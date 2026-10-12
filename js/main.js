@@ -143,6 +143,8 @@
   mount("source-chips", () =>
     C.sources.map((s) => `<div class="chip"><b>${esc(s.short)}</b><small>${esc(pick(s))}</small></div>`).join(""));
 
+  mount("hero-sources", () => C.sources.map((s) => `<span>${esc(s.short)}</span>`).join(""));
+
   mount("socials", () =>
     Object.keys(C.social).map((k) => `<a class="social-btn" href="${C.social[k]}" target="_blank" rel="noopener">${ICON[k]}${LABEL[k]}</a>`).join(""));
 
