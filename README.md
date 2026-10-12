@@ -16,7 +16,7 @@ Colors come from the logo, banner and poster: orange `#ff7522`, black `#0b0b0b`,
 | News posts (currently **samples**) | `js/posts.js` |
 | Colors / fonts | `:root` in `css/style.css` |
 
-Before launch: replace the placeholder social URLs in `js/config.js` with your real page links, and replace the sample posts with real, verified stories.
+Before launch: replace the sample posts in `js/posts.js` with real, verified stories.
 
 ## Run locally
 ```bash
