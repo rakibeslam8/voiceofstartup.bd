@@ -88,7 +88,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 }
 .hero .rays.left { left: -170px; bottom: -190px; width: 460px; height: 460px; }
 .hero .rays.right { right: -170px; top: -190px; width: 460px; height: 460px; }
-.hero-grid { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: center; }
+.hero-grid { position: relative; display: block; }
+.hero-grid > div { max-width: 820px; }
 .hero-quote { font-family: var(--font-head); font-weight: 800; font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; letter-spacing: -0.01em; text-transform: uppercase; }
 .hero-quote .b { color: var(--black); } .hero-quote .gg { color: var(--green); } .hero-quote .rr { color: var(--red); }
 .hero-bn { font-family: var(--font-head); font-size: clamp(1.5rem, 3.2vw, 2.3rem); font-weight: 800; margin-top: 14px; line-height: 1.3; }
