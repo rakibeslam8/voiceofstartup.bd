@@ -11,11 +11,21 @@ window.VOSB = {
 
   // Business emails
   emails: [
-    { key: "editor",       address: "editor@voiceofstartup.bd",       bn: "সম্পাদকীয় ও নিউজ টিপস", en: "Editorial & news tips" },
-    { key: "partnerships", address: "partnerships@voiceofstartup.bd", bn: "পার্টনারশিপ ও স্পনসরশিপ", en: "Partnerships & sponsorship" },
-    { key: "rakib",        address: "rakib@voiceofstartup.bd",        bn: "রাকিব ইসলাম — সরাসরি যোগাযোগ", en: "Rakib Eslam — direct contact" },
-    { key: "hello",        address: "hello@voiceofstartup.bd",        bn: "সাধারণ জিজ্ঞাসা", en: "General enquiries" },
-    { key: "careers",      address: "careers@voiceofstartup.bd",      bn: "ক্যারিয়ার ও ভলান্টিয়ার", en: "Careers & volunteering" },
+    { key: "editor",       icon: "📰", address: "editor@voiceofstartup.bd",
+      bn: "সম্পাদকীয় ও নিউজ টিপস", en: "Editorial & news tips",
+      useBn: "নিউজ টিপস, প্রেস রিলিজ, ফাউন্ডার স্টোরি ও লেখা পাঠানো", useEn: "News tips, press releases, founder stories and article submissions" },
+    { key: "partnerships", icon: "🤝", address: "partnerships@voiceofstartup.bd",
+      bn: "পার্টনারশিপ ও স্পনসরশিপ", en: "Partnerships & sponsorship",
+      useBn: "বিজ্ঞাপন, স্পনসরশিপ, ইভেন্ট ও মিডিয়া পার্টনারশিপ", useEn: "Advertising, sponsorship, event and media partnerships" },
+    { key: "rakib",        icon: "👤", address: "rakib@voiceofstartup.bd",
+      bn: "রাকিব ইসলাম — সরাসরি যোগাযোগ", en: "Rakib Eslam — direct contact",
+      useBn: "জরুরি বা ব্যক্তিগত বিষয়ে সরাসরি যোগাযোগ", useEn: "Urgent or personal matters, direct contact" },
+    { key: "hello",        icon: "💬", address: "hello@voiceofstartup.bd",
+      bn: "সাধারণ জিজ্ঞাসা", en: "General enquiries",
+      useBn: "সাধারণ প্রশ্ন, মতামত ও সাপোর্ট", useEn: "General questions, feedback and support" },
+    { key: "careers",      icon: "💼", address: "careers@voiceofstartup.bd",
+      bn: "ক্যারিয়ার ও ভলান্টিয়ার", en: "Careers & volunteering",
+      useBn: "জব, ইন্টার্নশিপ, ভলান্টিয়ার ও CV জমা", useEn: "Jobs, internships, volunteering and CV submissions" },
   ],
 
   social: {

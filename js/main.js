@@ -82,7 +82,7 @@
           </div>
           <div>
             <h4>${T("যোগাযোগ", "Contact")}</h4>
-            <ul>${C.emails.map((e) => `<li><a href="mailto:${e.address}">${e.address}</a></li>`).join("")}</ul>
+            <div class="fc-list">${C.emails.map((e) => `<a class="fc" href="mailto:${e.address}"><span class="fc-ic" aria-hidden="true">${e.icon}</span><span class="fc-tx"><small>${esc(pick(e))}</small><b>${e.address}</b></span></a>`).join("")}</div>
           </div>
         </div>
         <div class="footer-bottom"><span>© ${new Date().getFullYear()} Voice of Startup Bangladesh. ${T("সর্বস্বত্ব সংরক্ষিত।", "All rights reserved.")}</span><span>${C.site.domain}</span></div>
@@ -149,7 +149,13 @@
     Object.keys(C.social).map((k) => `<a class="social-btn" href="${C.social[k]}" target="_blank" rel="noopener">${ICON[k]}${LABEL[k]}</a>`).join(""));
 
   mount("mail-cards", () =>
-    C.emails.map((e) => `<a class="mail-card" href="mailto:${e.address}"><h3>✉️ ${esc(pick(e))}</h3><span class="addr">${e.address}</span></a>`).join(""));
+    C.emails.map((e) => `<a class="mail-card" href="mailto:${e.address}">
+      <span class="mc-ic" aria-hidden="true">${e.icon}</span>
+      <h3>${esc(pick(e))}</h3>
+      <p>${esc(lang === "bn" ? e.useBn : e.useEn)}</p>
+      <span class="addr">${e.address}</span>
+      <span class="mc-go">${T("ইমেইল করুন", "Send email")} →</span>
+    </a>`).join(""));
 
   /* News listing with filters */
   function renderNews() {
@@ -198,6 +204,10 @@
       location.href = `mailto:hello@voiceofstartup.bd?subject=${encodeURIComponent("Newsletter signup")}&body=${encodeURIComponent("Please add me to the newsletter: " + v)}`;
     };
     const cf = $("#contact-form");
+    if (cf) $$("select[name=to] option", cf).forEach((o) => {
+      const em = C.emails.find((x) => x.address === o.value);
+      if (em) o.textContent = `${pick(em)} — ${em.address}`;
+    });
     if (cf) cf.onsubmit = (e) => {
       e.preventDefault();
       const f = new FormData(cf);
