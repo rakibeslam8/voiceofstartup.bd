@@ -18,12 +18,11 @@ window.VOSB = {
     { key: "careers",      address: "careers@voiceofstartup.bd",      bn: "ক্যারিয়ার ও ভলান্টিয়ার", en: "Careers & volunteering" },
   ],
 
-  // TODO: replace "#" style placeholders with the real page URLs
   social: {
-    facebook:  "https://www.facebook.com/",
-    instagram: "https://www.instagram.com/",
-    linkedin:  "https://www.linkedin.com/",
-    youtube:   "https://www.youtube.com/",
+    facebook:  "https://www.facebook.com/voiceofstartupbd",
+    instagram: "https://www.instagram.com/voiceofstartupbd/",
+    linkedin:  "https://www.linkedin.com/company/voiceofstartupbd/",
+    youtube:   "https://www.youtube.com/@voiceofstartup-bd/",
   },
 
   // Verified information sources (shown as text, no logos used)
