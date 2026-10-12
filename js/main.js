@@ -21,14 +21,30 @@
   const LABEL = { facebook: "Facebook", instagram: "Instagram", linkedin: "LinkedIn", youtube: "YouTube" };
 
   const NAV = [
-    { href: "index.html", bn: "হোম", en: "Home" },
-    { href: "news.html", bn: "সংবাদ", en: "News" },
-    { href: "news.html?cat=funding", bn: "ফান্ডিং", en: "Funding" },
-    { href: "news.html?cat=founder", bn: "ফাউন্ডার স্টোরি", en: "Founder Stories" },
-    { href: "about.html", bn: "আমাদের সম্পর্কে", en: "About" },
-    { href: "careers.html", bn: "ক্যারিয়ার", en: "Careers" },
-    { href: "contact.html", bn: "যোগাযোগ", en: "Contact" },
+    { href: "/", bn: "হোম", en: "Home" },
+    { href: "/news", bn: "সংবাদ", en: "News" },
+    { href: "/news?cat=funding", bn: "ফান্ডিং", en: "Funding" },
+    { href: "/news?cat=founder", bn: "ফাউন্ডার স্টোরি", en: "Founder Stories" },
+    { href: "/about", bn: "আমাদের সম্পর্কে", en: "About" },
+    { href: "/careers", bn: "ক্যারিয়ার", en: "Careers" },
+    { href: "/contact", bn: "যোগাযোগ", en: "Contact" },
   ];
+
+  const LEGAL = [
+    { href: "/privacy-policy",   bn: "গোপনীয়তা নীতি", en: "Privacy Policy" },
+    { href: "/terms-of-service", bn: "ব্যবহারের শর্তাবলি", en: "Terms of Service" },
+    { href: "/cookie-policy",    bn: "কুকি নীতি", en: "Cookie Policy" },
+    { href: "/refund-policy",    bn: "রিফান্ড নীতি", en: "Refund Policy" },
+    { href: "/usage-policy",     bn: "ব্যবহার নীতি", en: "Usage Policy" },
+  ];
+
+  // Show clean URLs (/about instead of /about.html) if someone opens an old .html link
+  try {
+    if (/\.html$/.test(location.pathname)) {
+      const clean = location.pathname.replace(/index\.html$/, "").replace(/\.html$/, "") || "/";
+      history.replaceState(null, "", clean + location.search + location.hash);
+    }
+  } catch (e) {}
 
   const formatDate = (iso) => {
     const d = new Date(iso + "T00:00:00");
@@ -37,7 +53,7 @@
 
   /* ---------- Header / footer ---------- */
   function renderChrome() {
-    const page = location.pathname.split("/").pop() || "index.html";
+    const page = location.pathname.replace(/index\.html$/, "").replace(/\.html$/, "") || "/";
     const top = $("#site-top");
     if (top) {
       top.innerHTML = `
@@ -46,7 +62,7 @@
         <span class="date">${new Date().toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</span>
       </div></div>
       <header class="site-header"><div class="container">
-        <a class="brand" href="index.html" aria-label="Voice of Startup Bangladesh"><img src="assets/logo.png" alt="Voice of Startup BD logo"></a>
+        <a class="brand" href="/" aria-label="Voice of Startup Bangladesh"><img src="/assets/logo.png" alt="Voice of Startup BD logo"></a>
         <nav class="nav" id="nav" aria-label="Main">
           ${NAV.map((n) => `<a href="${n.href}" class="${n.href === page ? "active" : ""}">${esc(pick(n))}</a>`).join("")}
         </nav>
@@ -70,21 +86,22 @@
       <footer class="site-footer"><div class="container">
         <div class="footer-grid">
           <div>
-            <span class="footer-logo"><img src="assets/logo.png" alt="Voice of Startup BD"></span>
+            <span class="footer-logo"><img src="/assets/logo.png" alt="Voice of Startup BD"></span>
             <p style="margin-top:16px;color:#d6d6d6;max-width:40ch">${T("স্টার্টআপ, ব্যবসা ও বিনিয়োগের সব আপডেট সবার আগে।", "Startup, business & investment updates — first.")}</p>
             <div class="footer-socials">${social}</div>
           </div>
           <div>
             <h4>${T("এক্সপ্লোর", "Explore")}</h4>
-            <ul>${C.categories.map((c) => `<li><a href="news.html?cat=${c.id}">${c.icon} ${esc(pick(c))}</a></li>`).join("")}
-            <li><a href="about.html">${T("আমাদের সম্পর্কে", "About us")}</a></li>
-            <li><a href="careers.html">${T("ক্যারিয়ার", "Careers")}</a></li></ul>
+            <ul>${C.categories.map((c) => `<li><a href="/news?cat=${c.id}">${c.icon} ${esc(pick(c))}</a></li>`).join("")}
+            <li><a href="/about">${T("আমাদের সম্পর্কে", "About us")}</a></li>
+            <li><a href="/careers">${T("ক্যারিয়ার", "Careers")}</a></li></ul>
           </div>
           <div>
             <h4>${T("যোগাযোগ", "Contact")}</h4>
             <div class="fc-list">${C.emails.map((e) => `<a class="fc" href="mailto:${e.address}"><span class="fc-ic" aria-hidden="true">${e.icon}</span><span class="fc-tx"><small>${esc(pick(e))}</small><b>${e.address}</b></span></a>`).join("")}</div>
           </div>
         </div>
+        <nav class="legal-links" aria-label="Legal">${LEGAL.map((l) => `<a href="${l.href}">${esc(pick(l))}</a>`).join("")}</nav>
         <div class="footer-bottom"><span>© ${new Date().getFullYear()} Voice of Startup Bangladesh. ${T("সর্বস্বত্ব সংরক্ষিত।", "All rights reserved.")}</span><span>${C.site.domain}</span></div>
       </div></footer>`;
     }
@@ -105,7 +122,7 @@
 
   function postCard(p) {
     const c = catOf(p.cat);
-    return `<a class="post-card" href="article.html?id=${p.id}">
+    return `<a class="post-card" href="/article?id=${p.id}">
       <div class="post-thumb ${p.cat}" aria-hidden="true">${c.icon}</div>
       <div class="post-body">
         <div class="post-meta"><span class="badge">${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
@@ -121,7 +138,9 @@
   }
 
   mount("ticker", () => {
-    const items = POSTS.map((p) => esc(pick(p.title)));
+    const items = POSTS.length
+      ? POSTS.map((p) => esc(pick(p.title)))
+      : C.categories.map((c) => `${c.icon} ${esc(pick(c))}`);
     items.unshift(T("সব আপডেট সবার আগে", "All updates, first"));
     const html = items.map((t) => `<span>${t}</span>`).join("");
     return `<div class="ticker-track">${html}${html}</div>`;
@@ -135,10 +154,19 @@
         business: T("ব্যবসা, বিনিয়োগ ও নীতিমালার গুরুত্বপূর্ণ খবর।", "Key news on business, investment and policy."),
         opportunity: T("নতুন উদ্যোক্তাদের জন্য কাজের তথ্য ও সুযোগ।", "Practical info and opportunities for new entrepreneurs."),
       }[c.id];
-      return `<a class="cat-card" href="news.html?cat=${c.id}"><div class="ic">${c.icon}</div><h3>${esc(pick(c))}</h3><p>${desc}</p></a>`;
+      return `<a class="cat-card" href="/news?cat=${c.id}"><div class="ic">${c.icon}</div><h3>${esc(pick(c))}</h3><p>${desc}</p></a>`;
     }).join(""));
 
-  mount("latest", () => [...POSTS].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6).map(postCard).join(""));
+  const emptyState = () => `<div class="empty-state">
+      <div class="es-ic" aria-hidden="true">🔔</div>
+      <h3>${T("প্রথম আপডেট শিগগিরই আসছে", "First updates are coming soon")}</h3>
+      <p>${T("যাচাইকৃত ফান্ডিং, নীতিমালা ও সুযোগের খবর এখানে প্রকাশিত হবে। নোটিফিকেশন পেতে আমাদের পেজগুলো ফলো করুন।", "Verified funding, policy and opportunity news will appear here. Follow our pages to get notified.")}</p>
+      <div class="socials es-socials">${Object.keys(C.social).map((k) => `<a class="social-btn" href="${C.social[k]}" target="_blank" rel="noopener">${ICON[k]}${LABEL[k]}</a>`).join("")}</div>
+    </div>`;
+
+  mount("latest", () => POSTS.length
+    ? [...POSTS].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6).map(postCard).join("")
+    : emptyState());
 
   mount("source-chips", () =>
     C.sources.map((s) => `<div class="chip"><b>${esc(s.short)}</b><small>${esc(pick(s))}</small></div>`).join(""));
@@ -172,7 +200,8 @@
       renderNews();
     }));
     const items = POSTS.filter((p) => active === "all" || p.cat === active).sort((a, b) => b.date.localeCompare(a.date));
-    list.innerHTML = items.length ? items.map(postCard).join("") : `<p class="muted">${T("এই ক্যাটাগরিতে এখনো কোনো পোস্ট নেই।", "No posts in this category yet.")}</p>`;
+    list.innerHTML = items.length ? items.map(postCard).join("") : emptyState();
+    list.classList.toggle("post-grid", items.length > 0);
   }
   renderers.push(renderNews);
 
@@ -182,18 +211,49 @@
     if (!box) return;
     const id = new URLSearchParams(location.search).get("id");
     const p = POSTS.find((x) => x.id === id);
-    if (!p) { box.innerHTML = `<h1>${T("পোস্ট পাওয়া যায়নি", "Post not found")}</h1><p><a class="btn btn-orange" href="news.html">${T("সব সংবাদ", "All news")}</a></p>`; return; }
+    if (!p) { box.innerHTML = `<h1>${T("পোস্ট পাওয়া যায়নি", "Post not found")}</h1><p><a class="btn btn-orange" href="/news">${T("সব সংবাদ", "All news")}</a></p>`; return; }
     const c = catOf(p.cat);
     document.title = pick(p.title) + " — Voice of Startup Bangladesh";
+    // A real post: make it indexable with its own canonical URL and description
+    const robots = $('meta[name="robots"]'); if (robots) robots.remove();
+    const canon = $('link[rel="canonical"]'); if (canon) canon.href = `${C.site.origin}/article?id=${p.id}`;
+    const md = $('meta[name="description"]'); if (md) md.content = pick(p.excerpt);
     box.innerHTML = `
       <div class="post-meta"><span class="badge">${c.icon} ${esc(pick(c))}</span><span class="badge verified">✔ ${T("যাচাইকৃত সূত্র", "Verified source")}: ${esc(p.source)}</span></div>
       <h1>${esc(pick(p.title))}</h1>
       <span class="muted">${formatDate(p.date)}</span>
       ${(p.body[lang] || p.body.bn).map((t) => `<p>${esc(t)}</p>`).join("")}
       <div class="src">${T("তথ্যসূত্র", "Source")}: ${esc(p.source)}</div>
-      <p style="margin-top:28px"><a class="btn btn-outline" href="news.html">← ${T("সব সংবাদ", "All news")}</a></p>`;
+      <p style="margin-top:28px"><a class="btn btn-outline" href="/news">← ${T("সব সংবাদ", "All news")}</a></p>`;
   }
   renderers.push(renderArticle);
+
+  /* Legal pages (content lives in js/legal.js) */
+  function renderLegal() {
+    const box = $("#legal");
+    const key = document.body.dataset.legal;
+    const doc = window.VOSB_LEGAL && window.VOSB_LEGAL[key];
+    if (!box || !doc) return;
+    document.title = `${pick(doc.title)} — Voice of Startup Bangladesh`;
+    const sections = doc.sections.map((s, i) => `
+      <section id="s${i + 1}">
+        <h2>${i + 1}. ${esc(pick(s.h))}</h2>
+        ${(s.p || []).map((x) => `<p>${esc(pick(x))}</p>`).join("")}
+        ${s.ul ? `<ul>${s.ul.map((x) => `<li>${esc(pick(x))}</li>`).join("")}</ul>` : ""}
+        ${(s.p2 || []).map((x) => `<p>${esc(pick(x))}</p>`).join("")}
+      </section>`).join("");
+    const toc = doc.sections.map((s, i) => `<li><a href="#s${i + 1}">${esc(pick(s.h))}</a></li>`).join("");
+    box.innerHTML = `
+      <p class="eyebrow">${T("আইনি তথ্য", "Legal")}</p>
+      <h1>${esc(pick(doc.title))}</h1>
+      <p class="muted legal-meta">${T("কার্যকর ও সর্বশেষ হালনাগাদ", "Effective & last updated")}: ${formatDate(window.VOSB_LEGAL.updated)}</p>
+      <p class="legal-intro">${esc(pick(doc.intro))}</p>
+      <nav class="legal-toc" aria-label="${T("সূচিপত্র", "Contents")}"><b>${T("সূচিপত্র", "Contents")}</b><ol>${toc}</ol></nav>
+      ${sections}
+      <div class="legal-contact"><b>${T("প্রশ্ন আছে?", "Questions?")}</b> ${T("যোগাযোগ করুন", "Contact us at")} <a href="mailto:hello@voiceofstartup.bd">hello@voiceofstartup.bd</a></div>
+      <div class="legal-others">${LEGAL.filter((l) => l.href !== location.pathname.replace(/\.html$/, "")).map((l) => `<a href="${l.href}">${esc(pick(l))}</a>`).join("")}</div>`;
+  }
+  renderers.push(renderLegal);
 
   /* Forms (mailto fallback — swap for Formspree/Netlify Forms later) */
   function wireForms() {
