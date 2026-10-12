@@ -24,7 +24,7 @@ URLs are extensionless (GitHub Pages serves `about.html` at `/about`). Legal tex
 
 ## Run locally
 ```bash
-python3 -m http.server 8000   # then open http://localhost:8000
+python3 -m http.server 8000   # open http://localhost:8000 (note: extensionless URLs like /about only work on GitHub Pages; locally use /about.html)
 ```
 
 ## Deploy
