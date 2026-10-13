@@ -51,6 +51,7 @@ create index if not exists posts_category_idx on public.posts (category, publish
 create or replace function public.set_updated_at()
 returns trigger
 language plpgsql
+set search_path = public
 as $$
 begin
   if (to_jsonb(new) - 'views' - 'shares' - 'updated_at')
