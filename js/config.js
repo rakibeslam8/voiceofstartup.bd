@@ -48,9 +48,24 @@ window.VOSB = {
   ],
 
   categories: [
-    { id: "funding",    icon: "🏆", bn: "ফান্ডিং ও প্রতিযোগিতা", en: "Funding & Competitions" },
-    { id: "founder",    icon: "💡", bn: "ফাউন্ডার স্টোরি",       en: "Founder Stories" },
-    { id: "business",   icon: "📈", bn: "ব্যবসা, বিনিয়োগ ও নীতিমালা", en: "Business, Investment & Policy" },
-    { id: "opportunity",icon: "🚀", bn: "সুযোগ ও কাজের তথ্য",    en: "Opportunities & Resources" },
+    { id: "funding",     slug: "funding",         icon: "🏆", bn: "ফান্ডিং ও প্রতিযোগিতা", en: "Funding & Competitions" },
+    { id: "founder",     slug: "founder-stories", icon: "💡", bn: "ফাউন্ডার স্টোরি",       en: "Founder Stories" },
+    { id: "business",    slug: "business-policy", icon: "📈", bn: "ব্যবসা, বিনিয়োগ ও নীতিমালা", en: "Business, Investment & Policy" },
+    { id: "opportunity", slug: "opportunities",   icon: "🚀", bn: "সুযোগ ও কাজের তথ্য",    en: "Opportunities & Resources" },
   ],
+
+  // ---- Backend (Supabase). Fill these two values after following ADMIN-SETUP.md ----
+  // Both are PUBLIC by design (the database is protected by Row Level Security).
+  // NEVER put the "service_role" key or any password here.
+  supabase: {
+    url: "https://hpanuojuazdqolgkafqg.supabase.co",
+    anonKey: "sb_publishable_mlE074b-dObobvXT22c1SA_UChZPnJN",   // public publishable key
+  },
+
+  // Admin login: User ID "voiceofstartupbd" becomes voiceofstartupbd@<loginDomain>.
+  // The same email must be created in Supabase and listed in supabase/setup.sql (is_admin).
+  admin: {
+    userId: "voiceofstartupbd",
+    loginDomain: "voiceofstartup.bd",
+  },
 };
