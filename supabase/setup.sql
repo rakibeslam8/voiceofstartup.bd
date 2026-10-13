@@ -6,9 +6,9 @@
 --    file -> Run.  It is safe to run again (idempotent).
 --
 --  ADMIN LOGIN:
---    The admin signs in with User ID "voiceofstartupbd". The site turns that
+--    The admin signs in with User ID "rakib". The site turns that
 --    into the email below. Create that user in Supabase
---    (Authentication -> Users -> Add user -> Create new user, tick
+--    (Authentication -> Users -> Add user -> Create new user, e.g. rakib@voiceofstartup.bd, tick
 --    "Auto Confirm User") and set your own password there.
 --    If you ever want another User ID, change the email in is_admin() and
 --    in js/config.js (admin.loginDomain / admin.userId).
@@ -87,7 +87,7 @@ stable
 security definer
 set search_path = public, auth
 as $$
-  select lower(coalesce(auth.jwt() ->> 'email', '')) = 'voiceofstartupbd@voiceofstartup.bd';
+  select lower(coalesce(auth.jwt() ->> 'email', '')) = 'rakib@voiceofstartup.bd';
 $$;
 
 -- ---------------------------------------------------------------------

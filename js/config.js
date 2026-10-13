@@ -62,10 +62,10 @@ window.VOSB = {
     anonKey: "sb_publishable_mlE074b-dObobvXT22c1SA_UChZPnJN",   // public publishable key
   },
 
-  // Admin login: User ID "voiceofstartupbd" becomes voiceofstartupbd@<loginDomain>.
+  // Admin login: User ID "rakib" becomes rakib@<loginDomain>.
   // The same email must be created in Supabase and listed in supabase/setup.sql (is_admin).
   admin: {
-    userId: "voiceofstartupbd",
+    userId: "rakib",
     loginDomain: "voiceofstartup.bd",
   },
 };
