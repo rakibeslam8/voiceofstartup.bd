@@ -735,7 +735,7 @@
           <p style="margin-top:14px"><button class="b b-line" id="so">Sign out on this device</button></p>
         </div>
         <div class="card"><h2>Google Search Console</h2>
-          <p class="muted" style="margin-bottom:10px">New articles are added to the sitemap automatically (within ~15 minutes).</p>
+          <p class="muted" style="margin-bottom:10px">Submit this link once in Search Console. New articles can be found by Google through the site's links, and are shared instantly via their own article link.</p>
           <div class="url" style="background:#f6f6f3;padding:9px 12px;border-radius:10px;overflow-wrap:anywhere;font-size:.9rem">${esc(C.site.origin)}/sitemap.xml</div>
           <p style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="b b-line b-sm" id="cs">Copy sitemap link</button><a class="b b-line b-sm" href="https://search.google.com/search-console" target="_blank" rel="noopener">Open Search Console ↗</a></p>
         </div>
