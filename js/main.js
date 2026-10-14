@@ -333,6 +333,7 @@
     });
     const copy = $("[data-copy]", bar);
     if (copy) copy.onclick = async () => {
+      API.trackShare(p.slug);
       let ok = false;
       try { await navigator.clipboard.writeText(url); ok = true; } catch (err) {
         const ta = document.createElement("textarea"); ta.value = url; ta.style.cssText = "position:fixed;opacity:0";
@@ -342,7 +343,6 @@
       const lbl = $("span", copy);
       lbl.textContent = ok ? T("কপি হয়েছে ✓", "Copied ✓") : url;
       copy.classList.toggle("done", ok);
-      API.trackShare(p.slug);
       setTimeout(() => { lbl.textContent = T("লিংক কপি", "Copy link"); copy.classList.remove("done"); }, 2200);
     };
     const nat = $("[data-native]", bar);
