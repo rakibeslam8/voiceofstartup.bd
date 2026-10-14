@@ -91,6 +91,30 @@
   }
   const randSlug = () => "post-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
 
+  /* ---------------- images ---------------- */
+  async function compress(file) {
+    if (file.type === "image/gif" && file.size <= 5 * 1024 * 1024) return { blob: file, ext: "gif", type: "image/gif" };
+    const bmp = await createImageBitmap(file).catch(() => null);
+    if (!bmp) { if (/^image\/(jpeg|png|webp)$/.test(file.type) && file.size <= 5 * 1024 * 1024) return { blob: file, ext: file.type.split("/")[1].replace("jpeg", "jpg"), type: file.type }; throw new Error("Could not read this image"); }
+    const max = 1600, sc = Math.min(1, max / Math.max(bmp.width, bmp.height));
+    const cv = document.createElement("canvas"); cv.width = Math.round(bmp.width * sc); cv.height = Math.round(bmp.height * sc);
+    const ctx = cv.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, cv.width, cv.height); ctx.drawImage(bmp, 0, 0, cv.width, cv.height);
+    const toBlob = (t, q) => new Promise((r) => cv.toBlob(r, t, q));
+    let blob = await toBlob("image/webp", 0.82), type = "image/webp", ext = "webp";
+    if (!blob || blob.type !== "image/webp") { blob = await toBlob("image/jpeg", 0.84); type = "image/jpeg"; ext = "jpg"; }
+    if (blob.size > 5 * 1024 * 1024) throw new Error("Image is still over 5 MB after compression");
+    return { blob, ext, type };
+  }
+
+  async function uploadImage(file, folder) {
+    const { blob, ext, type } = await compress(file);
+    const d = new Date();
+    const path = `${folder}/${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, "0")}/${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}.${ext}`;
+    const { error } = await sb.storage.from("post-images").upload(path, blob, { contentType: type, cacheControl: "31536000", upsert: false });
+    if (error) throw error;
+    return sb.storage.from("post-images").getPublicUrl(path).data.publicUrl;
+  }
+
   /* ---------------- data ---------------- */
   const LIST_COLS = "id,slug,category,status,publish_at,featured,title_bn,title_en,source,author,image_url,views,shares,updated_at";
   async function loadPosts(force) {
@@ -160,8 +184,10 @@
   /* ---------------- shell & routing ---------------- */
   const NAV = [
     { r: "dashboard", ic: "📊", t: "Dashboard" },
+    { r: "visitors", ic: "👥", t: "Visitors" },
     { r: "posts", ic: "📰", t: "Articles" },
     { r: "edit/new", ic: "✍️", t: "New" },
+    { r: "ads", ic: "📣", t: "Ads" },
     { r: "settings", ic: "⚙️", t: "Settings" },
   ];
   let shellOn = false;
@@ -183,7 +209,7 @@
   }
 
   function markNav(r) {
-    const base = r.startsWith("edit") ? "edit/new" : r;
+    const base = r.startsWith("edit") ? "edit/new" : r.startsWith("ads") ? "ads" : r;
     $$("[data-r]").forEach((a) => a.classList.toggle("on", a.dataset.r === base || (base === "edit/new" && a.dataset.r === "edit/new")));
   }
 
@@ -198,6 +224,9 @@
     markNav(h);
     try {
       if (h === "dashboard") await viewDashboard(view);
+      else if (h === "visitors") await viewVisitors(view);
+      else if (h === "ads") await viewAds(view);
+      else if (h.startsWith("ads/")) await viewAdEditor(view, h.slice(4));
       else if (h === "posts") await viewPosts(view);
       else if (h === "settings") viewSettings(view);
       else if (h.startsWith("edit/")) await viewEditor(view, h.slice(5));
@@ -217,12 +246,20 @@
     daily = (data || []).map((d) => ({ day: d.day, views: Number(d.views) }));
   }
 
+  async function loadSite(days) {
+    const { data, error } = await sb.rpc("admin_site_stats", { p_days: days });
+    if (error) throw error;
+    return data;
+  }
+
   function chartSvg(rows, showTable) {
     if (showTable) {
-      return `<table class="t"><thead><tr><th>Date</th><th class="n">Views</th></tr></thead><tbody>${rows.slice().reverse().map((r) => `<tr><td>${esc(fmtD(r.day + "T12:00:00+06:00"))}</td><td class="n">${fmtN(r.views)}</td></tr>`).join("")}</tbody></table>`;
+      const vis = rows.length && rows[0].visitors !== undefined;
+      return `<table class="t"><thead><tr><th>Date</th><th class="n">${vis ? "Page views" : "Views"}</th>${vis ? `<th class="n">Visitors</th>` : ""}</tr></thead><tbody>${rows.slice().reverse().map((r) => `<tr><td>${esc(fmtD(r.day + "T12:00:00+06:00"))}</td><td class="n">${fmtN(r.views)}</td>${vis ? `<td class="n">${fmtN(r.visitors)}</td>` : ""}</tr>`).join("")}</tbody></table>`;
     }
     const W = 640, H = 220, L = 34, B = 26, T = 10, R = 6;
-    const max = Math.max(4, ...rows.map((r) => r.views));
+    const hasVis = rows.length && rows[0].visitors !== undefined;
+    const max = Math.max(4, ...rows.map((r) => Math.max(r.views, r.visitors || 0)));
     const step = niceStep(max / 4);
     const top = Math.ceil(max / step) * step;
     const iw = W - L - R, ih = H - T - B;
@@ -244,13 +281,19 @@
         + `</g>`;
       if (i % every === 0 || i === rows.length - 1) labs += `<text x="${x + barW / 2}" y="${H - 8}" text-anchor="middle">${new Date(r.day + "T12:00:00+06:00").toLocaleDateString("en-GB", { timeZone: "Asia/Dhaka", day: "numeric", month: "short" })}</text>`;
     });
-    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily article views">${g}${bars}${labs}</svg>`;
+    let line = "";
+    if (hasVis) {
+      const pts = rows.map((r, i) => [L + i * bw + bw / 2, T + ih - (r.visitors / top) * ih]);
+      line = `<path class="ln" d="M${pts.map((q) => q[0].toFixed(1) + "," + q[1].toFixed(1)).join(" L")}"/>` + (rows.length <= 45 ? pts.map((q) => `<circle class="dot" cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="3"/>`).join("") : "");
+    }
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${hasVis ? "Daily page views and visitors" : "Daily article views"}">${g}${bars}${line}${labs}</svg>`;
   }
   function niceStep(x) { const p = Math.pow(10, Math.floor(Math.log10(x || 1))); const m = x / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p; }
 
   async function viewDashboard(view) {
     view.innerHTML = `<div class="page-h"><h1>Dashboard</h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div><div class="card"><p class="muted">Loading…</p></div>`;
-    await Promise.all([loadPosts(true), loadDaily()]);
+    let site = null;
+    await Promise.all([loadPosts(true), loadDaily(), loadSite(7).then((x) => { site = x; }).catch(() => {})]);
     if (!view.isConnected) return;   // user navigated away while loading
     const total = posts.reduce((a, p) => a + Number(p.views || 0), 0);
     const shares = posts.reduce((a, p) => a + Number(p.shares || 0), 0);
@@ -264,6 +307,12 @@
 
     view.innerHTML = `
       <div class="page-h"><h1>Dashboard</h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div>
+      ${site ? `<div class="tiles">
+        <div class="tile g"><small>Online now</small><b>${fmtN(site.totals.online_now)}</b></div>
+        <div class="tile"><small>Visitors today</small><b>${fmtN(site.totals.visitors_today)}</b></div>
+        <div class="tile k"><small>Page views today</small><b>${fmtN(site.totals.views_today)}</b></div>
+        <div class="tile r"><small>Visitors · 7 days</small><b>${fmtN(site.totals.visitors_7d)}</b></div>
+      </div>` : ""}
       <div class="tiles">
         <div class="tile"><small>Total reads</small><b>${fmtN(total)}</b></div>
         <div class="tile g"><small>Reads today</small><b>${fmtN(today)}</b></div>
@@ -316,7 +365,7 @@
       const show = () => {
         const r = rows[+g.dataset.i];
         if (!tip) { tip = document.createElement("div"); tip.className = "tip"; box.appendChild(tip); }
-        tip.innerHTML = `${esc(fmtD(r.day + "T12:00:00+06:00"))}<br><b>${fmtN(r.views)}</b> reads`;
+        tip.innerHTML = r.visitors !== undefined ? `${esc(fmtD(r.day + "T12:00:00+06:00"))}<br><b>${fmtN(r.views)}</b> page views · <b>${fmtN(r.visitors)}</b> visitors` : `${esc(fmtD(r.day + "T12:00:00+06:00"))}<br><b>${fmtN(r.views)}</b> reads`;
         const gb = g.getBoundingClientRect(), bb = box.getBoundingClientRect();
         tip.style.left = Math.min(Math.max(gb.left - bb.left + gb.width / 2, 50), bb.width - 50) + "px";
         tip.style.top = "6px";
@@ -418,6 +467,7 @@
     id: null, slug: "", slugTouched: false, category: "funding", status: "draft", publish_at: nowLocalInput(), featured: false,
     title_bn: "", title_en: "", excerpt_bn: "", excerpt_en: "", body_bn: "", body_en: "",
     source: "VOSB", source_url: "", author: "VOSB Desk", image_url: "", image_alt: "",
+    auto_translated_bn: false, auto_translated_en: false,
   });
   const FIELDS = ["category", "publish_at", "featured", "title_bn", "title_en", "excerpt_bn", "excerpt_en", "body_bn", "body_en", "source", "source_url", "author", "image_url", "image_alt", "slug"];
 
@@ -440,6 +490,7 @@
       if (raw) { const d = JSON.parse(raw); if (d && d.t && JSON.stringify(d.f) !== original) { Object.assign(ed, d.f); restored = true; } }
     } catch (e) {}
 
+    const touched = { bn: false, en: false };      // language the editor typed in (so it is no longer "machine translated")
     let tab = ed.title_bn || !ed.title_en ? "bn" : "en";
     let mode = "write";
     let dirty = restored;
@@ -453,8 +504,9 @@
           <div class="card">
             <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
               <div class="seg" id="lt" role="tablist" aria-label="Language"><button data-l="bn" role="tab">বাংলা</button><button data-l="en" role="tab">English</button></div>
-              <span class="muted" style="font-size:.82rem">Write in Bangla, English, or both. Visitors can switch language.</span>
+              <span class="muted" style="font-size:.82rem">Write in Bangla <b>or</b> English — the other language and the short summary are created automatically when you publish.</span>
             </div>
+            <div class="auto-row"><button type="button" class="b b-line b-sm" id="retr">🌐 Auto-translate this tab</button><span class="muted" id="auto-note" style="font-size:.82rem"></span></div>
             <div class="fld"><label for="f-title">Title <span class="hint" id="title-l"></span></label><input class="inp" id="f-title" maxlength="200"></div>
             <div class="fld"><label for="f-ex">Short summary <span class="hint">(shown on cards & Google — leave empty to auto-create)</span></label><textarea class="txt" id="f-ex" rows="2" maxlength="300"></textarea><div class="cnt" id="ex-c"></div></div>
             <div class="lbl" style="margin-bottom:6px;display:flex;justify-content:space-between;align-items:center"><span>Article content</span>
@@ -513,6 +565,7 @@
       $$("#lt button").forEach((b) => { b.classList.toggle("on", b.dataset.l === tab); b.classList.toggle("has", !!(ed["title_" + b.dataset.l] || ed["body_" + b.dataset.l])); b.setAttribute("aria-selected", b.dataset.l === tab); });
       $f("f-title").value = ed["title_" + tab]; $f("f-ex").value = ed["excerpt_" + tab]; $f("f-body").value = ed["body_" + tab];
       $f("title-l").textContent = tab === "bn" ? "(বাংলা)" : "(English)";
+      autoNote();
       $f("f-title").placeholder = tab === "bn" ? "আর্টিকেলের শিরোনাম" : "Article headline";
       counts(); renderPv();
     }
@@ -555,13 +608,13 @@
     /* bindings */
     $("#lt").onclick = (e) => { const b = e.target.closest("[data-l]"); if (b) { tab = b.dataset.l; fillLang(); } };
     $f("f-title").oninput = (e) => {
-      set("title_" + tab, e.target.value);
+      set("title_" + tab, e.target.value); touched[tab] = true;
       if (!ed.slugTouched && tab === "en") { ed.slug = slugify(ed.title_en); $f("f-slug").value = ed.slug; slugUrl(); }
       fillLangTabsOnly(); saveBar();
     };
     function fillLangTabsOnly() { $$("#lt button").forEach((b) => b.classList.toggle("has", !!(ed["title_" + b.dataset.l] || ed["body_" + b.dataset.l]))); }
-    $f("f-ex").oninput = (e) => { set("excerpt_" + tab, e.target.value); counts(); };
-    $f("f-body").oninput = (e) => { set("body_" + tab, e.target.value); counts(); fillLangTabsOnly(); saveBar(); };
+    $f("f-ex").oninput = (e) => { set("excerpt_" + tab, e.target.value); touched[tab] = true; counts(); };
+    $f("f-body").oninput = (e) => { set("body_" + tab, e.target.value); touched[tab] = true; counts(); fillLangTabsOnly(); saveBar(); };
     $f("f-cat").onchange = (e) => set("category", e.target.value);
     $f("f-date").oninput = (e) => { set("publish_at", e.target.value); dateHint(); saveBar(); };
     $f("now").onclick = () => { set("publish_at", nowLocalInput()); $f("f-date").value = ed.publish_at; dateHint(); saveBar(); };
@@ -611,19 +664,6 @@
     $f("body-file").onchange = (e) => { const f = e.target.files[0]; e.target.value = ""; if (f) upload(f, "body"); };
 
     /* image upload (compress in the browser, then store in Supabase Storage) */
-    async function compress(file) {
-      if (file.type === "image/gif" && file.size <= 5 * 1024 * 1024) return { blob: file, ext: "gif", type: "image/gif" };
-      const bmp = await createImageBitmap(file).catch(() => null);
-      if (!bmp) { if (/^image\/(jpeg|png|webp)$/.test(file.type) && file.size <= 5 * 1024 * 1024) return { blob: file, ext: file.type.split("/")[1].replace("jpeg", "jpg"), type: file.type }; throw new Error("Could not read this image"); }
-      const max = 1600, sc = Math.min(1, max / Math.max(bmp.width, bmp.height));
-      const cv = document.createElement("canvas"); cv.width = Math.round(bmp.width * sc); cv.height = Math.round(bmp.height * sc);
-      const ctx = cv.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, cv.width, cv.height); ctx.drawImage(bmp, 0, 0, cv.width, cv.height);
-      const toBlob = (t, q) => new Promise((r) => cv.toBlob(r, t, q));
-      let blob = await toBlob("image/webp", 0.82), type = "image/webp", ext = "webp";
-      if (!blob || blob.type !== "image/webp") { blob = await toBlob("image/jpeg", 0.84); type = "image/jpeg"; ext = "jpg"; }
-      if (blob.size > 5 * 1024 * 1024) throw new Error("Image is still over 5 MB after compression");
-      return { blob, ext, type };
-    }
     async function upload(file, where) {
       if (!/^image\//.test(file.type)) return toast("Please choose an image file", "err");
       const prog = $("#prog"); if (prog && where === "cover") { prog.hidden = false; $("i", prog).style.width = "30%"; }
@@ -646,6 +686,55 @@
     ["dragleave", "drop"].forEach((n) => cb.addEventListener(n, (e) => { e.preventDefault(); cb.classList.remove("drag"); }));
     cb.addEventListener("drop", (e) => { const f = e.dataTransfer.files[0]; if (f) upload(f, "cover"); });
 
+    /* ---- automatic translation + summary ---- */
+    const TR = window.VOSB_TR;
+    const LN = { bn: "Bangla", en: "English" };
+    function autoNote() {
+      const n = $f("auto-note"); if (!n) return;
+      const flagged = ed["auto_translated_" + tab] && !touched[tab];
+      n.textContent = flagged ? `This ${LN[tab]} version was machine-translated — please check it.` : "";
+    }
+    async function autoFill() {
+      const out = { done: [], failed: false };
+      const flags = { bn: !!ed.auto_translated_bn && !touched.bn, en: !!ed.auto_translated_en && !touched.en };
+      for (const to of ["bn", "en"]) {
+        const from = to === "bn" ? "en" : "bn";
+        const needT = !ed["title_" + to].trim() && ed["title_" + from].trim();
+        const needB = !ed["body_" + to].trim() && ed["body_" + from].trim();
+        let gen = false;
+        if ((needT || needB) && TR) {
+          try {
+            if (needT) ed["title_" + to] = await TR.title(ed["title_" + from], from, to);
+            if (needB) ed["body_" + to] = await TR.markdown(ed["body_" + from], from, to);
+            gen = true; out.done.push(to);
+          } catch (e) { out.failed = true; }
+        }
+        if (gen) flags[to] = true;
+        if (!ed["excerpt_" + to].trim()) {
+          const fromEx = ed["excerpt_" + from].trim();
+          if (gen && fromEx && TR) { try { ed["excerpt_" + to] = (await TR.title(fromEx, from, to)).slice(0, 300); } catch (e) {} }
+          if (!ed["excerpt_" + to].trim() && ed["body_" + to].trim()) ed["excerpt_" + to] = MD.excerptFrom(ed["body_" + to], 160);
+        }
+      }
+      ed.auto_translated_bn = flags.bn; ed.auto_translated_en = flags.en;
+      return out;
+    }
+    $f("retr").onclick = async () => {
+      const from = tab === "bn" ? "en" : "bn";
+      if (!TR) return toast("Translator not loaded", "err");
+      if (!(ed["title_" + from].trim() || ed["body_" + from].trim())) return toast(`Write the ${LN[from]} version first`, "err");
+      if ((ed["title_" + tab].trim() || ed["body_" + tab].trim()) && !(await modal({ title: `Replace the ${LN[tab]} text?`, body: `The ${LN[tab]} title, summary and content will be replaced by an automatic translation of the ${LN[from]} version.`, ok: "Translate & replace" }))) return;
+      const btn = $f("retr"); btn.disabled = true; btn.textContent = "Translating…";
+      try {
+        if (ed["title_" + from].trim()) ed["title_" + tab] = await TR.title(ed["title_" + from], from, tab);
+        if (ed["body_" + from].trim()) ed["body_" + tab] = await TR.markdown(ed["body_" + from], from, tab);
+        ed["excerpt_" + tab] = ed["excerpt_" + from].trim() ? (await TR.title(ed["excerpt_" + from], from, tab)).slice(0, 300) : MD.excerptFrom(ed["body_" + tab], 160);
+        ed["auto_translated_" + tab] = true; touched[tab] = false; dirty = true; persist();
+        fillLang(); saveBar(); autoNote(); toast("Translated — please read it once", "ok");
+      } catch (e) { toast("Translation service is unavailable right now. Try again in a minute.", "err"); }
+      btn.disabled = false; btn.textContent = "🌐 Auto-translate this tab";
+    };
+
     /* save */
     async function save(status) {
       if (saving) return;
@@ -658,14 +747,21 @@
       if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) return toast("Web address can use only a–z, 0–9 and hyphens", "err");
       if (ed.source_url && !/^https?:\/\//i.test(ed.source_url)) return toast("Source link must start with https://", "err");
       ed.slug = slug; $f("f-slug").value = slug; slugUrl();
+      saving = true; saveBar();
+      let tr = { done: [], failed: false };
+      if (!(ed.title_bn.trim() && ed.title_en.trim() && ed.body_bn.trim() && ed.body_en.trim() && ed.excerpt_bn.trim() && ed.excerpt_en.trim())) {
+        toast("Creating the other language & summary…");
+        tr = await autoFill();
+        fillLang();
+      } else { ed.auto_translated_bn = ed.auto_translated_bn && !touched.bn; ed.auto_translated_en = ed.auto_translated_en && !touched.en; }
       const row = {
         slug, category: ed.category, status, publish_at: fromLocalInput(ed.publish_at), featured: ed.featured,
         title_bn: ed.title_bn.trim(), title_en: ed.title_en.trim(), excerpt_bn: ed.excerpt_bn.trim(), excerpt_en: ed.excerpt_en.trim(),
         body_bn: ed.body_bn, body_en: ed.body_en,
         source: ed.source === "Other" ? "Other" : ed.source, source_url: ed.source_url || null, author: ed.author.trim() || "VOSB Desk",
         image_url: ed.image_url || null, image_alt: ed.image_alt.trim(),
+        auto_translated_bn: !!ed.auto_translated_bn, auto_translated_en: !!ed.auto_translated_en,
       };
-      saving = true; saveBar();
       let res;
       try {
         res = ed.id ? await sb.from("posts").update(row).eq("id", ed.id).select("id,slug,status,publish_at").single()
@@ -679,6 +775,8 @@
       ed.id = res.data.id; ed.status = status; dirty = false; clearTimeout(persistTimer);
       try { localStorage.removeItem(draftKey); localStorage.removeItem("vosb-draft-new"); } catch (e) {}
       postsLoaded = false;
+      if (tr.failed) toast("Saved, but automatic translation was unavailable — the article shows in the language you wrote. Use “Auto-translate” later.", "err");
+      else if (tr.done.length) toast(`${tr.done.map((l) => LN[l]).join(" & ")} version created automatically`, "ok");
       if (status === "published") showDone(res.data); else { toast("Draft saved", "ok"); saveBar(); if (isNew && location.hash !== "#/edit/" + ed.id) history.replaceState(null, "", "#/edit/" + ed.id); }
     }
     function showDone(r) {
@@ -710,13 +808,269 @@
     window.onbeforeunload = () => (dirty ? "Unsaved changes" : undefined);
     window.addEventListener("hashchange", () => { window.onbeforeunload = null; }, { once: true });
 
-    fillStatic(); fillLang(); cover(); slugUrl(); dateHint(); saveBar();
+    fillStatic(); fillLang(); cover(); slugUrl(); dateHint(); saveBar(); autoNote();
     if (restored) {
       $("#restore").innerHTML = `<div class="msg info">Restored your unsaved changes from this device. <button class="link-btn" id="discard">Discard them</button></div>`;
       $("#discard").onclick = () => { try { localStorage.removeItem(draftKey); } catch (e) {} dirty = false; window.onbeforeunload = null; router(); };
     }
   }
   function pickFields(ed) { const o = {}; FIELDS.forEach((k) => (o[k] = ed[k])); return o; }
+
+  /* ---------------- visitors / site analytics ---------------- */
+  const pct = (n, t) => (t ? Math.round((n / t) * 100) : 0);
+  function barList(items, valueKey, labelFn, emptyMsg) {
+    if (!items || !items.length) return `<div class="empty"><b>No data yet</b>${esc(emptyMsg || "Numbers appear after the first visits.")}</div>`;
+    const total = items.reduce((a, x) => a + Number(x[valueKey] || 0), 0);
+    const max = Math.max(...items.map((x) => Number(x[valueKey] || 0)), 1);
+    return `<div class="bl">${items.map((x) => `<div class="bl-r"><div class="bl-t"><span class="bl-l">${labelFn(x)}</span><b>${fmtN(x[valueKey])} <small>${pct(Number(x[valueKey]), total)}%</small></b></div><div class="bl-b"><i style="width:${Math.max(2, (Number(x[valueKey]) / max) * 100)}%"></i></div></div>`).join("")}</div>`;
+  }
+  function pageLabel(path) {
+    const m = /^\/read\/([a-z0-9-]+)$/.exec(path);
+    if (m) { const p = posts.find((x) => x.slug === m[1]); return p ? `📰 ${esc((p.title_bn || p.title_en || m[1]).slice(0, 70))}` : `📰 ${esc(path)}`; }
+    if (path === "/") return "🏠 Home";
+    const c = cats.find((x) => "/" + x.slug === path);
+    if (c) return `${c.icon} ${esc(c.en)}`;
+    const names = { "/news": "📰 News", "/about": "ℹ️ About", "/contact": "✉️ Contact", "/careers": "💼 Careers" };
+    return esc(names[path] || path);
+  }
+
+  async function viewVisitors(view) {
+    view.innerHTML = `<div class="page-h"><h1>Visitors</h1></div><div class="card"><p class="muted">Loading…</p></div>`;
+    await loadPosts(true);
+    let range = 30, table = false, stats = null;
+    const load = async () => { stats = await loadSite(range); };
+    await load();
+    if (!view.isConnected) return;
+    const catViews = cats.map((c) => ({ c, v: posts.filter((p) => p.category === c.id).reduce((a, p) => a + Number(p.views || 0), 0) })).filter((x) => x.v > 0).sort((a, b) => b.v - a.v);
+
+    const draw = () => {
+      const t = stats.totals;
+      const devName = { mobile: "📱 Mobile", desktop: "💻 Desktop", tablet: "📲 Tablet" };
+      view.innerHTML = `
+      <div class="page-h"><h1>Visitors</h1>
+        <div class="range" id="rng">${[7, 30, 90].map((n) => `<button data-n="${n}" class="${n === range ? "on" : ""}">${n}d</button>`).join("")}</div></div>
+      <div class="tiles">
+        <div class="tile g"><small>Online now (last 5 min)</small><b>${fmtN(t.online_now)}</b></div>
+        <div class="tile"><small>Visitors today</small><b>${fmtN(t.visitors_today)}</b></div>
+        <div class="tile k"><small>Page views today</small><b>${fmtN(t.views_today)}</b></div>
+        <div class="tile r"><small>Sessions · 30 days</small><b>${fmtN(t.sessions_30d)}</b></div>
+        <div class="tile"><small>Visitors · 7 days</small><b>${fmtN(t.visitors_7d)}</b></div>
+        <div class="tile k"><small>Page views · 7 days</small><b>${fmtN(t.views_7d)}</b></div>
+        <div class="tile g"><small>Visitors · 30 days</small><b>${fmtN(t.visitors_30d)}</b></div>
+        <div class="tile r"><small>Page views · 30 days</small><b>${fmtN(t.views_30d)}</b></div>
+      </div>
+      <div class="card">
+        <div class="chart-h"><h2>Traffic — last ${range} days</h2>
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="legend"><i class="lg-b"></i>Page views <i class="lg-l"></i>Visitors</span><button class="link-btn" id="tv">${table ? "Chart view" : "Table view"}</button></div></div>
+        <div class="chart" id="chart"></div>
+        <p class="muted" style="font-size:.8rem;margin-top:8px">A “visitor” is one browser (counted by a random ID stored on the visitor's device — no name, email or IP address is saved). A “page view” is one page opened. Your own visits and bots are not counted. Bangladesh time.</p>
+      </div>
+      <div class="dash-cols" style="margin-top:16px">
+        <div class="card"><h2>Most visited pages</h2>${barList(stats.top_pages, "views", (x) => pageLabel(x.path), "Page views appear after the first visits.")}</div>
+        <div class="card"><h2>Where visitors come from</h2>${barList(stats.referrers, "views", (x) => esc(x.source))}</div>
+      </div>
+      <div class="dash-cols" style="margin-top:16px;grid-template-columns:1fr 1fr 1fr">
+        <div class="card"><h2>Devices</h2>${barList(stats.devices, "visitors", (x) => devName[x.device] || esc(x.device))}</div>
+        <div class="card"><h2>Reading language</h2>${barList(stats.langs, "visitors", (x) => (x.lang === "en" ? "🇬🇧 English" : "🇧🇩 বাংলা"))}</div>
+        <div class="card"><h2>New vs returning</h2>${barList([{ k: "🆕 New visitors", v: stats.new_visitors }, { k: "🔁 Returning", v: stats.returning_visitors }].filter((x) => x.v > 0), "v", (x) => x.k)}</div>
+      </div>
+      <div class="dash-cols" style="margin-top:16px">
+        <div class="card"><h2>Most read topics <span class="muted" style="font-size:.8rem;font-weight:500">(all-time article reads)</span></h2>${barList(catViews.map((x) => ({ k: `${x.c.icon} ${x.c.en}`, v: x.v })), "v", (x) => esc(x.k), "Topic reads appear after articles are read.")}</div>
+        <div class="card"><h2>All-time</h2>
+          <dl class="kv"><dt>Page views</dt><dd>${fmtN(t.views_all)}</dd><dt>Unique visitors</dt><dd>${fmtN(t.visitors_all)}</dd><dt>Article reads</dt><dd>${fmtN(posts.reduce((a, p) => a + Number(p.views || 0), 0))}</dd><dt>Shares</dt><dd>${fmtN(posts.reduce((a, p) => a + Number(p.shares || 0), 0))}</dd></dl>
+          <p class="muted" style="font-size:.8rem;margin-top:10px">Tip: for search keywords and Google rankings, also open Google Search Console.</p>
+        </div>
+      </div>`;
+      const rows = stats.daily.map((d) => ({ day: d.day, views: Number(d.views), visitors: Number(d.visitors) }));
+      const paint = () => { $("#chart").innerHTML = chartSvg(rows, table); $("#tv").textContent = table ? "Chart view" : "Table view"; if (!table) wireTip($("#chart"), rows); };
+      $("#tv").onclick = () => { table = !table; paint(); };
+      $("#rng").onclick = async (e) => { const b = e.target.closest("[data-n]"); if (!b) return; range = +b.dataset.n; try { await load(); } catch (err) { return toast(err.message, "err"); } if (!view.isConnected) return; draw(); };
+      paint();
+    };
+    draw();
+  }
+
+  /* ---------------- ads ---------------- */
+  const PLACES = {
+    popup:         { t: "Pop-up when a visitor opens the website", icon: "💬", d: "Shown once (then not again for the chosen hours) after about 5 seconds on the home, news and topic pages. Easy to close with ✕ or Esc. Never shown on article pages.", size: "Best size: 800 × 800 px (square) or 800 × 1000 px" },
+    header:        { t: "Top banner — every page", icon: "🔝", d: "A slim banner just under the menu on every page.", size: "Best size: 970 × 250 px or 728 × 90 px" },
+    feed:          { t: "Between news cards", icon: "📰", d: "Between the stories on the home page and the news lists (after the 6th story, then every 12).", size: "Best size: 970 × 250 px" },
+    in_article:    { t: "Inside articles", icon: "📖", d: "Between paragraphs of an article (after the 3rd block; long articles get a second one). Never right after a heading.", size: "Best size: 800 × 450 px" },
+    after_article: { t: "After the article (below share buttons)", icon: "⬇️", d: "At the end of every article, after the share buttons — readers see it when they finish.", size: "Best size: 970 × 250 px" },
+    footer:        { t: "Footer banner — every page", icon: "🔚", d: "A banner above the footer on every page.", size: "Best size: 970 × 250 px" },
+  };
+  let ads = [], adsLoaded = false;
+  async function loadAds(force) {
+    if (adsLoaded && !force) return ads;
+    const { data, error } = await sb.from("ads").select("*").order("created_at", { ascending: false }).limit(500);
+    if (error) throw error;
+    ads = data || []; adsLoaded = true; return ads;
+  }
+  const adState = (a) => (!a.is_active ? "paused" : a.start_at && new Date(a.start_at) > new Date() ? "sched" : a.end_at && new Date(a.end_at) <= new Date() ? "ended" : "live");
+  const adPill = (a) => ({ live: `<span class="pill live">LIVE</span>`, sched: `<span class="pill sched">SCHEDULED</span>`, ended: `<span class="pill draft">ENDED</span>`, paused: `<span class="pill paused">PAUSED</span>` })[adState(a)];
+  const ctr = (a) => (a.impressions > 0 ? ((a.clicks / a.impressions) * 100).toFixed(2) + "%" : "—");
+
+  function adPreview(a) {
+    const label = `<span class="ad-label">Ad</span>`;
+    if (a.kind === "image" && a.image_url) return `<div class="ad-prev">${label}<img src="${esc(a.image_url)}" alt=""></div>`;
+    if (a.kind === "text" && a.headline) return `<div class="ad-prev ad-prev-t">${label}<b>${esc(a.headline)}</b>${a.body ? `<span>${esc(a.body)}</span>` : ""}<em>${esc(a.cta || "Learn more")} →</em></div>`;
+    return `<div class="ad-prev empty-prev">Preview appears here</div>`;
+  }
+
+  async function viewAds(view) {
+    view.innerHTML = `<div class="page-h"><h1>Ads</h1><a class="b b-orange" href="#/ads/new">➕ New ad</a></div><div class="card"><p class="muted">Loading…</p></div>`;
+    await loadAds(true);
+    if (!view.isConnected) return;
+    const live = ads.filter((a) => adState(a) === "live").length;
+    const imp = ads.reduce((n, a) => n + Number(a.impressions || 0), 0), clk = ads.reduce((n, a) => n + Number(a.clicks || 0), 0);
+    view.innerHTML = `
+      <div class="page-h"><h1>Ads <span class="muted" style="font-size:1rem">(${ads.length})</span></h1><a class="b b-orange" href="#/ads/new">➕ New ad</a></div>
+      <div class="tiles">
+        <div class="tile g"><small>Live ads</small><b>${fmtN(live)}</b></div>
+        <div class="tile"><small>Times shown</small><b>${fmtN(imp)}</b></div>
+        <div class="tile k"><small>Clicks</small><b>${fmtN(clk)}</b></div>
+        <div class="tile r"><small>Click rate</small><b>${imp ? ((clk / imp) * 100).toFixed(2) + "%" : "—"}</b></div>
+      </div>
+      <div class="rows" id="ad-rows">${ads.length ? ads.map((a) => `
+        <div class="row" data-id="${a.id}">
+          <div class="th">${a.kind === "image" && a.image_url ? `<img src="${esc(a.image_url)}" alt="" loading="lazy">` : "📣"}</div>
+          <div class="ti"><h3>${esc(a.name)}</h3>
+            <div class="meta">${adPill(a)}<span>${PLACES[a.placement].icon} ${esc(PLACES[a.placement].t)}</span><span>${a.lang === "all" ? "All languages" : a.lang === "bn" ? "বাংলা only" : "English only"}</span>
+              <span>👁 <span class="stat">${fmtN(a.impressions)}</span> shown</span><span>🖱 <span class="stat">${fmtN(a.clicks)}</span> clicks</span><span>CTR <span class="stat">${ctr(a)}</span></span>
+              ${a.start_at || a.end_at ? `<span>🗓 ${a.start_at ? esc(fmtD(a.start_at)) : "now"} → ${a.end_at ? esc(fmtD(a.end_at)) : "no end"}</span>` : ""}</div></div>
+          <div class="acts"><a class="b b-line b-sm" href="#/ads/${a.id}">Edit</a>
+            <button class="b b-line b-sm" data-a="toggle">${a.is_active ? "Pause" : "Resume"}</button>
+            <button class="b b-line b-sm" data-a="dup">Duplicate</button>
+            <button class="b b-sm" style="color:var(--red);border-color:var(--line);background:#fff" data-a="del">Delete</button></div></div>`).join("")
+        : `<div class="card empty"><b>No ads yet</b>Click “New ad” to add a pop-up, banner or in-article ad. Ads always show an “Ad” label to readers.</div>`}</div>
+      <div class="card" style="margin-top:16px"><h2>Where ads appear</h2>
+        <div class="place-grid">${Object.keys(PLACES).map((k) => `<div class="place"><b>${PLACES[k].icon} ${esc(PLACES[k].t)}</b><p>${esc(PLACES[k].d)}</p><small>${esc(PLACES[k].size)}</small></div>`).join("")}</div>
+        <p class="muted" style="margin-top:12px;font-size:.88rem"><b>Reader-friendly by design:</b> ads are always labelled “Ad”, the pop-up can be closed instantly and is limited to once per visitor per chosen period, nothing covers the article text while reading, and ads open in a new tab. Bots and your own admin visits are not counted in the numbers.</p></div>`;
+    $("#ad-rows").addEventListener("click", async (e) => {
+      const btn = e.target.closest("[data-a]"); if (!btn) return;
+      const a = ads.find((x) => x.id === btn.closest(".row").dataset.id); if (!a) return;
+      if (btn.dataset.a === "toggle") {
+        const { error } = await sb.from("ads").update({ is_active: !a.is_active }).eq("id", a.id);
+        if (error) return toast(error.message, "err");
+        toast(a.is_active ? "Ad paused" : "Ad resumed", "ok"); adsLoaded = false; return router();
+      }
+      if (btn.dataset.a === "dup") {
+        const c = Object.assign({}, a); ["id", "impressions", "clicks", "created_at", "updated_at"].forEach((k) => delete c[k]);
+        c.name = a.name + " (copy)"; c.is_active = false;
+        const r = await sb.from("ads").insert(c).select("id").single();
+        if (r.error) return toast(r.error.message, "err");
+        toast("Duplicated (paused)", "ok"); location.hash = "#/ads/" + r.data.id; return;
+      }
+      if (btn.dataset.a === "del") {
+        if (!(await modal({ title: "Delete this ad?", body: `“${a.name}” will be removed from the website and its numbers deleted.`, ok: "Delete", danger: true }))) return;
+        const { error } = await sb.from("ads").delete().eq("id", a.id);
+        if (error) return toast(error.message, "err");
+        toast("Deleted", "ok"); adsLoaded = false; router();
+      }
+    });
+  }
+
+  async function viewAdEditor(view, idOrNew) {
+    const isNew = idOrNew === "new";
+    let a = { name: "", placement: "popup", kind: "image", image_url: "", link_url: "", headline: "", body: "", cta: "", lang: "all", category: "", is_active: true, start_at: "", end_at: "", priority: 5, freq_hours: 12 };
+    if (!isNew) {
+      view.innerHTML = `<div class="card"><p class="muted">Loading…</p></div>`;
+      const { data, error } = await sb.from("ads").select("*").eq("id", idOrNew).maybeSingle();
+      if (error) throw error;
+      if (!view.isConnected) return;
+      if (!data) { view.innerHTML = `<div class="card empty"><b>Ad not found</b><a class="b b-orange" href="#/ads">Back to ads</a></div>`; return; }
+      a = Object.assign(a, data, { category: data.category || "", image_url: data.image_url || "", start_at: data.start_at ? toLocalInput(data.start_at) : "", end_at: data.end_at ? toLocalInput(data.end_at) : "" });
+    }
+    let saving = false;
+    view.innerHTML = `
+      <div class="page-h"><h1>${isNew ? "New ad" : "Edit ad"}</h1><a class="b b-line" href="#/ads">← Ads</a></div>
+      <div class="ed-grid"><div class="grid">
+        <div class="card">
+          <div class="fld"><label for="a-name">Ad name <span class="hint">(only you see this)</span></label><input class="inp" id="a-name" maxlength="80" placeholder="e.g. Summit sponsor — November"></div>
+          <div class="fld"><label for="a-place">Where should it appear?</label><select class="sel" id="a-place">${Object.keys(PLACES).map((k) => `<option value="${k}">${PLACES[k].icon} ${esc(PLACES[k].t)}</option>`).join("")}</select><span class="hint" id="a-place-h"></span></div>
+          <div class="fld"><label>Ad type</label><div class="seg" id="a-kind"><button type="button" data-k="image">🖼 Image</button><button type="button" data-k="text">📝 Text</button></div></div>
+          <div id="a-img-box" class="fld"><label>Ad image</label><div class="cover-box" id="a-cover"></div><span class="hint" id="a-size"></span></div>
+          <div class="fld"><label for="a-head">Headline <span class="hint" id="a-head-h"></span></label><input class="inp" id="a-head" maxlength="90"></div>
+          <div id="a-text-box"><div class="fld"><label for="a-body">Message <span class="hint">(optional)</span></label><textarea class="txt" id="a-body" rows="2" maxlength="220"></textarea></div>
+          <div class="fld"><label for="a-cta">Button text <span class="hint">(optional, e.g. Register now)</span></label><input class="inp" id="a-cta" maxlength="30"></div></div>
+          <div class="fld"><label for="a-link">Link — where the ad goes when clicked</label><input class="inp" id="a-link" type="url" inputmode="url" placeholder="https://…"></div>
+        </div>
+        <div class="card"><h2>Preview</h2><div id="a-prev"></div><p class="muted" style="font-size:.8rem;margin-top:8px">Readers always see a small “Ad” label on it.</p></div>
+      </div>
+      <aside class="ed-side">
+        <div class="card savebar"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b>Status:</b> <span id="a-pill"></span></div>
+          <label class="chk"><input type="checkbox" id="a-active"> Active (show on the website)</label>
+          <button class="b b-green" id="a-save">💾 Save ad</button></div>
+        <div class="card"><h2>Targeting & schedule</h2>
+          <div class="fld"><label for="a-lang">Language</label><select class="sel" id="a-lang"><option value="all">All readers</option><option value="bn">বাংলা readers only</option><option value="en">English readers only</option></select></div>
+          <div class="fld"><label for="a-cat">Topic</label><select class="sel" id="a-cat"><option value="">All topics</option>${cats.map((c) => `<option value="${c.id}">${c.icon} ${esc(c.en)}</option>`).join("")}</select><span class="hint">Only on that topic's pages and articles.</span></div>
+          <div class="fld"><label for="a-start">Start <span class="hint">(optional, Bangladesh time)</span></label><input class="inp" id="a-start" type="datetime-local"></div>
+          <div class="fld"><label for="a-end">End <span class="hint">(optional)</span></label><input class="inp" id="a-end" type="datetime-local"></div>
+          <div class="fld"><label for="a-pri">Priority <span class="hint">(1–10, higher = shown more when several ads share a place)</span></label><input class="inp" id="a-pri" type="number" min="1" max="10"></div>
+          <div class="fld" id="a-freq-box"><label for="a-freq">Pop-up frequency</label><select class="sel" id="a-freq"><option value="0">Every visit</option><option value="6">Once every 6 hours</option><option value="12">Once every 12 hours</option><option value="24">Once a day</option><option value="72">Once every 3 days</option><option value="168">Once a week</option></select></div>
+        </div></aside></div>`;
+    const $a = (id) => $("#" + id);
+    const read = () => {
+      a.name = $a("a-name").value.trim(); a.placement = $a("a-place").value; a.headline = $a("a-head").value.trim(); a.body = $a("a-body").value.trim();
+      a.cta = $a("a-cta").value.trim(); a.link_url = $a("a-link").value.trim(); a.lang = $a("a-lang").value; a.category = $a("a-cat").value;
+      a.is_active = $a("a-active").checked; a.start_at = $a("a-start").value; a.end_at = $a("a-end").value;
+      a.priority = Math.min(10, Math.max(1, parseInt($a("a-pri").value, 10) || 5)); a.freq_hours = +$a("a-freq").value;
+    };
+    const sync = () => {
+      const pl = PLACES[a.placement];
+      $a("a-place-h").textContent = pl.d; $a("a-size").textContent = pl.size;
+      $$("#a-kind button").forEach((b) => b.classList.toggle("on", b.dataset.k === a.kind));
+      $a("a-img-box").hidden = a.kind !== "image"; $a("a-text-box").hidden = a.kind !== "text";
+      $a("a-freq-box").hidden = a.placement !== "popup";
+      $a("a-head-h").textContent = a.kind === "image" ? "(optional — used as the image description)" : "(required)";
+      $a("a-prev").innerHTML = adPreview(a);
+      $a("a-pill").innerHTML = isNew && !a.id ? `<span class="pill draft">NEW</span>` : adPill(Object.assign({}, a, { start_at: a.start_at ? fromLocalInput(a.start_at) : null, end_at: a.end_at ? fromLocalInput(a.end_at) : null }));
+    };
+    const cover = () => {
+      const box = $a("a-cover");
+      box.innerHTML = a.image_url ? `<img src="${esc(a.image_url)}" alt="Ad image"><div class="row-b"><button type="button" class="b b-line b-sm" id="ac-pick">Replace</button><button type="button" class="b b-line b-sm" id="ac-del">Remove</button></div>`
+        : `<p class="muted" style="margin-bottom:10px">Drag an image here, or choose one.<br><small>JPG, PNG, WebP · auto-optimised</small></p><button type="button" class="b b-orange b-sm" id="ac-pick">📷 Choose image</button>`;
+      box.insertAdjacentHTML("beforeend", `<input type="file" id="ac-file" accept="image/*" hidden>`);
+      $("#ac-pick", box).onclick = () => $("#ac-file").click();
+      const d = $("#ac-del", box); if (d) d.onclick = () => { a.image_url = ""; cover(); sync(); };
+      $("#ac-file").onchange = (e) => { const f = e.target.files[0]; if (f) up(f); };
+    };
+    async function up(f) {
+      if (!/^image\//.test(f.type)) return toast("Please choose an image file", "err");
+      try { toast("Optimising & uploading…"); a.image_url = await uploadImage(f, "ads"); cover(); sync(); toast("Image uploaded", "ok"); }
+      catch (e) { toast("Upload failed: " + (e.message || e), "err"); }
+    }
+    const cb = $a("a-cover");
+    ["dragenter", "dragover"].forEach((n) => cb.addEventListener(n, (e) => { e.preventDefault(); cb.classList.add("drag"); }));
+    ["dragleave", "drop"].forEach((n) => cb.addEventListener(n, (e) => { e.preventDefault(); cb.classList.remove("drag"); }));
+    cb.addEventListener("drop", (e) => { const f = e.dataTransfer.files[0]; if (f) up(f); });
+
+    $a("a-name").value = a.name; $a("a-place").value = a.placement; $a("a-head").value = a.headline; $a("a-body").value = a.body; $a("a-cta").value = a.cta;
+    $a("a-link").value = a.link_url; $a("a-lang").value = a.lang; $a("a-cat").value = a.category; $a("a-active").checked = a.is_active;
+    $a("a-start").value = a.start_at; $a("a-end").value = a.end_at; $a("a-pri").value = a.priority; $a("a-freq").value = String(a.freq_hours);
+    if (![...$a("a-freq").options].some((o) => o.value === String(a.freq_hours))) $a("a-freq").insertAdjacentHTML("beforeend", `<option value="${a.freq_hours}">Once every ${a.freq_hours} hours</option>`), $a("a-freq").value = String(a.freq_hours);
+    $("#a-kind").onclick = (e) => { const b = e.target.closest("[data-k]"); if (!b) return; read(); a.kind = b.dataset.k; sync(); };
+    ["a-name", "a-place", "a-head", "a-body", "a-cta", "a-link", "a-lang", "a-cat", "a-active", "a-start", "a-end", "a-pri", "a-freq"].forEach((id) => { $a(id).addEventListener("input", () => { read(); sync(); }); $a(id).addEventListener("change", () => { read(); sync(); }); });
+    cover(); sync();
+
+    $a("a-save").onclick = async () => {
+      if (saving) return; read();
+      if (!a.name) return toast("Give the ad a name (only you see it)", "err");
+      if (!/^https?:\/\//i.test(a.link_url)) return toast("The link must start with https://", "err");
+      if (a.kind === "image" && !a.image_url) return toast("Add the ad image", "err");
+      if (a.kind === "text" && !a.headline) return toast("Write a headline for the text ad", "err");
+      if (a.start_at && a.end_at && fromLocalInput(a.end_at) <= fromLocalInput(a.start_at)) return toast("The end must be after the start", "err");
+      const row = { name: a.name, placement: a.placement, kind: a.kind, image_url: a.kind === "image" ? a.image_url : (a.image_url || null), link_url: a.link_url, headline: a.headline, body: a.kind === "text" ? a.body : "", cta: a.kind === "text" ? a.cta : "",
+        lang: a.lang, category: a.category || null, is_active: a.is_active, start_at: a.start_at ? fromLocalInput(a.start_at) : null, end_at: a.end_at ? fromLocalInput(a.end_at) : null, priority: a.priority, freq_hours: a.freq_hours };
+      saving = true; $a("a-save").disabled = true;
+      const r = a.id ? await sb.from("ads").update(row).eq("id", a.id).select("id").single() : await sb.from("ads").insert(row).select("id").single();
+      saving = false; $a("a-save").disabled = false;
+      if (r.error) return toast(r.error.message, "err");
+      a.id = r.data.id; adsLoaded = false; toast(a.is_active ? "Ad saved — it is live on the website" : "Ad saved (paused)", "ok");
+      if (isNew) history.replaceState(null, "", "#/ads/" + a.id);
+      sync();
+    };
+  }
 
   /* ---------------- settings ---------------- */
   function viewSettings(view) {
@@ -740,7 +1094,8 @@
           <p style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="b b-line b-sm" id="cs">Copy sitemap link</button><a class="b b-line b-sm" href="https://search.google.com/search-console" target="_blank" rel="noopener">Open Search Console ↗</a></p>
         </div>
         <div class="card"><h2>Quick guide</h2>
-          <ol class="steps"><li><b>New article</b> → write title & content (Bangla and/or English).</li><li>Add a cover image (auto-optimised).</li><li>Pick topic, date & time. Future time = scheduled.</li><li>Press <b>Publish now</b> — it appears on the website instantly.</li><li>Share the link on WhatsApp / Facebook / LinkedIn.</li></ol>
+          <ol class="steps"><li><b>New article</b> → write title & content (Bangla and/or English).</li><li>Add a cover image (auto-optimised).</li><li>Pick topic, date & time. Future time = scheduled.</li><li>Press <b>Publish now</b> — it appears on the website instantly.</li><li>Share the link on WhatsApp / Facebook / LinkedIn / X.</li></ol>
+          <p class="muted" style="margin-top:10px;font-size:.88rem"><b>Bangla ↔ English:</b> write in one language only — the other language and the short summary are created automatically when you publish (marked “machine-translated” for readers). <b>Ads</b> and <b>Visitors</b> have their own pages in the menu.</p>
           <p class="muted" style="margin-top:10px;font-size:.88rem">Formatting: <code>**bold**</code> · <code>*italic*</code> · <code>## Heading</code> · <code>- list</code> · <code>[text](link)</code></p>
         </div>
       </div>`;

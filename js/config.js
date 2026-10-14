@@ -34,6 +34,7 @@ window.VOSB = {
     instagram: "https://www.instagram.com/voiceofstartupbd/",
     linkedin:  "https://www.linkedin.com/company/voiceofstartupbd/",
     youtube:   "https://www.youtube.com/@voiceofstartup-bd/",
+    x:         "https://x.com/vostartupbd",
   },
 
   // Verified information sources (shown as text, no logos used)
@@ -52,6 +53,12 @@ window.VOSB = {
     { id: "founder",     slug: "founder-stories", icon: "💡", bn: "ফাউন্ডার স্টোরি",       en: "Founder Stories" },
     { id: "business",    slug: "business-policy", icon: "📈", bn: "ব্যবসা, বিনিয়োগ ও নীতিমালা", en: "Business, Investment & Policy" },
     { id: "opportunity", slug: "opportunities",   icon: "🚀", bn: "সুযোগ ও কাজের তথ্য",    en: "Opportunities & Resources" },
+    { id: "tech",          slug: "technology-ai",          icon: "🤖", bn: "প্রযুক্তি ও এআই",        en: "Technology & AI" },
+    { id: "market",        slug: "market-insights",        icon: "📊", bn: "মার্কেট ইনসাইট",         en: "Market Insights" },
+    { id: "events",        slug: "events-workshops",       icon: "🎤", bn: "ইভেন্ট ও ওয়ার্কশপ",      en: "Events & Workshops" },
+    { id: "guide",         slug: "entrepreneur-guides",    icon: "📘", bn: "উদ্যোক্তাদের গাইড",      en: "Entrepreneur Guides" },
+    { id: "international", slug: "international-startups", icon: "🌍", bn: "আন্তর্জাতিক স্টার্টআপ",   en: "International Startups" },
+    { id: "interview",     slug: "interviews-opinion",     icon: "🎙️", bn: "সাক্ষাৎকার ও মতামত",     en: "Interviews & Opinion" },
   ],
 
   // ---- Backend (Supabase). Fill these two values after following ADMIN-SETUP.md ----

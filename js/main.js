@@ -19,9 +19,10 @@
     facebook: '<svg viewBox="0 0 24 24"><path fill="#1877f2" d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg>',
     instagram: '<svg viewBox="0 0 24 24"><defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".35" stop-color="#fa7e1e"/><stop offset=".6" stop-color="#d62976"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs><path fill="url(#ig)" d="M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 4 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.2 4.4 2.6 6.8 7 7C8.3 24 8.7 24 12 24s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.2-4.4-2.6-6.8-7-7C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.4 1.4 0 1 0 0 2.9 1.4 1.4 0 0 0 0-2.9z"/></svg>',
     linkedin: '<svg viewBox="0 0 24 24"><path fill="#0a66c2" d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.4v1.6c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.5H3.6V9h3.5v11.5zM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0z"/></svg>',
+    x: '<svg viewBox="0 0 24 24"><path fill="#111111" d="M18.2 2.2h3.3l-7.2 8.300 8.500 11.300h-6.700l-5.200-6.800-6 6.800H1.600l7.700-8.800L1.200 2.200h6.800l4.700 6.200 5.500-6.200zm-1.200 17.600h1.800L7 4.100H5.100l11.900 15.700z"/></svg>',
     youtube: '<svg viewBox="0 0 24 24"><path fill="#ff0000" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg>',
   };
-  const LABEL = { facebook: "Facebook", instagram: "Instagram", linkedin: "LinkedIn", youtube: "YouTube" };
+  const LABEL = { facebook: "Facebook", instagram: "Instagram", linkedin: "LinkedIn", youtube: "YouTube", x: "X (Twitter)" };
 
   const NAV = [
     { href: "/", bn: "হোম", en: "Home" },
@@ -75,7 +76,8 @@
           <a class="btn btn-green" href="#follow">${T("ফলো করুন", "Follow Now")}</a>
           <button class="menu-btn" id="menu" aria-label="Menu">☰</button>
         </div>
-      </div></header>`;
+      </div></header>
+      <div class="container"><div class="ad-slot ad-header" data-slot="header" data-i="0"></div></div>`;
       $("#menu").onclick = () => $("#nav").classList.toggle("open");
       $("#lang").onclick = () => {
         lang = lang === "bn" ? "en" : "bn";
@@ -87,6 +89,7 @@
     if (bottom) {
       const social = Object.keys(C.social).map((k) => `<a href="${C.social[k]}" target="_blank" rel="noopener" aria-label="${LABEL[k]}">${ICON[k].replace(/fill="[^"]*"/g, "").replace(/<defs>.*<\/defs>/, "")}</a>`).join("");
       bottom.innerHTML = `
+      <div class="container"><div class="ad-slot ad-footer" data-slot="footer" data-i="0"></div></div>
       <footer class="site-footer"><div class="container">
         <div class="footer-grid">
           <div>
@@ -187,6 +190,12 @@
         founder: T("সফল উদ্যোক্তাদের অনুপ্রেরণামূলক ফাউন্ডার স্টোরি।", "Inspiring stories from successful founders."),
         business: T("ব্যবসা, বিনিয়োগ ও নীতিমালার গুরুত্বপূর্ণ খবর।", "Key news on business, investment and policy."),
         opportunity: T("নতুন উদ্যোক্তাদের জন্য কাজের তথ্য ও সুযোগ।", "Practical info and opportunities for new entrepreneurs."),
+        tech: T("ফিনটেক, এডটেক, SaaS ও এআই স্টার্টআপের খবর।", "Fintech, edtech, SaaS and AI startup news."),
+        market: T("বাজারের ট্রেন্ড, রিপোর্ট ও তথ্যভিত্তিক বিশ্লেষণ।", "Market trends, reports and data-backed analysis."),
+        events: T("স্টার্টআপ সামিট, বুটক্যাম্প ও ওয়ার্কশপের আপডেট।", "Startup summits, bootcamps and workshop updates."),
+        guide: T("ব্যবসা শুরু ও বড় করার ধাপে ধাপে গাইড।", "Step-by-step guides to start and grow a business."),
+        international: T("বিশ্ব স্টার্টআপ জগতের খবর ও শেখার বিষয়।", "Global startup news and lessons to learn."),
+        interview: T("ফাউন্ডার ও বিশেষজ্ঞদের সাক্ষাৎকার ও মতামত।", "Interviews and opinion from founders and experts."),
       }[c.id];
       return `<a class="cat-card" href="/${c.slug}"><div class="ic">${c.icon}</div><h3>${esc(pick(c))}</h3><p>${desc}</p></a>`;
     }).join(""));
@@ -239,7 +248,7 @@
     const items = POSTS.filter((p) => active === "all" || p.cat === active);
     const ready = postsState === "ready";
     list.classList.toggle("post-grid", !(ready && !items.length) && postsState !== "error");
-    list.innerHTML = postsBlock(items.slice(0, shown), true);
+    list.innerHTML = postsState === "ready" && items.length ? withFeedAds(items.slice(0, shown).map(postCard)) : postsBlock(items.slice(0, shown), true);
     const more = $("#load-more");
     if (more) {
       more.hidden = !(ready && items.length > shown);
@@ -369,7 +378,8 @@
       <h1>${esc(pick(p.title))}</h1>
       <div class="byline"><span>${T("লেখক", "By")} <b>${esc(p.author)}</b></span><span>${formatDateTime(p.date)}</span><span>${T(`${minsTxt} মিনিটে পড়া`, `${minsTxt} min read`)}</span></div>
       ${p.image ? `<figure class="cover"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" width="1200" height="675" decoding="async" fetchpriority="high">${p.imageAlt ? `<figcaption>${esc(p.imageAlt)}</figcaption>` : ""}</figure>` : ""}
-      <div class="prose">${MD.render(bodyMd)}</div>
+      <div class="prose">${withArticleAds(MD.render(bodyMd))}</div>
+      ${(lang === "bn" ? p.autoBn : p.autoEn) ? `<p class="tr-note">🌐 ${T("এই বাংলা সংস্করণটি স্বয়ংক্রিয়ভাবে অনুবাদ করা হয়েছে। কোনো ভুল চোখে পড়লে editor@voiceofstartup.bd-এ জানান।", "This English version was automatically translated from the original Bangla. If you spot a mistake, tell editor@voiceofstartup.bd.")}</p>` : ""}
       <div class="src">${src}</div>
       <div class="share-bar" id="share-bar" role="group" aria-label="${T("শেয়ার করুন", "Share")}">
         <b class="share-title">${T("শেয়ার করুন", "Share this article")}</b>
@@ -379,6 +389,7 @@
           <button type="button" class="share-btn" data-copy style="--c:#0b8a4b">${COPY_SVG}<span>${T("লিংক কপি", "Copy link")}</span></button>
         </div>
       </div>
+      <div class="ad-slot" data-slot="after_article" data-i="0"></div>
       <div id="related"></div>
       <p style="margin-top:28px"><a class="btn btn-outline" href="/news">← ${T("সব সংবাদ", "All news")}</a></p>`;
     wireShare(p);
@@ -416,6 +427,131 @@
     else { box.innerHTML = articleSkeleton(); }
   }
   renderers.push(renderArticle);
+
+
+  /* ---------- Ads (managed in the admin panel; always labelled; never block reading) ---------- */
+  let ADS = (API && API.configured && API.cachedAds) ? API.cachedAds() : [];
+  const adMemo = new Map();      // keep the same ad in a slot across re-renders (language switch etc.)
+  const adSeen = new Set();      // impressions counted once per page load
+  const isLive = (a) => (!a.start_at || new Date(a.start_at) <= new Date()) && (!a.end_at || new Date(a.end_at) > new Date());
+  const catOfPage = () => document.body.dataset.cat || (art && art.post ? art.post.cat : null);
+
+  function eligible(place, exclude) {
+    const cat = catOfPage();
+    return ADS.filter((a) => a.placement === place && isLive(a) && /^https?:\/\//i.test(a.link_url || "")
+      && (a.lang === "all" || a.lang === lang) && (!a.category || !cat || a.category === cat) && !(exclude || []).includes(a.id));
+  }
+  function weightedPick(list) {
+    if (!list.length) return null;
+    const total = list.reduce((n, a) => n + (a.priority || 5), 0);
+    let r = Math.random() * total;
+    for (const a of list) { r -= a.priority || 5; if (r <= 0) return a; }
+    return list[0];
+  }
+  function adFor(place, i) {
+    const key = place + ":" + i;
+    const prev = adMemo.get(key);
+    if (prev) { const still = eligible(place).find((a) => a.id === prev); if (still) return still; }
+    const used = [];
+    adMemo.forEach((id, k) => { if (k.startsWith(place + ":") && k !== key) used.push(id); });
+    const a = weightedPick(eligible(place, used)) || weightedPick(eligible(place));
+    if (a) adMemo.set(key, a.id); else adMemo.delete(key);
+    return a;
+  }
+  function adHtml(a) {
+    const label = `<span class="ad-label">${T("বিজ্ঞাপন", "Ad")}</span>`;
+    const attrs = `href="${esc(a.link_url)}" target="_blank" rel="sponsored nofollow noopener" data-ad="${esc(a.id)}"`;
+    if (a.kind === "image" && a.image_url) {
+      return `<a class="ad" ${attrs} aria-label="${esc(a.headline || T("স্পনসরড", "Sponsored"))}">${label}<img src="${esc(a.image_url)}" alt="${esc(a.headline || T("বিজ্ঞাপন", "Advertisement"))}" loading="lazy" decoding="async"></a>`;
+    }
+    return `<a class="ad" ${attrs}>${label}<span class="ad-text"><b>${esc(a.headline)}</b>${a.body ? `<span class="ad-body">${esc(a.body)}</span>` : ""}<span class="ad-cta">${esc(a.cta || T("বিস্তারিত দেখুন", "Learn more"))} →</span></span></a>`;
+  }
+  function fillSlots() {
+    $$("[data-slot]").forEach((el) => {
+      const a = adFor(el.dataset.slot, +el.dataset.i || 0);
+      el.innerHTML = a ? adHtml(a) : "";
+    });
+  }
+  let io = null;
+  function observeAds() {
+    if (!API || !API.configured) return;
+    const els = $$("a.ad[data-ad]").filter((el) => !adSeen.has(el.dataset.ad));
+    if (!els.length) return;
+    if (!("IntersectionObserver" in window)) { els.forEach((el) => { adSeen.add(el.dataset.ad); API.adImpression(el.dataset.ad); }); return; }
+    if (!io) io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      const id = en.target.dataset.ad;
+      io.unobserve(en.target);
+      if (!adSeen.has(id)) { adSeen.add(id); API.adImpression(id); }
+    }), { threshold: 0.5 });
+    els.forEach((el) => io.observe(el));
+  }
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest("a.ad[data-ad]");
+    if (a && API) API.adClick(a.dataset.ad);
+  });
+
+  /* feed ads: one after the 6th card, then every 12 cards */
+  function withFeedAds(cards) {
+    const out = [];
+    let n = 0;
+    cards.forEach((c, i) => {
+      out.push(c);
+      if (i === 5 || (i > 5 && (i - 5) % 12 === 0)) out.push(`<div class="ad-slot" data-slot="feed" data-i="${n++}"></div>`);
+    });
+    return out.join("");
+  }
+  /* in-article ads: after the 3rd block, and again after the 10th for long articles — never right after a heading */
+  function withArticleAds(html) {
+    const blocks = html.split("\n");
+    if (blocks.length < 5) return html;
+    const out = [];
+    let n = 0, next = 3;
+    blocks.forEach((b, i) => {
+      out.push(b);
+      const idx = i + 1;
+      if (idx >= next && !/^<h[23]/.test(b) && idx < blocks.length - 1 && n < 2) {
+        out.push(`<div class="ad-slot in-article" data-slot="in_article" data-i="${n++}"></div>`);
+        next = idx + 7;
+      }
+    });
+    return out.join("\n");
+  }
+
+  /* welcome pop-up: once per visitor per N hours, only after a short delay, never on article pages, easy to close */
+  let popupDone = false;
+  function maybePopup() {
+    if (popupDone || !API || !API.configured || document.getElementById("article") || /^\/(admin|read)\b/.test(location.pathname)) return;
+    const a = weightedPick(eligible("popup"));
+    if (!a) return;
+    popupDone = true;
+    let seen = {};
+    try { seen = JSON.parse(localStorage.getItem("vosb-pop") || "{}"); } catch (e) {}
+    const hrs = a.freq_hours === 0 ? 0 : (a.freq_hours || 12);
+    if (hrs && seen[a.id] && Date.now() - seen[a.id] < hrs * 3600 * 1000) return;
+    setTimeout(() => {
+      if (document.hidden || document.querySelector(".ad-pop-bg")) return;
+      const prevFocus = document.activeElement;
+      const bg = document.createElement("div");
+      bg.className = "ad-pop-bg";
+      bg.innerHTML = `<div class="ad-pop" role="dialog" aria-label="${T("স্পনসরড বিজ্ঞাপন", "Sponsored advertisement")}"><button class="ad-pop-close" type="button" aria-label="${T("বন্ধ করুন", "Close")}">×</button>${adHtml(a)}</div>`;
+      const close = () => { bg.remove(); document.removeEventListener("keydown", onKey); if (prevFocus && prevFocus.focus) try { prevFocus.focus(); } catch (e) {} };
+      const onKey = (e) => { if (e.key === "Escape") close(); };
+      bg.addEventListener("click", (e) => { if (e.target === bg || e.target.closest(".ad-pop-close")) close(); });
+      document.addEventListener("keydown", onKey);
+      document.body.appendChild(bg);
+      bg.querySelector(".ad-pop-close").focus();
+      try { seen[a.id] = Date.now(); localStorage.setItem("vosb-pop", JSON.stringify(seen)); } catch (e) {}
+      observeAds();
+    }, 5000);
+  }
+
+  async function loadAds() {
+    if (!API || !API.configured) return;
+    try { ADS = await API.listAds(); } catch (e) { return; }
+    refresh();
+    maybePopup();
+  }
 
   /* Legal pages (content lives in js/legal.js) */
   function renderLegal() {
@@ -476,6 +612,8 @@
   function refresh() {
     renderers.forEach((r) => r());
     applyStatic();
+    fillSlots();
+    observeAds();
   }
 
   async function loadPosts() {
@@ -491,5 +629,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     renderAll();
     loadPosts();
+    loadAds();
+    if (API && API.trackVisit) API.trackVisit(lang);
   });
 })();

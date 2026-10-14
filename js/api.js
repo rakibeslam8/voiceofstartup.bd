@@ -12,7 +12,7 @@
   const headers = (extra) => Object.assign({ apikey: S.anonKey, Authorization: "Bearer " + S.anonKey }, extra || {});
   const rest = (path, init) => fetch(base + "/rest/v1/" + path, Object.assign({ headers: headers() }, init || {}));
 
-  const LIST_COLS = "id,slug,category,publish_at,updated_at,featured,title_bn,title_en,excerpt_bn,excerpt_en,source,source_url,author,image_url,image_alt";
+  const LIST_COLS = "id,slug,category,publish_at,updated_at,featured,title_bn,title_en,excerpt_bn,excerpt_en,source,source_url,author,image_url,image_alt,auto_translated_bn,auto_translated_en";
 
   /* DB row -> object the site renders */
   function normalize(r) {
@@ -40,6 +40,8 @@
       bodyMd: { bn: bodyBn || bodyEn, en: bodyEn || bodyBn },
       views: r.views,
       shares: r.shares,
+      autoBn: !!r.auto_translated_bn,
+      autoEn: !!r.auto_translated_en,
     };
   }
 
@@ -90,5 +92,50 @@
 
   function trackShare(slug) { return rpc("increment_share", { p_slug: slug }); }
 
-  window.VOSB_API = { configured, normalize, listPosts, getPost, trackView, trackShare };
+  /* ---------- site-wide visitor analytics (anonymous) ----------
+     A random id kept in this browser tells us "unique visitors"; no name, email or IP is stored. */
+  const rid = () => {
+    try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+    return "v" + Date.now().toString(36) + Math.random().toString(36).slice(2, 12) + Math.random().toString(36).slice(2, 8);
+  };
+  function skipTracking() {
+    const isBot = navigator.webdriver || /bot|crawl|spider|headless|lighthouse|preview|facebookexternalhit|slurp/i.test(navigator.userAgent || "");
+    const isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+    let isAdmin = false;
+    try { isAdmin = !!localStorage.getItem("vosb-admin-auth"); } catch (e) {}
+    return !window.VOSB_FORCE_TRACK && (isBot || isLocal || isAdmin);
+  }
+  function trackVisit(lang) {
+    try {
+      if (!configured || skipTracking()) return Promise.resolve();
+      let visitor = "", isNew = false;
+      try { visitor = localStorage.getItem("vosb-vid") || ""; if (!visitor) { visitor = rid(); isNew = true; localStorage.setItem("vosb-vid", visitor); } } catch (e) { visitor = rid(); }
+      let sid = "", first = false;
+      try { sid = sessionStorage.getItem("vosb-sid") || ""; if (!sid) { sid = rid(); first = true; sessionStorage.setItem("vosb-sid", sid); } } catch (e) { sid = rid(); first = true; }
+      let ref = "";
+      if (first && document.referrer) {
+        try { const h = new URL(document.referrer).hostname.replace(/^www\./, "").toLowerCase(); if (h && h !== location.hostname.replace(/^www\./, "")) ref = h; } catch (e) {}
+      }
+      const ua = navigator.userAgent || "";
+      const device = /iPad|Tablet|PlayBook|Silk/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua)) ? "tablet" : /Mobi|iPhone|iPod|Android/i.test(ua) ? "mobile" : "desktop";
+      const path = location.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "") || "/";
+      return rpc("track_visit", { p_path: path, p_visitor: visitor, p_session: sid, p_referrer: ref, p_device: device, p_lang: lang === "en" ? "en" : "bn", p_new: isNew });
+    } catch (e) { return Promise.resolve(); }
+  }
+
+  /* ---------- ads ---------- */
+  const ADS_CACHE = "vosb-ads-cache";
+  function cachedAds() { try { const c = JSON.parse(sessionStorage.getItem(ADS_CACHE) || "null"); return c && Array.isArray(c.a) ? c.a : []; } catch (e) { return []; } }
+  async function listAds() {
+    if (!configured) return [];
+    const res = await rest("ads?select=id,placement,kind,image_url,link_url,headline,body,cta,lang,category,priority,freq_hours,start_at,end_at&order=priority.desc&limit=100");
+    if (!res.ok) throw new Error("ads " + res.status);
+    const rows = await res.json();
+    try { sessionStorage.setItem(ADS_CACHE, JSON.stringify({ t: Date.now(), a: rows })); } catch (e) {}
+    return rows;
+  }
+  const adImpression = (id) => (skipTracking() ? Promise.resolve() : rpc("ad_impression", { p_id: id }));
+  const adClick = (id) => (skipTracking() ? Promise.resolve() : rpc("ad_click", { p_id: id }));
+
+  window.VOSB_API = { configured, normalize, listPosts, getPost, trackView, trackShare, trackVisit, listAds, cachedAds, adImpression, adClick };
 })();
