@@ -12,7 +12,7 @@
   const headers = (extra) => Object.assign({ apikey: S.anonKey, Authorization: "Bearer " + S.anonKey }, extra || {});
   const rest = (path, init) => fetch(base + "/rest/v1/" + path, Object.assign({ headers: headers() }, init || {}));
 
-  const LIST_COLS = "id,slug,category,publish_at,updated_at,featured,title_bn,title_en,excerpt_bn,excerpt_en,source,source_url,author,image_url,image_alt,auto_translated_bn,auto_translated_en";
+  const LIST_COLS = "id,slug,category,publish_at,updated_at,featured,views,title_bn,title_en,excerpt_bn,excerpt_en,source,source_url,author,image_url,image_alt,auto_translated_bn,auto_translated_en";
 
   /* DB row -> object the site renders */
   function normalize(r) {
@@ -58,6 +58,19 @@
     if (!res.ok) throw new Error("post " + res.status);
     const rows = await res.json();
     return rows.length ? normalize(rows[0]) : null;
+  }
+
+
+  /* Full-text-ish search over titles, summaries and article text (both languages) */
+  async function searchPosts(q) {
+    if (!configured) return [];
+    const t = String(q || "").replace(/[,()*%\\"'`:;]/g, " ").replace(/\s+/g, " ").trim().slice(0, 60);
+    if (t.length < 2) return [];
+    const like = "*" + t.replace(/ /g, "*") + "*";
+    const cols = ["title_bn", "title_en", "excerpt_bn", "excerpt_en", "body_bn", "body_en"].map((c) => `${c}.ilike.${like}`).join(",");
+    const res = await rest(`posts?select=${LIST_COLS}&or=(${encodeURIComponent(cols)})&order=publish_at.desc&limit=40`);
+    if (!res.ok) throw new Error("search " + res.status);
+    return (await res.json()).map(normalize);
   }
 
   function rpc(fn, body) {
@@ -137,5 +150,5 @@
   const adImpression = (id) => (skipTracking() ? Promise.resolve() : rpc("ad_impression", { p_id: id }));
   const adClick = (id) => (skipTracking() ? Promise.resolve() : rpc("ad_click", { p_id: id }));
 
-  window.VOSB_API = { configured, normalize, listPosts, getPost, trackView, trackShare, trackVisit, listAds, cachedAds, adImpression, adClick };
+  window.VOSB_API = { searchPosts, configured, normalize, listPosts, getPost, trackView, trackShare, trackVisit, listAds, cachedAds, adImpression, adClick };
 })();

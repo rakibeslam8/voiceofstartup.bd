@@ -743,10 +743,10 @@
       if (status === "published" && !(ed.body_bn.trim() || ed.body_en.trim())) return toast("Add some article content before publishing", "err");
       if (!ed.publish_at) return toast("Choose a publish date & time", "err");
       let slug = (ed.slug || "").replace(/^-+|-+$/g, "");
-      if (!slug) slug = slugify(ed.title_en) || randSlug();
-      if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) return toast("Web address can use only a–z, 0–9 and hyphens", "err");
+      const autoSlug = !slug;   // no address typed: build a readable one from the English title (after translation)
+      if (!slug) slug = slugify(ed.title_en) || "";
+      if (slug && !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) return toast("Web address can use only a–z, 0–9 and hyphens", "err");
       if (ed.source_url && !/^https?:\/\//i.test(ed.source_url)) return toast("Source link must start with https://", "err");
-      ed.slug = slug; $f("f-slug").value = slug; slugUrl();
       saving = true; saveBar();
       let tr = { done: [], failed: false };
       if (!(ed.title_bn.trim() && ed.title_en.trim() && ed.body_bn.trim() && ed.body_en.trim() && ed.excerpt_bn.trim() && ed.excerpt_en.trim())) {
@@ -754,6 +754,12 @@
         tr = await autoFill();
         fillLang();
       } else { ed.auto_translated_bn = ed.auto_translated_bn && !touched.bn; ed.auto_translated_en = ed.auto_translated_en && !touched.en; }
+      if (autoSlug && !slug) {
+        slug = slugify(ed.title_en);
+        if (!slug) slug = randSlug();
+        if (postsLoaded && posts.some((x) => x.slug === slug && x.id !== ed.id)) slug += "-" + Math.random().toString(36).slice(2, 5);
+      }
+      ed.slug = slug; $f("f-slug").value = slug; slugUrl();
       const row = {
         slug, category: ed.category, status, publish_at: fromLocalInput(ed.publish_at), featured: ed.featured,
         title_bn: ed.title_bn.trim(), title_en: ed.title_en.trim(), excerpt_bn: ed.excerpt_bn.trim(), excerpt_en: ed.excerpt_en.trim(),
