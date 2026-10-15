@@ -509,3 +509,15 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .ad-slot:empty { display: none; margin: 0; }
 @media (min-width: 1000px) { .cat-grid { grid-template-columns: repeat(5, 1fr); } }
 @media (min-width: 601px) and (max-width: 999px) { .cat-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* SEO text block + FAQ */
+.seo-block h2{font-size:clamp(1.25rem,3.4vw,1.7rem);margin-bottom:10px}
+.seo-block h3{margin:22px 0 10px;font-size:1.1rem}
+.seo-block>.container>p{color:var(--muted,#555);line-height:1.8}
+.faq{display:grid;gap:10px}
+.faq-item{background:#fff;border:1px solid #ececec;border-radius:14px;padding:0 16px}
+.faq-item summary{cursor:pointer;font-weight:600;padding:14px 0;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:"+";font-size:1.4rem;color:#ff7522;flex:none}
+.faq-item[open] summary::after{content:"–"}
+.faq-item p{padding:0 0 14px;line-height:1.75;color:#444}

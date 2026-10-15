@@ -8,6 +8,9 @@
   const renderers = [];
   let lang = "bn";
   try { lang = localStorage.getItem("vosb-lang") || "bn"; } catch (e) {}
+  // /en/read/<slug> is the English edition of an article: always show English there (Google indexes it as English)
+  const EN_EDITION = /^\/en\/read\/[a-z0-9-]+\/?$/.test(location.pathname);
+  if (EN_EDITION) lang = "en";
 
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -82,6 +85,7 @@
       $("#lang").onclick = () => {
         lang = lang === "bn" ? "en" : "bn";
         try { localStorage.setItem("vosb-lang", lang); } catch (e) {}
+        if (EN_EDITION && lang === "bn") { location.href = location.pathname.replace(/^\/en/, ""); return; }
         renderAll();
       };
     }
@@ -273,10 +277,10 @@
   let art = { slug: null, post: null, tracked: false, failed: false, drawn: "" };
 
   function articleSlug() {
-    const m = location.pathname.match(/^\/read\/([a-z0-9-]+)\/?$/);
+    const m = location.pathname.match(/^\/(?:en\/)?read\/([a-z0-9-]+)\/?$/);
     return m ? m[1] : new URLSearchParams(location.search).get("id");
   }
-  const articleUrl = (slug) => `${C.site.origin}/read/${slug}`;
+  const articleUrl = (slug) => `${C.site.origin}${EN_EDITION ? "/en" : ""}/read/${slug}`;
 
   const notFoundHtml = () => `<h1>${T("পোস্ট পাওয়া যায়নি", "Post not found")}</h1>
     <p class="muted" style="margin-top:8px">${T("লিংকটি ভুল হতে পারে অথবা পোস্টটি সরানো হয়েছে।", "The link may be wrong or the post may have been removed.")}</p>
@@ -521,7 +525,7 @@
   /* welcome pop-up: once per visitor per N hours, only after a short delay, never on article pages, easy to close */
   let popupDone = false;
   function maybePopup() {
-    if (popupDone || !API || !API.configured || document.getElementById("article") || /^\/(admin|read)\b/.test(location.pathname)) return;
+    if (popupDone || !API || !API.configured || document.getElementById("article") || /^\/(admin|read|en\/read)\b/.test(location.pathname)) return;
     const a = weightedPick(eligible("popup"));
     if (!a) return;
     popupDone = true;
