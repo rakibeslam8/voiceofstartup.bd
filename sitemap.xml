@@ -1,63 +1,515 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://voiceofstartup.bd/</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://voiceofstartup.bd/news</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/funding</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/founder-stories</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/business-policy</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/opportunities</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/technology-ai</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/market-insights</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/events-workshops</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/entrepreneur-guides</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/international-startups</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/interviews-opinion</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://voiceofstartup.bd/about</loc>
-    <lastmod>2026-10-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://voiceofstartup.bd/contact</loc>
-    <lastmod>2026-10-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://voiceofstartup.bd/careers</loc>
-    <lastmod>2026-10-12</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://voiceofstartup.bd/privacy-policy</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://voiceofstartup.bd/terms-of-service</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://voiceofstartup.bd/cookie-policy</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://voiceofstartup.bd/refund-policy</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://voiceofstartup.bd/usage-policy</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv8xilr3hpw</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv8xilr3hpw"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv8xilr3hpw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv8xilr3hpw"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv8xidyds74z.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv8xilr3hpw</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv8xilr3hpw"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv8xilr3hpw"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv8xilr3hpw"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv8xidyds74z.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv88k02qhwj</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv88k02qhwj"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv88k02qhwj"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv88k02qhwj"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv88glnhcki6.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv88k02qhwj</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv88k02qhwj"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv88k02qhwj"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv88k02qhwj"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv88glnhcki6.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv8by345cyv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv8by345cyv"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv8by345cyv"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv8by345cyv"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv8btlb4gq59.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv8by345cyv</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv8by345cyv"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv8by345cyv"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv8by345cyv"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv8btlb4gq59.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv8bomd4yop</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv8bomd4yop"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv8bomd4yop"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv8bomd4yop"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv8b88watuwz.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv8bomd4yop</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv8bomd4yop"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv8bomd4yop"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv8bomd4yop"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv8b88watuwz.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv7l09ca9tt</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7l09ca9tt"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7l09ca9tt"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7l09ca9tt"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7kve394z8r.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv7l09ca9tt</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7l09ca9tt"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7l09ca9tt"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7l09ca9tt"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7kve394z8r.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv8e2w35fja</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv8e2w35fja"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv8e2w35fja"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv8e2w35fja"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv8e1ktdq1i5.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv8e2w35fja</loc>
+    <lastmod>2026-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv8e2w35fja"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv8e2w35fja"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv8e2w35fja"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv8e1ktdq1i5.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/despite-the-stability-of-global-financial-markets-risks-remain-and-cou</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/despite-the-stability-of-global-financial-markets-risks-remain-and-cou"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/despite-the-stability-of-global-financial-markets-risks-remain-and-cou"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/despite-the-stability-of-global-financial-markets-risks-remain-and-cou"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7gptt9ta3w.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/despite-the-stability-of-global-financial-markets-risks-remain-and-cou</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/despite-the-stability-of-global-financial-markets-risks-remain-and-cou"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/despite-the-stability-of-global-financial-markets-risks-remain-and-cou"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/despite-the-stability-of-global-financial-markets-risks-remain-and-cou"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7gptt9ta3w.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv7krrwdb9t</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7krrwdb9t"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7krrwdb9t"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7krrwdb9t"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7kmqcun6eq.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv7krrwdb9t</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7krrwdb9t"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7krrwdb9t"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7krrwdb9t"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7kmqcun6eq.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv7lpzvkawk</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7lpzvkawk"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7lpzvkawk"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7lpzvkawk"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7ln4vlogpq.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv7lpzvkawk</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7lpzvkawk"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7lpzvkawk"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7lpzvkawk"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7ln4vlogpq.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv7lxem7svp</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7lxem7svp"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7lxem7svp"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7lxem7svp"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7lrknfkz0f.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv7lxem7svp</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7lxem7svp"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7lxem7svp"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7lxem7svp"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7lrknfkz0f.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv7l4t3r9an</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7l4t3r9an"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7l4t3r9an"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7l4t3r9an"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7l1qwckle4.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv7l4t3r9an</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7l4t3r9an"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7l4t3r9an"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7l4t3r9an"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7l1qwckle4.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv7lb8ji6nj</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7lb8ji6nj"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7lb8ji6nj"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7lb8ji6nj"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7l6wu9f4k0.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv7lb8ji6nj</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7lb8ji6nj"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7lb8ji6nj"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7lb8ji6nj"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7l6wu9f4k0.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv7lfmcp8vn</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7lfmcp8vn"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7lfmcp8vn"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7lfmcp8vn"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7ldcyz8brc.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv7lfmcp8vn</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7lfmcp8vn"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7lfmcp8vn"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7lfmcp8vn"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7ldcyz8brc.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/44-innovative-projects-receive-ict-and-innovation-award</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/44-innovative-projects-receive-ict-and-innovation-award"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/44-innovative-projects-receive-ict-and-innovation-award"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/44-innovative-projects-receive-ict-and-innovation-award"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7u1bfc3mym.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/44-innovative-projects-receive-ict-and-innovation-award</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/44-innovative-projects-receive-ict-and-innovation-award"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/44-innovative-projects-receive-ict-and-innovation-award"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/44-innovative-projects-receive-ict-and-innovation-award"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7u1bfc3mym.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/post-mv7sznichdk</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7sznichdk"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7sznichdk"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7sznichdk"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7swgur9tkb.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/post-mv7sznichdk</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/post-mv7sznichdk"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/post-mv7sznichdk"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/post-mv7sznichdk"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7swgur9tkb.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/from-banker-to-builder-shahir-chowdhury-s-edtech-journey-bangladesh-st</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/from-banker-to-builder-shahir-chowdhury-s-edtech-journey-bangladesh-st"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/from-banker-to-builder-shahir-chowdhury-s-edtech-journey-bangladesh-st"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/from-banker-to-builder-shahir-chowdhury-s-edtech-journey-bangladesh-st"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7tmt3nkgem.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/from-banker-to-builder-shahir-chowdhury-s-edtech-journey-bangladesh-st</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/from-banker-to-builder-shahir-chowdhury-s-edtech-journey-bangladesh-st"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/from-banker-to-builder-shahir-chowdhury-s-edtech-journey-bangladesh-st"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/from-banker-to-builder-shahir-chowdhury-s-edtech-journey-bangladesh-st"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7tmt3nkgem.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/ayman-sadiq-founder-and-ceo-10-minute-school</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/ayman-sadiq-founder-and-ceo-10-minute-school"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/ayman-sadiq-founder-and-ceo-10-minute-school"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/ayman-sadiq-founder-and-ceo-10-minute-school"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7t6xfo189s.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/ayman-sadiq-founder-and-ceo-10-minute-school</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/ayman-sadiq-founder-and-ceo-10-minute-school"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/ayman-sadiq-founder-and-ceo-10-minute-school"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/ayman-sadiq-founder-and-ceo-10-minute-school"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7t6xfo189s.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/startup-world-cup-2026-bangladeshi-startups-get-shot-at-1-million-glob</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/startup-world-cup-2026-bangladeshi-startups-get-shot-at-1-million-glob"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/startup-world-cup-2026-bangladeshi-startups-get-shot-at-1-million-glob"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/startup-world-cup-2026-bangladeshi-startups-get-shot-at-1-million-glob"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7sjji99pv1.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/startup-world-cup-2026-bangladeshi-startups-get-shot-at-1-million-glob</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/startup-world-cup-2026-bangladeshi-startups-get-shot-at-1-million-glob"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/startup-world-cup-2026-bangladeshi-startups-get-shot-at-1-million-glob"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/startup-world-cup-2026-bangladeshi-startups-get-shot-at-1-million-glob"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7sjji99pv1.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/64-year-old-rezaul-now-a-freelancer-earns-over-tk-100-000-per-month</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/64-year-old-rezaul-now-a-freelancer-earns-over-tk-100-000-per-month"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/64-year-old-rezaul-now-a-freelancer-earns-over-tk-100-000-per-month"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/64-year-old-rezaul-now-a-freelancer-earns-over-tk-100-000-per-month"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7m1q0brdly.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/64-year-old-rezaul-now-a-freelancer-earns-over-tk-100-000-per-month</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/64-year-old-rezaul-now-a-freelancer-earns-over-tk-100-000-per-month"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/64-year-old-rezaul-now-a-freelancer-earns-over-tk-100-000-per-month"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/64-year-old-rezaul-now-a-freelancer-earns-over-tk-100-000-per-month"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7m1q0brdly.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/read/top-10-successful-bangladeshi-entrepreneurs</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/top-10-successful-bangladeshi-entrepreneurs"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/top-10-successful-bangladeshi-entrepreneurs"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/top-10-successful-bangladeshi-entrepreneurs"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7s804hahbo.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://voiceofstartup.bd/en/read/top-10-successful-bangladeshi-entrepreneurs</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://voiceofstartup.bd/read/top-10-successful-bangladeshi-entrepreneurs"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://voiceofstartup.bd/en/read/top-10-successful-bangladeshi-entrepreneurs"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://voiceofstartup.bd/read/top-10-successful-bangladeshi-entrepreneurs"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7s804hahbo.webp</image:loc></image:image>
   </url>
 </urlset>
