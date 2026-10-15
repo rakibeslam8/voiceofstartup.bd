@@ -521,3 +521,21 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .faq-item summary::after{content:"+";font-size:1.4rem;color:#ff7522;flex:none}
 .faq-item[open] summary::after{content:"–"}
 .faq-item p{padding:0 0 14px;line-height:1.75;color:#444}
+
+/* Category filter: one swipeable row on phones, wrapped chips on desktop */
+.filters-wrap{position:relative;margin-bottom:22px}
+.filters{margin-bottom:0}
+.filter{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;text-decoration:none;color:inherit}
+.filter .fi{font-size:1.05em;line-height:1}
+.filter.active:hover{color:#fff}
+@media (max-width:899px){
+  .filters-wrap{margin-left:-16px;margin-right:-16px}
+  .filters{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:8px;padding:2px 16px 10px;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+  .filters::-webkit-scrollbar{display:none}
+  .filter{flex:0 0 auto;scroll-snap-align:start;padding:9px 15px;font-size:.92rem;border-width:1.5px}
+  .filters-wrap::before,.filters-wrap::after{content:"";position:absolute;top:0;bottom:10px;width:34px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:2}
+  .filters-wrap::before{left:0;background:linear-gradient(90deg,var(--bg,#f9f9f9),rgba(249,249,249,0))}
+  .filters-wrap::after{right:0;background:linear-gradient(270deg,var(--bg,#f9f9f9),rgba(249,249,249,0))}
+  .filters-wrap.fade-l::before,.filters-wrap.fade-r::after{opacity:1}
+}
+@media (max-width:899px){ .filters-wrap{overflow:hidden;max-width:100vw} }

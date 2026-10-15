@@ -6,8 +6,8 @@ window.VOSB = {
   site: {
     name: "Voice of Startup Bangladesh",
     short: "VOSB",
-    domain: "voiceofstartup.bd",
-    origin: "https://voiceofstartup.bd",
+    domain: "www.voiceofstartup.bd",
+    origin: "https://www.voiceofstartup.bd",
   },
 
   // Business emails

@@ -248,7 +248,20 @@
     const active = fixed || legacy || "all";
     const filters = [{ id: "all", slug: "news", bn: "সব", en: "All" }, ...C.categories];
     const fbox = $("#filters");
-    if (fbox) fbox.innerHTML = filters.map((f) => `<a class="filter ${f.id === active ? "active" : ""}" href="/${f.slug}">${f.icon || ""} ${esc(pick(f))}</a>`).join("");
+    if (fbox) {
+      fbox.innerHTML = filters.map((f) => `<a class="filter ${f.id === active ? "active" : ""}" href="/${f.slug}"${f.id === active ? ' aria-current="page"' : ""}>${f.icon ? `<span class="fi" aria-hidden="true">${f.icon}</span>` : ""}${esc(pick(f))}</a>`).join("");
+      const wrap = fbox.parentElement;
+      const sync = () => {
+        const max = fbox.scrollWidth - fbox.clientWidth;
+        wrap.classList.toggle("fade-l", fbox.scrollLeft > 6);
+        wrap.classList.toggle("fade-r", max > 6 && fbox.scrollLeft < max - 6);
+      };
+      fbox.onscroll = sync;
+      const on = fbox.querySelector(".filter.active");
+      if (on && fbox.scrollWidth > fbox.clientWidth) fbox.scrollLeft = Math.max(0, on.offsetLeft - (fbox.clientWidth - on.offsetWidth) / 2);
+      sync();
+      if (window.ResizeObserver && !fbox._ro) { fbox._ro = new ResizeObserver(sync); fbox._ro.observe(fbox); }
+    }
     const items = POSTS.filter((p) => active === "all" || p.cat === active);
     const ready = postsState === "ready";
     list.classList.toggle("post-grid", !(ready && !items.length) && postsState !== "error");

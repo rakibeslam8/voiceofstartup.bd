@@ -3,8 +3,8 @@
  *
  * Reads the LIVE articles from Supabase (public anon key from js/config.js — the same data any visitor can read)
  * and writes plain HTML files that Google can crawl with a normal "200 OK":
- *     read/<slug>.html        Bangla article page      -> https://voiceofstartup.bd/read/<slug>
- *     en/read/<slug>.html     English article page     -> https://voiceofstartup.bd/en/read/<slug>
+ *     read/<slug>.html        Bangla article page      -> https://www.voiceofstartup.bd/read/<slug>
+ *     en/read/<slug>.html     English article page     -> https://www.voiceofstartup.bd/en/read/<slug>
  *     sitemap.xml             every page (+ hreflang pairs, cover images)
  *     feed.xml, en/feed.xml   RSS feeds
  * Pages of deleted / unpublished articles are removed. Nothing changes (no commit) when nothing changed.

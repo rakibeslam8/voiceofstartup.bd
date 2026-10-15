@@ -6,7 +6,7 @@ import json, pathlib, html
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 V = "20261014a"
-ORIGIN = "https://voiceofstartup.bd"
+ORIGIN = "https://www.voiceofstartup.bd"
 
 CATS = [
  dict(id="funding", slug="funding", bn="ফান্ডিং ও প্রতিযোগিতা", en="Funding & Competitions",

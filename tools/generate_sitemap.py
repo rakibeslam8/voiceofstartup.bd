@@ -2,12 +2,12 @@
 """Regenerate sitemap.xml (run from anywhere):  python3 tools/generate_sitemap.py
 
 Includes the main pages, the legal pages and one /article?id=... URL per post
-found in js/posts.js. Submit https://voiceofstartup.bd/sitemap.xml in Google Search Console.
+found in js/posts.js. Submit https://www.voiceofstartup.bd/sitemap.xml in Google Search Console.
 """
 import re, datetime, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-ORIGIN = "https://voiceofstartup.bd"
+ORIGIN = "https://www.voiceofstartup.bd"
 today = datetime.date.today().isoformat()
 
 pages = [

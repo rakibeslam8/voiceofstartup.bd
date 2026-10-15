@@ -1,4 +1,4 @@
-# voiceofstartup.bd
+# www.voiceofstartup.bd
 Bangladesh Startup & Business News — Verified Insights, Funding Updates & Founder Stories
 
 ## Voice of Startup Bangladesh — Website
@@ -20,7 +20,7 @@ URLs are extensionless (GitHub Pages serves `about.html` at `/about`). Legal tex
 | Colors / fonts | `:root` in `css/style.css` |
 
 ## SEO
-`sitemap.xml` and `robots.txt` are in the root. After adding posts run `python3 tools/generate_sitemap.py`, commit, and submit `https://voiceofstartup.bd/sitemap.xml` in Google Search Console.
+`sitemap.xml` and `robots.txt` are in the root. After adding posts run `python3 tools/generate_sitemap.py`, commit, and submit `https://www.voiceofstartup.bd/sitemap.xml` in Google Search Console.
 
 ## Run locally
 ```bash

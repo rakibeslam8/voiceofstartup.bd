@@ -11,8 +11,8 @@
     privacy: {
       title: L("গোপনীয়তা নীতি", "Privacy Policy"),
       intro: L(
-        "Voice of Startup Bangladesh (“VOSB”, “আমরা”) আপনার গোপনীয়তাকে গুরুত্ব দেয়। এই নীতিতে ব্যাখ্যা করা হয়েছে voiceofstartup.bd ওয়েবসাইট ব্যবহার করলে আমরা কোন তথ্য সংগ্রহ করি, কেন করি এবং আপনার কী অধিকার আছে।",
-        "Voice of Startup Bangladesh (“VOSB”, “we”, “us”) respects your privacy. This policy explains what information we collect when you use voiceofstartup.bd, why we collect it, and what rights you have."
+        "Voice of Startup Bangladesh (“VOSB”, “আমরা”) আপনার গোপনীয়তাকে গুরুত্ব দেয়। এই নীতিতে ব্যাখ্যা করা হয়েছে www.voiceofstartup.bd ওয়েবসাইট ব্যবহার করলে আমরা কোন তথ্য সংগ্রহ করি, কেন করি এবং আপনার কী অধিকার আছে।",
+        "Voice of Startup Bangladesh (“VOSB”, “we”, “us”) respects your privacy. This policy explains what information we collect when you use www.voiceofstartup.bd, why we collect it, and what rights you have."
       ),
       sections: [
         { h: L("আমরা কারা", "Who we are"),
@@ -63,8 +63,8 @@
     terms: {
       title: L("ব্যবহারের শর্তাবলি", "Terms of Service"),
       intro: L(
-        "voiceofstartup.bd ওয়েবসাইট ও আমাদের সোশ্যাল মিডিয়া পেজ ব্যবহার করে আপনি এই শর্তাবলি মেনে নিচ্ছেন। শর্তগুলো মনোযোগ দিয়ে পড়ুন।",
-        "By using voiceofstartup.bd and our social media pages you agree to these Terms. Please read them carefully."
+        "www.voiceofstartup.bd ওয়েবসাইট ও আমাদের সোশ্যাল মিডিয়া পেজ ব্যবহার করে আপনি এই শর্তাবলি মেনে নিচ্ছেন। শর্তগুলো মনোযোগ দিয়ে পড়ুন।",
+        "By using www.voiceofstartup.bd and our social media pages you agree to these Terms. Please read them carefully."
       ),
       sections: [
         { h: L("শর্ত গ্রহণ", "Acceptance of terms"),
@@ -97,8 +97,8 @@
     cookies: {
       title: L("কুকি নীতি", "Cookie Policy"),
       intro: L(
-        "এই নীতিতে ব্যাখ্যা করা হয়েছে voiceofstartup.bd কুকি ও অনুরূপ প্রযুক্তি কীভাবে ব্যবহার করে।",
-        "This policy explains how voiceofstartup.bd uses cookies and similar technologies."
+        "এই নীতিতে ব্যাখ্যা করা হয়েছে www.voiceofstartup.bd কুকি ও অনুরূপ প্রযুক্তি কীভাবে ব্যবহার করে।",
+        "This policy explains how www.voiceofstartup.bd uses cookies and similar technologies."
       ),
       sections: [
         { h: L("কুকি কী", "What are cookies"),
@@ -160,8 +160,8 @@
     usage: {
       title: L("ব্যবহার নীতি", "Usage Policy"),
       intro: L(
-        "এই নীতি নির্ধারণ করে voiceofstartup.bd ও আমাদের কনটেন্ট আপনি কীভাবে ব্যবহার করতে পারবেন। এটি আমাদের ব্যবহারের শর্তাবলির অংশ।",
-        "This policy sets out how you may use voiceofstartup.bd and our content. It forms part of our Terms of Service."
+        "এই নীতি নির্ধারণ করে www.voiceofstartup.bd ও আমাদের কনটেন্ট আপনি কীভাবে ব্যবহার করতে পারবেন। এটি আমাদের ব্যবহারের শর্তাবলির অংশ।",
+        "This policy sets out how you may use www.voiceofstartup.bd and our content. It forms part of our Terms of Service."
       ),
       sections: [
         { h: L("অনুমোদিত ব্যবহার", "Permitted use"),
