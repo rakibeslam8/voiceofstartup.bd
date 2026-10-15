@@ -188,6 +188,7 @@
     { r: "posts", ic: "📰", t: "Articles" },
     { r: "edit/new", ic: "✍️", t: "New" },
     { r: "ads", ic: "📣", t: "Ads" },
+    { r: "subscribers", ic: "✉️", t: "Subscribers", s: "Mail" },
     { r: "settings", ic: "⚙️", t: "Settings" },
   ];
   let shellOn = false;
@@ -203,7 +204,7 @@
         <button class="b b-ghost b-sm" id="out">Sign out</button>
       </div></header>
       <main class="main" id="view"></main>
-      <nav class="bottom-nav" id="bnav" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}"><span>${n.ic}</span>${n.t}</a>`).join("")}</nav>`;
+      <nav class="bottom-nav" id="bnav" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}"><span>${n.ic}</span>${n.s || n.t}</a>`).join("")}</nav>`;
     $("#out").onclick = () => logout("You have been signed out.");
     shellOn = true;
   }
@@ -226,6 +227,7 @@
       if (h === "dashboard") await viewDashboard(view);
       else if (h === "visitors") await viewVisitors(view);
       else if (h === "ads") await viewAds(view);
+      else if (h === "subscribers") await viewSubscribers(view);
       else if (h.startsWith("ads/")) await viewAdEditor(view, h.slice(4));
       else if (h === "posts") await viewPosts(view);
       else if (h === "settings") viewSettings(view);
@@ -292,8 +294,9 @@
 
   async function viewDashboard(view) {
     view.innerHTML = `<div class="page-h"><h1>Dashboard</h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div><div class="card"><p class="muted">Loading…</p></div>`;
-    let site = null;
-    await Promise.all([loadPosts(true), loadDaily(), loadSite(7).then((x) => { site = x; }).catch(() => {})]);
+    let site = null, subs = null;
+    await Promise.all([loadPosts(true), loadDaily(), loadSite(7).then((x) => { site = x; }).catch(() => {}),
+      sb.from("subscribers").select("id", { count: "exact", head: true }).eq("status", "active").then((r) => { if (!r.error) subs = r.count; }, () => {})]);
     if (!view.isConnected) return;   // user navigated away while loading
     const total = posts.reduce((a, p) => a + Number(p.views || 0), 0);
     const shares = posts.reduce((a, p) => a + Number(p.shares || 0), 0);
@@ -313,6 +316,7 @@
         <div class="tile k"><small>Page views today</small><b>${fmtN(site.totals.views_today)}</b></div>
         <div class="tile r"><small>Visitors · 7 days</small><b>${fmtN(site.totals.visitors_7d)}</b></div>
       </div>` : ""}
+      ${subs !== null ? `<div class="tiles"><a class="tile g" href="#/subscribers" style="text-decoration:none;color:inherit"><small>Newsletter subscribers</small><b>${fmtN(subs)}</b></a></div>` : ""}
       <div class="tiles">
         <div class="tile"><small>Total reads</small><b>${fmtN(total)}</b></div>
         <div class="tile g"><small>Reads today</small><b>${fmtN(today)}</b></div>
@@ -1076,6 +1080,90 @@
       if (isNew) history.replaceState(null, "", "#/ads/" + a.id);
       sync();
     };
+  }
+
+
+  /* ---------------- newsletter subscribers ---------------- */
+  let subsList = [];
+  const csvCell = (v) => { v = String(v == null ? "" : v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
+  function downloadCsv(name, rows) {
+    const blob = new Blob(["﻿" + rows.map((r) => r.map(csvCell).join(",")).join("\r\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+  async function viewSubscribers(view) {
+    view.innerHTML = `<div class="page-h"><h1>Subscribers</h1></div><div class="card"><p class="muted">Loading…</p></div>`;
+    const { data, error } = await sb.from("subscribers").select("id,email,status,lang,source,token,created_at,unsubscribed_at").order("created_at", { ascending: false }).limit(10000);
+    if (!view.isConnected) return;
+    if (error) {
+      const missing = /relation|does not exist|schema cache|PGRST205|42P01/i.test(error.message + (error.code || ""));
+      view.innerHTML = `<div class="page-h"><h1>Subscribers</h1></div><div class="card"><div class="msg err">${missing ? "The newsletter table has not been created yet. Open Supabase → SQL Editor, paste the contents of <b>supabase/update-3-newsletter.sql</b> from the website repository, press Run, then reload this page." : "Could not load subscribers: " + esc(error.message)}</div></div>`;
+      return;
+    }
+    subsList = data || [];
+    let q = "", st = "all";
+    const origin = (window.VOSB && window.VOSB.origin) || "https://www.voiceofstartup.bd";
+    const unsubUrl = (x) => `${origin}/unsubscribe?t=${x.token}`;
+    const activeNow = () => subsList.filter((x) => x.status === "active");
+    const week = Date.now() - 7 * 864e5;
+    const draw = () => {
+      const active = activeNow();
+      const list = subsList.filter((x) => (st === "all" || x.status === st) && (!q || x.email.includes(q)));
+      view.innerHTML = `
+      <div class="page-h"><h1>Subscribers <span class="muted" style="font-size:1rem">(${fmtN(subsList.length)})</span></h1>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="b b-line" id="copy">Copy active emails</button><button class="b b-orange" id="csv">⬇ Export CSV</button></div></div>
+      <div class="tiles">
+        <div class="tile g"><small>Active</small><b>${fmtN(active.length)}</b></div>
+        <div class="tile"><small>New · 7 days</small><b>${fmtN(subsList.filter((x) => new Date(x.created_at) > week).length)}</b></div>
+        <div class="tile k"><small>বাংলা · English</small><b>${fmtN(active.filter((x) => x.lang === "bn").length)} · ${fmtN(active.filter((x) => x.lang === "en").length)}</b></div>
+        <div class="tile r"><small>Unsubscribed</small><b>${fmtN(subsList.length - active.length)}</b></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+          <input id="sq" type="search" placeholder="Search email…" value="${esc(q)}" style="flex:1 1 200px;min-width:0;padding:10px 14px;border:1px solid var(--line);border-radius:10px;font:inherit">
+          <select id="sf" style="padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit">${[["all", "All"], ["active", "Active"], ["unsubscribed", "Unsubscribed"]].map(([v, t]) => `<option value="${v}" ${v === st ? "selected" : ""}>${t}</option>`).join("")}</select>
+        </div>
+        ${list.length ? `<div class="rows" id="sub-rows">${list.slice(0, 500).map((x) => `
+          <div class="row sub" data-id="${x.id}">
+            <div class="ti" style="min-width:0"><h3 style="overflow-wrap:anywhere;-webkit-line-clamp:3">${esc(x.email)}</h3>
+              <div class="meta">${x.status === "active" ? `<span class="pill live">ACTIVE</span>` : `<span class="pill paused">UNSUBSCRIBED</span>`}<span>${x.lang === "en" ? "English" : "বাংলা"}</span><span>${esc(x.source)}</span><span>🗓 ${esc(fmtD(x.created_at))}</span></div></div>
+            <div class="acts"><button class="b b-line b-sm" data-a="toggle">${x.status === "active" ? "Unsubscribe" : "Re-subscribe"}</button>
+              <button class="b b-sm" style="color:var(--red);border-color:var(--line);background:#fff" data-a="del">Delete</button></div></div>`).join("")}</div>
+          ${list.length > 500 ? `<p class="muted" style="margin-top:10px">Showing the newest 500 of ${fmtN(list.length)}. Use search, or export the CSV for the full list.</p>` : ""}`
+          : `<div class="empty"><b>${subsList.length ? "No matches" : "No subscribers yet"}</b>${subsList.length ? "Try a different search." : "People who subscribe from the website homepage appear here."}</div>`}
+      </div>
+      <div class="card" style="margin-top:16px"><h2>Sending the newsletter</h2>
+        <p class="muted" style="font-size:.92rem;line-height:1.6">This page is your own subscriber list. Click <b>Export CSV</b> (active subscribers only; includes each person's private unsubscribe link) and import it into a mailing service such as Brevo or Mailchimp to design and send your weekly digest. Anyone who clicks an unsubscribe link <i>from the website</i> is marked “Unsubscribed” here automatically; if you send from a separate service, re-export before each send so unsubscribed people are left out.</p></div>`;
+      const sq = $("#sq", view);
+      sq.oninput = () => { q = sq.value.trim().toLowerCase(); const pos = sq.selectionStart; draw(); const n = $("#sq", view); n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) {} };
+      $("#sf", view).onchange = (e) => { st = e.target.value; draw(); };
+      $("#csv", view).onclick = () => {
+        const rows = [["email", "language", "subscribed_at", "source", "unsubscribe_url"]].concat(active.map((x) => [x.email, x.lang, x.created_at, x.source, unsubUrl(x)]));
+        downloadCsv(`vosb-subscribers-${new Date().toISOString().slice(0, 10)}.csv`, rows);
+        toast(`Exported ${fmtN(active.length)} active subscribers`, "ok");
+      };
+      $("#copy", view).onclick = async () => { toast((await copyText(active.map((x) => x.email).join(", "))) ? "Copied" : "Copy failed", "ok"); };
+      const rowsEl = $("#sub-rows", view);
+      if (rowsEl) rowsEl.addEventListener("click", async (e) => {
+        const btn = e.target.closest("[data-a]"); if (!btn) return;
+        const x = subsList.find((r) => r.id === btn.closest(".row").dataset.id); if (!x) return;
+        if (btn.dataset.a === "toggle") {
+          const on = x.status !== "active";
+          const { error: er } = await sb.from("subscribers").update({ status: on ? "active" : "unsubscribed", unsubscribed_at: on ? null : new Date().toISOString() }).eq("id", x.id);
+          if (er) return toast(er.message, "err");
+          x.status = on ? "active" : "unsubscribed"; x.unsubscribed_at = on ? null : new Date().toISOString();
+          toast(on ? "Re-subscribed" : "Unsubscribed", "ok"); return draw();
+        }
+        if (btn.dataset.a === "del") {
+          if (!(await modal({ title: "Delete this subscriber?", body: `${x.email} will be permanently removed from your list.`, ok: "Delete", danger: true }))) return;
+          const { error: er } = await sb.from("subscribers").delete().eq("id", x.id);
+          if (er) return toast(er.message, "err");
+          subsList = subsList.filter((r) => r.id !== x.id);
+          toast("Deleted", "ok"); draw();
+        }
+      });
+    };
+    draw();
   }
 
   /* ---------------- settings ---------------- */

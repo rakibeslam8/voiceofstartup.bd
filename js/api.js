@@ -137,5 +137,27 @@
   const adImpression = (id) => (skipTracking() ? Promise.resolve() : rpc("ad_impression", { p_id: id }));
   const adClick = (id) => (skipTracking() ? Promise.resolve() : rpc("ad_click", { p_id: id }));
 
-  window.VOSB_API = { configured, normalize, listPosts, getPost, trackView, trackShare, trackVisit, listAds, cachedAds, adImpression, adClick };
+  /* ---------- newsletter ---------- */
+  async function subscribe(email, lang, source) {
+    if (!configured) throw new Error("not configured");
+    const res = await fetch(`${base}/rest/v1/rpc/subscribe_newsletter`, {
+      method: "POST",
+      headers: headers({ "Content-Type": "application/json" }),
+      body: JSON.stringify({ p_email: email, p_lang: lang === "en" ? "en" : "bn", p_source: source || "home" }),
+    });
+    if (!res.ok) throw new Error("subscribe " + res.status);
+    return res.json();   // "ok" | "invalid" | "busy"
+  }
+  async function unsubscribe(token) {
+    if (!configured) throw new Error("not configured");
+    const res = await fetch(`${base}/rest/v1/rpc/unsubscribe_newsletter`, {
+      method: "POST",
+      headers: headers({ "Content-Type": "application/json" }),
+      body: JSON.stringify({ p_token: token }),
+    });
+    if (!res.ok) throw new Error("unsubscribe " + res.status);
+    return res.json();
+  }
+
+  window.VOSB_API = { configured, normalize, listPosts, getPost, trackView, trackShare, trackVisit, listAds, cachedAds, adImpression, adClick, subscribe, unsubscribe };
 })();

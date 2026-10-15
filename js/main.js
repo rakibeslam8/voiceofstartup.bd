@@ -612,14 +612,63 @@
   }
   renderers.push(renderLegal);
 
-  /* Forms (mailto fallback — swap for Formspree/Netlify Forms later) */
+  /* Newsletter: saves the address in Supabase (table `subscribers`) through a secure RPC */
+  function wireNewsletter(nl) {
+    const input = $("input[type=email]", nl), btn = $("button[type=submit]", nl), msg = $("#nl-msg");
+    const say = (kind, bn, en) => { if (!msg) return; msg.className = "nl-msg " + kind; msg.textContent = T(bn, en); msg.hidden = false; };
+    let done = "";
+    try { done = localStorage.getItem("vosb-nl") || ""; } catch (e) {}
+    if (done) say("ok", "আপনি ইতিমধ্যে সাবস্ক্রাইব করেছেন। ধন্যবাদ!", "You're already subscribed. Thank you!");
+    nl.onsubmit = async (e) => {
+      e.preventDefault();
+      const hp = $("input[name=website]", nl);
+      const email = (input.value || "").trim().toLowerCase();
+      if (hp && hp.value) { say("ok", "ধন্যবাদ! আপনি সাবস্ক্রাইব করেছেন।", "Thank you! You're subscribed."); return; }   // bots fill the hidden field
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)) { say("err", "সঠিক ইমেইল ঠিকানা দিন।", "Please enter a valid email address."); input.focus(); return; }
+      if (!API.configured) { location.href = `mailto:hello@voiceofstartup.bd?subject=${encodeURIComponent("Newsletter signup")}&body=${encodeURIComponent("Please add me to the newsletter: " + email)}`; return; }
+      btn.disabled = true; input.disabled = true;
+      const label = btn.textContent; btn.textContent = T("অপেক্ষা করুন…", "Please wait…");
+      try {
+        const r = await API.subscribe(email, lang, "home");
+        if (r === "ok") {
+          say("ok", "ধন্যবাদ! আপনি সাবস্ক্রাইব করেছেন। সাপ্তাহিক আপডেট আপনার ইমেইলে পৌঁছে যাবে।", "Thank you! You're subscribed. Our weekly update will reach your inbox.");
+          input.value = "";
+          try { localStorage.setItem("vosb-nl", "1"); } catch (e2) {}
+        } else if (r === "invalid") say("err", "সঠিক ইমেইল ঠিকানা দিন।", "Please enter a valid email address.");
+        else say("err", "এই মুহূর্তে অনেক অনুরোধ আসছে। একটু পরে আবার চেষ্টা করুন।", "We're getting a lot of requests right now. Please try again in a minute.");
+      } catch (err) {
+        say("err", "দুঃখিত, সাবস্ক্রাইব করা যায়নি। একটু পরে আবার চেষ্টা করুন অথবা hello@voiceofstartup.bd-এ লিখুন।", "Sorry, we couldn't subscribe you. Please try again shortly or write to hello@voiceofstartup.bd.");
+      }
+      btn.disabled = false; input.disabled = false; btn.textContent = label;
+    };
+  }
+
+  /* /unsubscribe?t=<token> — one-click unsubscribe */
+  async function renderUnsub() {
+    const box = $("#unsub-box");
+    if (!box) return;
+    const token = new URLSearchParams(location.search).get("t") || "";
+    const set = (h1, p) => { box.innerHTML = `<p class="eyebrow">${T("নিউজলেটার", "Newsletter")}</p><h1>${h1}</h1><p class="muted">${p}</p><p style="margin-top:24px"><a class="btn btn-green" href="/">${T("হোমে ফিরুন", "Back to home")}</a></p>`; };
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(token)) {
+      return set(T("লিংকটি সঠিক নয়", "This link isn't valid"), T("নিউজলেটার থেকে সরে যেতে ইমেইলের ভেতরের “Unsubscribe” লিংকটি ব্যবহার করুন, অথবা hello@voiceofstartup.bd-এ লিখুন।", "Please use the “Unsubscribe” link inside the newsletter email, or write to hello@voiceofstartup.bd."));
+    }
+    set(T("অপেক্ষা করুন…", "One moment…"), "");
+    try {
+      const ok = await API.unsubscribe(token.toLowerCase());
+      if (ok) {
+        try { localStorage.removeItem("vosb-nl"); } catch (e) {}
+        set(T("আপনি সরে গেছেন", "You've been unsubscribed"), T("আপনাকে আর নিউজলেটার পাঠানো হবে না। ভুল করে সরে গেলে সাইটে আবার সাবস্ক্রাইব করতে পারেন।", "You won't receive our newsletter any more. If this was a mistake you can subscribe again on the website."));
+      } else set(T("লিংকটি সঠিক নয়", "This link isn't valid"), T("এই লিংকে কোনো সাবস্ক্রিপশন পাওয়া যায়নি।", "We couldn't find a subscription for this link."));
+    } catch (e) {
+      set(T("কিছু ভুল হয়েছে", "Something went wrong"), T("একটু পরে আবার চেষ্টা করুন অথবা hello@voiceofstartup.bd-এ লিখুন।", "Please try again shortly or write to hello@voiceofstartup.bd."));
+    }
+  }
+  renderers.push(renderUnsub);
+
+  /* Forms */
   function wireForms() {
     const nl = $("#newsletter");
-    if (nl) nl.onsubmit = (e) => {
-      e.preventDefault();
-      const v = $("input", nl).value;
-      location.href = `mailto:hello@voiceofstartup.bd?subject=${encodeURIComponent("Newsletter signup")}&body=${encodeURIComponent("Please add me to the newsletter: " + v)}`;
-    };
+    if (nl) wireNewsletter(nl);
     const cf = $("#contact-form");
     if (cf) $$("select[name=to] option", cf).forEach((o) => {
       const em = C.emails.find((x) => x.address === o.value);

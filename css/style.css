@@ -585,6 +585,17 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 @media (max-width:720px){.ts-list{justify-content:flex-start}.trust-strip{padding:14px 14px}}
 
 /* bigger, crisper header logo */
-.brand img{height:60px;width:auto;image-rendering:auto}
-@media (max-width:900px){.brand img{height:52px}}
-@media (max-width:480px){.brand img{height:48px}}
+.brand img{height:44px;width:auto;image-rendering:auto}
+.site-header .container{padding-block:8px}
+@media (max-width:900px){.brand img{height:40px}}
+@media (max-width:480px){.brand img{height:34px}.site-header .container{padding-block:7px}}
+
+/* Newsletter form states */
+.nl-hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.newsletter { position: relative; }
+.nl-msg { margin: 14px auto 0; max-width: 560px; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-size: .95rem; text-align: left; }
+.nl-msg.ok { background: #e8f6ee; color: #0b6b3a; border: 1px solid #b9e3cb; }
+.nl-msg.err { background: #fdecec; color: #b3261e; border: 1px solid #f5c2c0; }
+.nl-note { margin: 12px auto 0; max-width: 560px; font-size: .82rem; color: #5b5b5b; }
+.nl-note a { color: var(--orange); text-decoration: underline; }
+.newsletter .btn:disabled, .newsletter input:disabled { opacity: .7; cursor: wait; }

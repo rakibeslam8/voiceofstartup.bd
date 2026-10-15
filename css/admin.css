@@ -226,7 +226,7 @@ table.t td.n, table.t th.n { text-align: right; }
 .empty-prev { padding: 36px 16px; text-align: center; color: var(--muted); background: #fafaf8; border-style: dashed; }
 @media (max-width: 860px) {
   .place-grid { grid-template-columns: 1fr; }
-  .bottom-nav { grid-template-columns: repeat(6, 1fr); }
+  .bottom-nav { grid-template-columns: repeat(7, 1fr); }
   .bottom-nav a { font-size: .66rem; padding: 7px 2px 6px; }
   .bottom-nav a span { font-size: 1.15rem; }
   .dash-cols[style*="1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
@@ -247,3 +247,7 @@ table.t td.n, table.t th.n { text-align: right; }
   .page-h h1 { font-size: 1.35rem; }
   .chart-h { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
+
+/* subscribers list: no thumbnail column; 7-item bottom menu */
+.row.sub { grid-template-columns: 1fr auto; }
+@media (max-width: 900px) { .row.sub { grid-template-columns: 1fr; } .bottom-nav { grid-template-columns: repeat(7, 1fr); } .bottom-nav a { font-size: .66rem; padding: 7px 1px 6px; } .bottom-nav a span { font-size: 1.15rem; } }
