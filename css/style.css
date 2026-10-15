@@ -539,3 +539,52 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   .filters-wrap.fade-l::before,.filters-wrap.fade-r::after{opacity:1}
 }
 @media (max-width:899px){ .filters-wrap{overflow:hidden;max-width:100vw} }
+
+/* ---- Round 3 design polish ---- */
+/* consistent line icons */
+.ci{width:1.2em;height:1.2em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.22em;flex:none}
+.cat-card .ic{font-size:1.5rem;color:var(--orange-dark,#e55f0f)}
+.cat-card .ic .ci{width:26px;height:26px}
+.cat-card:nth-child(4n+2) .ic{background:#eaf7f0;color:var(--green,#0b8a4b)}
+.cat-card:nth-child(4n+3) .ic{background:#fdecec;color:var(--red,#e8312f)}
+.cat-card:nth-child(4n+4) .ic{background:#efefef;color:#111}
+.cat-card:nth-child(4n+1) .ic{background:var(--orange-soft)}
+.post-thumb .ci,.fc-img .ci{width:34px;height:34px}
+.filter .fi .ci{width:1.1em;height:1.1em}
+.badge .ci{width:1em;height:1em;vertical-align:-.15em}
+.footer-grid li a .ci{width:1.05em;height:1.05em;margin-right:4px;opacity:.85}
+
+/* topics: compact grid */
+.topics .cat-grid{grid-template-columns:repeat(5,1fr);gap:14px}
+.topics .cat-card{padding:18px 16px}
+.topics .cat-card .ic{width:44px;height:44px;margin-bottom:10px}
+.topics .cat-card h3{font-size:1rem;line-height:1.35;margin-bottom:4px}
+.topics .cat-card p{font-size:.86rem;line-height:1.5}
+@media (max-width:1100px){.topics .cat-grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:720px){
+  .topics .cat-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .topics .cat-card{padding:14px 12px;display:flex;flex-direction:column}
+  .topics .cat-card p{display:none}
+  .topics .cat-card .ic{width:40px;height:40px;margin-bottom:8px}
+  .topics .cat-card h3{font-size:.95rem;margin:0}
+}
+
+/* top stories directly under the hero */
+.hero{padding:44px 0 52px}
+@media (max-width:720px){.hero{padding:32px 0 38px}}
+.top-stories{padding-top:34px}
+
+/* slim "verified sources" strip (replaces the big black block) */
+.trust-strip{display:flex;align-items:center;justify-content:space-between;gap:18px 28px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-left:5px solid var(--green,#0b8a4b);border-radius:16px;padding:16px 20px;box-shadow:var(--shadow)}
+.ts-head{display:flex;gap:12px;align-items:center;min-width:0;flex:1 1 320px}
+.ts-badge{flex:none;width:34px;height:34px;border-radius:50%;background:var(--green,#0b8a4b);color:#fff;display:grid;place-items:center;font-weight:800}
+.ts-head b{display:block;font-size:1rem;line-height:1.35}
+.ts-head small{display:block;color:var(--muted);font-size:.8rem;line-height:1.45;margin-top:2px}
+.ts-list{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 300px;justify-content:flex-end}
+.ts-chip{padding:6px 12px;border-radius:999px;background:#f4f4f1;border:1px solid var(--line);font-weight:800;font-size:.8rem;letter-spacing:.02em}
+@media (max-width:720px){.ts-list{justify-content:flex-start}.trust-strip{padding:14px 14px}}
+
+/* bigger, crisper header logo */
+.brand img{height:60px;width:auto;image-rendering:auto}
+@media (max-width:900px){.brand img{height:52px}}
+@media (max-width:480px){.brand img{height:48px}}

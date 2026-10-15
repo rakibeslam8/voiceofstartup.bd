@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@600;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css?v=20261014a">
+  <link rel="stylesheet" href="/css/style.css?v=20261015c">
   <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[{"@type":"NewsMediaOrganization","@id":"https://www.voiceofstartup.bd/#org","name":"Voice of Startup Bangladesh","alternateName":["VOSB","Voice of Startup BD","Voice of Startup","ভয়েস অব স্টার্টআপ বাংলাদেশ"],"url":"https://www.voiceofstartup.bd/","logo":{"@type":"ImageObject","url":"https://www.voiceofstartup.bd/assets/icon-512.png","width":512,"height":512},"image":"https://www.voiceofstartup.bd/assets/og-image.png","description":"Bangladesh startup, business and funding news platform — verified insights, founder stories and opportunities.","email":"hello@voiceofstartup.bd","areaServed":"BD","foundingLocation":"Bangladesh","knowsAbout":["Startups in Bangladesh","Venture capital","Business and investment policy","Entrepreneurship","Technology and AI"],"sameAs":["https://www.facebook.com/voiceofstartupbd","https://www.instagram.com/voiceofstartupbd/","https://www.linkedin.com/company/voiceofstartupbd/","https://www.youtube.com/@voiceofstartup-bd/","https://x.com/vostartupbd"],"contactPoint":[{"@type":"ContactPoint","contactType":"editorial","email":"editor@voiceofstartup.bd","availableLanguage":["bn","en"]},{"@type":"ContactPoint","contactType":"customer support","email":"hello@voiceofstartup.bd","availableLanguage":["bn","en"]}]},{"@type":"WebSite","@id":"https://www.voiceofstartup.bd/#site","url":"https://www.voiceofstartup.bd/","name":"Voice of Startup Bangladesh","alternateName":["VOSB","Voice of Startup BD","Voice of Startup","ভয়েস অব স্টার্টআপ বাংলাদেশ"],"description":"Bangladesh startup, business and funding news","inLanguage":["bn","en"],"publisher":{"@id":"https://www.voiceofstartup.bd/#org"}},{"@type":"WebPage","@id":"https://www.voiceofstartup.bd/#home","url":"https://www.voiceofstartup.bd/","name":"Voice of Startup Bangladesh | Startup, Business & Funding News","isPartOf":{"@id":"https://www.voiceofstartup.bd/#site"},"about":{"@id":"https://www.voiceofstartup.bd/#org"},"inLanguage":"bn"},{"@type":"ItemList","@id":"https://www.voiceofstartup.bd/#nav","name":"Main sections","itemListElement":[{"@type":"SiteNavigationElement","position":1,"name":"সর্বশেষ সংবাদ / Latest News","url":"https://www.voiceofstartup.bd/news"},{"@type":"SiteNavigationElement","position":2,"name":"ফান্ডিং ও প্রতিযোগিতা / Funding","url":"https://www.voiceofstartup.bd/funding"},{"@type":"SiteNavigationElement","position":3,"name":"ফাউন্ডার স্টোরি / Founder Stories","url":"https://www.voiceofstartup.bd/founder-stories"},{"@type":"SiteNavigationElement","position":4,"name":"ব্যবসা ও নীতিমালা / Business & Policy","url":"https://www.voiceofstartup.bd/business-policy"},{"@type":"SiteNavigationElement","position":5,"name":"সুযোগ / Opportunities","url":"https://www.voiceofstartup.bd/opportunities"},{"@type":"SiteNavigationElement","position":6,"name":"আমাদের সম্পর্কে / About Us","url":"https://www.voiceofstartup.bd/about"},{"@type":"SiteNavigationElement","position":7,"name":"যোগাযোগ / Contact","url":"https://www.voiceofstartup.bd/contact"}]}]}
   </script>
@@ -66,24 +66,12 @@
 
     <div class="ticker" id="ticker" aria-label="Headlines"></div>
 
-    <section class="section">
+    <section class="section top-stories">
       <div class="container">
         <div class="section-head">
           <div>
-            <p class="eyebrow" data-bn="আপনি পাবেন" data-en="What you get"></p>
-            <h2 data-bn="যা যা থাকছে <span class='g'>এখানে</span>" data-en="What you'll find <span class='g'>here</span>"></h2>
-          </div>
-        </div>
-        <div class="cat-grid" id="categories"></div>
-      </div>
-    </section>
-
-    <section class="section" style="padding-top:0">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow" data-bn="নতুন পোস্ট" data-en="Fresh posts"></p>
-            <h2 data-bn="সর্বশেষ <span class='r'>আপডেট</span>" data-en="Latest <span class='r'>updates</span>"></h2>
+            <p class="eyebrow" data-bn="এইমাত্র প্রকাশিত" data-en="Just published"></p>
+            <h2 data-bn="শীর্ষ <span class='r'>খবর</span>" data-en="Top <span class='r'>stories</span>"></h2>
           </div>
           <a class="btn btn-outline" href="/news" data-bn="সব দেখুন →" data-en="View all →"></a>
         </div>
@@ -93,14 +81,23 @@
       </div>
     </section>
 
+    <section class="section topics" style="padding-top:8px">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" data-bn="বিষয় অনুযায়ী" data-en="Browse by topic"></p>
+            <h2 data-bn="সব বিষয় <span class='g'>এক নজরে</span>" data-en="Every topic, <span class='g'>at a glance</span>"></h2>
+          </div>
+        </div>
+        <div class="cat-grid" id="categories"></div>
+      </div>
+    </section>
+
     <section class="section" style="padding-top:0">
       <div class="container">
-        <div class="sources">
-          <p class="eyebrow" data-bn="কেন বিশ্বাসযোগ্য" data-en="Why trust us"></p>
-          <h2 data-bn="সরকার অনুমোদিত সংস্থার তথ্যসূত্রে <span class='o'>যাচাইকৃত</span> আপডেট" data-en="Updates <span class='o'>verified</span> from government-approved sources"></h2>
-          <p data-bn="আমরা তথ্য সংগ্রহ করি নিচের সংস্থাগুলোর সূত্র থেকে, তাই প্রতিটি আপডেট যাচাইকৃত।" data-en="We collect information from the bodies below, so every update is checked against an official source."></p>
-          <div class="chips" id="source-chips"></div>
-          <p class="note" data-bn="এই সংস্থাগুলোর সূত্র ব্যবহার করা হয়; ওয়েবসাইটটি এসব সংস্থার অফিসিয়াল সাইট নয়।" data-en="We cite these bodies as sources; this website is not an official site of any of them."></p>
+        <div class="trust-strip">
+          <div class="ts-head"><span class="ts-badge" aria-hidden="true">✔</span><div><b data-bn="সরকার অনুমোদিত সংস্থার সূত্রে যাচাইকৃত" data-en="Verified from government-approved sources"></b><small data-bn="এই সংস্থাগুলোর সূত্র ব্যবহার করা হয়; ওয়েবসাইটটি এসব সংস্থার অফিসিয়াল সাইট নয়।" data-en="We cite these bodies as sources; this website is not an official site of any of them."></small></div></div>
+          <div class="ts-list" id="source-chips"></div>
         </div>
       </div>
     </section>
@@ -145,9 +142,9 @@
   </main>
 
   <div id="site-bottom"></div>
-  <script src="/js/config.js?v=20261014a"></script>
-  <script src="/js/md.js?v=20261014a"></script>
-  <script src="/js/api.js?v=20261014a"></script>
-  <script src="/js/main.js?v=20261014a"></script>
+  <script src="/js/config.js?v=20261015c"></script>
+  <script src="/js/md.js?v=20261015c"></script>
+  <script src="/js/api.js?v=20261015c"></script>
+  <script src="/js/main.js?v=20261015c"></script>
 </body>
 </html>

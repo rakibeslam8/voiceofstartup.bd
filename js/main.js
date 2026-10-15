@@ -103,7 +103,7 @@
           </div>
           <div>
             <h4>${T("এক্সপ্লোর", "Explore")}</h4>
-            <ul>${C.categories.map((c) => `<li><a href="/${c.slug}">${c.icon} ${esc(pick(c))}</a></li>`).join("")}
+            <ul>${C.categories.map((c) => `<li><a href="/${c.slug}">${ci(c)} ${esc(pick(c))}</a></li>`).join("")}
             <li><a href="/about">${T("আমাদের সম্পর্কে", "About us")}</a></li>
             <li><a href="/careers">${T("ক্যারিয়ার", "Careers")}</a></li></ul>
           </div>
@@ -130,11 +130,26 @@
 
   /* ---------- Reusable renderers ---------- */
   const catOf = (id) => C.categories.find((c) => c.id === id);
+  /* One consistent line-icon set for topics (replaces emoji, which look different on every phone) */
+  const CAT_SVG = {
+    funding: "M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3",
+    founder: "M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.600.500 1 1.200 1 2.100h5c0-.900.400-1.600 1-2.100A6 6 0 0 0 12 3z",
+    business: "M3 17l6-6 4 4 8-8M15 7h6v6",
+    opportunity: "M14.500 4.500c3-1.500 5.500-1.500 5.500-1.500s0 2.500-1.500 5.500L13 14l-3-3 4.500-6.500zM9 11l-3 .5L4 14l3.500.5M13 14l-.5 3.500L10 20l-.5-3.500M4.500 19.500c.5-1.500 1.500-2.500 3-3",
+    tech: "M7 7h10v10H7zM10 10h4v4h-4zM9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3",
+    market: "M4 20V11M10 20V4M16 20v-6M3 20h18",
+    events: "M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM4 10h16M8 3v4M16 3v4",
+    guide: "M12 6c-2-1.500-5-2-8-2v13c3 0 6 .5 8 2 2-1.500 5-2 8-2V4c-3 0-6 .5-8 2zM12 6v13",
+    international: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3c2.500 2.500 3.500 5.500 3.500 9s-1 6.500-3.500 9c-2.500-2.500-3.500-5.500-3.500-9s1-6.500 3.500-9z",
+    interview: "M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3M9 21h6",
+  };
+  const ci = (c) => (c && CAT_SVG[c.id] ? `<svg class="ci" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${CAT_SVG[c.id]}"/></svg>` : (c && c.icon) || "");
+
 
   const readUrl = (p) => `/read/${p.slug}`;
   const thumb = (p, c) => p.image
     ? `<div class="post-thumb has-img"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" loading="lazy" decoding="async" width="640" height="360"></div>`
-    : `<div class="post-thumb ${esc(p.cat)}" aria-hidden="true">${c.icon}</div>`;
+    : `<div class="post-thumb ${esc(p.cat)}" aria-hidden="true">${ci(c)}</div>`;
 
   function postCard(p) {
     const c = catOf(p.cat) || C.categories[0];
@@ -181,7 +196,7 @@
   mount("ticker", () => {
     const items = POSTS.length
       ? POSTS.slice(0, 12).map((p) => esc(pick(p.title)))
-      : C.categories.map((c) => `${c.icon} ${esc(pick(c))}`);
+      : C.categories.map((c) => `${ci(c)} ${esc(pick(c))}`);
     items.unshift(T("সব আপডেট সবার আগে", "All updates, first"));
     const html = items.map((t) => `<span>${t}</span>`).join("");
     return `<div class="ticker-track">${html}${html}</div>`;
@@ -201,7 +216,7 @@
         international: T("বিশ্ব স্টার্টআপ জগতের খবর ও শেখার বিষয়।", "Global startup news and lessons to learn."),
         interview: T("ফাউন্ডার ও বিশেষজ্ঞদের সাক্ষাৎকার ও মতামত।", "Interviews and opinion from founders and experts."),
       }[c.id];
-      return `<a class="cat-card" href="/${c.slug}"><div class="ic">${c.icon}</div><h3>${esc(pick(c))}</h3><p>${desc}</p></a>`;
+      return `<a class="cat-card" href="/${c.slug}"><div class="ic">${ci(c)}</div><h3>${esc(pick(c))}</h3><p>${desc}</p></a>`;
     }).join(""));
 
   const emptyState = () => `<div class="empty-state">
@@ -211,7 +226,7 @@
       <div class="socials es-socials">${Object.keys(C.social).map((k) => `<a class="social-btn" href="${C.social[k]}" target="_blank" rel="noopener">${ICON[k]}${LABEL[k]}</a>`).join("")}</div>
     </div>`;
 
-  const topStory = () => (postsState === "ready" ? POSTS.find((p) => p.featured) : null) || null;
+  const topStory = () => (postsState === "ready" ? POSTS.find((p) => p.featured) || POSTS[0] : null) || null;
   mount("featured", () => { const f = topStory(); return f ? featuredCard(f) : ""; });
   mount("latest", () => {
     const f = topStory();
@@ -222,7 +237,7 @@
   });
 
   mount("source-chips", () =>
-    C.sources.map((s) => `<div class="chip"><b>${esc(s.short)}</b><small>${esc(pick(s))}</small></div>`).join(""));
+    C.sources.map((s) => `<span class="ts-chip" title="${esc(pick(s))}">${esc(s.short)}</span>`).join(""));
 
   mount("hero-sources", () => C.sources.map((s) => `<span>${esc(s.short)}</span>`).join(""));
 
@@ -249,7 +264,7 @@
     const filters = [{ id: "all", slug: "news", bn: "সব", en: "All" }, ...C.categories];
     const fbox = $("#filters");
     if (fbox) {
-      fbox.innerHTML = filters.map((f) => `<a class="filter ${f.id === active ? "active" : ""}" href="/${f.slug}"${f.id === active ? ' aria-current="page"' : ""}>${f.icon ? `<span class="fi" aria-hidden="true">${f.icon}</span>` : ""}${esc(pick(f))}</a>`).join("");
+      fbox.innerHTML = filters.map((f) => `<a class="filter ${f.id === active ? "active" : ""}" href="/${f.slug}"${f.id === active ? ' aria-current="page"' : ""}>${(f.icon) ? `<span class="fi" aria-hidden="true">${ci(f)}</span>` : ""}${esc(pick(f))}</a>`).join("");
       const wrap = fbox.parentElement;
       const sync = () => {
         const max = fbox.scrollWidth - fbox.clientWidth;
@@ -391,7 +406,7 @@
       : `${T("তথ্যসূত্র", "Source")}: ${p.sourceUrl ? `<a href="${esc(p.sourceUrl)}" target="_blank" rel="noopener noreferrer nofollow">${esc(p.source)} ↗</a>` : esc(p.source)}`;
     box.innerHTML = `
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">${T("হোম", "Home")}</a><span>›</span><a href="/${c.slug}">${esc(pick(c))}</a></nav>
-      <div class="post-meta"><span class="badge">${c.icon} ${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
+      <div class="post-meta"><span class="badge">${ci(c)} ${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
       <h1>${esc(pick(p.title))}</h1>
       <div class="byline"><span>${T("লেখক", "By")} <b>${esc(p.author)}</b></span><span>${formatDateTime(p.date)}</span><span>${T(`${minsTxt} মিনিটে পড়া`, `${minsTxt} min read`)}</span></div>
       ${p.image ? `<figure class="cover"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" width="1200" height="675" decoding="async" fetchpriority="high">${p.imageAlt ? `<figcaption>${esc(p.imageAlt)}</figcaption>` : ""}</figure>` : ""}
