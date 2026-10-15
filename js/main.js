@@ -75,7 +75,6 @@
           ${NAV.map((n) => `<a href="${n.href}" class="${n.href === page ? "active" : ""}">${esc(pick(n))}</a>`).join("")}
         </nav>
         <div class="header-actions">
-          <a class="icon-btn" href="/search" aria-label="${T("সার্চ", "Search")}" title="${T("সার্চ", "Search")}"><svg viewBox="0 0 24 24" aria-hidden="true" class="ci"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></a>
           <button class="lang-toggle" id="lang" aria-label="Switch language">${lang === "bn" ? "EN" : "বাংলা"}</button>
           <a class="btn btn-green" href="#follow">${T("ফলো করুন", "Follow Now")}</a>
           <button class="menu-btn" id="menu" aria-label="Menu">☰</button>
@@ -253,59 +252,6 @@
       <span class="addr">${e.address}</span>
       <span class="mc-go">${T("ইমেইল করুন", "Send email")} →</span>
     </a>`).join(""));
-
-
-  /* ---------- Most read (home) ---------- */
-  mount("most-read", () => {
-    const sec = document.getElementById("most-read-sec");
-    const top = POSTS.filter((p) => Number(p.views) > 0).sort((a, b) => Number(b.views) - Number(a.views)).slice(0, 5);
-    if (sec) sec.hidden = top.length < 3;
-    if (top.length < 3) return "";
-    const nf = (n) => (lang === "bn" ? Number(n).toLocaleString("bn-BD") : Number(n).toLocaleString("en-US"));
-    return `<ol class="mr-list">${top.map((p, i) => {
-      const c = catOf(p.cat) || C.categories[0];
-      return `<li><a href="${readUrl(p)}"><span class="mr-n">${nf(i + 1)}</span><span class="mr-t"><b>${esc(pick(p.title))}</b><small>${ci(c)} ${esc(pick(c))} · ${nf(p.views)} ${T("বার পঠিত", "reads")}</small></span></a></li>`;
-    }).join("")}</ol>`;
-  });
-
-  /* ---------- Search page ---------- */
-  const SQ = { q: "", items: null, busy: false, err: false, seq: 0 };
-  const norm = (t) => String(t || "").toLowerCase();
-  function localSearch(q) {
-    const words = norm(q).split(/\s+/).filter(Boolean);
-    return POSTS.filter((p) => { const hay = norm([p.title.bn, p.title.en, p.excerpt.bn, p.excerpt.en, p.source].join(" ")); return words.every((w) => hay.includes(w)); });
-  }
-  async function runSearch(q) {
-    SQ.q = q.trim(); const my = ++SQ.seq;
-    if (SQ.q.length < 2) { SQ.items = null; SQ.busy = false; SQ.err = false; refresh(); return; }
-    SQ.busy = true; SQ.err = false; refresh();
-    try { SQ.items = await API.searchPosts(SQ.q); } catch (e) { SQ.items = localSearch(SQ.q); }
-    if (my !== SQ.seq) return;
-    SQ.busy = false; refresh();
-    try { history.replaceState(null, "", "/search?q=" + encodeURIComponent(SQ.q)); } catch (e) {}
-  }
-  function renderSearch() {
-    const box = $("#search-results");
-    if (!box) return;
-    const form = $("#search-form"), input = $("#sq");
-    if (form && !form._w) {
-      form._w = true;
-      let t;
-      input.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => runSearch(input.value), 280); });
-      form.addEventListener("submit", (e) => { e.preventDefault(); clearTimeout(t); runSearch(input.value); });
-      const q0 = new URLSearchParams(location.search).get("q");
-      if (q0) { input.value = q0; runSearch(q0); }
-    }
-    if (SQ.busy) { box.innerHTML = `<p class="muted">${T("খোঁজা হচ্ছে…", "Searching…")}</p>`; return; }
-    if (SQ.items === null) {
-      const rec = POSTS.slice(0, 6);
-      box.innerHTML = `<p class="muted s-hint">${T("কমপক্ষে ২টি অক্ষর লিখুন — শিরোনাম, সারসংক্ষেপ ও লেখার ভেতরেও খোঁজা হয়।", "Type at least 2 characters — titles, summaries and article text are searched.")}</p>${rec.length ? `<h2 class="s-h">${T("সর্বশেষ খবর", "Latest stories")}</h2><div class="post-grid">${rec.map(postCard).join("")}</div>` : ""}`;
-      return;
-    }
-    if (!SQ.items.length) { box.innerHTML = `<div class="empty-state"><h3>${T("কিছু পাওয়া যায়নি", "Nothing found")}</h3><p>${T("অন্য শব্দ দিয়ে চেষ্টা করুন, অথবা বিষয় অনুযায়ী খবর দেখুন।", "Try different words, or browse stories by topic.")}</p><p style="margin-top:14px"><a class="btn btn-orange" href="/news">${T("সব সংবাদ", "All news")}</a></p></div>`; return; }
-    box.innerHTML = `<p class="muted s-count">${SQ.items.length.toLocaleString(lang === "bn" ? "bn-BD" : "en-US")} ${T("টি ফল", "result(s)")} “${esc(SQ.q)}”</p><div class="post-grid">${SQ.items.map(postCard).join("")}</div>`;
-  }
-  renderers.push(renderSearch);
 
   /* News listing with filters */
   let shown = 12;
