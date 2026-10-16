@@ -925,14 +925,14 @@
       const r = resolveRange(sel);
       subsNew = null;
       if (!legacy) {
-        const { data, error } = await sb.rpc("admin_site_stats_range", { p_from: r.from, p_to: r.to });
+        const { data, error, status } = await sb.rpc("admin_site_stats_range", { p_from: r.from, p_to: r.to });
         if (!error) {
           stats = data;
           const q = sb.from("subscribers").select("id", { count: "exact", head: true }).gte("created_at", new Date(data.from + "T00:00:00+06:00").toISOString()).lt("created_at", new Date(addDays(data.to, 1) + "T00:00:00+06:00").toISOString());
           try { const x = await q; if (!x.error) subsNew = x.count; } catch (e) {}
           return;
         }
-        if (!isMissingFn(error)) throw error;
+        if (!isMissingFn(error) && status !== 404) throw error;
         legacy = true;
       }
       /* The range function isn't installed yet: fall back to the older 7/30/90/365-day report */

@@ -202,7 +202,7 @@
     return `<div class="ticker-track">${html}${html}</div>`;
   });
 
-  mount("categories", () =>
+  const catCards = () =>
     C.categories.map((c) => {
       const desc = {
         funding: T("ফান্ডিং রাউন্ড, গ্রান্ট ও স্টার্টআপ প্রতিযোগিতার সর্বশেষ আপডেট।", "Latest funding rounds, grants and startup competitions."),
@@ -217,7 +217,9 @@
         interview: T("ফাউন্ডার ও বিশেষজ্ঞদের সাক্ষাৎকার ও মতামত।", "Interviews and opinion from founders and experts."),
       }[c.id];
       return `<a class="cat-card" href="/${c.slug}"><div class="ic">${ci(c)}</div><h3>${esc(pick(c))}</h3><p>${desc}</p></a>`;
-    }).join(""));
+    }).join("");
+  mount("categories", catCards);
+  mount("about-cats", catCards);   // About page: "Topics we cover"
 
   const emptyState = () => `<div class="empty-state">
       <div class="es-ic" aria-hidden="true">🔔</div>
