@@ -251,3 +251,20 @@ table.t td.n, table.t th.n { text-align: right; }
 /* subscribers list: no thumbnail column; 7-item bottom menu */
 .row.sub { grid-template-columns: 1fr auto; }
 @media (max-width: 900px) { .row.sub { grid-template-columns: 1fr; } .bottom-nav { grid-template-columns: repeat(7, 1fr); } .bottom-nav a { font-size: .66rem; padding: 7px 1px 6px; } .bottom-nav a span { font-size: 1.15rem; } }
+
+/* date-range picker */
+.rangebar { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; max-width: 100%; }
+.range { max-width: 100%; flex-wrap: wrap; }
+.range button { padding: 6px 12px; white-space: nowrap; }
+.range-custom { display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; justify-content: flex-end; font-size: .8rem; color: var(--muted); font-weight: 600; }
+.range-custom label { display: grid; gap: 3px; }
+.range-custom input[type=date] { padding: 7px 10px; border: 1.5px solid var(--line); border-radius: 10px; font: inherit; color: var(--black); background: #fff; min-width: 0; }
+.period-line { margin: -4px 0 14px; font-size: .95rem; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }
+.tiles.six { grid-template-columns: repeat(6, 1fr); }
+@media (max-width: 900px) { .tiles.six { grid-template-columns: repeat(2, 1fr); } .rangebar { align-items: flex-start; } .range-custom { justify-content: flex-start; } }
+@media (max-width: 480px) { .page-h > #rp, .rangebar, .range { width: 100%; } .range { display: flex; border-radius: 16px; } .range button { flex: 1 1 auto; padding: 7px 8px; } .range-custom label { flex: 1 1 130px; } .range-custom input[type=date] { width: 100%; } }
+.imp-box textarea { width: 100%; min-height: 120px; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; font: inherit; resize: vertical; }
+.imp-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+.imp-row select, .imp-row input[type=file] { padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 10px; font: inherit; max-width: 100%; background: #fff; }
+.imp-check { display: flex; gap: 8px; align-items: flex-start; font-size: .88rem; margin-top: 12px; line-height: 1.45; }
+.imp-check input { margin-top: 3px; }

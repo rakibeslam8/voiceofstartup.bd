@@ -243,7 +243,7 @@
   /* ---------------- dashboard ---------------- */
   let daily = [];
   async function loadDaily() {
-    const { data, error } = await sb.rpc("admin_daily_views", { p_days: 90 });
+    const { data, error } = await sb.rpc("admin_daily_views", { p_days: 1095 });
     if (error) throw error;
     daily = (data || []).map((d) => ({ day: d.day, views: Number(d.views) }));
   }
@@ -256,8 +256,8 @@
 
   function chartSvg(rows, showTable) {
     if (showTable) {
-      const vis = rows.length && rows[0].visitors !== undefined;
-      return `<table class="t"><thead><tr><th>Date</th><th class="n">${vis ? "Page views" : "Views"}</th>${vis ? `<th class="n">Visitors</th>` : ""}</tr></thead><tbody>${rows.slice().reverse().map((r) => `<tr><td>${esc(fmtD(r.day + "T12:00:00+06:00"))}</td><td class="n">${fmtN(r.views)}</td>${vis ? `<td class="n">${fmtN(r.visitors)}</td>` : ""}</tr>`).join("")}</tbody></table>`;
+      const vis = rows.length && rows[0].visitors !== undefined, rd = rows.length && rows[0].reads !== undefined;
+      return `<table class="t"><thead><tr><th>${rows.length && rows[0].grouped ? "Period" : "Date"}</th><th class="n">${vis ? "Page views" : "Views"}</th>${vis ? `<th class="n">Visitors</th>` : ""}${rd ? `<th class="n">Article reads</th>` : ""}</tr></thead><tbody>${rows.slice().reverse().map((r) => `<tr><td>${esc(r.label || fmtD(r.day + "T12:00:00+06:00"))}</td><td class="n">${fmtN(r.views)}</td>${vis ? `<td class="n">${fmtN(r.visitors)}</td>` : ""}${rd ? `<td class="n">${fmtN(r.reads)}</td>` : ""}</tr>`).join("")}</tbody></table>`;
     }
     const W = 640, H = 220, L = 34, B = 26, T = 10, R = 6;
     const hasVis = rows.length && rows[0].visitors !== undefined;
@@ -272,7 +272,7 @@
       const y = T + ih - (v / top) * ih;
       g += `<line class="grid-l" x1="${L}" x2="${W - R}" y1="${y}" y2="${y}"/><text x="${L - 6}" y="${y + 4}" text-anchor="end">${v}</text>`;
     }
-    const every = rows.length > 40 ? 10 : rows.length > 14 ? 5 : 1;
+    const every = rows.length > 80 ? 14 : rows.length > 40 ? 10 : rows.length > 14 ? 5 : 1;
     let bars = "", labs = "";
     rows.forEach((r, i) => {
       const x = L + i * bw + (bw - barW) / 2;
@@ -281,7 +281,7 @@
       bars += `<g data-i="${i}"><rect class="hit" x="${L + i * bw}" y="${T}" width="${bw}" height="${ih}"/>`
         + (r.views ? `<path class="bar" d="M${x},${T + ih} V${y + Math.min(4, h)} Q${x},${y} ${x + Math.min(4, barW / 2)},${y} H${x + barW - Math.min(4, barW / 2)} Q${x + barW},${y} ${x + barW},${y + Math.min(4, h)} V${T + ih} Z"/>` : `<rect class="bar" x="${x}" y="${T + ih - 2}" width="${barW}" height="2" opacity=".35"/>`)
         + `</g>`;
-      if (i % every === 0 || i === rows.length - 1) labs += `<text x="${x + barW / 2}" y="${H - 8}" text-anchor="middle">${new Date(r.day + "T12:00:00+06:00").toLocaleDateString("en-GB", { timeZone: "Asia/Dhaka", day: "numeric", month: "short" })}</text>`;
+      if (i % every === 0 || i === rows.length - 1) labs += `<text x="${x + barW / 2}" y="${H - 8}" text-anchor="middle">${r.axis || new Date(r.day + "T12:00:00+06:00").toLocaleDateString("en-GB", { timeZone: "Asia/Dhaka", day: "numeric", month: "short" })}</text>`;
     });
     let line = "";
     if (hasVis) {
@@ -290,13 +290,76 @@
     }
     return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${hasVis ? "Daily page views and visitors" : "Daily article views"}">${g}${bars}${line}${labs}</svg>`;
   }
+  /* ---------- date-range picker (7d / 30d / 90d / 1y / All / Custom) + long-range bucketing ---------- */
+  const dhakaToday = () => new Date(Date.now() + 6 * 3600e3).toISOString().slice(0, 10);
+  const addDays = (iso, n) => { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+  const daysBetween = (a, b) => Math.round((new Date(b + "T00:00:00Z") - new Date(a + "T00:00:00Z")) / 864e5) + 1;
+  const dLong = (iso) => fmtD(iso + "T12:00:00+06:00");
+  const PRESETS = [["7", "7d"], ["30", "30d"], ["90", "90d"], ["365", "1 year"], ["all", "All"], ["custom", "Custom"]];
+  function resolveRange(sel) {
+    const to = dhakaToday();
+    if (sel.mode === "custom") return { from: sel.from, to: sel.to };
+    if (sel.mode === "all") return { from: null, to };
+    return { from: addDays(to, -(+sel.mode - 1)), to };
+  }
+  function rangeLabel(sel, from, to) {
+    if (sel.mode === "all") return "All time";
+    if (sel.mode === "365") return "Last 12 months";
+    if (sel.mode === "custom") return from === to ? dLong(from) : `${dLong(from)} → ${dLong(to)}`;
+    return `Last ${sel.mode} days`;
+  }
+  function mountPicker(box, sel, onApply) {
+    const paint = () => {
+      const today = dhakaToday();
+      box.innerHTML = `<div class="rangebar"><div class="range" id="rng">${PRESETS.map(([m, t]) => `<button data-m="${m}" class="${m === sel.mode ? "on" : ""}">${t}</button>`).join("")}</div>
+        ${sel.mode === "custom" ? `<div class="range-custom"><label>From <input type="date" id="rc-f" value="${esc(sel.from)}" max="${today}"></label><label>To <input type="date" id="rc-t" value="${esc(sel.to)}" max="${today}"></label><button class="b b-orange b-sm" id="rc-go">Show</button></div>` : ""}</div>`;
+      $("#rng", box).onclick = (e) => {
+        const b = e.target.closest("[data-m]"); if (!b) return;
+        sel.mode = b.dataset.m;
+        if (sel.mode === "custom" && !sel.from) { sel.to = today; sel.from = addDays(today, -29); }
+        paint(); onApply();
+      };
+      const go = $("#rc-go", box);
+      if (go) go.onclick = () => {
+        let f = $("#rc-f", box).value, t = $("#rc-t", box).value;
+        if (!f || !t) return toast("Pick both dates", "err");
+        if (f > t) [f, t] = [t, f];
+        if (t > today) t = today;
+        if (daysBetween(f, t) > 1095) return toast("Please choose up to 3 years at a time", "err");
+        sel.from = f; sel.to = t; paint(); onApply();
+      };
+    };
+    paint();
+  }
+  /* Long ranges are grouped (weekly up to ~13 months, monthly beyond) so the chart stays readable */
+  function bucketRows(rows) {
+    if (rows.length <= 92) return rows;
+    const monthly = rows.length > 400, out = []; let cur = null;
+    rows.forEach((r) => {
+      let start;
+      if (monthly) start = r.day.slice(0, 7) + "-01";
+      else { const dow = (new Date(r.day + "T00:00:00Z").getUTCDay() + 6) % 7; start = addDays(r.day, -dow); if (start < rows[0].day) start = rows[0].day; }
+      if (!cur || cur.key !== start) {
+        const d = new Date(start + "T12:00:00+06:00");
+        cur = { key: start, day: start, views: 0, visitors: r.visitors === undefined ? undefined : 0, reads: r.reads === undefined ? undefined : 0,
+          label: monthly ? d.toLocaleDateString("en-GB", { timeZone: "Asia/Dhaka", month: "long", year: "numeric" }) : "Week of " + dLong(start),
+          axis: monthly ? d.toLocaleDateString("en-GB", { timeZone: "Asia/Dhaka", month: "short", year: "2-digit" }) : null, grouped: true };
+        out.push(cur);
+      }
+      cur.views += r.views; if (cur.visitors !== undefined) cur.visitors += r.visitors; if (cur.reads !== undefined) cur.reads += r.reads;
+    });
+    return out;
+  }
+  const isMissingFn = (e) => /could not find the function|PGRST202|42883|does not exist/i.test(String((e && (e.message || "")) + (e && e.code || "")));
+
   function niceStep(x) { const p = Math.pow(10, Math.floor(Math.log10(x || 1))); const m = x / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p; }
 
   async function viewDashboard(view) {
     view.innerHTML = `<div class="page-h"><h1>Dashboard</h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div><div class="card"><p class="muted">Loading…</p></div>`;
-    let site = null, subs = null;
+    let site = null, subs = null, subsNew = null;
     await Promise.all([loadPosts(true), loadDaily(), loadSite(7).then((x) => { site = x; }).catch(() => {}),
-      sb.from("subscribers").select("id", { count: "exact", head: true }).eq("status", "active").then((r) => { if (!r.error) subs = r.count; }, () => {})]);
+      sb.from("subscribers").select("id", { count: "exact", head: true }).eq("status", "active").then((r) => { if (!r.error) subs = r.count; }, () => {}),
+      sb.from("subscribers").select("id", { count: "exact", head: true }).gte("created_at", new Date(Date.now() - 7 * 864e5).toISOString()).then((r) => { if (!r.error) subsNew = r.count; }, () => {})]);
     if (!view.isConnected) return;   // user navigated away while loading
     const total = posts.reduce((a, p) => a + Number(p.views || 0), 0);
     const shares = posts.reduce((a, p) => a + Number(p.shares || 0), 0);
@@ -306,17 +369,19 @@
     const today = daily.length ? daily[daily.length - 1].views : 0;
     const d7 = daily.slice(-7).reduce((a, r) => a + r.views, 0);
     const top = [...posts].sort((a, b) => b.views - a.views).filter((p) => p.views > 0).slice(0, 6);
-    let range = 30, table = false;
+    const sel = { mode: "30", from: "", to: "" };
+    let table = false;
 
     view.innerHTML = `
       <div class="page-h"><h1>Dashboard</h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div>
-      ${site ? `<div class="tiles">
-        <div class="tile g"><small>Online now</small><b>${fmtN(site.totals.online_now)}</b></div>
+      ${site || subs !== null ? `<div class="tiles${site && subs !== null ? " six" : ""}">
+        ${site ? `<div class="tile g"><small>Online now</small><b>${fmtN(site.totals.online_now)}</b></div>
         <div class="tile"><small>Visitors today</small><b>${fmtN(site.totals.visitors_today)}</b></div>
         <div class="tile k"><small>Page views today</small><b>${fmtN(site.totals.views_today)}</b></div>
-        <div class="tile r"><small>Visitors · 7 days</small><b>${fmtN(site.totals.visitors_7d)}</b></div>
+        <div class="tile r"><small>Visitors · 7 days</small><b>${fmtN(site.totals.visitors_7d)}</b></div>` : ""}
+        ${subs !== null ? `<a class="tile g" href="#/subscribers" style="text-decoration:none;color:inherit"><small>Newsletter subscribers</small><b>${fmtN(subs)}</b></a>
+        <a class="tile" href="#/subscribers" style="text-decoration:none;color:inherit"><small>New subscribers · 7 days</small><b>${fmtN(subsNew || 0)}</b></a>` : ""}
       </div>` : ""}
-      ${subs !== null ? `<div class="tiles"><a class="tile g" href="#/subscribers" style="text-decoration:none;color:inherit"><small>Newsletter subscribers</small><b>${fmtN(subs)}</b></a></div>` : ""}
       <div class="tiles">
         <div class="tile"><small>Total reads</small><b>${fmtN(total)}</b></div>
         <div class="tile g"><small>Reads today</small><b>${fmtN(today)}</b></div>
@@ -331,11 +396,12 @@
         <div class="card">
           <div class="chart-h"><h2>Daily reads</h2>
             <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-              <div class="range" id="rng">${[7, 30, 90].map((n) => `<button data-n="${n}" class="${n === range ? "on" : ""}">${n}d</button>`).join("")}</div>
+              <div id="rp"></div>
               <button class="link-btn" id="tv">Table view</button>
             </div></div>
+          <p class="muted" id="rl" style="font-size:.85rem;margin:2px 0 6px"></p>
           <div class="chart" id="chart"></div>
-          <p class="muted" style="font-size:.8rem;margin-top:8px">Counts one read per visitor per article per 6 hours. Your own visits and bots are not counted. Bangladesh time.</p>
+          <p class="muted" style="font-size:.8rem;margin-top:8px">Counts one read per visitor per article per 6 hours. Your own visits and bots are not counted. Bangladesh time.<span id="grp"></span></p>
         </div>
         <div class="card">
           <h2>Most read</h2>
@@ -349,12 +415,17 @@
       </div>`;
 
     const draw = () => {
-      const rows = daily.slice(-range);
+      let { from, to } = resolveRange(sel);
+      if (!from) { const f = daily.find((d) => d.views > 0); from = f ? f.day : to; }
+      const base = daily.filter((d) => d.day >= from && d.day <= to);
+      const rows = bucketRows(base);
+      $("#rl").textContent = `${rangeLabel(sel, from, to)} · ${fmtN(base.reduce((a, r) => a + r.views, 0))} reads`;
+      $("#grp").textContent = rows.length !== base.length ? ` Long ranges are grouped by ${rows.length && rows[0].axis ? "month" : "week"}.` : "";
       $("#chart").innerHTML = chartSvg(rows, table);
       $("#tv").textContent = table ? "Chart view" : "Table view";
       if (!table) wireTip($("#chart"), rows);
     };
-    $("#rng").onclick = (e) => { const b = e.target.closest("[data-n]"); if (!b) return; range = +b.dataset.n; $$("#rng button").forEach((x) => x.classList.toggle("on", x === b)); draw(); };
+    mountPicker($("#rp"), sel, draw);
     $("#tv").onclick = () => { table = !table; draw(); };
     draw();
     wireRows(view);
@@ -369,7 +440,8 @@
       const show = () => {
         const r = rows[+g.dataset.i];
         if (!tip) { tip = document.createElement("div"); tip.className = "tip"; box.appendChild(tip); }
-        tip.innerHTML = r.visitors !== undefined ? `${esc(fmtD(r.day + "T12:00:00+06:00"))}<br><b>${fmtN(r.views)}</b> page views · <b>${fmtN(r.visitors)}</b> visitors` : `${esc(fmtD(r.day + "T12:00:00+06:00"))}<br><b>${fmtN(r.views)}</b> reads`;
+        const dl = esc(r.label || fmtD(r.day + "T12:00:00+06:00"));
+        tip.innerHTML = r.visitors !== undefined ? `${dl}<br><b>${fmtN(r.views)}</b> page views · <b>${fmtN(r.visitors)}</b> visitors${r.reads !== undefined ? ` · <b>${fmtN(r.reads)}</b> reads` : ""}` : `${dl}<br><b>${fmtN(r.views)}</b> reads`;
         const gb = g.getBoundingClientRect(), bb = box.getBoundingClientRect();
         tip.style.left = Math.min(Math.max(gb.left - bb.left + gb.width / 2, 50), bb.width - 50) + "px";
         tip.style.top = "6px";
@@ -847,37 +919,81 @@
   async function viewVisitors(view) {
     view.innerHTML = `<div class="page-h"><h1>Visitors</h1></div><div class="card"><p class="muted">Loading…</p></div>`;
     await loadPosts(true);
-    let range = 30, table = false, stats = null;
-    const load = async () => { stats = await loadSite(range); };
+    const sel = { mode: "30", from: "", to: "" };
+    let table = false, stats = null, legacy = false, subsNew = null;
+    const load = async () => {
+      const r = resolveRange(sel);
+      subsNew = null;
+      if (!legacy) {
+        const { data, error } = await sb.rpc("admin_site_stats_range", { p_from: r.from, p_to: r.to });
+        if (!error) {
+          stats = data;
+          const q = sb.from("subscribers").select("id", { count: "exact", head: true }).gte("created_at", new Date(data.from + "T00:00:00+06:00").toISOString()).lt("created_at", new Date(addDays(data.to, 1) + "T00:00:00+06:00").toISOString());
+          try { const x = await q; if (!x.error) subsNew = x.count; } catch (e) {}
+          return;
+        }
+        if (!isMissingFn(error)) throw error;
+        legacy = true;
+      }
+      /* The range function isn't installed yet: fall back to the older 7/30/90/365-day report */
+      if (sel.mode === "custom" || sel.mode === "all") { sel.mode = "365"; toast("Custom dates and “All” need the update-4 SQL — showing the last 12 months for now.", "err"); }
+      const days = +sel.mode, o = await loadSite(days), t = o.totals || {};
+      stats = Object.assign({}, o, {
+        from: addDays(dhakaToday(), -(days - 1)), to: dhakaToday(), legacy: true, top_articles: [],
+        range: { views: o.daily.reduce((a, d) => a + Number(d.views), 0), visitors: days === 7 ? t.visitors_7d : days === 30 ? t.visitors_30d : null, sessions: null, article_reads: null },
+        totals: Object.assign({}, t, { reads_today: null }),
+      });
+    };
     await load();
     if (!view.isConnected) return;
     const catViews = cats.map((c) => ({ c, v: posts.filter((p) => p.category === c.id).reduce((a, p) => a + Number(p.views || 0), 0) })).filter((x) => x.v > 0).sort((a, b) => b.v - a.v);
+    const dash = (n) => (n === null || n === undefined ? "—" : fmtN(n));
+    const reload = async () => {
+      view.style.opacity = ".55";
+      try { await load(); } catch (err) { view.style.opacity = ""; return toast(err.message, "err"); }
+      view.style.opacity = "";
+      if (view.isConnected) draw();
+    };
 
     const draw = () => {
-      const t = stats.totals;
+      const t = stats.totals, R = stats.range, nDays = daysBetween(stats.from, stats.to);
       const devName = { mobile: "📱 Mobile", desktop: "💻 Desktop", tablet: "📲 Tablet" };
+      const allRows = stats.daily.map((d) => ({ day: d.day, views: Number(d.views), visitors: Number(d.visitors), reads: d.reads === undefined ? undefined : Number(d.reads) }));
+      const rows = bucketRows(allRows);
+      const busiest = allRows.reduce((m, r) => (r.views > (m ? m.views : 0) ? r : m), null);
+      const label = rangeLabel(sel, stats.from, stats.to);
       view.innerHTML = `
-      <div class="page-h"><h1>Visitors</h1>
-        <div class="range" id="rng">${[7, 30, 90].map((n) => `<button data-n="${n}" class="${n === range ? "on" : ""}">${n}d</button>`).join("")}</div></div>
+      <div class="page-h"><h1>Visitors</h1><div id="rp"></div></div>
+      <p class="period-line"><b>${esc(label)}</b> <span class="muted">${sel.mode === "custom" ? "" : `· ${esc(dLong(stats.from))} → ${esc(dLong(stats.to))} `}· ${fmtN(nDays)} day${nDays === 1 ? "" : "s"}</span>
+        <button class="link-btn" id="csv" style="margin-left:8px">⬇ Export CSV</button></p>
+      ${stats.legacy ? `<div class="msg err" style="margin-bottom:14px">Custom dates, “All”, and article reads per period need one small database update. Open Supabase → SQL Editor, paste <b>supabase/update-4-range-import.sql</b> from the website repository and press Run. Until then you can use 7d / 30d / 90d / 1 year.</div>` : ""}
       <div class="tiles">
         <div class="tile g"><small>Online now (last 5 min)</small><b>${fmtN(t.online_now)}</b></div>
         <div class="tile"><small>Visitors today</small><b>${fmtN(t.visitors_today)}</b></div>
         <div class="tile k"><small>Page views today</small><b>${fmtN(t.views_today)}</b></div>
-        <div class="tile r"><small>Sessions · 30 days</small><b>${fmtN(t.sessions_30d)}</b></div>
-        <div class="tile"><small>Visitors · 7 days</small><b>${fmtN(t.visitors_7d)}</b></div>
-        <div class="tile k"><small>Page views · 7 days</small><b>${fmtN(t.views_7d)}</b></div>
-        <div class="tile g"><small>Visitors · 30 days</small><b>${fmtN(t.visitors_30d)}</b></div>
-        <div class="tile r"><small>Page views · 30 days</small><b>${fmtN(t.views_30d)}</b></div>
+        <div class="tile r"><small>Article reads today</small><b>${dash(t.reads_today)}</b></div>
+        <div class="tile g"><small>Visitors · this period</small><b>${dash(R.visitors)}</b></div>
+        <div class="tile"><small>Page views · this period</small><b>${dash(R.views)}</b></div>
+        <div class="tile k"><small>Sessions · this period</small><b>${dash(R.sessions)}</b></div>
+        <div class="tile r"><small>Article reads · this period</small><b>${dash(R.article_reads)}</b></div>
       </div>
       <div class="card">
-        <div class="chart-h"><h2>Traffic — last ${range} days</h2>
+        <div class="chart-h"><h2>Traffic</h2>
           <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="legend"><i class="lg-b"></i>Page views <i class="lg-l"></i>Visitors</span><button class="link-btn" id="tv">${table ? "Chart view" : "Table view"}</button></div></div>
         <div class="chart" id="chart"></div>
-        <p class="muted" style="font-size:.8rem;margin-top:8px">A “visitor” is one browser (counted by a random ID stored on the visitor's device — no name, email or IP address is saved). A “page view” is one page opened. Your own visits and bots are not counted. Bangladesh time.</p>
+        <p class="muted" style="font-size:.8rem;margin-top:8px">A “visitor” is one browser (counted by a random ID stored on the visitor's device — no name, email or IP address is saved). A “page view” is one page opened. Your own visits and bots are not counted. Bangladesh time.${rows.length !== allRows.length ? ` Long ranges are grouped by ${rows[0].axis ? "month" : "week"}; the visitors line there adds up each day's unique visitors.` : ""}</p>
       </div>
       <div class="dash-cols" style="margin-top:16px">
         <div class="card"><h2>Most visited pages</h2>${barList(stats.top_pages, "views", (x) => pageLabel(x.path), "Page views appear after the first visits.")}</div>
         <div class="card"><h2>Where visitors come from</h2>${barList(stats.referrers, "views", (x) => esc(x.source))}</div>
+      </div>
+      <div class="dash-cols" style="margin-top:16px">
+        <div class="card"><h2>Most read articles <span class="muted" style="font-size:.8rem;font-weight:500">(this period)</span></h2>${barList((stats.top_articles || []).map((a) => ({ k: a.title_bn || a.title_en || a.slug, v: a.reads })), "v", (x) => `📰 ${esc(String(x.k).slice(0, 80))}`, stats.legacy ? "Needs the update-4 SQL." : "Article reads in this period appear here.")}</div>
+        <div class="card"><h2>Highlights</h2>
+          <dl class="kv"><dt>Busiest day</dt><dd>${busiest && busiest.views ? `${esc(dLong(busiest.day))} · ${fmtN(busiest.views)} views` : "—"}</dd>
+            <dt>Avg visitors / day</dt><dd>${R.visitors == null ? "—" : fmtN(Math.round(allRows.reduce((a, r) => a + r.visitors, 0) / Math.max(1, nDays)))}</dd>
+            <dt>Pages per visit</dt><dd>${R.sessions ? (R.views / R.sessions).toFixed(1) : "—"}</dd>
+            <dt>New visitors</dt><dd>${fmtN(stats.new_visitors)}</dd><dt>Returning</dt><dd>${fmtN(stats.returning_visitors)}</dd>${subsNew !== null ? `<dt>New subscribers</dt><dd><a href="#/subscribers">${fmtN(subsNew)}</a></dd>` : ""}</dl></div>
       </div>
       <div class="dash-cols" style="margin-top:16px;grid-template-columns:1fr 1fr 1fr">
         <div class="card"><h2>Devices</h2>${barList(stats.devices, "visitors", (x) => devName[x.device] || esc(x.device))}</div>
@@ -891,10 +1007,13 @@
           <p class="muted" style="font-size:.8rem;margin-top:10px">Tip: for search keywords and Google rankings, also open Google Search Console.</p>
         </div>
       </div>`;
-      const rows = stats.daily.map((d) => ({ day: d.day, views: Number(d.views), visitors: Number(d.visitors) }));
+      mountPicker($("#rp"), sel, reload);
+      $("#csv").onclick = () => {
+        downloadCsv(`vosb-traffic-${stats.from}_to_${stats.to}.csv`, [["date", "page_views", "visitors", "article_reads"]].concat(allRows.map((r) => [r.day, r.views, r.visitors, r.reads === undefined ? "" : r.reads])));
+        toast("Exported " + fmtN(allRows.length) + " days", "ok");
+      };
       const paint = () => { $("#chart").innerHTML = chartSvg(rows, table); $("#tv").textContent = table ? "Chart view" : "Table view"; if (!table) wireTip($("#chart"), rows); };
       $("#tv").onclick = () => { table = !table; paint(); };
-      $("#rng").onclick = async (e) => { const b = e.target.closest("[data-n]"); if (!b) return; range = +b.dataset.n; try { await load(); } catch (err) { return toast(err.message, "err"); } if (!view.isConnected) return; draw(); };
       paint();
     };
     draw();
@@ -1084,7 +1203,13 @@
 
 
   /* ---------------- newsletter subscribers ---------------- */
-  let subsList = [];
+  let subsList = [], lastImportMsg = "";
+  const extractEmails = (text) => {
+    const found = String(text || "").match(/[A-Za-z0-9._%+'\-]+@[A-Za-z0-9\-]+(?:\.[A-Za-z0-9\-]+)*\.[A-Za-z]{2,}/g) || [];
+    const all = found.map((e) => e.toLowerCase());
+    const uniq = Array.from(new Set(all)).filter((e) => e.length <= 254);
+    return { uniq, dup: all.length - Array.from(new Set(all)).length };
+  };
   const csvCell = (v) => { v = String(v == null ? "" : v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
   function downloadCsv(name, rows) {
     const blob = new Blob(["﻿" + rows.map((r) => r.map(csvCell).join(",")).join("\r\n")], { type: "text/csv;charset=utf-8" });
@@ -1101,7 +1226,8 @@
       return;
     }
     subsList = data || [];
-    let q = "", st = "all";
+    let flash = lastImportMsg; lastImportMsg = "";
+    let q = "", st = "all", impOpen = false, impText = "", impLang = "bn", impOk = false, impBusy = false;
     const origin = (window.VOSB && window.VOSB.origin) || "https://www.voiceofstartup.bd";
     const unsubUrl = (x) => `${origin}/unsubscribe?t=${x.token}`;
     const activeNow = () => subsList.filter((x) => x.status === "active");
@@ -1111,7 +1237,16 @@
       const list = subsList.filter((x) => (st === "all" || x.status === st) && (!q || x.email.includes(q)));
       view.innerHTML = `
       <div class="page-h"><h1>Subscribers <span class="muted" style="font-size:1rem">(${fmtN(subsList.length)})</span></h1>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="b b-line" id="copy">Copy active emails</button><button class="b b-orange" id="csv">⬇ Export CSV</button></div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="b b-line" id="imp-t">⬆ Import emails</button><button class="b b-line" id="copy">Copy active emails</button><button class="b b-orange" id="csv">⬇ Export CSV</button></div></div>
+      ${flash ? `<div class="msg ok" style="margin-bottom:14px">${esc(flash)}</div>` : ""}
+      ${impOpen ? `<div class="card imp-box" style="margin-bottom:16px"><h2>Import existing emails</h2>
+        <p class="muted" style="font-size:.9rem;line-height:1.55;margin:4px 0 10px">Paste email addresses (separated by commas, spaces or new lines) or upload a <b>.csv</b> / <b>.txt</b> file — for example a contacts export from Gmail or Google Contacts. Other columns are ignored; duplicates and people already on the list are skipped.</p>
+        <textarea id="imp-ta" placeholder="name@example.com, another@example.com&#10;third@example.com">${esc(impText)}</textarea>
+        <div class="imp-row"><input type="file" id="imp-file" accept=".csv,.txt,.tsv,.vcf,text/*">
+          <label>Language <select id="imp-lang"><option value="bn" ${impLang === "bn" ? "selected" : ""}>বাংলা</option><option value="en" ${impLang === "en" ? "selected" : ""}>English</option></select></label>
+          <span class="muted" id="imp-n" style="font-size:.88rem"></span></div>
+        <label class="imp-check"><input type="checkbox" id="imp-ok" ${impOk ? "checked" : ""}><span>I confirm these people agreed to receive emails from Voice of Startup Bangladesh (for example they gave me their address to get updates). I will not import purchased or scraped lists.</span></label>
+        <div class="imp-row"><button class="b b-orange" id="imp-go" ${impBusy ? "disabled" : ""}>${impBusy ? "Importing…" : "Import"}</button><button class="b b-line" id="imp-x">Cancel</button></div></div>` : ""}
       <div class="tiles">
         <div class="tile g"><small>Active</small><b>${fmtN(active.length)}</b></div>
         <div class="tile"><small>New · 7 days</small><b>${fmtN(subsList.filter((x) => new Date(x.created_at) > week).length)}</b></div>
@@ -1134,6 +1269,43 @@
       </div>
       <div class="card" style="margin-top:16px"><h2>Sending the newsletter</h2>
         <p class="muted" style="font-size:.92rem;line-height:1.6">This page is your own subscriber list. Click <b>Export CSV</b> (active subscribers only; includes each person's private unsubscribe link) and import it into a mailing service such as Brevo or Mailchimp to design and send your weekly digest. Anyone who clicks an unsubscribe link <i>from the website</i> is marked “Unsubscribed” here automatically; if you send from a separate service, re-export before each send so unsubscribed people are left out.</p></div>`;
+      $("#imp-t", view).onclick = () => { impOpen = !impOpen; flash = ""; draw(); };
+      if (impOpen) {
+        const ta = $("#imp-ta", view), n = $("#imp-n", view);
+        const count = () => { const r = extractEmails(impText); n.textContent = impText.trim() ? `${fmtN(r.uniq.length)} email address${r.uniq.length === 1 ? "" : "es"} found${r.dup ? ` (${fmtN(r.dup)} repeated)` : ""}` : ""; };
+        count();
+        ta.oninput = () => { impText = ta.value; count(); };
+        $("#imp-lang", view).onchange = (e) => { impLang = e.target.value; };
+        $("#imp-ok", view).onchange = (e) => { impOk = e.target.checked; };
+        $("#imp-x", view).onclick = () => { impOpen = false; impText = ""; impOk = false; draw(); };
+        $("#imp-file", view).onchange = (e) => {
+          const f = e.target.files && e.target.files[0]; if (!f) return;
+          if (f.size > 5 * 1024 * 1024) return toast("File is too large (max 5 MB)", "err");
+          const fr = new FileReader();
+          fr.onload = () => { impText = (impText ? impText + "\n" : "") + String(fr.result || ""); draw(); toast("File loaded", "ok"); };
+          fr.onerror = () => toast("Could not read that file", "err");
+          fr.readAsText(f);
+        };
+        $("#imp-go", view).onclick = async () => {
+          const { uniq } = extractEmails(impText);
+          if (!uniq.length) return toast("No email addresses found", "err");
+          if (!impOk) return toast("Please tick the confirmation box first", "err");
+          impBusy = true; draw();
+          const sum = { added: 0, existing: 0, invalid: 0 };
+          try {
+            for (let i = 0; i < uniq.length; i += 2000) {
+              const { data: r, error: er } = await sb.rpc("admin_import_subscribers", { p_emails: uniq.slice(i, i + 2000), p_lang: impLang });
+              if (er) throw er;
+              sum.added += r.added; sum.existing += r.existing; sum.invalid += r.invalid;
+            }
+          } catch (er) {
+            impBusy = false; draw();
+            return toast(isMissingFn(er) ? "Import needs the update-4 SQL — run supabase/update-4-range-import.sql in the Supabase SQL Editor first." : er.message, "err");
+          }
+          lastImportMsg = `Imported ${fmtN(sum.added)} new subscriber${sum.added === 1 ? "" : "s"}` + (sum.existing ? `, ${fmtN(sum.existing)} already on the list` : "") + (sum.invalid ? `, ${fmtN(sum.invalid)} invalid skipped` : "") + ".";
+          toast("Import finished", "ok"); router();
+        };
+      }
       const sq = $("#sq", view);
       sq.oninput = () => { q = sq.value.trim().toLowerCase(); const pos = sq.selectionStart; draw(); const n = $("#sq", view); n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) {} };
       $("#sf", view).onchange = (e) => { st = e.target.value; draw(); };
