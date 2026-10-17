@@ -563,8 +563,9 @@
     try { seen = JSON.parse(localStorage.getItem("vosb-pop") || "{}"); } catch (e) {}
     const hrs = a.freq_hours === 0 ? 0 : (a.freq_hours || 12);
     if (hrs && seen[a.id] && Date.now() - seen[a.id] < hrs * 3600 * 1000) return;
-    setTimeout(() => {
-      if (document.hidden || document.querySelector(".ad-pop-bg")) return;
+    const show = () => {
+      if (document.querySelector(".ad-pop-bg")) return;
+      if (document.hidden) { document.addEventListener("visibilitychange", function w() { if (!document.hidden) { document.removeEventListener("visibilitychange", w); show(); } }); return; }
       const prevFocus = document.activeElement;
       const bg = document.createElement("div");
       bg.className = "ad-pop-bg";
@@ -591,7 +592,8 @@
       bg.querySelector(".ad-pop-close").focus();
       try { seen[a.id] = Date.now(); localStorage.setItem("vosb-pop", JSON.stringify(seen)); } catch (e) {}
       observeAds();
-    }, 5000);
+    };
+    setTimeout(show, 3000);
   }
 
   async function loadAds() {

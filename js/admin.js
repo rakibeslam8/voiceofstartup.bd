@@ -1048,7 +1048,7 @@
 
   /* ---------------- ads ---------------- */
   const PLACES = {
-    popup:         { t: "Pop-up when a visitor opens the website", icon: "💬", d: "Shown once (then not again for the chosen hours) after about 5 seconds on the home, news and topic pages. Easy to close with ✕ or Esc. Never shown on article pages.", size: "Best size: 800 × 800 px (square) or 800 × 1000 px" },
+    popup:         { t: "Pop-up when a visitor opens the website", icon: "💬", d: "Shown once (then not again for the chosen hours) after about 3 seconds on the home, news and topic pages. Easy to close with ✕ or Esc. Never shown on article pages.", size: "Best size: 800 × 800 px (square) or 800 × 1000 px" },
     header:        { t: "Top banner — every page", icon: "🔝", d: "A slim banner just under the menu on every page.", size: "Best size: 970 × 250 px or 728 × 90 px" },
     feed:          { t: "Between news cards", icon: "📰", d: "Between the stories on the home page and the news lists (after the 6th story, then every 12).", size: "Best size: 970 × 250 px" },
     in_article:    { t: "Inside articles", icon: "📖", d: "Between paragraphs of an article (after the 3rd block; long articles get a second one). Never right after a heading.", size: "Best size: 800 × 450 px" },
