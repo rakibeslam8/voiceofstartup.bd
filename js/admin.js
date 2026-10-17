@@ -1087,6 +1087,7 @@
         <div class="tile k"><small>Clicks</small><b>${fmtN(clk)}</b></div>
         <div class="tile r"><small>Click rate</small><b>${imp ? ((clk / imp) * 100).toFixed(2) + "%" : "—"}</b></div>
       </div>
+      <p class="muted" style="font-size:.88rem;margin:-4px 2px 14px">Only real visitors are counted. Your own visits and clicks are ignored while you are signed in to this admin panel (and bots are ignored too). To test the counting yourself, <a href="${C.site.origin}/?track=1" target="_blank" rel="noopener" style="color:var(--orange-dark);font-weight:700">open the website in test-count mode ↗</a>, wait for the ad, click it, then press reload here.</p>
       <div class="rows" id="ad-rows">${ads.length ? ads.map((a) => `
         <div class="row" data-id="${a.id}">
           <div class="th">${a.kind === "image" && a.image_url ? `<img src="${esc(a.image_url)}" alt="" loading="lazy">` : "📣"}</div>

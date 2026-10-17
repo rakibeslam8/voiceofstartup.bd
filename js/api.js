@@ -103,7 +103,10 @@
     const isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
     let isAdmin = false;
     try { isAdmin = !!localStorage.getItem("vosb-admin-auth"); } catch (e) {}
-    return !window.VOSB_FORCE_TRACK && (isBot || isLocal || isAdmin);
+    /* "?track=1" (kept for this tab) lets the owner test counting from a signed-in browser */
+    let force = !!window.VOSB_FORCE_TRACK;
+    try { if (/[?&]track=1\b/.test(location.search)) sessionStorage.setItem("vosb-track", "1"); if (sessionStorage.getItem("vosb-track") === "1") force = true; } catch (e) {}
+    return !force && (isBot || isLocal || isAdmin);
   }
   function trackVisit(lang) {
     try {
