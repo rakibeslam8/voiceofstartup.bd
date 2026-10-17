@@ -182,30 +182,57 @@
   }
 
   /* ---------------- shell & routing ---------------- */
+  const IC = {
+    dashboard: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+    visitors: '<circle cx="9" cy="8" r="3.4"/><path d="M2.5 20c.6-3.6 3.2-5.6 6.5-5.6s5.9 2 6.5 5.6"/><path d="M16 4.8a3.3 3.3 0 0 1 0 6.2M18 14.8c1.9.7 3.2 2.5 3.5 5.2"/>',
+    posts: '<path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M18 9h1.5A1.5 1.5 0 0 1 21 10.500V18a2 2 0 0 1-2 2h-1"/><path d="M8.500 8.500h6M8.500 12h6M8.500 15.500h4"/>',
+    "edit/new": '<path d="M4 20h4L19.500 8.500a2.100 2.100 0 0 0-3-3L5 17z"/><path d="m14.500 7.500 3 3"/>',
+    ads: '<path d="M3.500 10v4a1 1 0 0 0 1 1H7l5.500 4V5L7 9H4.500a1 1 0 0 0-1 1z"/><path d="M16 9.200a4 4 0 0 1 0 5.600M18.500 6.700a7.500 7.500 0 0 1 0 10.600"/>',
+    subscribers: '<rect x="3" y="5" width="18" height="14" rx="2.500"/><path d="m3.500 7.500 8.500 6 8.500-6"/>',
+    settings: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.200"/><circle cx="9" cy="17" r="2.200"/>',
+    out: '<path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8l4 4-4 4M19 12H9"/>',
+    site: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/>',
+  };
+  const svg = (k, cls) => `<svg class="ic ${cls || ""}" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg>`;
   const NAV = [
-    { r: "dashboard", ic: "📊", t: "Dashboard" },
-    { r: "visitors", ic: "👥", t: "Visitors" },
-    { r: "posts", ic: "📰", t: "Articles" },
-    { r: "edit/new", ic: "✍️", t: "New" },
-    { r: "ads", ic: "📣", t: "Ads" },
-    { r: "subscribers", ic: "✉️", t: "Subscribers", s: "Mail" },
-    { r: "settings", ic: "⚙️", t: "Settings" },
+    { r: "dashboard", t: "Dashboard", s: "Home" },
+    { r: "visitors", t: "Visitors" },
+    { r: "posts", t: "Articles" },
+    { r: "edit/new", t: "New article", s: "New" },
+    { r: "ads", t: "Ads" },
+    { r: "subscribers", t: "Subscribers", s: "Mail" },
+    { r: "settings", t: "Settings" },
   ];
   let shellOn = false;
   function shell() {
+    const email = session.user.email || "";
+    const ini = (email.trim()[0] || "A").toUpperCase();
     app.innerHTML = `
       <header class="topbar"><div class="topbar-in">
-        <a class="brand" href="#/dashboard"><img src="/assets/logo.png" alt="VOSB" width="90" height="36"></a>
+        <a class="brand" href="#/dashboard" aria-label="Dashboard"><img src="/assets/logo.png" alt="Voice of Startup Bangladesh" width="90" height="36"></a>
         <span class="tag">Admin</span>
-        <nav class="tabs" id="tabs" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}">${n.ic} ${n.t === "New" ? "New article" : n.t}</a>`).join("")}</nav>
+        <nav class="tabs" id="tabs" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}" title="${n.t}">${svg(n.r)}<span class="lbl">${n.t}</span></a>`).join("")}</nav>
         <span class="sp"></span>
-        <span class="who" title="${esc(session.user.email)}">${esc(session.user.email)}</span>
-        <a class="b b-ghost b-sm" href="/" target="_blank" rel="noopener">View site ↗</a>
-        <button class="b b-ghost b-sm" id="out">Sign out</button>
+        <a class="site-link" href="/" target="_blank" rel="noopener" title="Open the public website">${svg("site", "sm")}<span>View site</span></a>
+        <div class="acct" id="acct">
+          <button class="acct-btn" id="acctBtn" aria-haspopup="true" aria-expanded="false" aria-label="Account menu"><span class="av">${esc(ini)}</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.400" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <div class="acct-menu" id="acctMenu" role="menu" hidden>
+            <div class="acct-id"><span class="av lg">${esc(ini)}</span><div><b>Administrator</b><small title="${esc(email)}">${esc(email)}</small></div></div>
+            <a role="menuitem" href="/" target="_blank" rel="noopener">${svg("site", "sm")}View website</a>
+            <a role="menuitem" href="#/settings">${svg("settings", "sm")}Settings</a>
+            <button role="menuitem" class="danger" id="out">${svg("out", "sm")}Sign out</button>
+          </div>
+        </div>
       </div></header>
       <main class="main" id="view"></main>
-      <nav class="bottom-nav" id="bnav" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}"><span>${n.ic}</span>${n.s || n.t}</a>`).join("")}</nav>`;
-    $("#out").onclick = () => logout("You have been signed out.");
+      <nav class="bottom-nav" id="bnav" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}">${svg(n.r)}<em>${n.s || n.t}</em></a>`).join("")}</nav>`;
+    const btn = $("#acctBtn"), menu = $("#acctMenu");
+    const close = () => { menu.hidden = true; btn.setAttribute("aria-expanded", "false"); };
+    btn.onclick = (e) => { e.stopPropagation(); const open = menu.hidden; menu.hidden = !open; btn.setAttribute("aria-expanded", String(open)); };
+    menu.addEventListener("click", (e) => { if (e.target.closest("a")) close(); });
+    document.addEventListener("click", (e) => { if (!menu.hidden && !e.target.closest("#acct")) close(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { close(); btn.focus(); } });
+    $("#out").onclick = () => { close(); logout("You have been signed out."); };
     shellOn = true;
   }
 

@@ -268,3 +268,59 @@ table.t td.n, table.t th.n { text-align: right; }
 .imp-row select, .imp-row input[type=file] { padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 10px; font: inherit; max-width: 100%; background: #fff; }
 .imp-check { display: flex; gap: 8px; align-items: flex-start; font-size: .88rem; margin-top: 12px; line-height: 1.45; }
 .imp-check input { margin-top: 3px; }
+
+/* ===== Round 5: professional admin navbar ===== */
+.topbar { background: var(--black); color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,.14); position: sticky; top: 0; z-index: 30; }
+.topbar::after { content: ""; display: block; height: 3px; background: linear-gradient(90deg, var(--orange) 0 50%, var(--green) 50% 80%, var(--red) 80% 100%); }
+.topbar-in { max-width: 1240px; margin: 0 auto; padding: 0 16px; height: 62px; display: flex; align-items: center; gap: 14px; }
+.topbar .brand { flex: none; display: block; }
+.topbar .brand img { height: 34px; width: auto; background: #fff; border-radius: 9px; padding: 3px 9px; }
+.topbar .tag { flex: none; font-family: var(--font-body); font-weight: 700; font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); border: 1px solid #ff752260; background: #ff752218; padding: 3px 9px; border-radius: 999px; }
+.topbar .tabs { display: flex; gap: 2px; margin-left: 10px; padding-left: 14px; border-left: 1px solid #ffffff22; min-width: 0; }
+.topbar .tabs a { position: relative; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 13px; border-radius: 10px; color: #c9c9c9; font-weight: 600; font-size: .92rem; white-space: nowrap; transition: background .15s, color .15s; }
+.topbar .tabs a .ic { flex: none; opacity: .9; }
+.topbar .tabs a:hover { background: #ffffff14; color: #fff; }
+.topbar .tabs a.on { background: var(--orange); color: #fff; box-shadow: 0 4px 14px #ff752240; }
+.topbar .tabs a:focus-visible, .site-link:focus-visible, .acct-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.topbar .sp { flex: 1; }
+.site-link { flex: none; display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid #ffffff2e; color: #e8e8e8; font-weight: 600; font-size: .86rem; white-space: nowrap; transition: background .15s, border-color .15s; }
+.site-link:hover { background: #ffffff14; border-color: #ffffff55; color: #fff; }
+.ic.sm { width: 17px; height: 17px; }
+.acct { position: relative; flex: none; }
+.acct-btn { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 8px 0 4px; border-radius: 999px; border: 1px solid #ffffff2e; background: transparent; color: #fff; cursor: pointer; transition: background .15s; }
+.acct-btn:hover, .acct-btn[aria-expanded="true"] { background: #ffffff14; }
+.acct-btn .chev { opacity: .75; transition: transform .15s; } .acct-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.av { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), var(--red)); color: #fff; font-family: var(--font-head); font-weight: 800; font-size: .95rem; line-height: 1; }
+.av.lg { width: 40px; height: 40px; font-size: 1.15rem; flex: none; }
+.acct-menu { position: absolute; right: 0; top: calc(100% + 10px); width: 270px; background: #fff; color: var(--text); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 18px 44px rgba(0,0,0,.22); padding: 8px; z-index: 60; }
+.acct-menu::before { content: ""; position: absolute; right: 16px; top: -6px; width: 12px; height: 12px; background: #fff; border-left: 1px solid var(--line); border-top: 1px solid var(--line); transform: rotate(45deg); }
+.acct-id { position: relative; display: flex; align-items: center; gap: 11px; padding: 10px 10px 12px; border-bottom: 1px solid var(--line); margin-bottom: 6px; min-width: 0; }
+.acct-id div { min-width: 0; } .acct-id b { display: block; font-size: .95rem; line-height: 1.2; }
+.acct-id small { display: block; color: var(--muted); font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.acct-menu a, .acct-menu button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 42px; padding: 0 12px; border: 0; border-radius: 10px; background: none; font-weight: 600; font-size: .92rem; color: var(--text); text-align: left; cursor: pointer; }
+.acct-menu a:hover, .acct-menu button:hover { background: #f4f4f2; }
+.acct-menu .danger { color: var(--red); margin-top: 4px; border-top: 1px solid var(--line); border-radius: 0 0 10px 10px; } .acct-menu .danger:hover { background: #fdecec; }
+.bottom-nav a .ic { width: 22px; height: 22px; }
+.bottom-nav a em { font-style: normal; }
+
+/* icon-only tabs on mid-size screens (active tab keeps its label) */
+@media (max-width: 1179px) and (min-width: 901px) {
+  .topbar .tabs a:not(.on) .lbl { display: none; }
+  .topbar .tabs a { padding: 0 12px; }
+  .topbar .tabs a:not(.on) { width: 42px; justify-content: center; padding: 0; }
+}
+@media (min-width: 901px) { .bottom-nav { display: none !important; } }
+@media (max-width: 900px) {
+  .topbar-in { height: 56px; gap: 10px; }
+  .topbar .tabs { display: none; }
+  .topbar .tag { display: inline-block; }
+  .topbar .who { display: none; }
+  .site-link span { display: none; } .site-link { width: 38px; padding: 0; justify-content: center; }
+  .main { padding-bottom: 96px; }
+  .bottom-nav { display: grid; grid-template-columns: repeat(7, 1fr); position: fixed; left: 0; right: 0; bottom: 0; background: #fff; border-top: 1px solid var(--line); box-shadow: 0 -6px 20px rgba(0,0,0,.07); z-index: 40; padding-bottom: env(safe-area-inset-bottom); }
+  .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 1px 7px; font-size: .66rem; font-weight: 700; color: var(--muted); position: relative; min-width: 0; }
+  .bottom-nav a em { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bottom-nav a.on { color: var(--orange-dark); }
+  .bottom-nav a.on::before { content: ""; position: absolute; top: 0; left: 28%; right: 28%; height: 3px; border-radius: 0 0 4px 4px; background: var(--orange); }
+}
+@media (max-width: 420px) { .topbar-in { padding: 0 12px; } .topbar .brand img { height: 30px; padding: 3px 7px; } .acct-menu { width: min(270px, calc(100vw - 24px)); } }

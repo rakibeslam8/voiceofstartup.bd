@@ -571,7 +571,21 @@
       bg.innerHTML = `<div class="ad-pop" role="dialog" aria-label="${T("স্পনসরড বিজ্ঞাপন", "Sponsored advertisement")}"><button class="ad-pop-close" type="button" aria-label="${T("বন্ধ করুন", "Close")}">×</button>${adHtml(a)}</div>`;
       const close = () => { bg.remove(); document.removeEventListener("keydown", onKey); if (prevFocus && prevFocus.focus) try { prevFocus.focus(); } catch (e) {} };
       const onKey = (e) => { if (e.key === "Escape") close(); };
-      bg.addEventListener("click", (e) => { if (e.target === bg || e.target.closest(".ad-pop-close")) close(); });
+      bg.addEventListener("click", (e) => {
+        if (e.target === bg || e.target.closest(".ad-pop-close")) return close();
+        /* links that point to this same website (e.g. the newsletter banner -> /#subscribe) stay in the page */
+        const l = e.target.closest("a.ad");
+        if (!l) return;
+        let u; try { u = new URL(l.href, location.href); } catch (x) { return; }
+        if (u.origin !== location.origin) return;
+        e.preventDefault();
+        const clean = (x) => x.replace(/\.html$/, "").replace(/\/+$/, "") || "/";
+        close();
+        if (clean(u.pathname) === clean(location.pathname) && u.hash) {
+          const t = document.querySelector(u.hash);
+          if (t) { t.scrollIntoView({ behavior: "smooth", block: "center" }); const f = t.querySelector("input[type=email]"); if (f) setTimeout(() => { try { f.focus({ preventScroll: true }); } catch (x) {} }, 450); }
+        } else location.href = u.href;
+      });
       document.addEventListener("keydown", onKey);
       document.body.appendChild(bg);
       bg.querySelector(".ad-pop-close").focus();
