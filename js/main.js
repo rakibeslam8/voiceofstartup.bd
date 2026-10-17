@@ -520,9 +520,27 @@
     }), { threshold: 0.5 });
     els.forEach((el) => io.observe(el));
   }
+  /* Ad links: count the click, then open the link reliably.
+     - links to this same website (www or not) stay in the page / same tab (e.g. the newsletter banner -> /#subscribe)
+     - every other link opens in a new tab (plain anchor behaviour, works in in-app browsers too) */
+  const siteHost = (h) => String(h || "").toLowerCase().replace(/^www\./, "");
+  const cleanPath = (x) => x.replace(/\/index\.html$/, "/").replace(/\.html$/, "").replace(/\/+$/, "") || "/";
   document.addEventListener("click", (e) => {
-    const a = e.target.closest && e.target.closest("a.ad[data-ad]");
-    if (a && API) API.adClick(a.dataset.ad);
+    const a = e.target.closest && e.target.closest("a.ad");
+    if (!a) return;
+    if (a.dataset.ad && API) API.adClick(a.dataset.ad);
+    if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    let u; try { u = new URL(a.getAttribute("href"), location.href); } catch (x) { return; }
+    if (!/^https?:$/.test(u.protocol)) { e.preventDefault(); return; }
+    if (siteHost(u.hostname) === siteHost(location.hostname)) {
+      e.preventDefault();
+      if (popClose) popClose();
+      if (cleanPath(u.pathname) === cleanPath(location.pathname)) {
+        const t = u.hash && document.querySelector(u.hash);
+        if (t) { t.scrollIntoView({ behavior: "smooth", block: "center" }); const f = t.querySelector("input[type=email]"); if (f) setTimeout(() => { try { f.focus({ preventScroll: true }); } catch (x) {} }, 500); }
+        else window.scrollTo({ top: 0, behavior: "smooth" });
+      } else location.href = u.href;
+    } else if (popClose) setTimeout(popClose, 300);   // opens in a new tab; tidy the pop-up behind it
   });
 
   /* feed ads: one after the 6th card, then every 12 cards */
@@ -553,7 +571,7 @@
   }
 
   /* welcome pop-up: once per visitor per N hours, only after a short delay, never on article pages, easy to close */
-  let popupDone = false;
+  let popupDone = false, popClose = null;
   function maybePopup() {
     if (popupDone || !API || !API.configured || document.getElementById("article") || /^\/(admin|read|en\/read)\b/.test(location.pathname)) return;
     const a = weightedPick(eligible("popup"));
@@ -570,23 +588,17 @@
       const bg = document.createElement("div");
       bg.className = "ad-pop-bg";
       bg.innerHTML = `<div class="ad-pop" role="dialog" aria-label="${T("স্পনসরড বিজ্ঞাপন", "Sponsored advertisement")}"><button class="ad-pop-close" type="button" aria-label="${T("বন্ধ করুন", "Close")}">×</button>${adHtml(a)}</div>`;
-      const close = () => { bg.remove(); document.removeEventListener("keydown", onKey); if (prevFocus && prevFocus.focus) try { prevFocus.focus(); } catch (e) {} };
+      let closing = false;
+      const close = () => {
+        if (closing) return; closing = true; popClose = null;
+        document.removeEventListener("keydown", onKey);
+        bg.classList.add("out");
+        const done = () => { bg.remove(); if (prevFocus && prevFocus.focus) try { prevFocus.focus({ preventScroll: true }); } catch (e) {} };
+        if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) done(); else setTimeout(done, 240);
+      };
+      popClose = close;
       const onKey = (e) => { if (e.key === "Escape") close(); };
-      bg.addEventListener("click", (e) => {
-        if (e.target === bg || e.target.closest(".ad-pop-close")) return close();
-        /* links that point to this same website (e.g. the newsletter banner -> /#subscribe) stay in the page */
-        const l = e.target.closest("a.ad");
-        if (!l) return;
-        let u; try { u = new URL(l.href, location.href); } catch (x) { return; }
-        if (u.origin !== location.origin) return;
-        e.preventDefault();
-        const clean = (x) => x.replace(/\.html$/, "").replace(/\/+$/, "") || "/";
-        close();
-        if (clean(u.pathname) === clean(location.pathname) && u.hash) {
-          const t = document.querySelector(u.hash);
-          if (t) { t.scrollIntoView({ behavior: "smooth", block: "center" }); const f = t.querySelector("input[type=email]"); if (f) setTimeout(() => { try { f.focus({ preventScroll: true }); } catch (x) {} }, 450); }
-        } else location.href = u.href;
-      });
+      bg.addEventListener("click", (e) => { if (e.target === bg || e.target.closest(".ad-pop-close")) close(); });
       document.addEventListener("keydown", onKey);
       document.body.appendChild(bg);
       bg.querySelector(".ad-pop-close").focus();

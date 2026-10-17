@@ -1126,6 +1126,15 @@
     });
   }
 
+  /* make pasted links work: "example.com/x" -> https://example.com/x, "/#subscribe" -> this website */
+  function normLink(v) {
+    v = String(v || "").trim();
+    if (!v) return v;
+    if (/^\/(?!\/)/.test(v) || /^#/.test(v)) return (C.site && C.site.origin ? C.site.origin : "https://www.voiceofstartup.bd") + (v[0] === "#" ? "/" : "") + v;
+    if (/^\/\//.test(v)) return "https:" + v;
+    if (!/^[a-z][a-z0-9+.-]*:/i.test(v)) return "https://" + v;
+    return v;
+  }
   async function viewAdEditor(view, idOrNew) {
     const isNew = idOrNew === "new";
     let a = { name: "", placement: "popup", kind: "image", image_url: "", link_url: "", headline: "", body: "", cta: "", lang: "all", category: "", is_active: true, start_at: "", end_at: "", priority: 5, freq_hours: 12 };
@@ -1212,7 +1221,8 @@
     $a("a-save").onclick = async () => {
       if (saving) return; read();
       if (!a.name) return toast("Give the ad a name (only you see it)", "err");
-      if (!/^https?:\/\//i.test(a.link_url)) return toast("The link must start with https://", "err");
+      a.link_url = normLink(a.link_url); $a("a-link").value = a.link_url;
+      if (!/^https?:\/\/[^\s/]+\.[^\s/]+/i.test(a.link_url) && !/^https?:\/\/localhost/i.test(a.link_url)) return toast("Enter a valid link, e.g. https://example.com/page", "err");
       if (a.kind === "image" && !a.image_url) return toast("Add the ad image", "err");
       if (a.kind === "text" && !a.headline) return toast("Write a headline for the text ad", "err");
       if (a.start_at && a.end_at && fromLocalInput(a.end_at) <= fromLocalInput(a.start_at)) return toast("The end must be after the start", "err");
