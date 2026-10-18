@@ -11,6 +11,8 @@ on:
     branches: [main]
     paths:
       - "tools/build_static.mjs"
+      - "tools/build_chrome.mjs"
+      - "js/legal.js"
       - "js/config.js"
       - "js/md.js"
 
@@ -30,7 +32,9 @@ jobs:
         with:
           node-version: "20"
       - name: Build
-        run: node tools/build_static.mjs
+        run: |
+          node tools/build_static.mjs
+          node tools/build_chrome.mjs
       - name: Commit changes
         run: |
           if [ -n "$(git status --porcelain)" ]; then

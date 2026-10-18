@@ -647,3 +647,8 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   .std-list li { padding: 14px; }
 }
 #subscribe { scroll-margin-top: 90px; }
+/* crawlable breadcrumbs + list headings (round: SEO) */
+.page-hero .crumbs, .legal .crumbs { margin-bottom: 14px; }
+.crumbs span[aria-hidden] { color: var(--muted); }
+.crumbs span[aria-current] { color: var(--text); font-weight: 600; }
+.list-h { font-size: clamp(1.25rem, 2.6vw, 1.6rem); margin: 0 0 16px; }
