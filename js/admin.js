@@ -12,6 +12,18 @@
   const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
   const esc = MD.esc;
   const fmtN = (n) => Number(n || 0).toLocaleString("en-IN");
+  /* Supabase returns at most 1,000 rows per request, so long lists are read page by page.
+     make() must build a fresh query each time, e.g. () => sb.from("subscribers").select("*").order("id") */
+  async function fetchAll(make) {
+    const out = [];
+    for (let from = 0; from < 200000; from += 1000) {
+      const { data, error } = await make().range(from, from + 999);
+      if (error) return { data: null, error };
+      out.push(...(data || []));
+      if (!data || data.length < 1000) break;
+    }
+    return { data: out, error: null };
+  }
   const ADMIN_EMAIL = ((C.admin && C.admin.userId) + "@" + (C.admin && C.admin.loginDomain)).toLowerCase();
   const STORE_FAIL = "vosb-admin-fail";
   const IDLE_MS = 30 * 60 * 1000;
@@ -119,7 +131,7 @@
   const LIST_COLS = "id,slug,category,status,publish_at,featured,title_bn,title_en,source,author,image_url,views,shares,updated_at";
   async function loadPosts(force) {
     if (postsLoaded && !force) return posts;
-    const { data, error } = await sb.from("posts").select(LIST_COLS).order("publish_at", { ascending: false }).limit(2000);
+    const { data, error } = await fetchAll(() => sb.from("posts").select(LIST_COLS).order("publish_at", { ascending: false }).order("id"));
     if (error) throw error;
     posts = data || [];
     postsLoaded = true;
@@ -237,7 +249,7 @@
   }
 
   function markNav(r) {
-    const base = r.startsWith("edit") ? "edit/new" : r.startsWith("ads") ? "ads" : r;
+    const base = r.startsWith("edit") ? "edit/new" : r.startsWith("ads") ? "ads" : r.startsWith("newsletter") ? "subscribers" : r;
     $$("[data-r]").forEach((a) => a.classList.toggle("on", a.dataset.r === base || (base === "edit/new" && a.dataset.r === "edit/new")));
   }
 
@@ -255,6 +267,7 @@
       else if (h === "visitors") await viewVisitors(view);
       else if (h === "ads") await viewAds(view);
       else if (h === "subscribers") await viewSubscribers(view);
+      else if (h === "newsletter" || h.startsWith("newsletter/")) await viewNewsletter(view, h.slice(11));
       else if (h.startsWith("ads/")) await viewAdEditor(view, h.slice(4));
       else if (h === "posts") await viewPosts(view);
       else if (h === "settings") viewSettings(view);
@@ -1254,9 +1267,254 @@
     const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   }
+
+  /* ---------------- newsletter sender (compose -> preview -> test -> one-click send) ---------------- */
+  const SEND_FN = "send-newsletter";
+  const SITE_ORIGIN = () => (C.site && C.site.origin) || "https://www.voiceofstartup.bd";
+
+  /* Turns the Markdown message into a finished, email-safe HTML page (inline styles, 600px table layout).
+     {{UNSUB_URL}} and {{EMAIL}} are filled in per subscriber by the send function. */
+  function buildEmail({ subject, preview, md }) {
+    const O = "#ff7522", OD = "#e55f0f", K = "#0b0b0b", G = "#0b8a4b", R = "#e8312f";
+    const font = `'Hind Siliguri','Noto Sans Bengali','Segoe UI',Arial,sans-serif`;
+    let h = MD.render(md || "");
+    const btn = `display:inline-block;background:${O};color:#ffffff;text-decoration:none;font-weight:700;padding:13px 28px;border-radius:999px;font-size:16px`;
+    h = h.replace(/<p>(<a [^>]*>[^<]*[→»][^<]*<\/a>)<\/p>/g, (m, a) => `<p style="margin:22px 0;text-align:center">${a.replace("<a ", `<a style="${btn}" `)}</p>`)
+      .replace(/<h2>/g, `<h2 style="font-family:${font};font-size:22px;line-height:1.35;margin:28px 0 10px;color:${K}">`)
+      .replace(/<h3>/g, `<h3 style="font-family:${font};font-size:18px;line-height:1.4;margin:22px 0 8px;color:${K}">`)
+      .replace(/<p>/g, `<p style="margin:0 0 16px">`)
+      .replace(/<a (?![^>]*style=)/g, `<a style="color:${OD};text-decoration:underline;font-weight:600" `)
+      .replace(/<ul>/g, `<ul style="margin:0 0 16px;padding-left:22px">`).replace(/<ol>/g, `<ol style="margin:0 0 16px;padding-left:22px">`)
+      .replace(/<li>/g, `<li style="margin:0 0 8px">`)
+      .replace(/<img /g, `<img style="max-width:100%;height:auto;border-radius:12px;display:block;margin:18px auto" `)
+      .replace(/<blockquote>/g, `<blockquote style="margin:18px 0;padding:6px 18px;border-left:4px solid ${O};color:#444;background:#fff7f1">`)
+      .replace(/<hr\s*\/?>/g, `<hr style="border:0;border-top:1px solid #e4e4e0;margin:26px 0">`);
+    const pre = esc(preview || "");
+    return `<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(subject || "Voice of Startup Bangladesh")}</title></head>
+<body style="margin:0;padding:0;background:#f4f4f2;font-family:${font};color:#1b1b1b">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;font-size:1px;line-height:1px;color:#f4f4f2">${pre}${"&nbsp;&zwnj;".repeat(40)}</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f2"><tr><td align="center" style="padding:22px 12px">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:18px;overflow:hidden;border:1px solid #e4e4e0">
+<tr><td style="height:6px;line-height:6px;font-size:0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td width="50%" style="background:${O};height:6px;font-size:0">&nbsp;</td><td width="30%" style="background:${G};height:6px;font-size:0">&nbsp;</td><td width="20%" style="background:${R};height:6px;font-size:0">&nbsp;</td></tr></table></td></tr>
+<tr><td align="center" style="padding:26px 24px 8px"><a href="${SITE_ORIGIN()}/"><img src="${SITE_ORIGIN()}/assets/logo.png" alt="Voice of Startup Bangladesh" width="150" style="width:150px;height:auto;border:0;display:block"></a></td></tr>
+<tr><td align="center" style="padding:0 24px 8px;font-size:13px;color:#777;letter-spacing:.04em">Bangladesh Startup &amp; Business News</td></tr>
+<tr><td style="padding:14px 30px 8px;font-size:16.5px;line-height:1.7;font-family:${font};color:#1b1b1b">${h}</td></tr>
+<tr><td style="padding:10px 30px 26px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #e4e4e0;padding-top:16px;font-size:14px;color:#555;line-height:1.6">— Voice of Startup Bangladesh<br><a href="${SITE_ORIGIN()}/" style="color:${OD};text-decoration:none;font-weight:600">www.voiceofstartup.bd</a></td></tr></table></td></tr>
+<tr><td style="background:${K};padding:20px 28px;text-align:center;font-size:12.5px;line-height:1.7;color:#bdbdbd">আপনি Voice of Startup Bangladesh-এর নিউজলেটার সাবস্ক্রাইব করেছেন ({{EMAIL}})।<br>You are receiving this email because you subscribed on voiceofstartup.bd.<br><a href="{{UNSUB_URL}}" style="color:#ffffff;text-decoration:underline;font-weight:600">আনসাবস্ক্রাইব / Unsubscribe</a></td></tr>
+</table></td></tr></table></body></html>`;
+  }
+
+  const CAMP_COLS = "id,subject,preview,audience,body_md,status,total,sent,failed,last_error,created_at,sent_at";
+  const campPill = (c) => ({ draft: `<span class="pill draft">DRAFT</span>`, sending: `<span class="pill sched">SENDING</span>`, paused: `<span class="pill paused">PAUSED</span>`, sent: `<span class="pill live">SENT</span>`, failed: `<span class="pill paused">FAILED</span>` }[c.status] || "");
+
+  /* calls the send function and turns every kind of failure into a readable message */
+  async function callSender(body) {
+    const { data, error } = await sb.functions.invoke(SEND_FN, { body });
+    if (error) {
+      const st = error.context && error.context.status;
+      if (st === 404) return { ok: false, error: "not_deployed", message: "The sending function is not deployed yet (see the setup steps above)." };
+      if (st === 403) return { ok: false, error: "forbidden", message: "This account is not allowed to send newsletters." };
+      if (st === 401) return { ok: false, error: "auth", message: "Session expired — please sign in again." };
+      return { ok: false, error: "network", message: "Could not reach the sending service. Check your connection and try again." };
+    }
+    return data || { ok: false, error: "empty", message: "No answer from the sending service." };
+  }
+
+  async function viewNewsletter(view, idOrNew) {
+    view.innerHTML = `<div class="page-h"><h1>Send newsletter</h1></div><div class="card"><p class="muted">Loading…</p></div>`;
+    const [subRes, histRes, posts_] = await Promise.all([
+      Promise.all(["all", "bn", "en"].map((k) => { let q = sb.from("subscribers").select("id", { count: "exact", head: true }).eq("status", "active"); if (k !== "all") q = q.eq("lang", k); return q; })),
+      sb.from("campaigns").select(CAMP_COLS).order("created_at", { ascending: false }).limit(60),
+      loadPosts().catch(() => []),
+    ]);
+    if (!view.isConnected) return;
+    const missing = (e) => e && /relation|does not exist|schema cache|PGRST205|42P01/i.test(e.message + (e.code || ""));
+    const subErr = subRes.find((x) => x.error);
+    if (subErr || histRes.error) {
+      const e = subErr ? subErr.error : histRes.error;
+      view.innerHTML = `<div class="page-h"><h1>Send newsletter</h1></div><div class="card"><div class="msg err">${missing(e) ? "The newsletter sender tables have not been created yet. Open Supabase → SQL Editor, paste the contents of <b>supabase/update-5-newsletter-sender.sql</b> from the website repository, press Run, then reload this page." : "Could not load: " + esc(e.message)}</div></div>`;
+      return;
+    }
+    const aud = { all: subRes[0].count || 0, bn: subRes[1].count || 0, en: subRes[2].count || 0 };
+    let hist = histRes.data || [];
+    let cur = { id: null, subject: "", preview: "", audience: "all", body_md: "", status: "draft", sent: 0, failed: 0, total: 0 };
+    if (idOrNew && idOrNew !== "new") {
+      const { data } = await sb.from("campaigns").select(CAMP_COLS).eq("id", idOrNew).maybeSingle();
+      if (data) cur = data; else toast("That newsletter was not found", "err");
+    }
+    let locked = cur.status === "sent";
+    let senderState = null;        // result of {action:"status"} (null = checking)
+    let busy = false, tab = "edit";
+
+    const $n = (id) => $("#" + id, view);
+    const audLabel = { all: "Everyone", bn: "Bangla readers", en: "English readers" };
+
+    function draw() {
+      locked = cur.status === "sent";
+      const n = aud[cur.audience] || 0;
+      const resume = cur.id && (cur.status === "sending" || cur.status === "paused");
+      view.innerHTML = `
+      <div class="page-h"><h1>Send newsletter</h1><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="b b-line" href="#/subscribers">← Subscribers</a>${cur.id ? `<a class="b b-line" href="#/newsletter">＋ New message</a>` : ""}</div></div>
+      <div id="nl-setup">${setupHtml()}</div>
+      <div class="nl-grid">
+        <div class="card nl-edit">
+          <h2>${locked ? "Sent message" : cur.id ? "Edit message" : "Write your message"} ${cur.id ? campPill(cur) : ""}</h2>
+          <div class="fld"><label for="nl-subject">Subject <span class="hint">— what people see in their inbox</span></label><input class="inp" id="nl-subject" maxlength="150" placeholder="e.g. এই সপ্তাহের সেরা স্টার্টআপ আপডেট" value="${esc(cur.subject)}" ${locked ? "disabled" : ""}></div>
+          <div class="fld"><label for="nl-pre">Preview text <span class="hint">— the grey line after the subject (optional)</span></label><input class="inp" id="nl-pre" maxlength="140" placeholder="Short teaser…" value="${esc(cur.preview)}" ${locked ? "disabled" : ""}></div>
+          <div class="fld"><label for="nl-aud">Send to</label><select class="sel" id="nl-aud" ${locked || cur.status === "sending" || cur.status === "paused" ? "disabled" : ""}>
+            ${["all", "bn", "en"].map((k) => `<option value="${k}" ${cur.audience === k ? "selected" : ""}>${audLabel[k]} — ${fmtN(aud[k])} active subscribers</option>`).join("")}</select></div>
+          <div class="fld"><label for="nl-body">Message</label>
+            ${locked ? "" : `<div class="nl-tools" role="toolbar" aria-label="Formatting"><button type="button" class="b b-line b-sm" data-t="b" title="Bold"><b>B</b></button><button type="button" class="b b-line b-sm" data-t="i" title="Italic"><i>I</i></button><button type="button" class="b b-line b-sm" data-t="h" title="Heading">H</button><button type="button" class="b b-line b-sm" data-t="l" title="Link">🔗 Link</button><button type="button" class="b b-line b-sm" data-t="ul" title="List">• List</button><button type="button" class="b b-line b-sm" data-t="btn" title="Orange button">🔘 Button</button><button type="button" class="b b-line b-sm" data-t="posts" title="Add the latest published articles">📰 Latest articles</button></div>`}
+            <textarea class="txt nl-body" id="nl-body" rows="14" placeholder="Write in Bangla or English. Use the buttons above for headings, links and lists." ${locked ? "disabled" : ""}>${esc(cur.body_md)}</textarea>
+            <span class="hint">A link on its own line that ends with → becomes an orange button, e.g. <code>[সব খবর পড়ুন →](https://www.voiceofstartup.bd/news)</code>. The unsubscribe link and your logo are added automatically.</span></div>
+          <div class="nl-test"><input class="inp" id="nl-to" type="email" inputmode="email" placeholder="Send a test to…" value="${esc(session.user.email || "")}"><button class="b b-line" id="nl-test" ${busy ? "disabled" : ""}>Send test</button></div>
+          <div id="nl-msg" class="msg" hidden></div>
+          <div class="nl-actions">
+            ${locked ? `<button class="b b-line" id="nl-dup">Duplicate as new</button>` : `<button class="b b-line" id="nl-save" ${busy ? "disabled" : ""}>Save draft</button><button class="b b-orange b-lg" id="nl-send" ${busy ? "disabled" : ""}>${resume ? "▶ Continue sending" : "✉️ Send to " + fmtN(n) + " subscriber" + (n === 1 ? "" : "s")}</button>`}
+          </div>
+          <div id="nl-prog" ${cur.status === "sending" || cur.status === "paused" || locked ? "" : "hidden"}>${progHtml()}</div>
+        </div>
+        <div class="card nl-prev"><h2>Email preview <span class="muted" style="font-weight:500;font-size:.85rem">(exactly what subscribers get)</span></h2><iframe id="nl-frame" title="Email preview" sandbox="" class="nl-frame"></iframe></div>
+      </div>
+      <div class="card" style="margin-top:16px"><h2>Past newsletters</h2>${histHtml()}</div>`;
+      wire(); preview();
+    }
+
+    function setupHtml() {
+      if (senderState === null) return `<div class="card nl-info"><span class="muted">Checking the email service…</span></div>`;
+      if (senderState.configured) return `<div class="card nl-info ok"><b>✓ Ready to send</b> via ${esc(senderState.provider)} · from <code>${esc(senderState.from)}</code>${senderState.daily_limit ? ` · daily limit <b>${fmtN(senderState.daily_limit)}</b> (sent today: ${fmtN(senderState.sent_today)})` : ""}</div>`;
+      const why = senderState.error === "not_deployed" ? "The sending function has not been deployed yet."
+        : senderState.error === "not_configured" ? "The email service is not connected yet." : esc(senderState.message || "The email service is not available.");
+      return `<div class="card nl-info warn"><b>⚙️ One-time setup needed</b> — ${why}
+        <ol><li>Create a free account at <b>resend.com</b> (or brevo.com), add the domain <b>voiceofstartup.bd</b> and add the DNS records they show (this lets your emails reach the inbox, not spam).</li>
+        <li>Create an API key. In <b>Supabase → Edge Functions → Secrets</b> add <code>RESEND_API_KEY</code> and <code>MAIL_FROM</code> = <code>Voice of Startup Bangladesh &lt;newsletter@voiceofstartup.bd&gt;</code> (optional: <code>DAILY_LIMIT</code> = 100 for Resend's free plan).</li>
+        <li>Reload this page — this box turns green. After that, sending is one click.</li></ol></div>`;
+    }
+
+    function progHtml() {
+      const t = cur.total || 0, done = (cur.sent || 0) + (cur.failed || 0), pct = t ? Math.min(100, Math.round((done / t) * 100)) : 0;
+      if (!t && cur.status === "draft") return "";
+      return `<div class="nl-bar" aria-hidden="true"><i style="width:${pct}%"></i></div><p class="muted" style="margin:6px 0 0;font-size:.9rem"><b>${fmtN(cur.sent)}</b> sent${cur.failed ? ` · <b style="color:var(--red)">${fmtN(cur.failed)}</b> failed` : ""} of ${fmtN(t)}${cur.status === "paused" ? " — paused (press Continue to carry on)" : ""}${cur.status === "sent" ? " — finished" : ""}${cur.last_error && cur.status !== "sent" ? `<br><span style="color:var(--red)">${esc(cur.last_error)}</span>` : ""}</p>${cur.failed && cur.id ? `<button class="b b-line b-sm" id="nl-retry" style="margin-top:8px">Retry the ${fmtN(cur.failed)} failed</button>` : ""}`;
+    }
+
+    function histHtml() {
+      if (!hist.length) return `<p class="muted">Nothing sent yet. Your first newsletter will appear here.</p>`;
+      return `<div class="rows">${hist.map((c) => `<div class="row sub" data-c="${c.id}"><div class="ti"><h3>${esc(c.subject)}</h3><div class="meta">${campPill(c)}<span>${audLabel[c.audience] || ""}</span><span>${c.status === "sent" && c.sent_at ? fmtDT(c.sent_at) : fmtDT(c.created_at)}</span>${c.total ? `<span><b>${fmtN(c.sent)}</b>/${fmtN(c.total)} delivered${c.failed ? ` · ${fmtN(c.failed)} failed` : ""}</span>` : ""}</div></div>
+        <div class="acts"><a class="b b-line b-sm" href="#/newsletter/${c.id}">${c.status === "sent" ? "View" : "Open"}</a><button class="b b-line b-sm" data-del="${c.id}">Delete</button></div></div>`).join("")}</div>`;
+    }
+
+    function read() {
+      if (locked) return;
+      cur.subject = $n("nl-subject").value.trim(); cur.preview = $n("nl-pre").value.trim(); cur.body_md = $n("nl-body").value;
+      const a = $n("nl-aud"); if (a) cur.audience = a.value;
+    }
+    function html() { return buildEmail({ subject: cur.subject, preview: cur.preview, md: cur.body_md }); }
+    function preview() {
+      const f = $n("nl-frame"); if (!f) return;
+      f.srcdoc = html().replace(/\{\{EMAIL\}\}/g, "subscriber@example.com").replace(/\{\{UNSUB_URL\}\}/g, "#");
+    }
+    function say(text, kind) { const m = $n("nl-msg"); if (!m) return; m.hidden = !text; m.className = "msg " + (kind || ""); m.textContent = text || ""; }
+    function lockUi(on) { busy = on; ["nl-save", "nl-send", "nl-test"].forEach((id) => { const b = $n(id); if (b) b.disabled = on; }); }
+
+    async function save(quiet) {
+      read();
+      if (!cur.subject) { say("Write a subject first.", "err"); $n("nl-subject").focus(); return false; }
+      if (!cur.body_md.trim()) { say("The message is empty.", "err"); $n("nl-body").focus(); return false; }
+      const row = { subject: cur.subject, preview: cur.preview, audience: cur.audience, body_md: cur.body_md, body_html: html(), updated_at: new Date().toISOString() };
+      const r = cur.id ? await sb.from("campaigns").update(row).eq("id", cur.id).select(CAMP_COLS).single() : await sb.from("campaigns").insert(row).select(CAMP_COLS).single();
+      if (r.error) { say("Could not save: " + r.error.message, "err"); return false; }
+      const fresh = !cur.id; cur = r.data;
+      hist = [cur, ...hist.filter((x) => x.id !== cur.id)];
+      if (fresh) history.replaceState(null, "", "#/newsletter/" + cur.id);
+      if (!quiet) { say("Draft saved ✓", "ok"); toast("Draft saved", "ok"); }
+      return true;
+    }
+
+    async function send() {
+      read();
+      if (!(await save(true))) return;
+      const n = aud[cur.audience] || 0;
+      if (!n && cur.status === "draft") return say("There are no active subscribers for this audience.", "err");
+      if (!senderState || !senderState.configured) return say("Finish the one-time setup above first.", "err");
+      const resuming = cur.status === "sending" || cur.status === "paused";
+      const ok = await modal({ title: resuming ? "Continue sending?" : "Send this newsletter?", body: resuming ? `The rest of "${cur.subject}" will be sent now. People who already got it will not get it twice.` : `"${cur.subject}" will be emailed to ${fmtN(n)} active subscriber${n === 1 ? "" : "s"} (${audLabel[cur.audience]}). This cannot be undone — make sure you sent yourself a test first.`, ok: resuming ? "Continue" : `Send to ${fmtN(n)}`, cancel: "Not yet" });
+      if (!ok) return;
+      lockUi(true); say("", ""); $n("nl-prog").hidden = false; $n("nl-send").textContent = "Sending… keep this page open";
+      let guard = 0, final = { t: "", k: "" };
+      while (view.isConnected && guard++ < 400) {
+        const r = await callSender({ action: "send", campaign_id: cur.id });
+        if (!view.isConnected) return;
+        if (!r.ok) { final = { t: r.message || "Sending stopped.", k: "err" }; break; }
+        cur = { ...cur, sent: r.sent, failed: r.failed, total: r.total, status: r.done ? "sent" : r.paused ? "paused" : "sending", last_error: r.error || null };
+        $n("nl-prog").innerHTML = progHtml();
+        if (r.done) { final = { t: `Done ✓ ${fmtN(r.sent)} email${r.sent === 1 ? "" : "s"} sent${r.failed ? `, ${fmtN(r.failed)} failed` : ""}.`, k: "ok" }; toast("Newsletter sent", "ok"); break; }
+        if (r.paused) { final = r.paused === "daily_limit" ? { t: "Daily sending limit reached. The rest will go out when you press Continue tomorrow (people are never emailed twice).", k: "" } : { t: "Stopped: " + (r.error || "the email service refused the request. Check the API key and the verified domain."), k: "err" }; break; }
+      }
+      hist = [cur, ...hist.filter((x) => x.id !== cur.id)];
+      draw();
+      if (final.t) say(final.t, final.k);
+    }
+
+    function wire() {
+      if (locked) {
+        $n("nl-dup").onclick = () => { try { sessionStorage.setItem("vosb-nl-dup", JSON.stringify({ subject: cur.subject, preview: cur.preview, audience: cur.audience, body_md: cur.body_md })); } catch (e) {} location.hash = "#/newsletter"; };
+      } else {
+        ["nl-subject", "nl-pre", "nl-body"].forEach((id) => $n(id).addEventListener("input", () => { read(); clearTimeout(wire.t); wire.t = setTimeout(preview, 250); }));
+        $n("nl-aud").addEventListener("change", () => { read(); draw(); });
+        $n("nl-save").onclick = async () => { lockUi(true); await save(); lockUi(false); draw(); };
+        $n("nl-send").onclick = send;
+        $$(".nl-tools [data-t]", view).forEach((b) => (b.onclick = () => tool(b.dataset.t)));
+      }
+      $n("nl-test").onclick = async () => {
+        read();
+        const to = $n("nl-to").value.trim();
+        if (!cur.subject) return say("Write a subject first.", "err");
+        if (!cur.body_md.trim()) return say("The message is empty.", "err");
+        if (!senderState || !senderState.configured) return say("Finish the one-time setup above first.", "err");
+        lockUi(true); say("Sending test…", "");
+        const r = await callSender({ action: "test", to, subject: cur.subject, html: html() });
+        lockUi(false); say(r.ok ? `Test sent to ${to} ✓ (check the spam folder the first time)` : r.message || "Could not send the test.", r.ok ? "ok" : "err");
+      };
+      const rt = $n("nl-retry"); if (rt) rt.onclick = async () => { lockUi(true); await callSender({ action: "retry", campaign_id: cur.id }); cur.failed = 0; cur.status = "paused"; lockUi(false); draw(); say("Failed addresses will be tried again — press Continue sending.", ""); };
+      $$("[data-del]", view).forEach((b) => (b.onclick = async () => {
+        const c = hist.find((x) => x.id === b.dataset.del);
+        if (!(await modal({ title: "Delete this newsletter?", body: `"${c.subject}" and its sending history will be removed. Emails already delivered cannot be recalled.`, ok: "Delete", danger: true }))) return;
+        const { error } = await sb.from("campaigns").delete().eq("id", c.id);
+        if (error) return toast("Could not delete: " + error.message, "err");
+        hist = hist.filter((x) => x.id !== c.id); toast("Deleted", "ok");
+        if (cur.id === c.id) location.hash = "#/newsletter"; else draw();
+      }));
+    }
+
+    function tool(t) {
+      const ta = $n("nl-body"), a = ta.selectionStart, b = ta.selectionEnd, sel = ta.value.slice(a, b);
+      const put = (text, from, to) => { ta.setRangeText(text, a, b, "end"); ta.focus(); if (from !== undefined) ta.setSelectionRange(a + from, a + to); read(); preview(); };
+      if (t === "b") { const x = sel || "bold text"; put(`**${x}**`, 2, 2 + x.length); }
+      else if (t === "i") { const x = sel || "italic text"; put(`*${x}*`, 1, 1 + x.length); }
+      else if (t === "h") { const x = sel || "Heading"; put(`${a && ta.value[a - 1] !== "\n" ? "\n\n" : ""}## ${x}\n\n`); }
+      else if (t === "l") { const x = sel || "link text"; put(`[${x}](https://)`, x.length + 3, x.length + 11); }
+      else if (t === "ul") { put(`${a && ta.value[a - 1] !== "\n" ? "\n" : ""}- ${sel || "item"}\n- item\n`); }
+      else if (t === "btn") { put(`${a && ta.value[a - 1] !== "\n" ? "\n\n" : ""}[${sel || "বিস্তারিত পড়ুন"} →](${SITE_ORIGIN()}/news)\n\n`); }
+      else if (t === "posts") {
+        const live = (posts_ || []).filter((p) => stateOf(p) === "live").sort((x, y) => new Date(y.publish_at) - new Date(x.publish_at)).slice(0, 5);
+        if (!live.length) return toast("No published articles yet", "err");
+        put(`${a && ta.value[a - 1] !== "\n" ? "\n\n" : ""}## সর্বশেষ আপডেট\n\n${live.map((p) => `- [${(p.title_bn || p.title_en || "").replace(/[\[\]]/g, "")}](${liveUrl(p.slug)})`).join("\n")}\n\n[সব খবর পড়ুন →](${SITE_ORIGIN()}/news)\n\n`);
+      }
+    }
+
+    // "Duplicate as new" hand-over
+    if (!cur.id) { try { const d = JSON.parse(sessionStorage.getItem("vosb-nl-dup") || "null"); if (d) { cur = { ...cur, ...d }; sessionStorage.removeItem("vosb-nl-dup"); } } catch (e) {} }
+    draw();
+    callSender({ action: "status" }).then((r) => {
+      if (!view.isConnected) return;
+      senderState = r.ok ? r : { configured: false, error: r.error, message: r.message };
+      const box = $n("nl-setup"); if (box) box.innerHTML = setupHtml();
+    });
+  }
+
   async function viewSubscribers(view) {
     view.innerHTML = `<div class="page-h"><h1>Subscribers</h1></div><div class="card"><p class="muted">Loading…</p></div>`;
-    const { data, error } = await sb.from("subscribers").select("id,email,status,lang,source,token,created_at,unsubscribed_at").order("created_at", { ascending: false }).limit(10000);
+    const { data, error } = await fetchAll(() => sb.from("subscribers").select("id,email,status,lang,source,token,created_at,unsubscribed_at").order("created_at", { ascending: false }).order("id"));
     if (!view.isConnected) return;
     if (error) {
       const missing = /relation|does not exist|schema cache|PGRST205|42P01/i.test(error.message + (error.code || ""));
@@ -1275,7 +1533,7 @@
       const list = subsList.filter((x) => (st === "all" || x.status === st) && (!q || x.email.includes(q)));
       view.innerHTML = `
       <div class="page-h"><h1>Subscribers <span class="muted" style="font-size:1rem">(${fmtN(subsList.length)})</span></h1>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="b b-line" id="imp-t">⬆ Import emails</button><button class="b b-line" id="copy">Copy active emails</button><button class="b b-orange" id="csv">⬇ Export CSV</button></div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="b b-orange" href="#/newsletter">✉️ Send newsletter</a><button class="b b-line" id="imp-t">⬆ Import emails</button><button class="b b-line" id="copy">Copy active emails</button><button class="b b-line" id="csv">⬇ Export CSV</button></div></div>
       ${flash ? `<div class="msg ok" style="margin-bottom:14px">${esc(flash)}</div>` : ""}
       ${impOpen ? `<div class="card imp-box" style="margin-bottom:16px"><h2>Import existing emails</h2>
         <p class="muted" style="font-size:.9rem;line-height:1.55;margin:4px 0 10px">Paste email addresses (separated by commas, spaces or new lines) or upload a <b>.csv</b> / <b>.txt</b> file — for example a contacts export from Gmail or Google Contacts. Other columns are ignored; duplicates and people already on the list are skipped.</p>

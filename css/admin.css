@@ -324,3 +324,22 @@ table.t td.n, table.t th.n { text-align: right; }
   .bottom-nav a.on::before { content: ""; position: absolute; top: 0; left: 28%; right: 28%; height: 3px; border-radius: 0 0 4px 4px; background: var(--orange); }
 }
 @media (max-width: 420px) { .topbar-in { padding: 0 12px; } .topbar .brand img { height: 30px; padding: 3px 7px; } .acct-menu { width: min(270px, calc(100vw - 24px)); } }
+
+/* ===== Round 6: newsletter sender ===== */
+.b-lg { min-height: 50px; padding: 11px 26px; font-size: 1.02rem; }
+.nl-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.nl-prev { position: sticky; top: 84px; }
+.nl-frame { width: 100%; height: min(78vh, 760px); border: 1px solid var(--line); border-radius: 12px; background: #f4f4f2; }
+.nl-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.nl-body { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Hind Siliguri", monospace; font-size: .93rem; line-height: 1.6; min-height: 280px; resize: vertical; }
+.nl-test { display: flex; gap: 8px; margin: 4px 0 12px; } .nl-test .inp { flex: 1; min-width: 0; } .nl-test .b { flex: none; }
+.nl-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; margin-top: 6px; }
+.nl-info { margin-bottom: 16px; line-height: 1.6; font-size: .93rem; }
+.nl-info.ok { border-color: #bfe5d0; background: #f1fbf6; color: #0a5c34; }
+.nl-info.warn { border-color: #ffd2b5; background: #fff7f1; }
+.nl-info ol { margin: 10px 0 0 20px; display: grid; gap: 6px; }
+.nl-info code, .fld .hint code { background: #0000000d; padding: 1px 6px; border-radius: 6px; font-size: .86em; overflow-wrap: anywhere; }
+.nl-bar { height: 10px; border-radius: 999px; background: #eee; overflow: hidden; margin-top: 14px; } .nl-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--orange), var(--green)); transition: width .4s ease; }
+#nl-prog { margin-top: 6px; }
+@media (max-width: 1000px) { .nl-grid { grid-template-columns: 1fr; } .nl-prev { position: static; order: 2; } .nl-frame { height: 70vh; } }
+@media (max-width: 560px) { .nl-test { flex-direction: column; } .nl-actions .b { flex: 1 1 100%; } }

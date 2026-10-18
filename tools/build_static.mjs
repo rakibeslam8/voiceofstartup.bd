@@ -45,12 +45,18 @@ const V = assetVersion();
 /* ---- fetch live posts ---- */
 async function fetchPosts() {
   const now = new Date().toISOString();
-  const url = `${SB_URL}/rest/v1/posts?select=*&status=eq.published&publish_at=lte.${encodeURIComponent(now)}&order=publish_at.desc&limit=2000`;
-  const res = await fetch(url, { headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY } });
-  if (!res.ok) throw new Error("Supabase responded " + res.status + " " + (await res.text()).slice(0, 200));
-  const rows = await res.json();
-  if (!Array.isArray(rows)) throw new Error("Unexpected response");
-  return rows;
+  const all = [];
+  // Supabase returns at most 1,000 rows per request, so read page by page
+  for (let from = 0; from < 100000; from += 1000) {
+    const url = `${SB_URL}/rest/v1/posts?select=*&status=eq.published&publish_at=lte.${encodeURIComponent(now)}&order=publish_at.desc,id.asc`;
+    const res = await fetch(url, { headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY, Range: `${from}-${from + 999}`, "Range-Unit": "items" } });
+    if (!res.ok) throw new Error("Supabase responded " + res.status + " " + (await res.text()).slice(0, 200));
+    const rows = await res.json();
+    if (!Array.isArray(rows)) throw new Error("Unexpected response");
+    all.push(...rows);
+    if (rows.length < 1000) break;
+  }
+  return all;
 }
 
 /* ---- helpers ---- */
