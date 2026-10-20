@@ -12,6 +12,23 @@
   const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
   const esc = MD.esc;
   const fmtN = (n) => Number(n || 0).toLocaleString("en-IN");
+  /* Short form for big numbers, e.g. 1,234,567 -> "1.23M" (shown next to the exact figure, never instead of it) */
+  const fmtC = (n) => { n = Number(n || 0); const a = Math.abs(n); return a >= 1e9 ? (n / 1e9).toFixed(2) + "B" : a >= 1e6 ? (n / 1e6).toFixed(2) + "M" : (n / 1e3).toFixed(a >= 1e5 ? 0 : 1) + "K"; };
+  /* Every stat tile: keep the exact number, add a short "≈ 1.23M" hint from 100,000 up, and shrink the digits
+     so even 10-digit numbers fit a phone-sized tile without overflowing. */
+  function fitTiles(root) {
+    $$(".tile b", root).forEach((b) => {
+      if (!b.dataset.fit) {
+        b.dataset.fit = "1";
+        const txt = b.textContent.trim(), m = /^[≈\s]*([\d,]+)$/.exec(txt);
+        const n = m ? Number(m[1].replace(/,/g, "")) : NaN;
+        if (n >= 100000) b.insertAdjacentHTML("afterend", `<em class="tile-hint">≈ ${fmtC(n)}</em>`);
+      }
+      b.style.fontSize = "";
+      let size = parseFloat(getComputedStyle(b).fontSize);
+      while (b.scrollWidth > b.clientWidth + 1 && size > 14) { size -= 1; b.style.fontSize = size + "px"; }
+    });
+  }
   /* Supabase returns at most 1,000 rows per request, so long lists are read page by page.
      make() must build a fresh query each time, e.g. () => sb.from("subscribers").select("*").order("id") */
   async function fetchAll(make) {
@@ -262,6 +279,8 @@
     old.replaceWith(view);
     window.scrollTo(0, 0);
     markNav(h);
+    // every page: keep stat-tile numbers fitting (and add the short "≈ 1.2M" hint) whenever tiles are drawn
+    try { let tm; new MutationObserver(() => { clearTimeout(tm); tm = setTimeout(() => fitTiles(view), 30); }).observe(view, { childList: true, subtree: true }); } catch (e) {}
     try {
       if (h === "dashboard") await viewDashboard(view);
       else if (h === "visitors") await viewVisitors(view);
@@ -397,9 +416,21 @@
   async function viewDashboard(view) {
     view.innerHTML = `<div class="page-h"><h1>Dashboard</h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div><div class="card"><p class="muted">Loading…</p></div>`;
     let site = null, subs = null, subsNew = null;
+    /* one exact server-side count (update-6 SQL); falls back to two plain counts if that update isn't installed yet */
+    const loadSubs = async () => {
+      try {
+        const r = await sb.rpc("admin_subscriber_stats");
+        if (!r.error && r.data) return { active: Number(r.data.active), new7: Number(r.data.new_7d) };
+      } catch (e) {}
+      try {
+        const a = await sb.from("subscribers").select("id", { count: "exact", head: true }).eq("status", "active");
+        const b = await sb.from("subscribers").select("id", { count: "exact", head: true }).gte("created_at", new Date(Date.now() - 7 * 864e5).toISOString());
+        if (!a.error) return { active: a.count, new7: b.error ? 0 : b.count };
+      } catch (e) {}
+      return null;
+    };
     await Promise.all([loadPosts(true), loadDaily(), loadSite(7).then((x) => { site = x; }).catch(() => {}),
-      sb.from("subscribers").select("id", { count: "exact", head: true }).eq("status", "active").then((r) => { if (!r.error) subs = r.count; }, () => {}),
-      sb.from("subscribers").select("id", { count: "exact", head: true }).gte("created_at", new Date(Date.now() - 7 * 864e5).toISOString()).then((r) => { if (!r.error) subsNew = r.count; }, () => {})]);
+      loadSubs().then((x) => { if (x) { subs = x.active; subsNew = x.new7; } })]);
     if (!view.isConnected) return;   // user navigated away while loading
     const total = posts.reduce((a, p) => a + Number(p.views || 0), 0);
     const shares = posts.reduce((a, p) => a + Number(p.shares || 0), 0);
@@ -431,9 +462,9 @@
         <div class="tile"><small>Visitors today</small><b>${fmtN(site.totals.visitors_today)}</b></div>
         <div class="tile k"><small>Page views today</small><b>${fmtN(site.totals.views_today)}</b></div>` : ""}
         <div class="tile r"><small>Reads today</small><b>${fmtN(today)}</b></div>
-        ${site ? `<div class="tile"><small>Visitors · 7 days</small><b>${fmtN(site.totals.visitors_7d)}</b></div>` : ""}
+        ${site ? `<div class="tile"><small>Visitors · 7 days</small><b>${site.exact && site.exact.visitors_7d === false ? "≈ " : ""}${fmtN(site.totals.visitors_7d)}</b></div>` : ""}
         <div class="tile g"><small>Reads · 7 days</small><b>${fmtN(d7)}</b></div>
-        ${site ? `<div class="tile k"><small>Visitors · 30 days</small><b>${fmtN(site.totals.visitors_30d)}</b></div>` : ""}
+        ${site ? `<div class="tile k"><small>Visitors · 30 days</small><b>${site.exact && site.exact.visitors_30d === false ? "≈ " : ""}${fmtN(site.totals.visitors_30d)}</b></div>` : ""}
         ${subs !== null ? `<a class="tile r" href="#/subscribers" style="text-decoration:none;color:inherit"><small>New subscribers · 7 days</small><b>${fmtN(subsNew || 0)}</b></a>` : ""}
       </div>
       <div class="dash-cols">
@@ -458,6 +489,7 @@
         ${posts.length ? `<div class="rows">${posts.slice(0, 5).map(rowHtml).join("")}</div>` : `<div class="empty"><b>No articles yet</b>Click “Write new article” to publish your first one.</div>`}
       </div>`;
 
+    fitTiles(view);
     const draw = () => {
       let { from, to } = resolveRange(sel);
       if (!from) { const f = daily.find((d) => d.views > 0); from = f ? f.day : to; }
@@ -1006,6 +1038,8 @@
       const rows = bucketRows(allRows);
       const busiest = allRows.reduce((m, r) => (r.views > (m ? m.views : 0) ? r : m), null);
       const label = rangeLabel(sel, stats.from, stats.to);
+      const ex = stats.exact || {}, apV = ex.visitors === false ? "≈ " : "", apS = ex.sessions === false ? "≈ " : "", apB = ex.breakdowns === false;
+      const anyApprox = ex.visitors === false || ex.sessions === false || apB;
       view.innerHTML = `
       <div class="page-h"><h1>Visitors</h1><div id="rp"></div></div>
       <p class="period-line"><b>${esc(label)}</b> <span class="muted">${sel.mode === "custom" ? "" : `· ${esc(dLong(stats.from))} → ${esc(dLong(stats.to))} `}· ${fmtN(nDays)} day${nDays === 1 ? "" : "s"}</span>
@@ -1016,16 +1050,16 @@
         <div class="tile"><small>Visitors today</small><b>${fmtN(t.visitors_today)}</b></div>
         <div class="tile k"><small>Page views today</small><b>${fmtN(t.views_today)}</b></div>
         <div class="tile r"><small>Article reads today</small><b>${dash(t.reads_today)}</b></div>
-        <div class="tile g"><small>Visitors · this period</small><b>${dash(R.visitors)}</b></div>
+        <div class="tile g"><small>Visitors · this period</small><b>${apV}${dash(R.visitors)}</b></div>
         <div class="tile"><small>Page views · this period</small><b>${dash(R.views)}</b></div>
-        <div class="tile k"><small>Sessions · this period</small><b>${dash(R.sessions)}</b></div>
+        <div class="tile k"><small>Sessions · this period</small><b>${apS}${dash(R.sessions)}</b></div>
         <div class="tile r"><small>Article reads · this period</small><b>${dash(R.article_reads)}</b></div>
       </div>
       <div class="card">
         <div class="chart-h"><h2>Traffic</h2>
           <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="legend"><i class="lg-b"></i>Page views <i class="lg-l"></i>Visitors</span><button class="link-btn" id="tv">${table ? "Chart view" : "Table view"}</button></div></div>
         <div class="chart" id="chart"></div>
-        <p class="muted" style="font-size:.8rem;margin-top:8px">A “visitor” is one browser (counted by a random ID stored on the visitor's device — no name, email or IP address is saved). A “page view” is one page opened. Your own visits and bots are not counted. Bangladesh time.${rows.length !== allRows.length ? ` Long ranges are grouped by ${rows[0].axis ? "month" : "week"}; the visitors line there adds up each day's unique visitors.` : ""}</p>
+        <p class="muted" style="font-size:.8rem;margin-top:8px">A “visitor” is one browser (counted by a random ID stored on the visitor's device — no name, email or IP address is saved). A “page view” is one page opened. Your own visits and bots are not counted. Bangladesh time.${anyApprox ? ` <b>≈</b> marks a figure for a very large period (more than ${fmtN(ex.visitors === false ? 400000 : 40000)} page views) where each day's unique visitors are added up, so a person who came on several days is counted once per day. Page views, article reads and every per-day number stay exact; narrow the dates to see exact visitor figures.` : ""}${rows.length !== allRows.length ? ` Long ranges are grouped by ${rows[0].axis ? "month" : "week"}; the visitors line there adds up each day's unique visitors.` : ""}</p>
       </div>
       <div class="dash-cols" style="margin-top:16px">
         <div class="card"><h2>Most visited pages</h2>${barList(stats.top_pages, "views", (x) => pageLabel(x.path), "Page views appear after the first visits.")}</div>
@@ -1035,9 +1069,9 @@
         <div class="card"><h2>Most read articles <span class="muted" style="font-size:.8rem;font-weight:500">(this period)</span></h2>${barList((stats.top_articles || []).map((a) => ({ k: a.title_bn || a.title_en || a.slug, v: a.reads })), "v", (x) => `📰 ${esc(String(x.k).slice(0, 80))}`, stats.legacy ? "Needs the update-4 SQL." : "Article reads in this period appear here.")}</div>
         <div class="card"><h2>Highlights</h2>
           <dl class="kv"><dt>Busiest day</dt><dd>${busiest && busiest.views ? `${esc(dLong(busiest.day))} · ${fmtN(busiest.views)} views` : "—"}</dd>
-            <dt>Avg visitors / day</dt><dd>${R.visitors == null ? "—" : fmtN(Math.round(allRows.reduce((a, r) => a + r.visitors, 0) / Math.max(1, nDays)))}</dd>
+            <dt>Avg visitors / day</dt><dd>${R.visitors == null ? "—" : apV + fmtN(Math.round(allRows.reduce((a, r) => a + r.visitors, 0) / Math.max(1, nDays)))}</dd>
             <dt>Pages per visit</dt><dd>${R.sessions ? (R.views / R.sessions).toFixed(1) : "—"}</dd>
-            <dt>New visitors</dt><dd>${fmtN(stats.new_visitors)}</dd><dt>Returning</dt><dd>${fmtN(stats.returning_visitors)}</dd>${subsNew !== null ? `<dt>New subscribers</dt><dd><a href="#/subscribers">${fmtN(subsNew)}</a></dd>` : ""}</dl></div>
+            <dt>New visitors</dt><dd>${fmtN(stats.new_visitors)}</dd><dt>Returning</dt><dd>${apV}${fmtN(stats.returning_visitors)}</dd>${subsNew !== null ? `<dt>New subscribers</dt><dd><a href="#/subscribers">${fmtN(subsNew)}</a></dd>` : ""}</dl></div>
       </div>
       <div class="dash-cols" style="margin-top:16px;grid-template-columns:1fr 1fr 1fr">
         <div class="card"><h2>Devices</h2>${barList(stats.devices, "visitors", (x) => devName[x.device] || esc(x.device))}</div>
@@ -1052,6 +1086,7 @@
         </div>
       </div>`;
       mountPicker($("#rp"), sel, reload);
+      fitTiles(view);
       $("#csv").onclick = () => {
         downloadCsv(`vosb-traffic-${stats.from}_to_${stats.to}.csv`, [["date", "page_views", "visitors", "article_reads"]].concat(allRows.map((r) => [r.day, r.views, r.visitors, r.reads === undefined ? "" : r.reads])));
         toast("Exported " + fmtN(allRows.length) + " days", "ok");

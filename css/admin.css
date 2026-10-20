@@ -347,3 +347,5 @@ table.t td.n, table.t th.n { text-align: right; }
 /* dashboard section headings */
 .sec-h { display: flex; align-items: baseline; gap: 8px; font-size: 1.05rem; margin: 6px 2px 10px; }
 .sec-h span { color: var(--muted); font-weight: 600; font-size: .8rem; }
+.tile b { overflow: hidden; white-space: nowrap; }
+.tile-hint { display: block; font-style: normal; font-size: .78rem; color: var(--muted); font-weight: 600; margin-top: 2px; }
