@@ -652,3 +652,25 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
 .crumbs span[aria-hidden] { color: var(--muted); }
 .crumbs span[aria-current] { color: var(--text); font-weight: 600; }
 .list-h { font-size: clamp(1.25rem, 2.6vw, 1.6rem); margin: 0 0 16px; }
+
+/* header "Topics" drop-down (all topic pages linked from the main menu) */
+.nav-dd { position: relative; }
+.nav-dd > summary { list-style: none; cursor: pointer; padding: 8px 14px; border-radius: 999px; font-weight: 600; font-size: 0.97rem; user-select: none; }
+.nav-dd > summary::-webkit-details-marker { display: none; }
+.nav-dd > summary::after { content: "▾"; margin-left: 6px; font-size: .75em; }
+.nav-dd > summary:hover, .nav-dd[open] > summary, .nav-dd.active > summary { background: var(--orange-soft); color: var(--orange-dark); }
+.nav-dd .dd-menu { position: absolute; top: calc(100% + 8px); left: 0; z-index: 60; min-width: 250px; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 8px; box-shadow: 0 18px 40px rgba(0,0,0,.14); display: flex; flex-direction: column; }
+.nav-dd .dd-menu a { border-radius: 10px; padding: 9px 12px; font-size: .95rem; }
+@media (max-width: 760px) {
+  .nav-dd > summary { padding: 12px 14px; }
+  .nav-dd .dd-menu { position: static; box-shadow: none; border: 0; border-left: 3px solid var(--orange-soft); border-radius: 0; margin: 2px 0 6px 14px; padding: 2px 0 2px 6px; min-width: 0; }
+}
+
+/* crawlable headline index (raw-HTML internal links) */
+.headline-index { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--line); }
+.headline-index h2 { font-size: 1.15rem; margin-bottom: 10px; }
+.headline-index ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 28px; }
+.headline-index li { padding: 6px 0; border-bottom: 1px dashed var(--line); min-width: 0; }
+.headline-index a { color: var(--text); font-weight: 500; overflow-wrap: anywhere; }
+.headline-index a:hover { color: var(--orange-dark); }
+@media (max-width: 760px) { .headline-index ul { grid-template-columns: 1fr; } }

@@ -60,6 +60,11 @@
     toDate(iso).toLocaleString(lang === "bn" ? "bn-BD" : "en-GB", { timeZone: "Asia/Dhaka", year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true });
 
   /* ---------- Header / footer ---------- */
+  // "Topics" drop-down: every topic page is linked from the main menu (plain <details>, works without JS)
+  function topicsMenu(page) {
+    const on = C.categories.some((c) => "/" + c.slug === page);
+    return `<details class="nav-dd${on ? " active" : ""}"><summary>${T("বিষয়", "Topics")}</summary><div class="dd-menu">${C.categories.map((c) => `<a href="/${c.slug}" class="${"/" + c.slug === page ? "active" : ""}">${esc(pick(c))}</a>`).join("")}</div></details>`;
+  }
   function renderChrome() {
     const page = location.pathname.replace(/index\.html$/, "").replace(/\.html$/, "") || "/";
     const top = $("#site-top");
@@ -72,7 +77,7 @@
       <header class="site-header"><div class="container">
         <a class="brand" href="/" aria-label="Voice of Startup Bangladesh"><img src="/assets/logo.png" alt="Voice of Startup BD logo"></a>
         <nav class="nav" id="nav" aria-label="Main">
-          ${NAV.map((n) => `<a href="${n.href}" class="${n.href === page ? "active" : ""}">${esc(pick(n))}</a>`).join("")}
+          ${NAV.map((n, i) => `<a href="${n.href}" class="${n.href === page ? "active" : ""}">${esc(pick(n))}</a>${i === 1 ? topicsMenu(page) : ""}`).join("")}
         </nav>
         <div class="header-actions">
           <button class="lang-toggle" id="lang" aria-label="Switch language">${lang === "bn" ? "EN" : "বাংলা"}</button>
@@ -82,6 +87,7 @@
       </div></header>
       <div class="container"><div class="ad-slot ad-header" data-slot="header" data-i="0"></div></div>`;
       $("#menu").onclick = () => $("#nav").classList.toggle("open");
+      document.addEventListener("click", (e) => { document.querySelectorAll(".nav-dd[open]").forEach((d) => { if (!d.contains(e.target)) d.removeAttribute("open"); }); });
       $("#lang").onclick = () => {
         lang = lang === "bn" ? "en" : "bn";
         try { localStorage.setItem("vosb-lang", lang); } catch (e) {}

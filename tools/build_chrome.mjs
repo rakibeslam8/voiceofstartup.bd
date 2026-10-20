@@ -46,12 +46,15 @@ C.categories.forEach((c) => (PAGE_NAME["/" + c.slug] = [c.bn, c.en]));
 
 const T = (en, bn, a, b) => (en ? b : a);   // helper: T(isEn, ...)
 
+function topics(en) {
+  return `<details class="nav-dd"><summary>${en ? "Topics" : "বিষয়"}</summary><div class="dd-menu">${C.categories.map((c) => `<a href="/${c.slug}">${esc(en ? c.en : c.bn)}</a>`).join("")}</div></details>`;
+}
 function top(en) {
   const t = (bn, e) => (en ? e : bn);
   return `<!--s--><div class="topbar"><div class="container"><span class="flagline"><span class="flagdot"></span>${t("সরকার অনুমোদিত সংস্থার তথ্যসূত্রে যাচাইকৃত আপডেট", "Updates verified from government-approved sources")}</span></div></div>
       <header class="site-header"><div class="container">
         <a class="brand" href="/" aria-label="Voice of Startup Bangladesh"><img src="/assets/logo.png" alt="Voice of Startup BD logo"></a>
-        <nav class="nav" id="nav" aria-label="Main">${NAV.map(([h, bn, e]) => `<a href="${h}">${esc(t(bn, e))}</a>`).join("")}</nav>
+        <nav class="nav" id="nav" aria-label="Main">${NAV.map(([h, bn, e], i) => `<a href="${h}">${esc(t(bn, e))}</a>${i === 1 ? topics(en) : ""}`).join("")}</nav>
       </div></header><!--e-->`;
 }
 function bottom(en) {

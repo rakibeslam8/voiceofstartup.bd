@@ -205,10 +205,12 @@ function articlePage(r, lang, all) {
 const STATIC = ["/", "/news", ...cats.map((c) => "/" + c.slug), "/about", "/contact", "/careers", "/privacy-policy", "/terms-of-service", "/cookie-policy", "/refund-policy", "/usage-policy"];
 const day = (iso) => String(iso).slice(0, 10);
 function sitemap(posts) {
-  const latest = posts.length ? day(posts.reduce((m, p) => (p.updated_at > m ? p.updated_at : m), posts[0].updated_at)) : null;
+  const newest = (list) => (list.length ? day(list.reduce((m, p) => ((p.updated_at || p.publish_at) > m ? (p.updated_at || p.publish_at) : m), list[0].updated_at || list[0].publish_at)) : null);
   const urls = [];
   for (const p of STATIC) {
     const hub = p === "/" || p === "/news" || cats.some((c) => "/" + c.slug === p);
+    const cat = cats.find((c) => "/" + c.slug === p);
+    const latest = newest(cat ? posts.filter((x) => x.category === cat.id) : posts);   // each topic page: date of ITS newest article
     urls.push(`  <url>\n    <loc>${ORIGIN}${p === "/" ? "/" : p}</loc>${hub && latest ? `\n    <lastmod>${latest}</lastmod>` : ""}\n    <changefreq>${hub ? "hourly" : "monthly"}</changefreq>\n    <priority>${p === "/" ? "1.0" : hub ? "0.8" : "0.4"}</priority>\n  </url>`);
   }
   for (const r of posts) {
@@ -228,6 +230,36 @@ function feed(posts, lang) {
   }).join("\n");
   const last = posts.length ? new Date(posts[0].publish_at).toUTCString() : new Date(0).toUTCString();
   return `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n  <channel>\n    <title>${esc(C.site.name)}</title>\n    <link>${ORIGIN}/</link>\n    <atom:link href="${ORIGIN}${lang === "en" ? "/en" : ""}/feed.xml" rel="self" type="application/rss+xml"/>\n    <description>${lang === "bn" ? "বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর" : "Verified Bangladesh startup, business and investment news"}</description>\n    <language>${lang}</language>\n    <lastBuildDate>${last}</lastBuildDate>\n${items}\n  </channel>\n</rss>\n`;
+}
+
+/* ---- crawlable headline index on the home, news and topic pages ----
+ * Article lists on those pages are drawn by js/main.js after the page loads. This adds a plain-HTML
+ * "latest headlines" list (descriptive anchor = the article's own headline) so every hub page links to its
+ * articles in the raw HTML. It lives between <!--hl--> markers right before </main>. */
+function headlineIndex(posts, scope) {
+  const list = (scope === "all" ? posts : posts.filter((p) => p.category === scope)).slice(0, scope === "all" ? 20 : 12);
+  if (!list.length) return "";
+  const cat = cats.find((c) => c.id === scope);
+  const bnH = cat ? `সর্বশেষ শিরোনাম — ${cat.bn}` : "সর্বশেষ শিরোনাম", enH = cat ? `Latest headlines — ${cat.en}` : "Latest headlines";
+  const li = list.map((r) => {
+    const bn = view(r, "bn").title, en = view(r, "en").title || bn;
+    return `<li><a href="/read/${esc(r.slug)}" data-bn="${esc(bn)}" data-en="${esc(en)}">${esc(bn)}</a></li>`;
+  }).join("");
+  return `<!--hl--><section class="headline-index"><div class="container"><h2 data-bn="${esc(bnH)}" data-en="${esc(enH)}">${esc(bnH)}</h2><ul>${li}</ul></div></section><!--/hl-->`;
+}
+function injectHeadlines(posts) {
+  const targets = [["index.html", "all"], ["news.html", "all"], ...cats.map((c) => [c.slug + ".html", c.id])];
+  let n = 0;
+  for (const [file, scope] of targets) {
+    const f = path.join(ROOT, file);
+    if (!fs.existsSync(f)) continue;
+    const s = fs.readFileSync(f, "utf8");
+    const block = headlineIndex(posts, scope);
+    let out = s.replace(/<!--hl-->[\s\S]*?<!--\/hl-->\s*/, "");
+    if (block) out = out.replace(/(\s*)<\/main>/, `\n  ${block}\n  </main>`);
+    if (out !== s) { fs.writeFileSync(f, out); n++; }
+  }
+  return n;
 }
 
 /* ---- main ---- */
@@ -250,6 +282,7 @@ function feed(posts, lang) {
       if (f.endsWith(".html") && !keep.has(rel)) { fs.unlinkSync(path.join(ROOT, rel)); changed++; }
     }
   }
+  changed += injectHeadlines(posts);
   if (write("sitemap.xml", sitemap(posts))) changed++;
   if (write("feed.xml", feed(posts, "bn"))) changed++;
   if (write("en/feed.xml", feed(posts, "en"))) changed++;
