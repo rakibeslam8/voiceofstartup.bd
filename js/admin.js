@@ -414,23 +414,27 @@
 
     view.innerHTML = `
       <div class="page-h"><h1>Dashboard</h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div>
-      ${site || subs !== null ? `<div class="tiles${site && subs !== null ? " six" : ""}">
+      <h2 class="sec-h">Overall <span>all time</span></h2>
+      <div class="tiles">
+        ${site ? `<div class="tile g"><small>Total visitors</small><b>${fmtN(site.totals.visitors_all)}</b></div>
+        <div class="tile"><small>Total page views</small><b>${fmtN(site.totals.views_all)}</b></div>` : ""}
+        <div class="tile k"><small>Total article reads</small><b>${fmtN(total)}</b></div>
+        <div class="tile r"><small>Total shares</small><b>${fmtN(shares)}</b></div>
+        <div class="tile"><small>Total articles</small><b>${fmtN(posts.length)}</b></div>
+        <div class="tile g"><small>Live articles</small><b>${fmtN(live)}</b></div>
+        ${subs !== null ? `<a class="tile k" href="#/subscribers" style="text-decoration:none;color:inherit"><small>Newsletter subscribers</small><b>${fmtN(subs)}</b></a>` : ""}
+        <div class="tile r"><small>Scheduled · Drafts</small><b>${fmtN(sched)} · ${fmtN(drafts)}</b></div>
+      </div>
+      <h2 class="sec-h">Recent activity <span>Bangladesh time</span></h2>
+      <div class="tiles">
         ${site ? `<div class="tile g"><small>Online now</small><b>${fmtN(site.totals.online_now)}</b></div>
         <div class="tile"><small>Visitors today</small><b>${fmtN(site.totals.visitors_today)}</b></div>
-        <div class="tile k"><small>Page views today</small><b>${fmtN(site.totals.views_today)}</b></div>
-        <div class="tile r"><small>Visitors · 7 days</small><b>${fmtN(site.totals.visitors_7d)}</b></div>` : ""}
-        ${subs !== null ? `<a class="tile g" href="#/subscribers" style="text-decoration:none;color:inherit"><small>Newsletter subscribers</small><b>${fmtN(subs)}</b></a>
-        <a class="tile" href="#/subscribers" style="text-decoration:none;color:inherit"><small>New subscribers · 7 days</small><b>${fmtN(subsNew || 0)}</b></a>` : ""}
-      </div>` : ""}
-      <div class="tiles">
-        <div class="tile"><small>Total reads</small><b>${fmtN(total)}</b></div>
-        <div class="tile g"><small>Reads today</small><b>${fmtN(today)}</b></div>
-        <div class="tile k"><small>Last 7 days</small><b>${fmtN(d7)}</b></div>
-        <div class="tile r"><small>Shares</small><b>${fmtN(shares)}</b></div>
-        <div class="tile g"><small>Live articles</small><b>${fmtN(live)}</b></div>
-        <div class="tile"><small>Scheduled</small><b>${fmtN(sched)}</b></div>
-        <div class="tile k"><small>Drafts</small><b>${fmtN(drafts)}</b></div>
-        <div class="tile r"><small>Total articles</small><b>${fmtN(posts.length)}</b></div>
+        <div class="tile k"><small>Page views today</small><b>${fmtN(site.totals.views_today)}</b></div>` : ""}
+        <div class="tile r"><small>Reads today</small><b>${fmtN(today)}</b></div>
+        ${site ? `<div class="tile"><small>Visitors · 7 days</small><b>${fmtN(site.totals.visitors_7d)}</b></div>` : ""}
+        <div class="tile g"><small>Reads · 7 days</small><b>${fmtN(d7)}</b></div>
+        ${site ? `<div class="tile k"><small>Visitors · 30 days</small><b>${fmtN(site.totals.visitors_30d)}</b></div>` : ""}
+        ${subs !== null ? `<a class="tile r" href="#/subscribers" style="text-decoration:none;color:inherit"><small>New subscribers · 7 days</small><b>${fmtN(subsNew || 0)}</b></a>` : ""}
       </div>
       <div class="dash-cols">
         <div class="card">

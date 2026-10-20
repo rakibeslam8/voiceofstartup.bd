@@ -343,3 +343,7 @@ table.t td.n, table.t th.n { text-align: right; }
 #nl-prog { margin-top: 6px; }
 @media (max-width: 1000px) { .nl-grid { grid-template-columns: 1fr; } .nl-prev { position: static; order: 2; } .nl-frame { height: 70vh; } }
 @media (max-width: 560px) { .nl-test { flex-direction: column; } .nl-actions .b { flex: 1 1 100%; } }
+
+/* dashboard section headings */
+.sec-h { display: flex; align-items: baseline; gap: 8px; font-size: 1.05rem; margin: 6px 2px 10px; }
+.sec-h span { color: var(--muted); font-weight: 600; font-size: .8rem; }
