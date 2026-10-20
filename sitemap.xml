@@ -60,7 +60,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/international-startups</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -108,6 +108,26 @@
     <loc>https://www.voiceofstartup.bd/usage-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/after-steve-jobs-and-tim-cook-which-way-will-john-turnus-take-apple</loc>
+    <lastmod>2026-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/after-steve-jobs-and-tim-cook-which-way-will-john-turnus-take-apple"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/after-steve-jobs-and-tim-cook-which-way-will-john-turnus-take-apple"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/after-steve-jobs-and-tim-cook-which-way-will-john-turnus-take-apple"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvgthtlyqsac.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/after-steve-jobs-and-tim-cook-which-way-will-john-turnus-take-apple</loc>
+    <lastmod>2026-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/after-steve-jobs-and-tim-cook-which-way-will-john-turnus-take-apple"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/after-steve-jobs-and-tim-cook-which-way-will-john-turnus-take-apple"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/after-steve-jobs-and-tim-cook-which-way-will-john-turnus-take-apple"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvgthtlyqsac.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/gausul-azam-is-a-successful-agricultural-entrepreneur-at-the-age-of-21</loc>
