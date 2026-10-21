@@ -284,6 +284,29 @@
       if (on && fbox.scrollWidth > fbox.clientWidth) fbox.scrollLeft = Math.max(0, on.offsetLeft - (fbox.clientWidth - on.offsetWidth) / 2);
       sync();
       if (window.ResizeObserver && !fbox._ro) { fbox._ro = new ResizeObserver(sync); fbox._ro.observe(fbox); }
+      // desktop helpers (added once): arrow buttons, click-and-drag, mouse wheel
+      if (!wrap.querySelector(".f-arrow")) {
+        const step = (dir) => fbox.scrollBy({ left: dir * Math.max(240, fbox.clientWidth * 0.7), behavior: "smooth" });
+        wrap.insertAdjacentHTML("afterbegin", `<button type="button" class="f-arrow f-prev" aria-label="${T("আগের বিষয়", "Previous topics")}">‹</button>`);
+        wrap.insertAdjacentHTML("beforeend", `<button type="button" class="f-arrow f-next" aria-label="${T("পরের বিষয়", "Next topics")}">›</button>`);
+        wrap.querySelector(".f-prev").onclick = () => step(-1);
+        wrap.querySelector(".f-next").onclick = () => step(1);
+        let down = false, moved = false, sx = 0, sl = 0;
+        fbox.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse" || e.button !== 0) return; down = true; moved = false; sx = e.clientX; sl = fbox.scrollLeft; });
+        window.addEventListener("pointermove", (e) => {
+          if (!down) return;
+          const dx = e.clientX - sx;
+          if (!moved && Math.abs(dx) > 5) { moved = true; fbox.classList.add("dragging"); }
+          if (moved) fbox.scrollLeft = sl - dx;
+        });
+        window.addEventListener("pointerup", () => { if (!down) return; down = false; if (moved) setTimeout(() => fbox.classList.remove("dragging"), 0); });
+        fbox.addEventListener("wheel", (e) => {
+          if (fbox.scrollWidth <= fbox.clientWidth || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+          const max = fbox.scrollWidth - fbox.clientWidth;
+          if ((e.deltaY < 0 && fbox.scrollLeft <= 0) || (e.deltaY > 0 && fbox.scrollLeft >= max - 1)) return;   // at the ends let the page scroll
+          e.preventDefault(); fbox.scrollLeft += e.deltaY;
+        }, { passive: false });
+      }
     }
     const items = POSTS.filter((p) => active === "all" || p.cat === active);
     const ready = postsState === "ready";
