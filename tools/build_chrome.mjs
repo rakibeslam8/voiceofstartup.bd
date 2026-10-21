@@ -33,7 +33,7 @@ const LEG = sbl.window.VOSB_LEGAL;
 
 const NAV = [
   ["/", "হোম", "Home"], ["/news", "সংবাদ", "News"], ["/funding", "ফান্ডিং", "Funding"], ["/founder-stories", "ফাউন্ডার স্টোরি", "Founder Stories"],
-  ["/about", "আমাদের সম্পর্কে", "About"], ["/careers", "ক্যারিয়ার", "Careers"], ["/contact", "যোগাযোগ", "Contact"],
+  ["/about", "আমাদের সম্পর্কে", "About"], ["/contact", "যোগাযোগ", "Contact"],
 ];
 const LEGAL = [
   ["/privacy-policy", "গোপনীয়তা নীতি", "Privacy Policy"], ["/terms-of-service", "ব্যবহারের শর্তাবলি", "Terms of Service"],

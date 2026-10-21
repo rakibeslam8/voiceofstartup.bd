@@ -33,7 +33,6 @@
     { href: "/funding", bn: "ফান্ডিং", en: "Funding" },
     { href: "/founder-stories", bn: "ফাউন্ডার স্টোরি", en: "Founder Stories" },
     { href: "/about", bn: "আমাদের সম্পর্কে", en: "About" },
-    { href: "/careers", bn: "ক্যারিয়ার", en: "Careers" },
     { href: "/contact", bn: "যোগাযোগ", en: "Contact" },
   ];
 
