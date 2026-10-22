@@ -3,7 +3,7 @@
    formatting is applied, so pasted content cannot inject scripts.
 
    Supported:  ## Heading   ### Sub-heading   **bold**   *italic*
-               [text](https://link)   ![alt](https://image)   - list   1. list
+               [text](https://link)   ![description](https://image) (own line = picture + caption)   - list   1. list
                > quote   ---   blank line = new paragraph, single newline = line break */
 (function (root, factory) {
   if (typeof module === "object" && module.exports) module.exports = factory();
@@ -52,6 +52,11 @@
         flushPara(); flushList();
         const lv = m[1].length;
         out.push(`<h${lv}>${inline(m[2])}</h${lv}>`);
+      } else if ((m = esc(t).match(/^!\[([^\]]*)\]\(([^)\s]+)\)$/))) {
+        // a picture on its own line: show the description you typed as a caption under it
+        flushPara(); flushList();
+        const alt = m[1].trim(), cap = alt && !/^(image|img|photo|picture)?[\s_-]*\d*(\.(png|jpe?g|webp|gif))?$/i.test(alt) && !/\.(png|jpe?g|webp|gif)$/i.test(alt) ? alt : "";
+        out.push(`<figure class="fig"><img src="${safeUrl(m[2])}" alt="${alt}" loading="lazy" decoding="async">${cap ? `<figcaption>${cap}</figcaption>` : ""}</figure>`);
       } else if (/^---+$/.test(t)) {
         flushPara(); flushList(); out.push("<hr>");
       } else if ((m = t.match(/^>\s?(.*)$/))) {
