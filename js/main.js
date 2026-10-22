@@ -439,7 +439,7 @@
       <div class="post-meta"><span class="badge">${ci(c)} ${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
       <h1>${esc(pick(p.title))}</h1>
       <div class="byline"><span>${T("লেখক", "By")} <b>${esc(p.author)}</b></span><span>${formatDateTime(p.date)}</span><span>${T(`${minsTxt} মিনিটে পড়া`, `${minsTxt} min read`)}</span></div>
-      ${p.image ? `<figure class="cover"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" width="1200" height="675" decoding="async" fetchpriority="high">${p.imageAlt ? `<figcaption>${esc(p.imageAlt)}</figcaption>` : ""}</figure>` : ""}
+      ${p.image ? `<figure class="cover"><div class="cv"><img class="cv-bg" src="${esc(p.image)}" alt="" aria-hidden="true" decoding="async"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" width="1200" height="675" decoding="async" fetchpriority="high"></div>${p.imageAlt ? `<figcaption>${esc(p.imageAlt)}</figcaption>` : ""}</figure>` : ""}
       <div class="prose">${withArticleAds(MD.render(bodyMd))}</div>
       ${(lang === "bn" ? p.autoBn : p.autoEn) ? `<p class="tr-note">🌐 ${T("এই বাংলা সংস্করণটি স্বয়ংক্রিয়ভাবে অনুবাদ করা হয়েছে। কোনো ভুল চোখে পড়লে editor@voiceofstartup.bd-এ জানান।", "This English version was automatically translated from the original Bangla. If you spot a mistake, tell editor@voiceofstartup.bd.")}</p>` : ""}
       <div class="src">${src}</div>

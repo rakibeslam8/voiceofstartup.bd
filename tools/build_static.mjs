@@ -65,7 +65,7 @@ function view(r, lang) {
   const other = lang === "bn" ? "en" : "bn";
   const title = trim(r["title_" + lang]) || trim(r["title_" + other]);
   const body = trim(r["body_" + lang]) || trim(r["body_" + other]);
-  const excerpt = trim(r["excerpt_" + lang]) || MD.excerptFrom(body, 160) || trim(r["excerpt_" + other]);
+  const excerpt = trim(r["excerpt_" + lang]) || MD.excerptFrom(body) || trim(r["excerpt_" + other]);
   return { title, body, excerpt };
 }
 const hasLang = (r, lang) => !!(trim(r["title_" + lang]) && trim(r["body_" + lang]));
@@ -131,7 +131,7 @@ function articlePage(r, lang, all) {
       <div class="post-meta"><span class="badge">${c.icon} ${esc(actualLang === "bn" ? c.bn : c.en)}</span><span class="badge verified">✔ ${esc(r.source)}</span></div>
       <h1>${esc(v.title)}</h1>
       <div class="byline"><span>${T(actualLang, "লেখক", "By")} <b>${esc(r.author || "VOSB Desk")}</b></span><span>${esc(dateFmt(r.publish_at, actualLang))}</span><span>${esc(minsOf(v.body, actualLang))}</span></div>
-      ${r.image_url ? `<figure class="cover"><img src="${esc(r.image_url)}" alt="${esc(r.image_alt || v.title)}" width="1200" height="675" decoding="async" fetchpriority="high">${r.image_alt ? `<figcaption>${esc(r.image_alt)}</figcaption>` : ""}</figure>` : ""}
+      ${r.image_url ? `<figure class="cover"><div class="cv"><img class="cv-bg" src="${esc(r.image_url)}" alt="" aria-hidden="true" decoding="async"><img src="${esc(r.image_url)}" alt="${esc(r.image_alt || v.title)}" width="1200" height="675" decoding="async" fetchpriority="high"></div>${r.image_alt ? `<figcaption>${esc(r.image_alt)}</figcaption>` : ""}</figure>` : ""}
       <div class="prose">${MD.render(v.body)}</div>
       ${noteHtml}
       <div class="src">${srcLine}</div>

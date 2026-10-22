@@ -92,10 +92,14 @@
 
   function excerptFrom(md, n) {
     const t = toText(md);
-    n = n || 160;
-    if (t.length <= n) return t;
-    const cut = t.slice(0, n);
-    const sp = cut.lastIndexOf(" ");
+    n = n || 180;
+    if (t.length <= n + 40) return t;
+    // end on a COMPLETE sentence (। . ! ?) so a card's description never stops mid-sentence
+    const win = t.slice(0, n + 40), re = /[।.!?]["”’)]?(?=\s|$)/g;
+    let m, end = -1;
+    while ((m = re.exec(win))) { const e = m.index + m[0].length; if (e >= n * 0.5) end = e; }
+    if (end > 0) return win.slice(0, end).trim();
+    const cut = t.slice(0, n), sp = cut.lastIndexOf(" ");
     return (sp > n * 0.6 ? cut.slice(0, sp) : cut).trim() + "…";
   }
 

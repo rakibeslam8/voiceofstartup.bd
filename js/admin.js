@@ -865,7 +865,7 @@
         if (!ed["excerpt_" + to].trim()) {
           const fromEx = ed["excerpt_" + from].trim();
           if (gen && fromEx && TR) { try { ed["excerpt_" + to] = (await TR.title(fromEx, from, to)).slice(0, 300); } catch (e) {} }
-          if (!ed["excerpt_" + to].trim() && ed["body_" + to].trim()) ed["excerpt_" + to] = MD.excerptFrom(ed["body_" + to], 160);
+          if (!ed["excerpt_" + to].trim() && ed["body_" + to].trim()) ed["excerpt_" + to] = MD.excerptFrom(ed["body_" + to]);
         }
       }
       ed.auto_translated_bn = flags.bn; ed.auto_translated_en = flags.en;
@@ -880,7 +880,7 @@
       try {
         if (ed["title_" + from].trim()) ed["title_" + tab] = await TR.title(ed["title_" + from], from, tab);
         if (ed["body_" + from].trim()) ed["body_" + tab] = await TR.markdown(ed["body_" + from], from, tab);
-        ed["excerpt_" + tab] = ed["excerpt_" + from].trim() ? (await TR.title(ed["excerpt_" + from], from, tab)).slice(0, 300) : MD.excerptFrom(ed["body_" + tab], 160);
+        ed["excerpt_" + tab] = ed["excerpt_" + from].trim() ? (await TR.title(ed["excerpt_" + from], from, tab)).slice(0, 400) : MD.excerptFrom(ed["body_" + tab]);
         ed["auto_translated_" + tab] = true; touched[tab] = false; dirty = true; persist();
         fillLang(); saveBar(); autoNote(); toast("Translated — please read it once", "ok");
       } catch (e) { toast("Translation service is unavailable right now. Try again in a minute.", "err"); }
