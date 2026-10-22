@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Thu, 22 Oct 2026 02:30:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 22 Oct 2026 14:01:00 GMT</lastBuildDate>
+    <item>
+      <title>এন্থ্রপিকের রেকর্ড লোকসান: ৬ মাসে আয় ১৬.৩ বিলিয়ন, অথচ গচ্চা ৮০.৭ বিলিয়ন ডলার!</title>
+      <link>https://www.voiceofstartup.bd/read/entropic-s-record-loss-16-3-billion-in-revenue-in-6-months-but-80-7-bi</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/entropic-s-record-loss-16-3-billion-in-revenue-in-6-months-but-80-7-bi</guid>
+      <pubDate>Thu, 22 Oct 2026 14:01:00 GMT</pubDate>
+      <category>আন্তর্জাতিক স্টার্টআপ</category>
+      <description>জনপ্রিয় এআই চ্যাটবট &#39;ক্লড&#39; (Claude)-এর নির্মাতা প্রতিষ্ঠান এন্থ্রপিক (Anthropic) ২০২৬ সালের প্রথমার্ধে (জানুয়ারি-জুন) অভাবনীয় আর্থিক পরিসংখ্যানের মুখোমুখি হয়েছে।</description>
+    </item>
     <item>
       <title>চাকরি ছেড়ে উদ্যোক্তা, সামুদ্রিক শৈবালে বড় ব্যবসার স্বপ্ন মারিয়ার</title>
       <link>https://www.voiceofstartup.bd/read/mariah-a-jobless-entrepreneur-dreams-of-a-big-business-in-seaweed</link>
@@ -238,14 +246,6 @@
       <pubDate>Sun, 11 Oct 2026 04:21:00 GMT</pubDate>
       <category>সুযোগ ও কাজের তথ্য</category>
       <description>চলতি ২০২৬–২৭ অর্থবছরের প্রথম প্রান্তিক শেষে প্রবাসী আয়ে প্রথম ও দ্বিতীয় অবস্থান ধরে রেখেছে ইসলামী ব্যাংক ও বাংলাদেশ কৃষি ব্যাংক।</description>
-    </item>
-    <item>
-      <title>নবায়নযোগ্য বিদ্যুৎ ব্যবহারের বৈশ্বিক উদ্যোগে যোগ দিল আকিজবশির গ্রুপ</title>
-      <link>https://www.voiceofstartup.bd/read/post-mv7l4t3r9an</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/post-mv7l4t3r9an</guid>
-      <pubDate>Fri, 09 Oct 2026 08:00:00 GMT</pubDate>
-      <category>ব্যবসা, বিনিয়োগ ও নীতিমালা</category>
-      <description>শতভাগ নবায়নযোগ্য বিদ্যুৎ ব্যবহারের বৈশ্বিক উদ্যোগ আরই১০০-তে যোগ দিয়েছে আকিজবশির গ্রুপ। বাংলাদেশের প্রথম প্রতিষ্ঠান হিসেবে গ্রুপটি এ উদ্যোগের সদস্য হয়েছে।</description>
     </item>
   </channel>
 </rss>
