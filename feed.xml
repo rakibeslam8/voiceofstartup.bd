@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Fri, 23 Oct 2026 08:26:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 23 Oct 2026 15:15:00 GMT</lastBuildDate>
+    <item>
+      <title>আপনার স্টার্টআপের গল্প হোক সবার অনুপ্রেরণা: &#39;ভয়েস অফ স্টার্টআপ বাংলাদেশ&#39;-এ বিনামূল্যে আর্টিকেল প্রকাশের সুযোগ</title>
+      <link>https://www.voiceofstartup.bd/read/let-your-startup-story-inspire-everyone-opportunity-to-publish-free-ar</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/let-your-startup-story-inspire-everyone-opportunity-to-publish-free-ar</guid>
+      <pubDate>Fri, 23 Oct 2026 15:15:00 GMT</pubDate>
+      <category>ফাউন্ডার স্টোরি</category>
+      <description>&#39;ভয়েস অফ স্টার্টআপ বাংলাদেশ&#39; (Voice of Startup Bangladesh) দেশের স্টার্টআপ, ব্যবসা এবং প্রযুক্তি বিষয়ক খবরের একটি শীর্ষস্থানীয় ডিজিটাল প্ল্যাটফর্ম।</description>
+    </item>
     <item>
       <title>সাইবার হামলার শঙ্কায় বিশ্বজুড়ে বহু ওয়েবসাইট বন্ধ, হামলা এড়াতে বাংলাদেশ ব্যাংকের ওয়েবসাইট বন্ধ</title>
       <link>https://www.voiceofstartup.bd/read/many-websites-around-the-world-are-closed-due-to-fear-of-cyber-attacks</link>
@@ -238,14 +246,6 @@
       <pubDate>Tue, 13 Oct 2026 06:47:00 GMT</pubDate>
       <category>সুযোগ ও কাজের তথ্য</category>
       <description>আজ মঙ্গলবার দেশের বাজারে সোনার দাম কমেছে। আজ সোনার দাম ভরিতে সর্বোচ্চ ৩ হাজার ২৬৬ টাকা কমেছে। একই সঙ্গে আজ রুপার দাম কমেছে। নতুন দাম আজ সকাল ১০টা থেকে কার্যকর হয়েছে।</description>
-    </item>
-    <item>
-      <title>মোংলা বন্দরে দুটি কনটেইনার টার্মিনাল নির্মাণে ৩৪ কোটি ডলার ঋণ দেবে চীন</title>
-      <link>https://www.voiceofstartup.bd/read/post-mv7lpzvkawk</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/post-mv7lpzvkawk</guid>
-      <pubDate>Mon, 12 Oct 2026 17:17:00 GMT</pubDate>
-      <category>ব্যবসা, বিনিয়োগ ও নীতিমালা</category>
-      <description>মোংলা বন্দরে আধুনিক যন্ত্রপাতিসহ দুটি কনটেইনার টার্মিনাল নির্মাণে চীনের কাছ থেকে ৩৪ কোটি মার্কিন ডলার ঋণ নিচ্ছে সরকার। চীনা মুদ্রায় যার পরিমাণ প্রায় ২৪০ কোটি আরএমবি।</description>
     </item>
   </channel>
 </rss>

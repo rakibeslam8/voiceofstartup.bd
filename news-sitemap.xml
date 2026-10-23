@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/let-your-startup-story-inspire-everyone-opportunity-to-publish-free-ar</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-23T15:15:00.000Z</news:publication_date>
+      <news:title>আপনার স্টার্টআপের গল্প হোক সবার অনুপ্রেরণা: &#39;ভয়েস অফ স্টার্টআপ বাংলাদেশ&#39;-এ বিনামূল্যে আর্টিকেল প্রকাশের সুযোগ</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/let-your-startup-story-inspire-everyone-opportunity-to-publish-free-ar</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-23T15:15:00.000Z</news:publication_date>
+      <news:title>Let Your Startup Story Inspire Everyone: Opportunity to Publish Free Articles on &#39;Voice of Startup Bangladesh&#39;</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/many-websites-around-the-world-are-closed-due-to-fear-of-cyber-attacks</loc>
     <news:news>
       <news:publication>
