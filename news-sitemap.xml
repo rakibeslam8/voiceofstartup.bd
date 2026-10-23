@@ -66,26 +66,4 @@
       <news:title>Mariah, a jobless entrepreneur, dreams of a big business in seaweed</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/shoes-made-by-women-in-remote-villages-are-going-to-europe-america</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-21T10:40:00.000Z</news:publication_date>
-      <news:title>প্রত্যন্ত গ্রামের নারীদের তৈরি জুতা যাচ্ছে ইউরোপ-আমেরিকায়</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/shoes-made-by-women-in-remote-villages-are-going-to-europe-america</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-21T10:40:00.000Z</news:publication_date>
-      <news:title>Shoes made by women in remote villages are going to Europe-America</news:title>
-    </news:news>
-  </url>
 </urlset>
