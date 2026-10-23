@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Thu, 22 Oct 2026 14:01:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 23 Oct 2026 08:26:00 GMT</lastBuildDate>
+    <item>
+      <title>সাইবার হামলার শঙ্কায় বিশ্বজুড়ে বহু ওয়েবসাইট বন্ধ, হামলা এড়াতে বাংলাদেশ ব্যাংকের ওয়েবসাইট বন্ধ</title>
+      <link>https://www.voiceofstartup.bd/read/many-websites-around-the-world-are-closed-due-to-fear-of-cyber-attacks</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/many-websites-around-the-world-are-closed-due-to-fear-of-cyber-attacks</guid>
+      <pubDate>Fri, 23 Oct 2026 08:26:00 GMT</pubDate>
+      <category>প্রযুক্তি ও এআই</category>
+      <description>সাইবার হামলার ঝুঁকি এড়াতে বিশ্বজুড়ে বিভিন্ন সরকারি সংস্থা ও বাণিজ্যিক প্রতিষ্ঠান তাদের ওয়েবসাইট সাময়িকভাবে বন্ধ রেখেছে।</description>
+    </item>
     <item>
       <title>এন্থ্রপিকের রেকর্ড লোকসান: ৬ মাসে আয় ১৬.৩ বিলিয়ন, অথচ গচ্চা ৮০.৭ বিলিয়ন ডলার!</title>
       <link>https://www.voiceofstartup.bd/read/entropic-s-record-loss-16-3-billion-in-revenue-in-6-months-but-80-7-bi</link>
@@ -238,14 +246,6 @@
       <pubDate>Mon, 12 Oct 2026 17:17:00 GMT</pubDate>
       <category>ব্যবসা, বিনিয়োগ ও নীতিমালা</category>
       <description>মোংলা বন্দরে আধুনিক যন্ত্রপাতিসহ দুটি কনটেইনার টার্মিনাল নির্মাণে চীনের কাছ থেকে ৩৪ কোটি মার্কিন ডলার ঋণ নিচ্ছে সরকার। চীনা মুদ্রায় যার পরিমাণ প্রায় ২৪০ কোটি আরএমবি।</description>
-    </item>
-    <item>
-      <title>প্রবাসী আয়ে শীর্ষ ১০ ব্যাংকের তালিকায় কোনগুলো</title>
-      <link>https://www.voiceofstartup.bd/read/post-mv7lxem7svp</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/post-mv7lxem7svp</guid>
-      <pubDate>Sun, 11 Oct 2026 04:21:00 GMT</pubDate>
-      <category>সুযোগ ও কাজের তথ্য</category>
-      <description>চলতি ২০২৬–২৭ অর্থবছরের প্রথম প্রান্তিক শেষে প্রবাসী আয়ে প্রথম ও দ্বিতীয় অবস্থান ধরে রেখেছে ইসলামী ব্যাংক ও বাংলাদেশ কৃষি ব্যাংক।</description>
     </item>
   </channel>
 </rss>
