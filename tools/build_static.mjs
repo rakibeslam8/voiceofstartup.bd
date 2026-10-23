@@ -223,6 +223,19 @@ function sitemap(posts) {
   }
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n${urls.join("\n")}\n</urlset>\n`;
 }
+/* Google News sitemap: only articles published in the last 48 hours (Google's rule), one entry per language version */
+function newsSitemap(posts) {
+  const since = Date.now() - 48 * 3600e3;
+  const urls = [];
+  for (const r of posts) {
+    if (new Date(r.publish_at).getTime() < since) continue;
+    for (const lang of hasLang(r, "en") ? ["bn", "en"] : ["bn"]) {
+      const v = view(r, lang);
+      urls.push(`  <url>\n    <loc>${urlOf(r.slug, lang)}</loc>\n    <news:news>\n      <news:publication>\n        <news:name>${esc(C.site.name)}</news:name>\n        <news:language>${lang}</news:language>\n      </news:publication>\n      <news:publication_date>${new Date(r.publish_at).toISOString()}</news:publication_date>\n      <news:title>${esc(v.title)}</news:title>\n    </news:news>\n  </url>`);
+    }
+  }
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n${urls.join("\n")}\n</urlset>\n`;
+}
 function feed(posts, lang) {
   const items = posts.slice(0, 30).map((r) => {
     const v = view(r, lang); const c = catOf(r.category);
@@ -284,6 +297,7 @@ function injectHeadlines(posts) {
   }
   changed += injectHeadlines(posts);
   if (write("sitemap.xml", sitemap(posts))) changed++;
+  if (write("news-sitemap.xml", newsSitemap(posts))) changed++;
   if (write("feed.xml", feed(posts, "bn"))) changed++;
   if (write("en/feed.xml", feed(posts, "en"))) changed++;
   console.log(`Built ${posts.length} article(s); ${changed} file(s) changed.`);
