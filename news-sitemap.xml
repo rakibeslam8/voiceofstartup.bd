@@ -88,26 +88,4 @@
       <news:title>Soulshare earns Tk 8 crore annually from eco-friendly initiatives</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/started-with-10-thousand-taka-now-income-is-20-lakh-taka-per-month</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-21T02:26:00.000Z</news:publication_date>
-      <news:title>১০ হাজার টাকায় শুরু, এখন মাসে আয় ২০ লাখ টাকা</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/started-with-10-thousand-taka-now-income-is-20-lakh-taka-per-month</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-21T02:26:00.000Z</news:publication_date>
-      <news:title>Started with 10 thousand taka, now income is 20 lakh taka per month</news:title>
-    </news:news>
-  </url>
 </urlset>
