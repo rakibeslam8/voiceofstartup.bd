@@ -88,26 +88,4 @@
       <news:title>Entropic&#39;s record loss: 16.3 billion in revenue in 6 months, but 80.7 billion dollars!</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/mariah-a-jobless-entrepreneur-dreams-of-a-big-business-in-seaweed</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-22T02:30:00.000Z</news:publication_date>
-      <news:title>চাকরি ছেড়ে উদ্যোক্তা, সামুদ্রিক শৈবালে বড় ব্যবসার স্বপ্ন মারিয়ার</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/mariah-a-jobless-entrepreneur-dreams-of-a-big-business-in-seaweed</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-22T02:30:00.000Z</news:publication_date>
-      <news:title>Mariah, a jobless entrepreneur, dreams of a big business in seaweed</news:title>
-    </news:news>
-  </url>
 </urlset>
