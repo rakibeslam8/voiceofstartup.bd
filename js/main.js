@@ -153,7 +153,7 @@
 
   const readUrl = (p) => `/read/${p.slug}`;
   const thumb = (p, c) => p.image
-    ? `<div class="post-thumb has-img" style="--bg:url(&quot;${esc(p.image)}&quot;)"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" loading="lazy" decoding="async" width="640" height="360"></div>`
+    ? `<div class="post-thumb has-img"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" loading="lazy" decoding="async" width="640" height="360"></div>`
     : `<div class="post-thumb ${esc(p.cat)}" aria-hidden="true">${ci(c)}</div>`;
 
   function postCard(p) {
@@ -171,7 +171,7 @@
   function featuredCard(p, label) {
     const c = catOf(p.cat) || C.categories[0];
     return `<a class="featured-card" href="${readUrl(p)}">
-      ${p.image ? `<div class="fc-img" style="--bg:url(&quot;${esc(p.image)}&quot;)"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" decoding="async" width="800" height="450"></div>` : `<div class="fc-img ${esc(p.cat)}" aria-hidden="true"><span>${c.icon}</span></div>`}
+      ${p.image ? `<div class="fc-img"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" decoding="async" width="800" height="450"></div>` : `<div class="fc-img ${esc(p.cat)}" aria-hidden="true"><span>${c.icon}</span></div>`}
       <div class="fc-body">
         <div class="post-meta"><span class="badge top">★ ${label || T("প্রধান খবর", "Top story")}</span><span class="badge">${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
         <h3>${esc(pick(p.title))}</h3>
