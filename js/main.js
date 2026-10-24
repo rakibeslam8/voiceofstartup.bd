@@ -153,7 +153,7 @@
 
   const readUrl = (p) => `/read/${p.slug}`;
   const thumb = (p, c) => p.image
-    ? `<div class="post-thumb has-img"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" loading="lazy" decoding="async" width="640" height="360"></div>`
+    ? `<div class="post-thumb has-img" style="--bg:url(&quot;${esc(p.image)}&quot;)"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" loading="lazy" decoding="async" width="640" height="360"></div>`
     : `<div class="post-thumb ${esc(p.cat)}" aria-hidden="true">${ci(c)}</div>`;
 
   function postCard(p) {
@@ -164,19 +164,19 @@
         <div class="post-meta"><span class="badge">${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
         <h3>${esc(pick(p.title))}</h3>
         <p>${esc(pick(p.excerpt))}</p>
-        <span class="post-date">${formatDate(p.date)}</span>
+        <div class="post-foot"><span class="post-date">${formatDate(p.date)}</span><span class="post-go">${T("পড়ুন", "Read")} <i aria-hidden="true">→</i></span></div>
       </div></a>`;
   }
 
-  function featuredCard(p) {
+  function featuredCard(p, label) {
     const c = catOf(p.cat) || C.categories[0];
     return `<a class="featured-card" href="${readUrl(p)}">
-      ${p.image ? `<div class="fc-img"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" decoding="async" width="800" height="450"></div>` : `<div class="fc-img ${esc(p.cat)}" aria-hidden="true"><span>${c.icon}</span></div>`}
+      ${p.image ? `<div class="fc-img" style="--bg:url(&quot;${esc(p.image)}&quot;)"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" decoding="async" width="800" height="450"></div>` : `<div class="fc-img ${esc(p.cat)}" aria-hidden="true"><span>${c.icon}</span></div>`}
       <div class="fc-body">
-        <div class="post-meta"><span class="badge top">★ ${T("প্রধান খবর", "Top story")}</span><span class="badge">${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
+        <div class="post-meta"><span class="badge top">★ ${label || T("প্রধান খবর", "Top story")}</span><span class="badge">${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
         <h3>${esc(pick(p.title))}</h3>
         <p>${esc(pick(p.excerpt))}</p>
-        <span class="post-date">${formatDate(p.date)}</span>
+        <div class="post-foot"><span class="post-date">${formatDate(p.date)}</span><span class="post-go">${T("পুরো খবর পড়ুন", "Read the full story")} <i aria-hidden="true">→</i></span></div>
       </div></a>`;
   }
 
@@ -310,7 +310,18 @@
     const items = POSTS.filter((p) => active === "all" || p.cat === active);
     const ready = postsState === "ready";
     list.classList.toggle("post-grid", !(ready && !items.length) && postsState !== "error");
-    list.innerHTML = postsState === "ready" && items.length ? withFeedAds(items.slice(0, shown).map(postCard)) : postsBlock(items.slice(0, shown), true);
+    const lead = postsState === "ready" && items.length >= 4;           // newest story gets the big lead card
+    list.innerHTML = postsState === "ready" && items.length
+      ? withFeedAds(items.slice(0, shown).map((p, i) => (lead && i === 0 ? featuredCard(p, T("সর্বশেষ", "Latest")) : postCard(p))))
+      : postsBlock(items.slice(0, shown), true);
+    const lh = document.querySelector(".list-h");
+    if (lh) {
+      let bar = lh.parentElement.classList.contains("list-bar") ? lh.parentElement : null;
+      if (!bar) { bar = document.createElement("div"); bar.className = "list-bar"; lh.parentNode.insertBefore(bar, lh); bar.appendChild(lh); }
+      let cnt = bar.querySelector(".list-count");
+      if (!cnt) { cnt = document.createElement("span"); cnt.className = "list-count"; bar.appendChild(cnt); }
+      cnt.textContent = ready && items.length ? (lang === "bn" ? `${items.length.toLocaleString("bn-BD")}টি যাচাইকৃত আপডেট` : `${items.length} verified update${items.length === 1 ? "" : "s"}`) : "";
+    }
     const more = $("#load-more");
     if (more) {
       more.hidden = !(ready && items.length > shown);
