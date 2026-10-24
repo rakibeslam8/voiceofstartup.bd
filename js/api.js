@@ -12,7 +12,7 @@
   const headers = (extra) => Object.assign({ apikey: S.anonKey, Authorization: "Bearer " + S.anonKey }, extra || {});
   const rest = (path, init) => fetch(base + "/rest/v1/" + path, Object.assign({ headers: headers() }, init || {}));
 
-  const LIST_COLS = "id,slug,category,publish_at,updated_at,featured,title_bn,title_en,excerpt_bn,excerpt_en,source,source_url,author,image_url,image_alt,auto_translated_bn,auto_translated_en";
+  const LIST_COLS = "id,slug,category,publish_at,updated_at,featured,views,title_bn,title_en,excerpt_bn,excerpt_en,source,source_url,author,image_url,image_alt,auto_translated_bn,auto_translated_en";
 
   /* DB row -> object the site renders */
   function normalize(r) {
@@ -49,6 +49,17 @@
     if (!configured) return [];
     const res = await rest(`posts?select=${LIST_COLS}&order=publish_at.desc&limit=${limit || 200}`);
     if (!res.ok) throw new Error("posts " + res.status);
+    return (await res.json()).map(normalize);
+  }
+
+  /* server-side search - only used once the site has more stories than the list loads up front */
+  async function searchPosts(q) {
+    if (!configured) return [];
+    const t = String(q || "").replace(/[^\p{L}\p{N} ]/gu, " ").trim().slice(0, 60);
+    if (t.length < 2) return [];
+    const pat = encodeURIComponent("*" + t + "*");
+    const res = await rest(`posts?select=${LIST_COLS}&or=(title_bn.ilike.${pat},title_en.ilike.${pat},excerpt_bn.ilike.${pat},excerpt_en.ilike.${pat})&order=publish_at.desc&limit=60`);
+    if (!res.ok) throw new Error("search " + res.status);
     return (await res.json()).map(normalize);
   }
 
@@ -162,5 +173,5 @@
     return res.json();
   }
 
-  window.VOSB_API = { configured, normalize, listPosts, getPost, trackView, trackShare, trackVisit, listAds, cachedAds, adImpression, adClick, subscribe, unsubscribe };
+  window.VOSB_API = { configured, normalize, listPosts, searchPosts, getPost, trackView, trackShare, trackVisit, listAds, cachedAds, adImpression, adClick, subscribe, unsubscribe };
 })();

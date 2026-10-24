@@ -307,27 +307,159 @@
         }, { passive: false });
       }
     }
-    const items = POSTS.filter((p) => active === "all" || p.cat === active);
+    /* ---- reading aids: search, sort, month archive, most-read, pagination ---- */
+    if (!ST.init) {
+      const qs = new URLSearchParams(location.search);
+      ST.q = (qs.get("q") || "").slice(0, 80);
+      ST.sort = qs.get("sort") === "top" ? "top" : "new";
+      ST.month = /^\d{4}-\d{2}$/.test(qs.get("month") || "") ? qs.get("month") : "";
+      ST.page = Math.max(1, parseInt(qs.get("page") || "1", 10) || 1);
+      ST.init = true;
+    }
     const ready = postsState === "ready";
+    const inCat = POSTS.filter((p) => active === "all" || p.cat === active);
+    const norm = (t) => String(t || "").toLowerCase();
+    const hay = (p) => norm([p.title.bn, p.title.en, p.excerpt.bn, p.excerpt.en, (catOf(p.cat) || {}).bn, (catOf(p.cat) || {}).en, p.source].join(" "));
+    const words = norm(ST.q).split(/\s+/).filter(Boolean);
+    let items = inCat;
+    if (words.length) {
+      items = inCat.filter((p) => { const h = hay(p); return words.every((w) => h.includes(w)); });
+      const seen = new Set(items.map((p) => p.slug));
+      ST.server.filter((p) => (active === "all" || p.cat === active) && !seen.has(p.slug)).forEach((p) => items.push(p));
+    }
+    const mKey = (iso) => toDate(iso).toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" }).slice(0, 7);
+    const mLabel = (k) => new Date(k + "-15T06:00:00Z").toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { timeZone: "Asia/Dhaka", month: "long", year: "numeric" });
+    const months = {};
+    inCat.forEach((p) => { const k = mKey(p.date); months[k] = (months[k] || 0) + 1; });
+    if (ST.month && !months[ST.month]) ST.month = "";
+    if (ST.month) items = items.filter((p) => mKey(p.date) === ST.month);
+    if (ST.sort === "top") items = items.slice().sort((a, b) => (b.views || 0) - (a.views || 0) || toDate(b.date) - toDate(a.date));
+    const num = (n) => (lang === "bn" ? Number(n).toLocaleString("bn-BD") : String(n));
+    const PER = 12;
+    const pages = Math.max(1, Math.ceil(items.length / PER));
+    ST.page = Math.min(Math.max(1, ST.page), pages);
+    const pageItems = items.slice((ST.page - 1) * PER, ST.page * PER);
+    const filtered = !!(ST.q || ST.month);
+
+    mountListTools(list, num);
+    // toolbar: sort + month archive + search note
+    const tools = $("#list-tools");
+    if (tools) {
+      tools.hidden = !(ready && POSTS.length);
+      tools.innerHTML = `<div class="seg" role="group" aria-label="${T("সাজান", "Sort")}">
+          <button type="button" data-sort="new" class="${ST.sort === "new" ? "on" : ""}" aria-pressed="${ST.sort === "new"}">${T("সর্বশেষ", "Latest")}</button>
+          <button type="button" data-sort="top" class="${ST.sort === "top" ? "on" : ""}" aria-pressed="${ST.sort === "top"}">${T("সর্বাধিক পঠিত", "Most read")}</button></div>
+        <label class="month-sel"><span>${T("সংরক্ষাগার", "Archive")}</span><select id="month-sel" aria-label="${T("মাস অনুযায়ী দেখুন", "Browse by month")}">
+          <option value="">${T("সব সময়", "All time")}</option>${Object.keys(months).sort().reverse().map((k) => `<option value="${k}"${k === ST.month ? " selected" : ""}>${esc(mLabel(k))} (${num(months[k])})</option>`).join("")}</select></label>
+        ${filtered ? `<p class="search-note" role="status">${ST.q ? `“<b>${esc(ST.q)}</b>” — ` : ""}${num(items.length)}${lang === "bn" ? "টি ফলাফল" : (items.length === 1 ? " result" : " results")}${ST.month ? ` · ${esc(mLabel(ST.month))}` : ""} <button type="button" class="clear-f" data-clear>${T("মুছুন", "Clear")} ✕</button></p>` : ""}`;
+    }
+    // most-read strip (only when it adds something)
+    const mr = $("#most-read");
+    if (mr) {
+      const top = inCat.filter((p) => (p.views || 0) > 0).sort((a, b) => b.views - a.views).slice(0, 5);
+      const show = ready && top.length >= 3 && !filtered && ST.sort === "new" && ST.page === 1;
+      mr.hidden = !show;
+      mr.innerHTML = show ? `<h2 class="mr-h"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1 3-1 4.500-1 7 0 1.500 1 2.500 2 2.500s2-1 2-2.500c2 1.500 3 3.500 3 6a6 6 0 0 1-12 0c0-3 2-4.500 3.500-7C10 8 11.500 6 12 3z"/></svg>${T("সর্বাধিক পঠিত", "Most read")}</h2>
+        <ol class="mr-list">${top.map((p, i) => `<li><a href="${readUrl(p)}"><span class="mr-n">${num(i + 1)}</span><span class="mr-t">${esc(pick(p.title))}</span>${p.views >= 50 ? `<small>${num(p.views)} ${T("বার পড়া হয়েছে", "reads")}</small>` : `<small>${esc(pick(catOf(p.cat) || C.categories[0]))}</small>`}</a></li>`).join("")}</ol>` : "";
+    }
+
+    const lead = ready && !filtered && ST.sort === "new" && ST.page === 1 && items.length >= 4;   // newest story gets the big lead card
     list.classList.toggle("post-grid", !(ready && !items.length) && postsState !== "error");
-    const lead = postsState === "ready" && items.length >= 4;           // newest story gets the big lead card
-    list.innerHTML = postsState === "ready" && items.length
-      ? withFeedAds(items.slice(0, shown).map((p, i) => (lead && i === 0 ? featuredCard(p, T("সর্বশেষ", "Latest")) : postCard(p))))
-      : postsBlock(items.slice(0, shown), true);
+    list.innerHTML = ready && items.length
+      ? withFeedAds(pageItems.map((p, i) => (lead && i === 0 ? featuredCard(p, T("সর্বশেষ", "Latest")) : postCard(p))))
+      : (ready && filtered ? searchEmpty() : postsBlock(pageItems, true));
     const lh = document.querySelector(".list-h");
     if (lh) {
       let bar = lh.parentElement.classList.contains("list-bar") ? lh.parentElement : null;
       if (!bar) { bar = document.createElement("div"); bar.className = "list-bar"; lh.parentNode.insertBefore(bar, lh); bar.appendChild(lh); }
       let cnt = bar.querySelector(".list-count");
       if (!cnt) { cnt = document.createElement("span"); cnt.className = "list-count"; bar.appendChild(cnt); }
-      cnt.textContent = ready && items.length ? (lang === "bn" ? `${items.length.toLocaleString("bn-BD")}টি যাচাইকৃত আপডেট` : `${items.length} verified update${items.length === 1 ? "" : "s"}`) : "";
+      cnt.textContent = ready && inCat.length ? (lang === "bn" ? `${num(inCat.length)}টি যাচাইকৃত আপডেট` : `${inCat.length} verified update${inCat.length === 1 ? "" : "s"}`) : "";
     }
+    renderHeroStats(ready);
     const more = $("#load-more");
-    if (more) {
-      more.hidden = !(ready && items.length > shown);
-      more.textContent = T("আরও দেখুন", "Load more");
-      more.onclick = () => { shown += 12; renderNews(); };
+    if (more) more.hidden = true;
+    renderPager(pages);
+  }
+  const ST = { init: false, q: "", sort: "new", month: "", page: 1, server: [], serverQ: "" };
+  const searchEmpty = () => `<div class="empty-state"><div class="es-ic" aria-hidden="true">🔍</div>
+      <h3>${T("কোনো ফলাফল পাওয়া যায়নি", "No matching stories")}</h3>
+      <p>${T("অন্য শব্দ দিয়ে খুঁজুন, অথবা ফিল্টার মুছে সব খবর দেখুন।", "Try different words, or clear the filters to see every story.")}</p>
+      <p style="margin-top:16px"><button class="btn btn-orange" type="button" data-clear>${T("সব খবর দেখুন", "Show all stories")}</button></p></div>`;
+  const syncUrl = () => {
+    const u = new URL(location.href);
+    [["q", ST.q], ["sort", ST.sort === "top" ? "top" : ""], ["month", ST.month], ["page", ST.page > 1 ? String(ST.page) : ""]].forEach(([k, v]) => (v ? u.searchParams.set(k, v) : u.searchParams.delete(k)));
+    try { history.replaceState(null, "", u.pathname + u.search + u.hash); } catch (e) {}
+  };
+  let searchTimer = 0;
+  function runServerSearch() {
+    // only needed once the site has more stories than the page loads up front
+    if (!ST.q || ST.q.length < 2 || POSTS.length < 200 || !API || !API.searchPosts || ST.serverQ === ST.q) return;
+    const q = ST.q; ST.serverQ = q;
+    API.searchPosts(q).then((rows) => { if (ST.q === q) { ST.server = rows; renderNews(); } }).catch(() => {});
+  }
+  function setQuery(v) {
+    ST.q = v.slice(0, 80); ST.page = 1; if (!ST.q) { ST.server = []; ST.serverQ = ""; }
+    syncUrl(); renderNews(); runServerSearch();
+  }
+  function mountListTools(list, num) {
+    // hero: search box, popular searches, live stats (added once, texts refreshed on every render)
+    const hero = document.querySelector(".page-hero .container");
+    if (hero && !hero.querySelector(".hero-search")) {
+      hero.insertAdjacentHTML("beforeend", `<form class="hero-search" role="search" autocomplete="off"><span class="hs-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></span><input id="q" type="search" enterkeyhint="search" maxlength="80"><button type="submit" class="btn btn-orange"></button></form>
+        <div class="hero-pop" id="hero-pop"></div><div class="hero-stats" id="hero-stats"></div>`);
+      const f = hero.querySelector(".hero-search"), inp = f.querySelector("input");
+      f.addEventListener("submit", (e) => { e.preventDefault(); clearTimeout(searchTimer); setQuery(inp.value.trim()); document.querySelector(".list-bar")?.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      inp.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => setQuery(inp.value.trim()), 220); });
+      hero.querySelector("#hero-pop").addEventListener("click", (e) => { const b = e.target.closest("[data-q]"); if (b) { inp.value = b.dataset.q; setQuery(b.dataset.q); document.querySelector(".list-bar")?.scrollIntoView({ behavior: "smooth", block: "start" }); } });
+      inp.value = ST.q;
     }
+    if (hero) {
+      const inp = hero.querySelector("#q");
+      inp.placeholder = T("খবর খুঁজুন…", "Search stories…");
+      inp.setAttribute("aria-label", T("খবর খুঁজুন", "Search stories"));
+      hero.querySelector(".hero-search button").textContent = T("খুঁজুন", "Search");
+      hero.querySelector("#hero-pop").innerHTML = `<span>${T("জনপ্রিয় বিষয়:", "Popular:")}</span>` + [["ফান্ডিং", "Funding"], ["বিনিয়োগ", "Investment"], ["উদ্যোক্তা", "Founder"], ["এআই", "AI"], ["নীতিমালা", "Policy"]].map((k) => `<button type="button" data-q="${esc(lang === "bn" ? k[0] : k[1])}">${esc(lang === "bn" ? k[0] : k[1])}</button>`).join("");
+    }
+    // toolbar + most-read containers sit between the topic chips and the grid
+    if (!$("#list-tools")) {
+      list.insertAdjacentHTML("beforebegin", `<section id="most-read" class="most-read" hidden aria-label="Most read"></section><div id="list-tools" class="list-tools" hidden></div>`);
+      const host = list.parentNode;
+      host.addEventListener("click", (e) => {
+        const sb = e.target.closest("[data-sort]"); if (sb) { ST.sort = sb.dataset.sort; ST.page = 1; syncUrl(); renderNews(); return; }
+        if (e.target.closest("[data-clear]")) { ST.q = ""; ST.month = ""; ST.page = 1; ST.server = []; ST.serverQ = ""; const i = document.querySelector("#q"); if (i) i.value = ""; syncUrl(); renderNews(); }
+      });
+      host.addEventListener("change", (e) => { if (e.target.id === "month-sel") { ST.month = e.target.value; ST.page = 1; syncUrl(); renderNews(); } });
+    }
+    if (!$("#pager")) {
+      const wrap = document.querySelector(".load-more-wrap");
+      if (wrap) wrap.insertAdjacentHTML("afterend", `<nav id="pager" class="pager" aria-label="Pages" hidden></nav>`);
+    }
+  }
+  function renderHeroStats(ready) {
+    const box = $("#hero-stats"); if (!box) return;
+    if (!ready || !POSTS.length) { box.innerHTML = ""; return; }
+    const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
+    const todayN = POSTS.filter((p) => toDate(p.date).toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" }) === today).length;
+    const nf = (n) => (lang === "bn" ? n.toLocaleString("bn-BD") : n);
+    box.innerHTML = [[nf(POSTS.length), T("যাচাইকৃত আপডেট", "verified updates")], [nf(C.categories.length), T("বিষয়", "topics")], todayN ? [nf(todayN), T("আজকের আপডেট", "today")] : null]
+      .filter(Boolean).map((x) => `<span class="hs"><b>${x[0]}</b> ${x[1]}</span>`).join("");
+  }
+  function renderPager(pages) {
+    const nav = $("#pager"); if (!nav) return;
+    if (pages <= 1 || postsState !== "ready") { nav.hidden = true; nav.innerHTML = ""; return; }
+    const cur = ST.page, nums = [];
+    for (let i = 1; i <= pages; i++) if (i === 1 || i === pages || Math.abs(i - cur) <= 1) nums.push(i); else if (nums[nums.length - 1] !== "…") nums.push("…");
+    const n = (v) => (lang === "bn" ? v.toLocaleString("bn-BD") : v);
+    nav.hidden = false;
+    nav.innerHTML = `<button type="button" data-pg="${cur - 1}" ${cur === 1 ? "disabled" : ""} aria-label="${T("আগের পৃষ্ঠা", "Previous page")}">‹ ${T("আগের", "Prev")}</button>`
+      + nums.map((v) => (v === "…" ? `<span class="pg-gap">…</span>` : `<button type="button" data-pg="${v}" class="${v === cur ? "on" : ""}"${v === cur ? ' aria-current="page"' : ""}>${n(v)}</button>`)).join("")
+      + `<button type="button" data-pg="${cur + 1}" ${cur === pages ? "disabled" : ""} aria-label="${T("পরের পৃষ্ঠা", "Next page")}">${T("পরের", "Next")} ›</button>`;
+    nav.onclick = (e) => {
+      const b = e.target.closest("[data-pg]"); if (!b || b.disabled) return;
+      ST.page = +b.dataset.pg; syncUrl(); renderNews();
+      const bar = document.querySelector(".list-bar"); if (bar) bar.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
   }
   renderers.push(renderNews);
 
