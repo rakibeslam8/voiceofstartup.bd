@@ -861,3 +861,17 @@ body:has(#news-list) .page-hero::after { right: -120px; top: -150px; width: 440p
   .pager { margin-top: 20px; gap: 6px; }
   .pager button { min-width: 38px; height: 38px; padding: 0 10px; font-size: .9rem; }
 }
+
+
+/* ---- phone: story first ---- */
+#list-tools { scroll-margin-top: 72px; }
+.post-grid > .most-read { grid-column: 1 / -1; }
+@media (max-width: 760px) {
+  .list-bar { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  body:has(#news-list) .page-hero p:not(.eyebrow) { -webkit-line-clamp: 1; }
+  body:has(#news-list) .page-hero::after { opacity: .5; }
+  body:has(#news-list) .section { padding-top: 12px; }
+  .filters-wrap { margin-bottom: 8px; }
+  .list-tools { margin-bottom: 10px; }
+  .post-grid > .most-read { margin: 2px 0 0; }
+}

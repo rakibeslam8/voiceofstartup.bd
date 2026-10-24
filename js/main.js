@@ -355,18 +355,23 @@
     }
     // most-read strip (only when it adds something)
     const mr = $("#most-read");
+    let mrInGrid = false, mrGridHtml = "";
     if (mr) {
       const top = inCat.filter((p) => (p.views || 0) > 0).sort((a, b) => b.views - a.views).slice(0, 5);
       const show = ready && top.length >= 3 && !filtered && ST.sort === "new" && ST.page === 1;
-      mr.hidden = !show;
-      mr.innerHTML = show ? `<h2 class="mr-h"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1 3-1 4.500-1 7 0 1.500 1 2.500 2 2.500s2-1 2-2.500c2 1.500 3 3.500 3 6a6 6 0 0 1-12 0c0-3 2-4.500 3.500-7C10 8 11.500 6 12 3z"/></svg>${T("সর্বাধিক পঠিত", "Most read")}</h2>
+      const phone = window.matchMedia("(max-width: 760px)").matches;
+      mrInGrid = show && phone && items.length >= 4;                    // phones: story first, most-read right below it
+      const mrHtml = show ? `<h2 class="mr-h"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1 3-1 4.500-1 7 0 1.500 1 2.500 2 2.500s2-1 2-2.500c2 1.500 3 3.500 3 6a6 6 0 0 1-12 0c0-3 2-4.500 3.500-7C10 8 11.500 6 12 3z"/></svg>${T("সর্বাধিক পঠিত", "Most read")}</h2>
         <ol class="mr-list">${top.map((p, i) => `<li><a href="${readUrl(p)}"><span class="mr-n">${num(i + 1)}</span><span class="mr-t">${esc(pick(p.title))}</span><small>${esc(pick(catOf(p.cat) || C.categories[0]))}</small></a></li>`).join("")}</ol>` : "";
+      mr.hidden = !show || mrInGrid;
+      mr.innerHTML = mrInGrid ? "" : mrHtml;
+      mrGridHtml = mrInGrid ? `<section class="most-read in-grid" aria-label="Most read">${mrHtml}</section>` : "";
     }
 
     const lead = ready && !filtered && ST.sort === "new" && ST.page === 1 && items.length >= 4;   // newest story gets the big lead card
     list.classList.toggle("post-grid", !(ready && !items.length) && postsState !== "error");
     list.innerHTML = ready && items.length
-      ? withFeedAds(pageItems.map((p, i) => (lead && i === 0 ? featuredCard(p, T("সর্বশেষ", "Latest")) : postCard(p))))
+      ? withFeedAds(pageItems.map((p, i) => (lead && i === 0 ? featuredCard(p, T("সর্বশেষ", "Latest")) + mrGridHtml : postCard(p))))
       : (ready && filtered ? searchEmpty() : postsBlock(pageItems, true));
     const lh = document.querySelector(".list-h");
     if (lh) {
@@ -378,6 +383,7 @@
     if (more) more.hidden = true;
     renderPager(pages);
   }
+  if (!window.__vosbMq) { window.__vosbMq = window.matchMedia("(max-width: 760px)"); const f = () => { if (document.getElementById("news-list")) renderNews(); }; (window.__vosbMq.addEventListener ? window.__vosbMq.addEventListener("change", f) : window.__vosbMq.addListener(f)); }
   const ST = { init: false, q: "", sort: "new", month: "", page: 1, server: [], serverQ: "" };
   const searchEmpty = () => `<div class="empty-state"><div class="es-ic" aria-hidden="true">🔍</div>
       <h3>${T("কোনো ফলাফল পাওয়া যায়নি", "No matching stories")}</h3>
@@ -409,9 +415,9 @@
       hero.querySelectorAll(".hero-search, .hero-pop").forEach((el) => side.appendChild(el));
       hero.appendChild(side);
       const f = hero.querySelector(".hero-search"), inp = f.querySelector("input");
-      f.addEventListener("submit", (e) => { e.preventDefault(); clearTimeout(searchTimer); setQuery(inp.value.trim()); document.querySelector(".list-bar")?.scrollIntoView({ behavior: "smooth", block: "start" }); });
+      f.addEventListener("submit", (e) => { e.preventDefault(); clearTimeout(searchTimer); setQuery(inp.value.trim()); document.querySelector("#list-tools")?.scrollIntoView({ behavior: "smooth", block: "start" }); });
       inp.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => setQuery(inp.value.trim()), 220); });
-      hero.querySelector("#hero-pop").addEventListener("click", (e) => { const b = e.target.closest("[data-q]"); if (b) { inp.value = b.dataset.q; setQuery(b.dataset.q); document.querySelector(".list-bar")?.scrollIntoView({ behavior: "smooth", block: "start" }); } });
+      hero.querySelector("#hero-pop").addEventListener("click", (e) => { const b = e.target.closest("[data-q]"); if (b) { inp.value = b.dataset.q; setQuery(b.dataset.q); document.querySelector("#list-tools")?.scrollIntoView({ behavior: "smooth", block: "start" }); } });
       inp.value = ST.q;
     }
     if (hero) {
@@ -449,7 +455,7 @@
     nav.onclick = (e) => {
       const b = e.target.closest("[data-pg]"); if (!b || b.disabled) return;
       ST.page = +b.dataset.pg; syncUrl(); renderNews();
-      const bar = document.querySelector(".list-bar"); if (bar) bar.scrollIntoView({ behavior: "smooth", block: "start" });
+      const bar = document.querySelector("#list-tools"); if (bar) bar.scrollIntoView({ behavior: "smooth", block: "start" });
     };
   }
   renderers.push(renderNews);
