@@ -875,3 +875,19 @@ body:has(#news-list) .page-hero::after { right: -120px; top: -150px; width: 440p
   .list-tools { margin-bottom: 10px; }
   .post-grid > .most-read { margin: 2px 0 0; }
 }
+
+/* ---- phone: compact news rows (headline left, photo right); lead story stays large ---- */
+@media (max-width: 760px) {
+  body:has(#news-list) #news-list { gap: 10px; }
+  body:has(#news-list) #news-list > .post-card { display: grid; grid-template-columns: minmax(0, 1fr) 104px; column-gap: 12px; align-items: start; padding: 12px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  body:has(#news-list) #news-list > .post-card:hover { transform: none; }
+  body:has(#news-list) #news-list > .post-card .post-thumb { grid-column: 2; grid-row: 1; width: 104px; height: 104px; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; font-size: 1.8rem; align-self: start; }
+  body:has(#news-list) #news-list > .post-card .post-thumb.has-img { aspect-ratio: 1 / 1; height: 104px; }
+  body:has(#news-list) #news-list > .post-card .post-body { grid-column: 1; grid-row: 1; padding: 0; gap: 6px; min-height: 104px; }
+  body:has(#news-list) #news-list > .post-card .badge.verified, body:has(#news-list) #news-list > .post-card p, body:has(#news-list) #news-list > .post-card .post-go { display: none; }
+  body:has(#news-list) #news-list > .post-card .post-meta .badge { font-size: .7rem; padding: 2px 9px; }
+  body:has(#news-list) #news-list > .post-card h3 { font-size: 1rem; line-height: 1.4; -webkit-line-clamp: 3; }
+  body:has(#news-list) #news-list > .post-card .post-foot { border: 0; padding: 0; margin-top: auto; }
+  body:has(#news-list) #news-list > .post-card .post-date { font-size: .78rem; }
+  body:has(#news-list) #news-list > .post-card.skeleton .post-thumb { height: 104px; }
+}
