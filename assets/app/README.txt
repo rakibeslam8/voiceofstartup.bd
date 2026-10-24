@@ -1,6 +1,7 @@
 VOSB app launch pack
 --------------------
-splash-1080x1920.png / splash-1440x3040.png  Sharp static splash (logo on white) for app builders / native splash.
+splash-blank-white-1080x1920.png             PLAIN WHITE splash. Use this as the app's native splash so nothing shows before the animation.
+splash-1080x1920.png / splash-1440x3040.png  Sharp static splash (logo on white), only if your app needs a logo splash.
 splash-icon-android12-1152.png               Transparent logo for the Android 12+ SplashScreen API (fits the safe circle).
 intro-1080x1920.mp4                          The animated opening (3.4 s) as a video, if your app builder accepts a video/GIF splash.
 ../logo.svg                                  Vector logo (sharp at any size).
