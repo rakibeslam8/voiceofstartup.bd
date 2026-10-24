@@ -30,8 +30,8 @@
     '@keyframes vsDrop{0%{opacity:0;transform:translateY(-420px) scale(.7)}45%{opacity:1;transform:translateY(0) scale(1.1,.86)}62%{transform:translateY(-34px) scale(.94,1.06)}80%{transform:translateY(0) scale(1.05,.95)}100%{opacity:1;transform:none}}',
     '#vosb-splash .shine{transform:translateX(-1500px);animation:vsShine .95s 1.95s cubic-bezier(.4,0,.2,1) both}',
     '@keyframes vsShine{0%{transform:translateX(-1500px)}100%{transform:translateX(1500px)}}',
-    '#vosb-splash .vs-tag{margin-top:clamp(18px,4.5vh,38px);max-width:80vw;text-align:center;font:600 15px/1.5 "Hind Siliguri","Noto Sans Bengali","Segoe UI",system-ui,sans-serif;color:#2b2b2b;opacity:0;animation:vsUp .7s 1.75s ease-out both}',
-    '#vosb-splash .vs-tag small{display:block;margin-top:6px;font:700 9.5px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.15em;white-space:nowrap;color:#8a8a8a}',
+    '#vosb-splash .vs-tag{margin-top:clamp(18px,4.5vh,38px);max-width:94vw;white-space:nowrap;text-align:center;font:600 clamp(11px,3.7vw,16px)/1.5 "Hind Siliguri","Noto Sans Bengali","Segoe UI",system-ui,sans-serif;color:#2b2b2b;opacity:0;animation:vsUp .7s 1.75s ease-out both}',
+    '#vosb-splash .vs-tag small{display:block;margin-top:6px;font:700 clamp(8px,2.5vw,10.5px)/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.14em;white-space:nowrap;color:#8a8a8a}',
     '@keyframes vsUp{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:none}}',
     '#vosb-splash .vs-bar{margin-top:clamp(18px,4vh,34px);display:flex;gap:4px;width:150px;height:4px}',
     '#vosb-splash .vs-bar i{flex:1;border-radius:4px;transform:scaleX(0);transform-origin:left;animation:vsBar .55s cubic-bezier(.3,.7,.2,1) both,vsPulse 1.1s 2.6s ease-in-out infinite}',
@@ -66,7 +66,7 @@
   root.classList.add('vs-on');
   root.appendChild(el);
   if (S.hold) return;                       // ?splash=hold keeps it on screen (testing)
-  var t0 = Date.now(), MIN = 3000, MAX = 5500, closed = false, loaded = d.readyState === 'complete';
+  var t0 = Date.now(), MIN = 2800, MAX = 5500, closed = false, loaded = d.readyState === 'complete';
   var reduce = w.matchMedia && w.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) MIN = 900;
   function close() {

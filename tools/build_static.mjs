@@ -175,7 +175,7 @@ function articlePage(r, lang, all) {
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="alternate" type="application/rss+xml" title="Voice of Startup Bangladesh" href="/feed.xml">
-  <script src="/js/splash.js?v=20261024a"></script>
+  <script src="/js/splash.js?v=20261024b"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@600;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
