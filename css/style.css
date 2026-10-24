@@ -891,3 +891,12 @@ body:has(#news-list) .page-hero::after { right: -120px; top: -150px; width: 440p
   body:has(#news-list) #news-list > .post-card .post-date { font-size: .78rem; }
   body:has(#news-list) #news-list > .post-card.skeleton .post-thumb { height: 104px; }
 }
+
+/* phone: tools row stays tidy while a search / month filter is active */
+@media (max-width: 760px) {
+  .list-tools { flex-wrap: wrap; }
+  .month-sel { flex: 1 1 140px; }
+  .month-sel select { min-width: 0; }
+  .search-note { order: 3; flex: 1 0 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0; padding: 8px 12px; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+  .search-note .clear-f { margin-left: 0; flex: none; }
+}

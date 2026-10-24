@@ -351,7 +351,7 @@
           <button type="button" data-sort="top" class="${ST.sort === "top" ? "on" : ""}" aria-pressed="${ST.sort === "top"}">${T("সর্বাধিক পঠিত", "Most read")}</button></div>
         <label class="month-sel"><span>${T("সংরক্ষাগার", "Archive")}</span><select id="month-sel" aria-label="${T("মাস অনুযায়ী দেখুন", "Browse by month")}">
           <option value="">${T("সব সময়", "All time")}</option>${Object.keys(months).sort().reverse().map((k) => `<option value="${k}"${k === ST.month ? " selected" : ""}>${esc(mLabel(k))}</option>`).join("")}</select></label>
-        ${filtered ? `<p class="search-note" role="status">${ST.q ? (lang === "bn" ? `“<b>${esc(ST.q)}</b>” এর ফলাফল` : `Results for “<b>${esc(ST.q)}</b>”`) : T("মাস অনুযায়ী খবর", "Stories from")}${ST.month ? ` · ${esc(mLabel(ST.month))}` : ""} <button type="button" class="clear-f" data-clear>${T("মুছুন", "Clear")} ✕</button></p>` : ""}`;
+        ${filtered ? `<p class="search-note" role="status"><span class="sn-t">${ST.q ? (lang === "bn" ? `“<b>${esc(ST.q)}</b>” এর ফলাফল` : `Results for “<b>${esc(ST.q)}</b>”`) : T("মাস অনুযায়ী খবর", "Stories from")}${ST.month ? ` · ${esc(mLabel(ST.month))}` : ""}</span> <button type="button" class="clear-f" data-clear>${T("মুছুন", "Clear")} ✕</button></p>` : ""}`;
     }
     // most-read strip (only when it adds something)
     const mr = $("#most-read");
