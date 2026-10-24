@@ -45,6 +45,28 @@
     </news:news>
   </url>
   <url>
+    <loc>https://www.voiceofstartup.bd/read/anup-bought-a-computer-with-tuition-money-and-is-now-a-successful-free</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-23T16:45:00.000Z</news:publication_date>
+      <news:title>টিউশনির টাকা জমিয়ে কম্পিউটার কেনা অনুপ এখন সফল ফ্রিল্যান্সার ও উদ্যোক্তা</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/anup-bought-a-computer-with-tuition-money-and-is-now-a-successful-free</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-23T16:45:00.000Z</news:publication_date>
+      <news:title>Anup bought a computer with tuition money and is now a successful freelancer and entrepreneur</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/let-your-startup-story-inspire-everyone-opportunity-to-publish-free-ar</loc>
     <news:news>
       <news:publication>
@@ -86,28 +108,6 @@
       </news:publication>
       <news:publication_date>2026-10-23T08:26:00.000Z</news:publication_date>
       <news:title>Many websites around the world are closed due to fear of cyber attacks, Bangladesh Bank website is closed to avoid attacks</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/entropic-s-record-loss-16-3-billion-in-revenue-in-6-months-but-80-7-bi</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-22T14:01:00.000Z</news:publication_date>
-      <news:title>এন্থ্রপিকের রেকর্ড লোকসান: ৬ মাসে আয় ১৬.৩ বিলিয়ন, অথচ গচ্চা ৮০.৭ বিলিয়ন ডলার!</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/entropic-s-record-loss-16-3-billion-in-revenue-in-6-months-but-80-7-bi</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-22T14:01:00.000Z</news:publication_date>
-      <news:title>Entropic&#39;s record loss: 16.3 billion in revenue in 6 months, but 80.7 billion dollars!</news:title>
     </news:news>
   </url>
 </urlset>
