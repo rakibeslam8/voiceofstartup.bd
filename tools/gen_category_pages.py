@@ -96,6 +96,7 @@ TEMPLATE = """<!doctype html>
   <meta name="twitter:image" content="{origin}/assets/og-image.png">
   <link rel="icon" href="/assets/favicon.png">
   <script type="application/ld+json">{ld}</script>
+  <script src="/js/splash.js?v=20261024a"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@600;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
