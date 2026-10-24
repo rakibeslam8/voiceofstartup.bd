@@ -67,6 +67,28 @@
     </news:news>
   </url>
   <url>
+    <loc>https://www.voiceofstartup.bd/read/how-sabbir-went-viral-by-making-a-web-app-with-ai</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-23T15:55:00.000Z</news:publication_date>
+      <news:title>এআই দিয়ে ওয়েব অ্যাপ বানিয়ে যেভাবে ভাইরাল হলেন সাব্বির</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/how-sabbir-went-viral-by-making-a-web-app-with-ai</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-23T15:55:00.000Z</news:publication_date>
+      <news:title>How Sabbir went viral by making a web app with AI</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/let-your-startup-story-inspire-everyone-opportunity-to-publish-free-ar</loc>
     <news:news>
       <news:publication>
@@ -86,6 +108,28 @@
       </news:publication>
       <news:publication_date>2026-10-23T15:15:00.000Z</news:publication_date>
       <news:title>Let Your Startup Story Inspire Everyone: Opportunity to Publish Free Articles on &#39;Voice of Startup Bangladesh&#39;</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/freelancing-for-wheelchair-users-income-above-lakhs-of-rupees</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-23T14:50:00.000Z</news:publication_date>
+      <news:title>হুইলচেয়ারে বসে বাছেদের ফ্রিল্যান্সিং, আয় লাখ টাকার ওপরে</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/freelancing-for-wheelchair-users-income-above-lakhs-of-rupees</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-23T14:50:00.000Z</news:publication_date>
+      <news:title>Freelancing for wheelchair users, income above lakhs of rupees</news:title>
     </news:news>
   </url>
   <url>
