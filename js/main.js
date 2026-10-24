@@ -350,8 +350,8 @@
           <button type="button" data-sort="new" class="${ST.sort === "new" ? "on" : ""}" aria-pressed="${ST.sort === "new"}">${T("সর্বশেষ", "Latest")}</button>
           <button type="button" data-sort="top" class="${ST.sort === "top" ? "on" : ""}" aria-pressed="${ST.sort === "top"}">${T("সর্বাধিক পঠিত", "Most read")}</button></div>
         <label class="month-sel"><span>${T("সংরক্ষাগার", "Archive")}</span><select id="month-sel" aria-label="${T("মাস অনুযায়ী দেখুন", "Browse by month")}">
-          <option value="">${T("সব সময়", "All time")}</option>${Object.keys(months).sort().reverse().map((k) => `<option value="${k}"${k === ST.month ? " selected" : ""}>${esc(mLabel(k))} (${num(months[k])})</option>`).join("")}</select></label>
-        ${filtered ? `<p class="search-note" role="status">${ST.q ? `“<b>${esc(ST.q)}</b>” — ` : ""}${num(items.length)}${lang === "bn" ? "টি ফলাফল" : (items.length === 1 ? " result" : " results")}${ST.month ? ` · ${esc(mLabel(ST.month))}` : ""} <button type="button" class="clear-f" data-clear>${T("মুছুন", "Clear")} ✕</button></p>` : ""}`;
+          <option value="">${T("সব সময়", "All time")}</option>${Object.keys(months).sort().reverse().map((k) => `<option value="${k}"${k === ST.month ? " selected" : ""}>${esc(mLabel(k))}</option>`).join("")}</select></label>
+        ${filtered ? `<p class="search-note" role="status">${ST.q ? (lang === "bn" ? `“<b>${esc(ST.q)}</b>” এর ফলাফল` : `Results for “<b>${esc(ST.q)}</b>”`) : T("মাস অনুযায়ী খবর", "Stories from")}${ST.month ? ` · ${esc(mLabel(ST.month))}` : ""} <button type="button" class="clear-f" data-clear>${T("মুছুন", "Clear")} ✕</button></p>` : ""}`;
     }
     // most-read strip (only when it adds something)
     const mr = $("#most-read");
@@ -360,7 +360,7 @@
       const show = ready && top.length >= 3 && !filtered && ST.sort === "new" && ST.page === 1;
       mr.hidden = !show;
       mr.innerHTML = show ? `<h2 class="mr-h"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1 3-1 4.500-1 7 0 1.500 1 2.500 2 2.500s2-1 2-2.500c2 1.500 3 3.500 3 6a6 6 0 0 1-12 0c0-3 2-4.500 3.500-7C10 8 11.500 6 12 3z"/></svg>${T("সর্বাধিক পঠিত", "Most read")}</h2>
-        <ol class="mr-list">${top.map((p, i) => `<li><a href="${readUrl(p)}"><span class="mr-n">${num(i + 1)}</span><span class="mr-t">${esc(pick(p.title))}</span>${p.views >= 50 ? `<small>${num(p.views)} ${T("বার পড়া হয়েছে", "reads")}</small>` : `<small>${esc(pick(catOf(p.cat) || C.categories[0]))}</small>`}</a></li>`).join("")}</ol>` : "";
+        <ol class="mr-list">${top.map((p, i) => `<li><a href="${readUrl(p)}"><span class="mr-n">${num(i + 1)}</span><span class="mr-t">${esc(pick(p.title))}</span><small>${esc(pick(catOf(p.cat) || C.categories[0]))}</small></a></li>`).join("")}</ol>` : "";
     }
 
     const lead = ready && !filtered && ST.sort === "new" && ST.page === 1 && items.length >= 4;   // newest story gets the big lead card
@@ -372,11 +372,8 @@
     if (lh) {
       let bar = lh.parentElement.classList.contains("list-bar") ? lh.parentElement : null;
       if (!bar) { bar = document.createElement("div"); bar.className = "list-bar"; lh.parentNode.insertBefore(bar, lh); bar.appendChild(lh); }
-      let cnt = bar.querySelector(".list-count");
-      if (!cnt) { cnt = document.createElement("span"); cnt.className = "list-count"; bar.appendChild(cnt); }
-      cnt.textContent = ready && inCat.length ? (lang === "bn" ? `${num(inCat.length)}টি যাচাইকৃত আপডেট` : `${inCat.length} verified update${inCat.length === 1 ? "" : "s"}`) : "";
+      const old = bar.querySelector(".list-count"); if (old) old.remove();
     }
-    renderHeroStats(ready);
     const more = $("#load-more");
     if (more) more.hidden = true;
     renderPager(pages);
@@ -407,7 +404,10 @@
     const hero = document.querySelector(".page-hero .container");
     if (hero && !hero.querySelector(".hero-search")) {
       hero.insertAdjacentHTML("beforeend", `<form class="hero-search" role="search" autocomplete="off"><span class="hs-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></span><input id="q" type="search" enterkeyhint="search" maxlength="80"><button type="submit" class="btn btn-orange"></button></form>
-        <div class="hero-pop" id="hero-pop"></div><div class="hero-stats" id="hero-stats"></div>`);
+        <div class="hero-pop" id="hero-pop"></div>`);
+      const side = document.createElement("div"); side.className = "hero-side";
+      hero.querySelectorAll(".hero-search, .hero-pop").forEach((el) => side.appendChild(el));
+      hero.appendChild(side);
       const f = hero.querySelector(".hero-search"), inp = f.querySelector("input");
       f.addEventListener("submit", (e) => { e.preventDefault(); clearTimeout(searchTimer); setQuery(inp.value.trim()); document.querySelector(".list-bar")?.scrollIntoView({ behavior: "smooth", block: "start" }); });
       inp.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => setQuery(inp.value.trim()), 220); });
@@ -435,15 +435,6 @@
       const wrap = document.querySelector(".load-more-wrap");
       if (wrap) wrap.insertAdjacentHTML("afterend", `<nav id="pager" class="pager" aria-label="Pages" hidden></nav>`);
     }
-  }
-  function renderHeroStats(ready) {
-    const box = $("#hero-stats"); if (!box) return;
-    if (!ready || !POSTS.length) { box.innerHTML = ""; return; }
-    const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" });
-    const todayN = POSTS.filter((p) => toDate(p.date).toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" }) === today).length;
-    const nf = (n) => (lang === "bn" ? n.toLocaleString("bn-BD") : n);
-    box.innerHTML = [[nf(POSTS.length), T("যাচাইকৃত আপডেট", "verified updates")], [nf(C.categories.length), T("বিষয়", "topics")], todayN ? [nf(todayN), T("আজকের আপডেট", "today")] : null]
-      .filter(Boolean).map((x) => `<span class="hs"><b>${x[0]}</b> ${x[1]}</span>`).join("");
   }
   function renderPager(pages) {
     const nav = $("#pager"); if (!nav) return;
