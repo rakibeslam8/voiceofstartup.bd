@@ -900,3 +900,65 @@ body:has(#news-list) .page-hero::after { right: -120px; top: -150px; width: 440p
   .search-note { order: 3; flex: 1 0 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0; padding: 8px 12px; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
   .search-note .clear-f { margin-left: 0; flex: none; }
 }
+
+
+/* ================= HOME polish ================= */
+.home-search { margin: -4px 0 22px; }
+.home-search .hero-search { margin-top: 0; max-width: none; }
+.hs-pop a { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 4px 12px; font: 600 .86rem var(--font-body); color: inherit; text-decoration: none; }
+.hs-pop a:hover { border-color: var(--orange); color: var(--orange-dark); background: var(--orange-soft); }
+.most-read:empty { display: none; }
+#home-most-read { margin: 22px 0 24px; }
+#latest .post-card p { -webkit-line-clamp: 3; }
+@media (max-width: 760px) {
+  /* hero: headline + two buttons + one swipeable row of sources, so the first story shows on screen one */
+  body:has(#latest) .hero { padding: 22px 0 22px; }
+  body:has(#latest) .hero .eyebrow { margin-bottom: 0; }
+  body:has(#latest) .hero-quote { margin-top: 6px; font-size: clamp(1.6rem, 7.8vw, 2.05rem); }
+  body:has(#latest) .hero-bn { font-size: 1.12rem; margin-top: 10px; line-height: 1.4; }
+  body:has(#latest) .hero-p { display: none; }
+  body:has(#latest) .hero-cta { flex-direction: row; width: 100%; margin: 16px auto 0; gap: 10px; flex-wrap: nowrap; }
+  body:has(#latest) .hero-cta .btn-lg { flex: 1 1 0; min-width: 0; width: auto; padding: 12px 8px; font-size: .95rem; white-space: nowrap; }
+  body:has(#latest) .hero-trust { margin-top: 16px; gap: 8px; align-items: stretch; }
+  body:has(#latest) .hero-trust-label { text-align: center; font-size: .82rem; }
+  body:has(#latest) .hero-trust-list { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; margin-inline: calc((100vw - 100%) / -2); padding: 2px calc((100vw - 100%) / 2) 4px; width: auto; }
+  body:has(#latest) .hero-trust-list::-webkit-scrollbar { display: none; }
+  body:has(#latest) .hero-trust-list span { flex: none; font-size: .78rem; padding: 5px 12px; }
+  body:has(#latest) .top-stories.section { padding-top: 22px; }
+  body:has(#latest) .top-stories .section-head { margin-bottom: 12px; }
+  .home-search { margin: 0 0 14px; }
+  .hs-pop { display: none; }
+  #home-most-read { margin: 14px 0 16px; }
+  body:has(#latest) #latest { gap: 10px; }
+}
+/* ---- phone: same compact rows on the home feed ---- */
+@media (max-width: 760px) {
+  body:has(#latest) #latest { gap: 10px; }
+  body:has(#latest) #latest > .post-card { display: grid; grid-template-columns: minmax(0, 1fr) 104px; column-gap: 12px; align-items: start; padding: 12px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  body:has(#latest) #latest > .post-card:hover { transform: none; }
+  body:has(#latest) #latest > .post-card .post-thumb { grid-column: 2; grid-row: 1; width: 104px; height: 104px; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; font-size: 1.8rem; align-self: start; }
+  body:has(#latest) #latest > .post-card .post-thumb.has-img { aspect-ratio: 1 / 1; height: 104px; }
+  body:has(#latest) #latest > .post-card .post-body { grid-column: 1; grid-row: 1; padding: 0; gap: 6px; min-height: 104px; }
+  body:has(#latest) #latest > .post-card .badge.verified, body:has(#latest) #latest > .post-card p, body:has(#latest) #latest > .post-card .post-go { display: none; }
+  body:has(#latest) #latest > .post-card .post-meta .badge { font-size: .7rem; padding: 2px 9px; }
+  body:has(#latest) #latest > .post-card h3 { font-size: 1rem; line-height: 1.4; -webkit-line-clamp: 3; }
+  body:has(#latest) #latest > .post-card .post-foot { border: 0; padding: 0; margin-top: auto; }
+  body:has(#latest) #latest > .post-card .post-date { font-size: .78rem; }
+  body:has(#latest) #latest > .post-card.skeleton .post-thumb { height: 104px; }
+}
+
+@media (max-width: 760px) {
+  /* topics: icon beside the title so twelve topics take half the scroll */
+  .topics .cat-card { flex-direction: row; align-items: center; gap: 10px; padding: 10px 12px; }
+  .topics .cat-card .ic { flex: none; width: 36px; height: 36px; margin: 0; border-radius: 11px; }
+  .topics .cat-card .ic .ci { width: 20px; height: 20px; }
+  .topics .cat-card h3 { font-size: .88rem; line-height: 1.3; text-align: left; }
+  .topics .cat-grid { gap: 8px; }
+}
+
+/* tablet header: English labels are longer, tighten so "Follow" never pushes past the edge */
+@media (min-width: 761px) and (max-width: 1100px) {
+  .nav { gap: 0; }
+  .nav a { padding: 8px 9px; font-size: .9rem; }
+  .header-actions .btn { padding: 8px 14px; }
+}

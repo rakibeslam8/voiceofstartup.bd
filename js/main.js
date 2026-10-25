@@ -235,6 +235,17 @@
 
   const topStory = () => (postsState === "ready" ? POSTS.find((p) => p.featured) || POSTS[0] : null) || null;
   mount("featured", () => { const f = topStory(); return f ? featuredCard(f) : ""; });
+  mount("home-search", () => `<form class="hero-search" role="search" action="/news" method="get" autocomplete="off"><span class="hs-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></span><input name="q" type="search" maxlength="80" placeholder="${T("খবর খুঁজুন…", "Search stories…")}" aria-label="${T("খবর খুঁজুন", "Search stories")}"><button class="btn btn-orange" type="submit">${T("খুঁজুন", "Search")}</button></form>
+    <p class="hero-pop hs-pop"><span>${T("জনপ্রিয় বিষয়:", "Popular:")}</span>${[["ফান্ডিং", "Funding"], ["বিনিয়োগ", "Investment"], ["উদ্যোক্তা", "Founder"], ["চাকরি", "Jobs"]].map((x) => `<a href="/news?q=${encodeURIComponent(x[0])}">${T(x[0], x[1])}</a>`).join("")}</p>`);
+  mount("home-most-read", () => {
+    if (postsState !== "ready") return "";
+    const f = topStory();
+    const top = POSTS.filter((p) => (p.views || 0) > 0 && (!f || p.slug !== f.slug)).sort((a, b) => b.views - a.views).slice(0, 5);
+    if (top.length < 3) return "";
+    const num = (n) => (lang === "bn" ? Number(n).toLocaleString("bn-BD") : String(n));
+    return `<h2 class="mr-h"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1 3-1 4.500-1 7 0 1.500 1 2.500 2 2.500s2-1 2-2.500c2 1.500 3 3.500 3 6a6 6 0 0 1-12 0c0-3 2-4.500 3.500-7C10 8 11.500 6 12 3z"/></svg>${T("সর্বাধিক পঠিত", "Most read")}</h2>
+      <ol class="mr-list">${top.map((p, i) => `<li><a href="${readUrl(p)}"><span class="mr-n">${num(i + 1)}</span><span class="mr-t">${esc(pick(p.title))}</span><small>${esc(pick(catOf(p.cat) || C.categories[0]))}</small></a></li>`).join("")}</ol>`;
+  });
   mount("latest", () => {
     const f = topStory();
     const rest = [...POSTS].filter((p) => !f || p.slug !== f.slug).slice(0, 6);
