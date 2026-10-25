@@ -235,23 +235,75 @@
 
   const topStory = () => (postsState === "ready" ? POSTS.find((p) => p.featured) || POSTS[0] : null) || null;
   mount("featured", () => { const f = topStory(); return f ? featuredCard(f) : ""; });
-  mount("home-search", () => `<form class="hero-search" role="search" action="/news" method="get" autocomplete="off"><span class="hs-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></span><input name="q" type="search" maxlength="80" placeholder="${T("খবর খুঁজুন…", "Search stories…")}" aria-label="${T("খবর খুঁজুন", "Search stories")}"><button class="btn btn-orange" type="submit">${T("খুঁজুন", "Search")}</button></form>
-    <p class="hero-pop hs-pop"><span>${T("জনপ্রিয় বিষয়:", "Popular:")}</span>${[["ফান্ডিং", "Funding"], ["বিনিয়োগ", "Investment"], ["উদ্যোক্তা", "Founder"], ["চাকরি", "Jobs"]].map((x) => `<a href="/news?q=${encodeURIComponent(x[0])}">${T(x[0], x[1])}</a>`).join("")}</p>`);
-  mount("home-most-read", () => {
-    if (postsState !== "ready") return "";
+  /* ---------- home: news-portal layout ---------- */
+  const homeSets = () => {
     const f = topStory();
-    const top = POSTS.filter((p) => (p.views || 0) > 0 && (!f || p.slug !== f.slug)).sort((a, b) => b.views - a.views).slice(0, 5);
-    if (top.length < 3) return "";
-    const num = (n) => (lang === "bn" ? Number(n).toLocaleString("bn-BD") : String(n));
-    return `<h2 class="mr-h"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1 3-1 4.500-1 7 0 1.500 1 2.500 2 2.500s2-1 2-2.500c2 1.500 3 3.500 3 6a6 6 0 0 1-12 0c0-3 2-4.500 3.500-7C10 8 11.500 6 12 3z"/></svg>${T("সর্বাধিক পঠিত", "Most read")}</h2>
-      <ol class="mr-list">${top.map((p, i) => `<li><a href="${readUrl(p)}"><span class="mr-n">${num(i + 1)}</span><span class="mr-t">${esc(pick(p.title))}</span><small>${esc(pick(catOf(p.cat) || C.categories[0]))}</small></a></li>`).join("")}</ol>`;
+    const rest = POSTS.filter((p) => !f || p.slug !== f.slug);
+    const hero = (f ? [f] : []).concat(rest.slice(0, 4));
+    const feed = rest.slice(4, 12);
+    return { hero, feed, seen: new Set(hero.concat(feed).map((p) => p.slug)) };
+  };
+  const coverImg = (p, eager) => `<img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
+  const coverBox = (p, cls) => {
+    const c = catOf(p.cat) || C.categories[0];
+    return `<div class="${cls} ${p.image ? "has-img" : esc(p.cat)}" aria-hidden="${p.image ? "false" : "true"}">${p.image ? "" : `<span class="tile-ic">${ci(c)}</span>`}</div>`;
+  };
+  function tile(p, lead) {
+    const c = catOf(p.cat) || C.categories[0];
+    const bg = p.image ? `<div class="tile-bg has-img">${coverImg(p, lead)}</div>` : coverBox(p, "tile-bg");
+    return `<a class="tile${lead ? " tile-lead" : ""}" href="${readUrl(p)}">${bg}<span class="tile-shade"></span>
+      <div class="tile-body"><span class="tile-cat">${esc(pick(c))}</span><h3>${esc(pick(p.title))}</h3>${lead ? `<p>${esc(pick(p.excerpt))}</p>` : ""}<span class="tile-date">${formatDate(p.date)}</span></div></a>`;
+  }
+  function feedItem(p) {
+    const c = catOf(p.cat) || C.categories[0];
+    const img = p.image ? `<div class="fi-img has-img">${coverImg(p)}</div>` : coverBox(p, "fi-img");
+    return `<a class="fi" href="${readUrl(p)}">${img}<div class="fi-body"><span class="fi-cat">${esc(pick(c))}</span><h3>${esc(pick(p.title))}</h3><p>${esc(pick(p.excerpt))}</p><span class="fi-date">${formatDate(p.date)}</span></div></a>`;
+  }
+  function smallCard(p) {
+    const c = catOf(p.cat) || C.categories[0];
+    const img = p.image ? `<div class="sc-img has-img">${coverImg(p)}</div>` : coverBox(p, "sc-img");
+    return `<a class="sc" href="${readUrl(p)}">${img}<div class="sc-body"><h3>${esc(pick(p.title))}</h3><span class="sc-date">${formatDate(p.date)}</span></div></a>`;
+  }
+  const skTile = (n) => Array.from({ length: n }, () => `<div class="tile sk-tile" aria-hidden="true"></div>`).join("");
+
+  mount("home-search", () => `<form class="hero-search" role="search" action="/news" method="get" autocomplete="off"><span class="hs-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></span><input name="q" type="search" maxlength="80" placeholder="${T("খবর খুঁজুন…", "Search stories…")}" aria-label="${T("খবর খুঁজুন", "Search stories")}"><button class="btn btn-orange" type="submit">${T("খুঁজুন", "Search")}</button></form>`);
+
+  mount("home-hero", () => {
+    if (postsState === "loading") return skTile(5);
+    if (postsState === "error") return errorState();
+    const { hero } = homeSets();
+    if (!hero.length) return emptyState();
+    return hero.map((p, i) => tile(p, i === 0)).join("");
   });
-  mount("latest", () => {
-    const f = topStory();
-    const rest = [...POSTS].filter((p) => !f || p.slug !== f.slug).slice(0, 6);
-    const html = postsBlock(rest, true);
-    // featured alone still counts as content: don't show "coming soon" under it
-    return f && !rest.length ? "" : html;
+
+  mount("home-latest", () => {
+    if (postsState === "loading") return skeleton(3);
+    if (postsState !== "ready") return "";
+    const { feed } = homeSets();
+    return feed.map(feedItem).join("");
+  });
+
+  mount("home-side", () => {
+    if (postsState !== "ready") return "";
+    const { seen, hero } = homeSets();
+    const num = (n) => (lang === "bn" ? Number(n).toLocaleString("bn-BD") : String(n));
+    let top = POSTS.filter((p) => (p.views || 0) > 0).sort((a, b) => b.views - a.views).slice(0, 5), title = T("সর্বাধিক পঠিত", "Most read");
+    if (top.length < 3) { top = POSTS.filter((p) => !seen.has(p.slug)).slice(0, 5); title = T("আরও খবর", "More stories"); }
+    const mr = top.length ? `<section class="side-card"><h2 class="side-h"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1 3-1 4.500-1 7 0 1.500 1 2.500 2 2.500s2-1 2-2.500c2 1.500 3 3.500 3 6a6 6 0 0 1-12 0c0-3 2-4.500 3.500-7C10 8 11.500 6 12 3z"/></svg>${title}</h2>
+      <ol class="mr2">${top.map((p, i) => `<li><a href="${readUrl(p)}"><span class="mr2-n">${num(i + 1)}</span><span class="mr2-t">${esc(pick(p.title))}<small>${esc(pick(catOf(p.cat) || C.categories[0]))}</small></span></a></li>`).join("")}</ol></section>` : "";
+    const src = `<section class="side-card side-src"><h2 class="side-h"><span class="side-ok" aria-hidden="true">✔</span>${T("যাচাইকৃত সূত্র", "Verified sources")}</h2>
+      <p>${T("সরকার অনুমোদিত সংস্থার সূত্রে যাচাই করা তথ্য।", "Information checked against government-approved bodies.")}</p>
+      <div class="ts-list">${C.sources.map((s) => `<span class="ts-chip" title="${esc(pick(s))}">${esc(s.short)}</span>`).join("")}</div></section>`;
+    return mr + src;
+  });
+
+  mount("home-cats", () => {
+    if (postsState !== "ready") return "";
+    const { seen } = homeSets();
+    const secs = C.categories.map((c) => ({ c, arr: POSTS.filter((p) => p.cat === c.id && !seen.has(p.slug)) })).filter((x) => x.arr.length >= 4)
+      .sort((a, b) => b.arr.length - a.arr.length).slice(0, 3);
+    return secs.map((x, i) => `<section class="cs cs-${i % 3}" aria-label="${esc(pick(x.c))}"><div class="sec-head"><h2>${esc(pick(x.c))}</h2><a href="/${x.c.slug}">${T("সব দেখুন", "See all")} →</a></div>
+      <div class="cs-grid">${x.arr.slice(0, 4).map(smallCard).join("")}</div></section>`).join("");
   });
 
   mount("source-chips", () =>
