@@ -962,3 +962,15 @@ body:has(#news-list) .page-hero::after { right: -120px; top: -150px; width: 440p
   .nav a { padding: 8px 9px; font-size: .9rem; }
   .header-actions .btn { padding: 8px 14px; }
 }
+
+/* hero: no lonely last word; slightly larger eyebrow; on short landscape screens (tablets, small laptops)
+   trim the height so the "Top stories" heading peeks above the fold */
+.hero-p { text-wrap: balance; }
+@media (min-width: 761px) { .hero .eyebrow { font-size: .92rem; letter-spacing: .01em; } }
+@media (min-width: 761px) and (orientation: landscape) and (max-height: 860px) {
+  .hero { padding: 30px 0 34px; }
+  .hero-bn { margin-top: 8px; }
+  .hero-p { margin-top: 12px; font-size: 1rem; line-height: 1.65; }
+  .hero-cta { margin-top: 18px; }
+  .hero-trust { margin-top: 20px; gap: 8px; }
+}
