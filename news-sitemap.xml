@@ -132,26 +132,4 @@
       <news:title>Freelancing for wheelchair users, income above lakhs of rupees</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/many-websites-around-the-world-are-closed-due-to-fear-of-cyber-attacks</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-23T08:26:00.000Z</news:publication_date>
-      <news:title>সাইবার হামলার শঙ্কায় বিশ্বজুড়ে বহু ওয়েবসাইট বন্ধ, হামলা এড়াতে বাংলাদেশ ব্যাংকের ওয়েবসাইট বন্ধ</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/many-websites-around-the-world-are-closed-due-to-fear-of-cyber-attacks</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-23T08:26:00.000Z</news:publication_date>
-      <news:title>Many websites around the world are closed due to fear of cyber attacks, Bangladesh Bank website is closed to avoid attacks</news:title>
-    </news:news>
-  </url>
 </urlset>
