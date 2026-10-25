@@ -11,7 +11,7 @@
       if (/bot|crawl|spider|slurp|google|lighthouse|pagespeed|gtmetrix|headless|facebookexternalhit|embedly|preview|whatsapp|telegram|twitter|linkedin|pinterest|yandex|baidu|duckduck|bing|ahrefs|semrush|screaming|ptst/i.test(u)) return;
       try { if (sessionStorage.getItem('vosb-splash')) return; sessionStorage.setItem('vosb-splash', '1'); } catch (e) {}
     }
-    w.__vosbSplash = { hold: /[?&]splash=hold(&|$)/.test(q) };
-    d.write('<script src="/js/splash-art.js?v=20261024b"><\/script>');
+    w.__vosbSplash = { hold: /[?&]splash=hold(&|$)/.test(q), force: force };
+    d.write('<script src="/js/splash-art.js?v=20261025a"><\/script>');
   } catch (e) {}
 })();
