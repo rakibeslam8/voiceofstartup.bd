@@ -79,6 +79,7 @@
           ${NAV.map((n, i) => `<a href="${n.href}" class="${n.href === page ? "active" : ""}">${esc(pick(n))}</a>${i === 1 ? topicsMenu(page) : ""}`).join("")}
         </nav>
         <div class="header-actions">
+          <a class="hdr-search" href="/news?s=1" aria-label="${T("খবর খুঁজুন", "Search stories")}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></a>
           <button class="lang-toggle" id="lang" aria-label="Switch language">${lang === "bn" ? "EN" : "বাংলা"}</button>
           <a class="btn btn-green" href="#follow">${T("ফলো করুন", "Follow Now")}</a>
           <button class="menu-btn" id="menu" aria-label="Menu">☰</button>
@@ -200,11 +201,10 @@
 
   mount("ticker", () => {
     const items = POSTS.length
-      ? POSTS.slice(0, 12).map((p) => esc(pick(p.title)))
-      : C.categories.map((c) => `${ci(c)} ${esc(pick(c))}`);
-    items.unshift(T("সব আপডেট সবার আগে", "All updates, first"));
-    const html = items.map((t) => `<span>${t}</span>`).join("");
-    return `<div class="ticker-track">${html}${html}</div>`;
+      ? POSTS.slice(0, 12).map((p) => `<a href="${readUrl(p)}">${esc(pick(p.title))}</a>`)
+      : C.categories.map((c) => `<span>${esc(pick(c))}</span>`);
+    const html = items.map((t) => `<span class="tk">${t}</span>`).join("");
+    return `<div class="container ticker-in"><span class="ticker-label"><i aria-hidden="true"></i>${T("সর্বশেষ", "Latest")}</span><div class="ticker-wrap"><div class="ticker-track">${html}${html}</div></div></div>`;
   });
 
   const catCards = () =>
@@ -266,7 +266,9 @@
   }
   const skTile = (n) => Array.from({ length: n }, () => `<div class="tile sk-tile" aria-hidden="true"></div>`).join("");
 
-  mount("home-search", () => `<form class="hero-search" role="search" action="/news" method="get" autocomplete="off"><span class="hs-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></span><input name="q" type="search" maxlength="80" placeholder="${T("খবর খুঁজুন…", "Search stories…")}" aria-label="${T("খবর খুঁজুন", "Search stories")}"><button class="btn btn-orange" type="submit">${T("খুঁজুন", "Search")}</button></form>`);
+  const searchForm = () => `<form class="hero-search" role="search" action="/news" method="get" autocomplete="off"><span class="hs-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></span><input name="q" type="search" maxlength="80" placeholder="${T("খবর খুঁজুন…", "Search stories…")}" aria-label="${T("খবর খুঁজুন", "Search stories")}"><button class="btn btn-orange" type="submit">${T("খুঁজুন", "Search")}</button></form>`;
+  mount("home-search", searchForm);
+  mount("home-search-m", searchForm);
 
   mount("home-hero", () => {
     if (postsState === "loading") return skTile(5);
@@ -294,16 +296,18 @@
     const src = `<section class="side-card side-src"><h2 class="side-h"><span class="side-ok" aria-hidden="true">✔</span>${T("যাচাইকৃত সূত্র", "Verified sources")}</h2>
       <p>${T("সরকার অনুমোদিত সংস্থার সূত্রে যাচাই করা তথ্য।", "Information checked against government-approved bodies.")}</p>
       <div class="ts-list">${C.sources.map((s) => `<span class="ts-chip" title="${esc(pick(s))}">${esc(s.short)}</span>`).join("")}</div></section>`;
-    return mr + src;
+    const fol = `<section class="side-card side-follow"><h2 class="side-h">${T("আমাদের ফলো করুন", "Follow us")}</h2><p>${T("নতুন ফান্ডিং ও সুযোগের খবর সবার আগে পান।", "Get new funding and opportunity news first.")}</p>
+      <div class="sd-soc">${Object.keys(C.social).map((k) => `<a href="${C.social[k]}" target="_blank" rel="noopener" aria-label="${LABEL[k]}">${ICON[k]}</a>`).join("")}</div></section>`;
+    return mr + src + fol;
   });
 
   mount("home-cats", () => {
     if (postsState !== "ready") return "";
     const { seen } = homeSets();
-    const secs = C.categories.map((c) => ({ c, arr: POSTS.filter((p) => p.cat === c.id && !seen.has(p.slug)) })).filter((x) => x.arr.length >= 4)
+    const secs = C.categories.map((c) => ({ c, arr: POSTS.filter((p) => p.cat === c.id && !seen.has(p.slug)) })).filter((x) => x.arr.length >= 5)
       .sort((a, b) => b.arr.length - a.arr.length).slice(0, 3);
     return secs.map((x, i) => `<section class="cs cs-${i % 3}" aria-label="${esc(pick(x.c))}"><div class="sec-head"><h2>${esc(pick(x.c))}</h2><a href="/${x.c.slug}">${T("সব দেখুন", "See all")} →</a></div>
-      <div class="cs-grid">${x.arr.slice(0, 4).map(smallCard).join("")}</div></section>`).join("");
+      <div class="cs-grid">${tile(x.arr[0], false).replace('class="tile"', 'class="tile cs-big"')}${x.arr.slice(1, 5).map(smallCard).join("")}</div></section>`).join("");
   });
 
   mount("source-chips", () =>
@@ -482,6 +486,7 @@
       inp.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => setQuery(inp.value.trim()), 220); });
       hero.querySelector("#hero-pop").addEventListener("click", (e) => { const b = e.target.closest("[data-q]"); if (b) { inp.value = b.dataset.q; setQuery(b.dataset.q); document.querySelector("#list-tools")?.scrollIntoView({ behavior: "smooth", block: "start" }); } });
       inp.value = ST.q;
+      if (/[?&]s=1(&|$)/.test(location.search) && !ST.q) setTimeout(() => { try { inp.focus({ preventScroll: false }); } catch (e) {} }, 120);
     }
     if (hero) {
       const inp = hero.querySelector("#q");
