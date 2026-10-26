@@ -22,26 +22,4 @@
       <news:title>To emerge as a producer and exporter of technology</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/idlc-s-sme-utsav-loan-tk-35-lakh-available-without-collateral</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-24T01:49:00.000Z</news:publication_date>
-      <news:title>আইডিএলসির এসএমই উৎসব ঋণ: জামানত ছাড়া ৩৫ লাখ টাকা পাওয়া যাবে</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/idlc-s-sme-utsav-loan-tk-35-lakh-available-without-collateral</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-24T01:49:00.000Z</news:publication_date>
-      <news:title>IDLC&#39;s SME Utsav Loan: Tk 35 lakh available without collateral</news:title>
-    </news:news>
-  </url>
 </urlset>
