@@ -257,14 +257,20 @@
   }
   function feedItem(p) {
     const c = catOf(p.cat) || C.categories[0];
-    const img = p.image ? `<div class="fi-img has-img">${coverImg(p)}</div>` : coverBox(p, "fi-img");
-    return `<a class="fi" href="${readUrl(p)}">${img}<div class="fi-body"><span class="fi-cat">${esc(pick(c))}</span><h3>${esc(pick(p.title))}</h3><p>${esc(pick(p.excerpt))}</p><span class="fi-date">${formatDate(p.date)}</span></div></a>`;
+    const img = p.image ? `<div class="fx-img has-img">${coverImg(p)}</div>` : coverBox(p, "fx-img");
+    return `<a class="fx" href="${readUrl(p)}">${img}<div class="fx-body"><span class="fx-cat">${esc(pick(c))}</span><h3>${esc(pick(p.title))}</h3><p>${esc(pick(p.excerpt))}</p><span class="fx-date">${formatDate(p.date)}</span></div></a>`;
   }
   function smallCard(p) {
     const c = catOf(p.cat) || C.categories[0];
     const img = p.image ? `<div class="sc-img has-img">${coverImg(p)}</div>` : coverBox(p, "sc-img");
     return `<a class="sc" href="${readUrl(p)}">${img}<div class="sc-body"><h3>${esc(pick(p.title))}</h3><span class="sc-date">${formatDate(p.date)}</span></div></a>`;
   }
+  function newsCard(p) {
+    const c = catOf(p.cat) || C.categories[0];
+    const img = p.image ? `<div class="nc-img has-img">${coverImg(p)}</div>` : coverBox(p, "nc-img");
+    return `<a class="nc" href="${readUrl(p)}">${img}<div class="nc-body"><span class="nc-cat">${esc(pick(c))}</span><h3>${esc(pick(p.title))}</h3><p>${esc(pick(p.excerpt))}</p><span class="nc-date">${formatDate(p.date)}</span></div></a>`;
+  }
+  const newsLead = (p) => tile(p, true).replace('class="tile tile-lead"', 'class="tile tile-lead news-lead"');
   const skTile = (n) => Array.from({ length: n }, () => `<div class="tile sk-tile" aria-hidden="true"></div>`).join("");
 
   const searchForm = () => `<form class="hero-search" role="search" action="/news" method="get" autocomplete="off"><span class="hs-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></span><input name="q" type="search" maxlength="80" placeholder="${T("খবর খুঁজুন…", "Search stories…")}" aria-label="${T("খবর খুঁজুন", "Search stories")}"><button class="btn btn-orange" type="submit">${T("খুঁজুন", "Search")}</button></form>`;
@@ -439,7 +445,7 @@
     const lead = ready && !filtered && ST.sort === "new" && ST.page === 1 && items.length >= 4;   // newest story gets the big lead card
     list.classList.toggle("post-grid", !(ready && !items.length) && postsState !== "error");
     list.innerHTML = ready && items.length
-      ? withFeedAds(pageItems.map((p, i) => (lead && i === 0 ? featuredCard(p, T("সর্বশেষ", "Latest")) + mrGridHtml : postCard(p))))
+      ? withFeedAds(pageItems.map((p, i) => (lead && i === 0 ? newsLead(p) + mrGridHtml : newsCard(p))))
       : (ready && filtered ? searchEmpty() : postsBlock(pageItems, true));
     const lh = document.querySelector(".list-h");
     if (lh) {
@@ -590,7 +596,7 @@
     const rel = POSTS.filter((x) => x.slug !== p.slug && x.cat === p.cat).slice(0, 3);
     const more = rel.length < 3 ? POSTS.filter((x) => x.slug !== p.slug && x.cat !== p.cat).slice(0, 3 - rel.length) : [];
     const all = [...rel, ...more];
-    box.innerHTML = all.length ? `<h2 class="related-h">${T("আরও পড়ুন", "Read more")}</h2><div class="post-grid related-grid">${all.map(postCard).join("")}</div>` : "";
+    box.innerHTML = all.length ? `<h2 class="related-h">${T("আরও পড়ুন", "Read more")}</h2><div class="post-grid related-grid">${all.map(newsCard).join("")}</div>` : "";
   }
 
   function wireShare(p) {
