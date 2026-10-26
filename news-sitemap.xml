@@ -1,25 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/to-emerge-as-a-producer-and-exporter-of-technology</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-24T12:46:00.000Z</news:publication_date>
-      <news:title>প্রযুক্তির উৎপাদক ও রফতানিকারক হিসেবে আত্মপ্রকাশ করতে হবে</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/to-emerge-as-a-producer-and-exporter-of-technology</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-24T12:46:00.000Z</news:publication_date>
-      <news:title>To emerge as a producer and exporter of technology</news:title>
-    </news:news>
-  </url>
+
 </urlset>
