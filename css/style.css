@@ -1281,3 +1281,13 @@ body:has(#news-list) .page-hero::after { right: -120px; top: -150px; width: 440p
 /* home: topics live in the menu, so the lead story sits right under the ticker */
 .home-top { padding: 20px 0 6px; }
 @media (max-width: 640px) { .home-top { padding: 12px 0 2px; } }
+
+/* phone: the sidebar cards stack full width (a later tablet rule had kept them in two cramped columns) */
+@media (max-width: 640px) {
+  .home-side { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .side-follow { grid-column: auto; }
+  .side-card { padding: 16px 16px 6px; }
+  .side-src, .side-follow { padding-bottom: 16px; }
+  .mr2 a { grid-template-columns: 30px minmax(0, 1fr); gap: 10px; padding: 12px 0; }
+  .mr2-t { font-size: .95rem; line-height: 1.45; }
+}
