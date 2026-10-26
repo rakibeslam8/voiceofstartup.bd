@@ -311,8 +311,14 @@
   mount("home-cats", () => {
     if (postsState !== "ready") return "";
     const { seen } = homeSets();
-    const secs = C.categories.map((c) => ({ c, arr: POSTS.filter((p) => p.cat === c.id && !seen.has(p.slug)) })).filter((x) => x.arr.length >= 5)
-      .sort((a, b) => b.arr.length - a.arr.length).slice(0, 3);
+    const secs = C.categories.map((c) => {
+      const all = POSTS.filter((p) => p.cat === c.id);
+      if (all.length < 5) return null;
+      const fresh = all.filter((p) => !seen.has(p.slug));
+      if (fresh.length < 2) return null;                       // skip a topic whose stories are all shown above
+      const arr = fresh.concat(all.filter((p) => seen.has(p.slug))).slice(0, 5).sort((a, b) => toDate(b.date) - toDate(a.date));
+      return { c, arr };
+    }).filter(Boolean).slice(0, 6);
     return secs.map((x, i) => `<section class="cs cs-${i % 3}" aria-label="${esc(pick(x.c))}"><div class="sec-head"><h2>${esc(pick(x.c))}</h2><a href="/${x.c.slug}">${T("সব দেখুন", "See all")} →</a></div>
       <div class="cs-grid">${tile(x.arr[0], false).replace('class="tile"', 'class="tile cs-big"')}${x.arr.slice(1, 5).map(smallCard).join("")}</div></section>`).join("");
   });
