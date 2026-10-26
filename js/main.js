@@ -53,10 +53,11 @@
   } catch (e) {}
 
   const toDate = (iso) => (/^\d{4}-\d{2}-\d{2}$/.test(iso) ? new Date(iso + "T00:00:00+06:00") : new Date(iso));
-  const formatDate = (iso) =>
-    toDate(iso).toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { timeZone: "Asia/Dhaka", year: "numeric", month: "long", day: "numeric" });
-  const formatDateTime = (iso) =>
-    toDate(iso).toLocaleString(lang === "bn" ? "bn-BD" : "en-GB", { timeZone: "Asia/Dhaka", year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true });
+  const bnDigits = (s) => (lang === "bn" ? String(s).replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[d]) : s);
+  const formatDate = (iso) => bnDigits(
+    toDate(iso).toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { timeZone: "Asia/Dhaka", year: "numeric", month: "long", day: "numeric" }));
+  const formatDateTime = (iso) => bnDigits(
+    toDate(iso).toLocaleString(lang === "bn" ? "bn-BD" : "en-GB", { timeZone: "Asia/Dhaka", year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", hour12: true }));
 
   /* ---------- Header / footer ---------- */
   // "Topics" drop-down: every topic page is linked from the main menu (plain <details>, works without JS)
@@ -71,7 +72,7 @@
       top.innerHTML = `
       <div class="topbar"><div class="container">
         <span class="flagline"><span class="flagdot"></span>${T("সরকার অনুমোদিত সংস্থার তথ্যসূত্রে যাচাইকৃত আপডেট", "Updates verified from government-approved sources")}</span>
-        <span class="date">${new Date().toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</span>
+        <span class="date">${bnDigits(new Date().toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" }))}</span>
       </div></div>
       <header class="site-header"><div class="container">
         <a class="brand" href="/" aria-label="Voice of Startup Bangladesh"><img src="/assets/logo.png" alt="Voice of Startup BD logo"></a>
@@ -395,7 +396,7 @@
       ST.server.filter((p) => (active === "all" || p.cat === active) && !seen.has(p.slug)).forEach((p) => items.push(p));
     }
     const mKey = (iso) => toDate(iso).toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" }).slice(0, 7);
-    const mLabel = (k) => new Date(k + "-15T06:00:00Z").toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { timeZone: "Asia/Dhaka", month: "long", year: "numeric" });
+    const mLabel = (k) => bnDigits(new Date(k + "-15T06:00:00Z").toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { timeZone: "Asia/Dhaka", month: "long", year: "numeric" }));
     const months = {};
     inCat.forEach((p) => { const k = mKey(p.date); months[k] = (months[k] || 0) + 1; });
     if (ST.month && !months[ST.month]) ST.month = "";
