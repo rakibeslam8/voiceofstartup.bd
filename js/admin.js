@@ -476,7 +476,7 @@
             </div></div>
           <p class="muted" id="rl" style="font-size:.85rem;margin:2px 0 6px"></p>
           <div class="chart" id="chart"></div>
-          <p class="muted" style="font-size:.8rem;margin-top:8px">Counts one read per visitor per article per 6 hours. Your own visits and bots are not counted. Bangladesh time.<span id="grp"></span></p>
+          <p class="muted" style="font-size:.8rem;margin-top:8px">Counts one read per visitor per article per 6 hours. Everyone is counted, including your own visits and bots (see Visitors for the split). Bangladesh time.<span id="grp"></span></p>
         </div>
         <div class="card">
           <h2>Most read</h2>
@@ -992,11 +992,23 @@
     return esc(names[path] || path);
   }
 
+  /* Who is behind the numbers: real readers, the owner (this admin browser) and bots */
+  function kindsCard(k) {
+    const names = { human: ["👥 Real readers", "People on their own browsers"], owner: ["🧑‍💻 You (owner)", "Browsers signed in to this admin panel"], bot: ["🤖 Bots & crawlers", "Search engines, link previews, automated tools"] };
+    const v = {}, r = {};
+    (k.visits || []).forEach((x) => (v[x.kind] = x));
+    (k.reads || []).forEach((x) => (r[x.kind] = x));
+    const row = (id) => `<div class="tile"><small>${names[id][0]}</small><b>${fmtN(v[id] ? v[id].visitors : 0)}</b><span class="muted" style="font-size:.78rem">visitors · ${fmtN(v[id] ? v[id].views : 0)} page views · ${fmtN(r[id] ? r[id].reads : 0)} article reads</span></div>`;
+    return `<div class="card" style="margin-top:16px"><h2>Who is visiting</h2>
+      <div class="tiles">${row("human")}${row("owner")}${row("bot")}</div>
+      <p class="muted" style="font-size:.8rem;margin-top:8px">The totals above include all three. Article view numbers shown to the public count real readers and you, not bots. Counting of owner and bot visits started on 26 Oct 2026 — earlier visits are all shown as real readers.</p></div>`;
+  }
+
   async function viewVisitors(view) {
     view.innerHTML = `<div class="page-h"><h1>Visitors</h1></div><div class="card"><p class="muted">Loading…</p></div>`;
     await loadPosts(true);
     const sel = { mode: "30", from: "", to: "" };
-    let table = false, stats = null, legacy = false, subsNew = null;
+    let table = false, stats = null, legacy = false, subsNew = null, kinds = null;
     const load = async () => {
       const r = resolveRange(sel);
       subsNew = null;
@@ -1006,6 +1018,8 @@
           stats = data;
           const q = sb.from("subscribers").select("id", { count: "exact", head: true }).gte("created_at", new Date(data.from + "T00:00:00+06:00").toISOString()).lt("created_at", new Date(addDays(data.to, 1) + "T00:00:00+06:00").toISOString());
           try { const x = await q; if (!x.error) subsNew = x.count; } catch (e) {}
+          kinds = null;
+          try { const k = await sb.rpc("admin_site_kinds", { p_from: r.from, p_to: r.to }); if (!k.error) kinds = k.data; } catch (e) {}
           return;
         }
         if (!isMissingFn(error) && status !== 404) throw error;
@@ -1059,8 +1073,9 @@
         <div class="chart-h"><h2>Traffic</h2>
           <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="legend"><i class="lg-b"></i>Page views <i class="lg-l"></i>Visitors</span><button class="link-btn" id="tv">${table ? "Chart view" : "Table view"}</button></div></div>
         <div class="chart" id="chart"></div>
-        <p class="muted" style="font-size:.8rem;margin-top:8px">A “visitor” is one browser (counted by a random ID stored on the visitor's device — no name, email or IP address is saved). A “page view” is one page opened. Your own visits and bots are not counted. Bangladesh time.${anyApprox ? ` <b>≈</b> marks a figure for a very large period (more than ${fmtN(ex.visitors === false ? 400000 : 40000)} page views) where each day's unique visitors are added up, so a person who came on several days is counted once per day. Page views, article reads and every per-day number stay exact; narrow the dates to see exact visitor figures.` : ""}${rows.length !== allRows.length ? ` Long ranges are grouped by ${rows[0].axis ? "month" : "week"}; the visitors line there adds up each day's unique visitors.` : ""}</p>
+        <p class="muted" style="font-size:.8rem;margin-top:8px">A “visitor” is one browser (counted by a random ID stored on the visitor's device — no name, email or IP address is saved). A “page view” is one page opened, so one visitor can make many page views. Everyone is counted — real readers, your own visits and bots — and the card below splits them. Bangladesh time.${anyApprox ? ` <b>≈</b> marks a figure for a very large period (more than ${fmtN(ex.visitors === false ? 400000 : 40000)} page views) where each day's unique visitors are added up, so a person who came on several days is counted once per day. Page views, article reads and every per-day number stay exact; narrow the dates to see exact visitor figures.` : ""}${rows.length !== allRows.length ? ` Long ranges are grouped by ${rows[0].axis ? "month" : "week"}; the visitors line there adds up each day's unique visitors.` : ""}</p>
       </div>
+      ${kinds ? kindsCard(kinds) : ""}
       <div class="dash-cols" style="margin-top:16px">
         <div class="card"><h2>Most visited pages</h2>${barList(stats.top_pages, "views", (x) => pageLabel(x.path), "Page views appear after the first visits.")}</div>
         <div class="card"><h2>Where visitors come from</h2>${barList(stats.referrers, "views", (x) => esc(x.source))}</div>

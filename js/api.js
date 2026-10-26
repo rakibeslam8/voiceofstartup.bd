@@ -81,15 +81,24 @@
     }).catch(() => {});
   }
 
-  /* Count one view per browser per article per 6 hours. Skips bots, local previews and the
-     admin's own browser so the numbers reflect real readers. */
-  function trackView(slug) {
+  /* Who is looking: "human" (a normal reader), "owner" (a browser signed in to the admin panel) or "bot"
+     (automation, crawlers, link-preview fetchers). Every one of them is counted; the admin panel shows the split.
+     Only local previews (localhost) are not sent. */
+  const BOT_RE = /bot|crawl|spider|headless|lighthouse|preview|facebookexternalhit|slurp/i;
+  function visitKind() {
     try {
-      const isBot = navigator.webdriver || /bot|crawl|spider|headless|lighthouse/i.test(navigator.userAgent || "");
-      const isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
-      let isAdmin = false;
-      try { isAdmin = !!localStorage.getItem("vosb-admin-auth"); } catch (e) {}
-      if (!window.VOSB_FORCE_TRACK && (isBot || isLocal || isAdmin)) return Promise.resolve();
+      if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) && !window.VOSB_FORCE_TRACK) return "";
+      if (navigator.webdriver || BOT_RE.test(navigator.userAgent || "")) return "bot";
+      try { if (localStorage.getItem("vosb-admin-auth")) return "owner"; } catch (e) {}
+    } catch (e) {}
+    return "human";
+  }
+
+  /* Count one view per browser per article per 6 hours (everyone is counted, labelled by kind). */
+  function trackView(slug) {
+    const kind = visitKind();
+    if (!kind) return Promise.resolve();
+    try {
       let seen = {};
       try { seen = JSON.parse(localStorage.getItem("vosb-seen") || "{}"); } catch (e) {}
       const now = Date.now();
@@ -98,7 +107,7 @@
       for (const k of Object.keys(seen)) if (now - seen[k] > 48 * 3600 * 1000) delete seen[k];
       try { localStorage.setItem("vosb-seen", JSON.stringify(seen)); } catch (e) {}
     } catch (e) {}
-    return rpc("increment_view", { p_slug: slug });
+    return rpc("increment_view_k", { p_slug: slug, p_kind: kind });
   }
 
   function trackShare(slug) { return rpc("increment_share", { p_slug: slug }); }
@@ -121,7 +130,8 @@
   }
   function trackVisit(lang) {
     try {
-      if (!configured || skipTracking()) return Promise.resolve();
+      const kind = visitKind();
+      if (!configured || !kind) return Promise.resolve();
       let visitor = "", isNew = false;
       try { visitor = localStorage.getItem("vosb-vid") || ""; if (!visitor) { visitor = rid(); isNew = true; localStorage.setItem("vosb-vid", visitor); } } catch (e) { visitor = rid(); }
       let sid = "", first = false;
@@ -133,7 +143,7 @@
       const ua = navigator.userAgent || "";
       const device = /iPad|Tablet|PlayBook|Silk/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua)) ? "tablet" : /Mobi|iPhone|iPod|Android/i.test(ua) ? "mobile" : "desktop";
       const path = location.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "") || "/";
-      return rpc("track_visit", { p_path: path, p_visitor: visitor, p_session: sid, p_referrer: ref, p_device: device, p_lang: lang === "en" ? "en" : "bn", p_new: isNew });
+      return rpc("track_visit_k", { p_path: path, p_visitor: visitor, p_session: sid, p_referrer: ref, p_device: device, p_lang: lang === "en" ? "en" : "bn", p_new: isNew, p_kind: kind });
     } catch (e) { return Promise.resolve(); }
   }
 
