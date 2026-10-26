@@ -1273,3 +1273,11 @@ body:has(#news-list) .page-hero::after { right: -120px; top: -150px; width: 440p
 .page-hero h1 { font-size: clamp(1.8rem, 3.6vw, 2.5rem); }
 .page-hero + .section, .page-hero + section.section { padding-top: 32px; }
 @media (max-width: 640px) { .page-hero { padding: 18px 0 18px; } .page-hero + .section { padding-top: 22px; } }
+
+/* the lead grid now follows the ticker directly (topics live in the menu, search in the header) */
+.home-top { padding: 20px 0 6px; }
+@media (max-width: 640px) { .home-top { padding: 14px 0 4px; } }
+
+/* home: topics live in the menu, so the lead story sits right under the ticker */
+.home-top { padding: 20px 0 6px; }
+@media (max-width: 640px) { .home-top { padding: 12px 0 2px; } }

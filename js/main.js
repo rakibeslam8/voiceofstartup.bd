@@ -273,9 +273,6 @@
   const newsLead = (p) => tile(p, true).replace('class="tile tile-lead"', 'class="tile tile-lead news-lead"');
   const skTile = (n) => Array.from({ length: n }, () => `<div class="tile sk-tile" aria-hidden="true"></div>`).join("");
 
-  const searchForm = () => `<form class="hero-search" role="search" action="/news" method="get" autocomplete="off"><span class="hs-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></span><input name="q" type="search" maxlength="80" placeholder="${T("খবর খুঁজুন…", "Search stories…")}" aria-label="${T("খবর খুঁজুন", "Search stories")}"><button class="btn btn-orange" type="submit">${T("খুঁজুন", "Search")}</button></form>`;
-  mount("home-search", searchForm);
-  mount("home-search-m", searchForm);
 
   mount("home-hero", () => {
     if (postsState === "loading") return skTile(5);
