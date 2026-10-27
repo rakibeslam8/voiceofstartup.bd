@@ -1001,7 +1001,12 @@
     const row = (id) => `<div class="tile"><small>${names[id][0]}</small><b>${fmtN(v[id] ? v[id].visitors : 0)}</b><span class="muted" style="font-size:.78rem">visitors · ${fmtN(v[id] ? v[id].views : 0)} page views · ${fmtN(r[id] ? r[id].reads : 0)} article reads</span></div>`;
     return `<div class="card" style="margin-top:16px"><h2>Who is visiting</h2>
       <div class="tiles">${row("human")}${row("owner")}${row("bot")}</div>
-      <p class="muted" style="font-size:.8rem;margin-top:8px">The totals above include all three. Article view numbers shown to the public count real readers and you, not bots. Counting of owner and bot visits started on 26 Oct 2026 — earlier visits are all shown as real readers.</p></div>`;
+      <p class="muted" style="font-size:.8rem;margin-top:8px">The totals above include all three. Article view numbers shown to the public count real readers and you, not bots. Owner and bot visits were only counted from 26 Oct 2026; earlier ones were never sent to the database, so they cannot be recovered. Visits recorded before that are all shown as real readers — use the review below to relabel the ones that were really you or a bot.</p>
+      <div class="rv-box" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <button class="b b-line b-sm" id="rv-mine">🧑‍💻 Mark this browser’s past visits as mine</button>
+        <button class="b b-line b-sm" id="rv-load">🔎 Review most active visitors</button>
+      </div>
+      <div id="rv-list" style="margin-top:10px"></div></div>`;
   }
 
   async function viewVisitors(view) {
@@ -1109,6 +1114,33 @@
       const paint = () => { $("#chart").innerHTML = chartSvg(rows, table); $("#tv").textContent = table ? "Chart view" : "Table view"; if (!table) wireTip($("#chart"), rows); };
       $("#tv").onclick = () => { table = !table; paint(); };
       paint();
+      if ($("#rv-mine")) {
+        const relabel = async (id, kind) => {
+          const { data, error } = await sb.rpc("admin_set_visitor_kind", { p_visitor: id, p_kind: kind });
+          if (error) return toast(error.message, "err");
+          toast(`Updated ${fmtN(data)} visit${data === 1 ? "" : "s"}`, "ok");
+          await reload();
+        };
+        $("#rv-mine").onclick = () => {
+          let id = "";
+          try { id = localStorage.getItem("vosb-vid") || ""; } catch (e) {}
+          if (!id) return toast("This browser has no visitor ID yet — open the public website once in this browser, then try again.", "err");
+          relabel(id, "owner");
+        };
+        $("#rv-load").onclick = async () => {
+          const r = resolveRange(sel), box = $("#rv-list");
+          box.innerHTML = `<p class="muted">Loading…</p>`;
+          const { data, error } = await sb.rpc("admin_top_visitors", { p_from: r.from, p_to: r.to, p_limit: 15 });
+          if (error) { box.innerHTML = ""; return toast(error.message, "err"); }
+          const nm = { human: "Real reader", owner: "Me (owner)", bot: "Bot" };
+          box.innerHTML = data.length ? `<div class="rows">${data.map((v, i) => `<div class="row" style="align-items:center;gap:10px;flex-wrap:wrap">
+            <div style="flex:1;min-width:200px"><b>Visitor #${i + 1}</b> <span class="muted">· ${esc(v.device)} · ${esc(String(v.visitor).slice(0, 6))}…</span><br>
+              <span class="muted" style="font-size:.85rem">${fmtN(v.views)} page views · ${fmtN(v.sessions)} sessions · ${fmtN(v.pages)} pages · ${esc(fmtD(v.first_at))} → ${esc(fmtD(v.last_at))}</span></div>
+            <select class="sel" data-i="${i}" aria-label="Who is this visitor">${["human", "owner", "bot"].map((k) => `<option value="${k}"${v.kind === k ? " selected" : ""}>${nm[k]}</option>`).join("")}</select></div>`).join("")}</div>
+            <p class="muted" style="font-size:.8rem;margin-top:6px">Someone who opened many pages over several days on one device is often you or a crawler. Changing the label moves all of that browser’s visits.</p>` : `<p class="muted">No visitors in this period.</p>`;
+          $$("select[data-i]", box).forEach((el) => { el.onchange = () => relabel(data[+el.dataset.i].visitor, el.value); });
+        };
+      }
     };
     draw();
   }

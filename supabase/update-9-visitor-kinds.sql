@@ -118,3 +118,8 @@ begin
 end;
 $$;
 grant execute on function public.admin_site_kinds(date, date) to authenticated;
+
+-- NOTE: the version actually applied to the live database used track_visit_k / increment_view_k (new names, nothing dropped)
+-- and an admin_site_kinds that reads the raw visit rows. Relabelling past visitors:
+--   admin_top_visitors(p_from, p_to, p_limit)  -> most active visitors in a period
+--   admin_set_visitor_kind(p_visitor, p_kind)   -> relabel one browser's visits as human / owner / bot
