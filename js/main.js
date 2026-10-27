@@ -78,11 +78,15 @@
         <a class="brand" href="/" aria-label="Voice of Startup Bangladesh"><img src="/assets/logo.png" alt="Voice of Startup BD logo"></a>
         <nav class="nav" id="nav" aria-label="Main">
           ${NAV.map((n, i) => `<a href="${n.href}" class="${n.href === page ? "active" : ""}">${esc(pick(n))}</a>${i === 1 ? topicsMenu(page) : ""}`).join("")}
+          <div class="nav-tools">
+            <button class="nt-btn theme-toggle" data-act="theme" type="button"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg><span>${T("ডার্ক / লাইট", "Dark / Light")}</span></button>
+            <button class="nt-btn" data-act="lang" type="button"><b>${lang === "bn" ? "EN" : "বা"}</b><span>${lang === "bn" ? "English" : "বাংলা"}</span></button>
+          </div>
         </nav>
         <div class="header-actions">
           <a class="hdr-search" href="/news?s=1" aria-label="${T("খবর খুঁজুন", "Search stories")}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></a>
-          <button class="theme-toggle" id="theme" type="button" aria-label="${T("ডার্ক / লাইট মোড", "Dark / light mode")}" title="${T("ডার্ক / লাইট মোড", "Dark / light mode")}"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg></button>
-          <button class="lang-toggle" id="lang" aria-label="Switch language">${lang === "bn" ? "EN" : "বাংলা"}</button>
+          <button class="theme-toggle" data-act="theme" type="button" aria-label="${T("ডার্ক / লাইট মোড", "Dark / light mode")}" title="${T("ডার্ক / লাইট মোড", "Dark / light mode")}"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg></button>
+          <button class="lang-toggle" data-act="lang" aria-label="Switch language">${lang === "bn" ? "EN" : "বাংলা"}</button>
           <a class="btn btn-green" href="#follow">${T("ফলো করুন", "Follow Now")}</a>
           <button class="menu-btn" id="menu" aria-label="Menu">☰</button>
         </div>
@@ -90,18 +94,20 @@
       <div class="container"><div class="ad-slot ad-header" data-slot="header" data-i="0"></div></div>`;
       $("#menu").onclick = () => $("#nav").classList.toggle("open");
       document.addEventListener("click", (e) => { document.querySelectorAll(".nav-dd[open]").forEach((d) => { if (!d.contains(e.target)) d.removeAttribute("open"); }); });
-      $("#theme").onclick = () => {
+      const toggleTheme = () => {
         const dark = document.documentElement.dataset.theme !== "dark";
         if (dark) document.documentElement.dataset.theme = "dark"; else delete document.documentElement.dataset.theme;
         try { localStorage.setItem("vosb-theme", dark ? "dark" : "light"); } catch (e) {}
         const m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", dark ? "#0e0f11" : "#ff7522");
       };
-      $("#lang").onclick = () => {
+      document.querySelectorAll('[data-act="theme"]').forEach((b) => (b.onclick = toggleTheme));
+      const toggleLang = () => {
         lang = lang === "bn" ? "en" : "bn";
         try { localStorage.setItem("vosb-lang", lang); } catch (e) {}
         if (EN_EDITION && lang === "bn") { location.href = location.pathname.replace(/^\/en/, ""); return; }
         renderAll();
       };
+      document.querySelectorAll('[data-act="lang"]').forEach((b) => (b.onclick = toggleLang));
     }
     const bottom = $("#site-bottom");
     if (bottom) {

@@ -1446,3 +1446,14 @@ html[data-theme="dark"] .page-hero::after { opacity: .16; }
 html[data-theme="dark"] .filter.active { background: var(--orange); color: #fff; border-color: var(--orange); -webkit-text-fill-color: #fff; }
 /* narrow tablets (English menu is wider): make room for the new theme button */
 @media (min-width: 761px) and (max-width: 830px) { .hdr-search { display: none; } }
+
+/* phones: language + dark/light buttons live inside the ☰ menu, not in the top bar */
+.nav-tools { display: none; }
+@media (max-width: 760px) {
+  .header-actions .theme-toggle, .header-actions .lang-toggle { display: none; }
+  .nav-tools { display: flex; gap: 10px; margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .nav-tools .nt-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 9px; width: auto; height: auto; padding: 11px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--text); font: 600 .95rem var(--font-body); cursor: pointer; -webkit-text-fill-color: currentColor; }
+  .nav-tools .nt-btn svg { width: 20px; height: 20px; flex: none; }
+  .nav-tools .nt-btn b { font-weight: 800; font-size: .78rem; border: 1.5px solid currentColor; border-radius: 999px; padding: 1px 8px; line-height: 1.5; }
+  .nav-tools .nt-btn:active { background: var(--orange-soft); }
+}
