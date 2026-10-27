@@ -81,6 +81,7 @@
         </nav>
         <div class="header-actions">
           <a class="hdr-search" href="/news?s=1" aria-label="${T("খবর খুঁজুন", "Search stories")}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></a>
+          <button class="theme-toggle" id="theme" type="button" aria-label="${T("ডার্ক / লাইট মোড", "Dark / light mode")}" title="${T("ডার্ক / লাইট মোড", "Dark / light mode")}"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg></button>
           <button class="lang-toggle" id="lang" aria-label="Switch language">${lang === "bn" ? "EN" : "বাংলা"}</button>
           <a class="btn btn-green" href="#follow">${T("ফলো করুন", "Follow Now")}</a>
           <button class="menu-btn" id="menu" aria-label="Menu">☰</button>
@@ -89,6 +90,12 @@
       <div class="container"><div class="ad-slot ad-header" data-slot="header" data-i="0"></div></div>`;
       $("#menu").onclick = () => $("#nav").classList.toggle("open");
       document.addEventListener("click", (e) => { document.querySelectorAll(".nav-dd[open]").forEach((d) => { if (!d.contains(e.target)) d.removeAttribute("open"); }); });
+      $("#theme").onclick = () => {
+        const dark = document.documentElement.dataset.theme !== "dark";
+        if (dark) document.documentElement.dataset.theme = "dark"; else delete document.documentElement.dataset.theme;
+        try { localStorage.setItem("vosb-theme", dark ? "dark" : "light"); } catch (e) {}
+        const m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", dark ? "#0e0f11" : "#ff7522");
+      };
       $("#lang").onclick = () => {
         lang = lang === "bn" ? "en" : "bn";
         try { localStorage.setItem("vosb-lang", lang); } catch (e) {}
@@ -417,7 +424,7 @@
     const PER = 12;
     const pages = Math.max(1, Math.ceil(items.length / PER));
     ST.page = Math.min(Math.max(1, ST.page), pages);
-    const pageItems = items.slice((ST.page - 1) * PER, ST.page * PER);
+    const pageItems = items.slice(0, ST.page * PER);                 // "Read more" adds the next batch under the ones already shown
     const filtered = !!(ST.q || ST.month);
 
     mountListTools(list, num);
@@ -447,7 +454,7 @@
       mrGridHtml = mrInGrid ? `<section class="most-read in-grid" aria-label="Most read">${mrHtml}</section>` : "";
     }
 
-    const lead = ready && !filtered && ST.sort === "new" && ST.page === 1 && items.length >= 4;   // newest story gets the big lead card
+    const lead = ready && !filtered && ST.sort === "new" && items.length >= 4 && window.matchMedia("(max-width: 760px)").matches;   // phones: newest story gets the big lead card; larger screens show equal cards
     list.classList.toggle("post-grid", !(ready && !items.length) && postsState !== "error");
     list.innerHTML = ready && items.length
       ? withFeedAds(pageItems.map((p, i) => (lead && i === 0 ? newsLead(p) + mrGridHtml : newsCard(p))))
@@ -459,8 +466,16 @@
       const old = bar.querySelector(".list-count"); if (old) old.remove();
     }
     const more = $("#load-more");
-    if (more) more.hidden = true;
-    renderPager(pages);
+    if (more) {
+      const left = ready && ST.page < pages;
+      more.hidden = !left;
+      more.textContent = T("আরও পড়ুন", "Read more");
+      if (!more.dataset.wired) {
+        more.dataset.wired = "1";
+        more.addEventListener("click", () => { ST.page += 1; syncUrl(); renderNews(); });
+      }
+    }
+    const pg = $("#pager"); if (pg) { pg.hidden = true; pg.innerHTML = ""; }
   }
   if (!window.__vosbMq) { window.__vosbMq = window.matchMedia("(max-width: 760px)"); const f = () => { if (document.getElementById("news-list")) renderNews(); }; (window.__vosbMq.addEventListener ? window.__vosbMq.addEventListener("change", f) : window.__vosbMq.addListener(f)); }
   const ST = { init: false, q: "", sort: "new", month: "", page: 1, server: [], serverQ: "" };

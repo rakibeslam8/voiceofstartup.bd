@@ -149,6 +149,7 @@ function articlePage(r, lang, all) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>try{if(localStorage.getItem("vosb-theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}</script>
   <title>${esc(pageTitle)}</title>
   <meta name="description" content="${esc(desc)}">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
