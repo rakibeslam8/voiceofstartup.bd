@@ -314,11 +314,12 @@
       if (all.length < 5) return null;
       const fresh = all.filter((p) => !seen.has(p.slug));
       if (fresh.length < 2) return null;                       // skip a topic whose stories are all shown above
-      const arr = fresh.concat(all.filter((p) => seen.has(p.slug))).slice(0, 5).sort((a, b) => toDate(b.date) - toDate(a.date));
+      const n = all.length >= 6 ? 6 : 3;                       // a full 3 x 2 block, or one tidy row of three
+      const arr = fresh.concat(all.filter((p) => seen.has(p.slug))).slice(0, n).sort((a, b) => toDate(b.date) - toDate(a.date));
       return { c, arr };
     }).filter(Boolean).slice(0, 6);
     return secs.map((x, i) => `<section class="cs cs-${i % 3}" aria-label="${esc(pick(x.c))}"><div class="sec-head"><h2>${esc(pick(x.c))}</h2><a href="/${x.c.slug}">${T("সব দেখুন", "See all")} →</a></div>
-      <div class="cs-grid">${tile(x.arr[0], false).replace('class="pt"', 'class="pt pt-big"')}${x.arr.slice(1, 5).map(smallCard).join("")}</div></section>`).join("");
+      <div class="cs-grid cs-${x.arr.length}">${x.arr.map((p) => tile(p, false).replace('class="pt"', 'class="pt pt-card"')).join("")}</div></section>`).join("");
   });
 
   mount("source-chips", () =>

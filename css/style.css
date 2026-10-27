@@ -679,15 +679,6 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.25; font-weight: 
   .nav-dd .dd-menu { position: static; box-shadow: none; border: 0; border-left: 3px solid var(--orange-soft); border-radius: 0; margin: 2px 0 6px 14px; padding: 2px 0 2px 6px; min-width: 0; }
 }
 
-/* crawlable headline index (raw-HTML internal links) */
-.headline-index { margin-top: 36px; padding-top: 22px; border-top: 1px solid var(--line); }
-.headline-index h2 { font-size: 1.15rem; margin-bottom: 10px; }
-.headline-index ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 28px; }
-.headline-index li { padding: 6px 0; border-bottom: 1px dashed var(--line); min-width: 0; }
-.headline-index a { color: var(--text); font-weight: 500; overflow-wrap: anywhere; }
-.headline-index a:hover { color: var(--orange-dark); }
-@media (max-width: 760px) { .headline-index ul { grid-template-columns: 1fr; } }
-
 
 /* ---- Listing pages redesign (news + topics): compact hero, lead story, uncropped photos, card polish ---- */
 body:has(#news-list) .page-hero { padding: 26px 0 22px; }
@@ -1314,12 +1305,12 @@ body:has(#news-list) .page-hero::after { right: -120px; top: -150px; width: 440p
 
 /* the main story: big photo, dark panel with the headline underneath */
 .pt-lead .pt-img { flex: 1 1 auto; border-radius: 12px 12px 0 0; aspect-ratio: 16 / 9; }
-.pt-lead .pt-body { background: var(--black); color: #fff; padding: 20px 22px 22px; border-radius: 0 0 12px 12px; gap: 10px; }
-.pt-lead .pt-cat { color: #ffb27d; }
+.pt-lead .pt-body { background: #cf2522; color: #fff; padding: 20px 22px 22px; border-radius: 0 0 12px 12px; gap: 10px; }
+.pt-lead .pt-cat { align-self: flex-start; background: #fff; color: #cf2522; padding: 5px 9px; border-radius: 5px; font-size: .74rem; }
 .pt-lead h3 { font-size: clamp(1.3rem, 2.3vw, 1.85rem); line-height: 1.34; color: #fff; -webkit-line-clamp: 4; }
 .pt-lead:hover h3 { color: #fff; }
-.pt-lead p { color: rgba(255,255,255,.82); font-size: .96rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.pt-lead .pt-meta { color: rgba(255,255,255,.7); }
+.pt-lead p { color: rgba(255,255,255,.94); font-size: .96rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pt-lead .pt-meta { color: rgba(255,255,255,.9); }
 
 /* home top grid: lead on the left, four cards on the right */
 .lead-grid { height: auto; grid-template-columns: minmax(0, 1.65fr) repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto; gap: 22px 18px; align-items: stretch; }
@@ -1363,4 +1354,26 @@ body:has(#news-list) .page-hero::after { right: -120px; top: -150px; width: 440p
   .cs-grid > .pt-big .pt-img { aspect-ratio: 4 / 3; }
   .post-grid > .pt-lead.news-lead { margin-bottom: 10px; }
   .post-grid > .pt-lead.news-lead .pt-img { aspect-ratio: 4 / 3; }
+}
+
+/* topic sections on the home page: an even grid of equal cards (3 x 2); phones keep the big card + list */
+.cs-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 22px; }
+.pt-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.pt-card .pt-img { border-radius: 0; aspect-ratio: 16 / 10; }
+.pt-card .pt-body { padding: 14px 16px 16px; gap: 7px; flex: 1 1 auto; }
+.pt-card h3 { font-size: 1.02rem; }
+.pt-card .pt-meta { margin-top: auto; padding-top: 2px; }
+@media (max-width: 1000px) { .cs-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) {
+  .cs-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .pt-card { background: none; border: 0; border-radius: 0; overflow: visible; }
+  .pt-card .pt-img { border-radius: 14px; aspect-ratio: 4 / 3; }
+  .pt-card .pt-body { padding: 12px 2px 0; flex: 0 0 auto; }
+  .cs-grid > .pt-card:first-child { margin-bottom: 6px; }
+  .cs-grid > .pt-card:first-child h3 { font-size: 1.12rem; }
+  .cs-grid > .pt-card:nth-child(n+2) { display: grid; grid-template-columns: minmax(0, 1fr) 96px; column-gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); align-items: start; }
+  .cs-grid > .pt-card:nth-child(n+2) .pt-img { grid-column: 2; grid-row: 1; aspect-ratio: 1 / 1; border-radius: 12px; }
+  .cs-grid > .pt-card:nth-child(n+2) .pt-body { grid-column: 1; grid-row: 1; padding: 0; min-height: 96px; }
+  .cs-grid > .pt-card:nth-child(n+2) .pt-cat { display: none; }
+  .cs-grid > .pt-card:nth-child(n+2) h3 { font-size: .96rem; }
 }

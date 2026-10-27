@@ -251,6 +251,7 @@ function feed(posts, lang) {
  * "latest headlines" list (descriptive anchor = the article's own headline) so every hub page links to its
  * articles in the raw HTML. It lives between <!--hl--> markers right before </main>. */
 function headlineIndex(posts, scope) {
+  return "";   // switched off: the site no longer shows a "Latest headlines" list (existing blocks are stripped by injectHeadlines)
   const list = (scope === "all" ? posts : posts.filter((p) => p.category === scope)).slice(0, scope === "all" ? 20 : 12);
   if (!list.length) return "";
   const cat = cats.find((c) => c.id === scope);
