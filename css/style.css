@@ -1444,3 +1444,5 @@ html[data-theme="dark"] .pt-sk.pt-lead .pt-body { background: #1b1c1f; }
 html[data-theme="dark"] body:has(#news-list) .page-hero, html[data-theme="dark"] .page-hero { background: #131416; }
 html[data-theme="dark"] .page-hero::after { opacity: .16; }
 html[data-theme="dark"] .filter.active { background: var(--orange); color: #fff; border-color: var(--orange); -webkit-text-fill-color: #fff; }
+/* narrow tablets (English menu is wider): make room for the new theme button */
+@media (min-width: 761px) and (max-width: 830px) { .hdr-search { display: none; } }
