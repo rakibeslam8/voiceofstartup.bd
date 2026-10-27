@@ -249,11 +249,12 @@
     const c = catOf(p.cat) || C.categories[0];
     return `<div class="${cls} ${p.image ? "has-img" : esc(p.cat)}" aria-hidden="${p.image ? "false" : "true"}">${p.image ? "" : `<span class="tile-ic">${ci(c)}</span>`}</div>`;
   };
+  /* portal card: the photo on top, the text always BELOW it (never on top of the photo) */
   function tile(p, lead) {
     const c = catOf(p.cat) || C.categories[0];
-    const bg = p.image ? `<div class="tile-bg has-img">${coverImg(p, lead)}</div>` : coverBox(p, "tile-bg");
-    return `<a class="tile${lead ? " tile-lead" : ""}" href="${readUrl(p)}">${bg}<span class="tile-shade"></span>
-      <div class="tile-body"><span class="tile-cat">${esc(pick(c))}</span><h3>${esc(pick(p.title))}</h3>${lead ? `<p>${esc(pick(p.excerpt))}</p>` : ""}<span class="tile-date">${formatDate(p.date)}</span></div></a>`;
+    const img = p.image ? `<div class="pt-img has-img">${coverImg(p, lead)}</div>` : coverBox(p, "pt-img");
+    return `<a class="pt${lead ? " pt-lead" : ""}" href="${readUrl(p)}">${img}
+      <div class="pt-body"><span class="pt-cat">${esc(pick(c))}</span><h3>${esc(pick(p.title))}</h3>${lead ? `<p>${esc(pick(p.excerpt))}</p>` : ""}<span class="pt-meta">${formatDate(p.date)}</span></div></a>`;
   }
   function feedItem(p) {
     const c = catOf(p.cat) || C.categories[0];
@@ -270,8 +271,8 @@
     const img = p.image ? `<div class="nc-img has-img">${coverImg(p)}</div>` : coverBox(p, "nc-img");
     return `<a class="nc" href="${readUrl(p)}">${img}<div class="nc-body"><span class="nc-cat">${esc(pick(c))}</span><h3>${esc(pick(p.title))}</h3><p>${esc(pick(p.excerpt))}</p><span class="nc-date">${formatDate(p.date)}</span></div></a>`;
   }
-  const newsLead = (p) => tile(p, true).replace('class="tile tile-lead"', 'class="tile tile-lead news-lead"');
-  const skTile = (n) => Array.from({ length: n }, () => `<div class="tile sk-tile" aria-hidden="true"></div>`).join("");
+  const newsLead = (p) => tile(p, true).replace('class="pt pt-lead"', 'class="pt pt-lead news-lead"');
+  const skTile = (n) => Array.from({ length: n }, (_, i) => `<div class="pt pt-sk${i ? "" : " pt-lead"}" aria-hidden="true"><div class="pt-img"></div><div class="pt-body"><i></i><i></i></div></div>`).join("");
 
 
   mount("home-hero", () => {
@@ -317,7 +318,7 @@
       return { c, arr };
     }).filter(Boolean).slice(0, 6);
     return secs.map((x, i) => `<section class="cs cs-${i % 3}" aria-label="${esc(pick(x.c))}"><div class="sec-head"><h2>${esc(pick(x.c))}</h2><a href="/${x.c.slug}">${T("সব দেখুন", "See all")} →</a></div>
-      <div class="cs-grid">${tile(x.arr[0], false).replace('class="tile"', 'class="tile cs-big"')}${x.arr.slice(1, 5).map(smallCard).join("")}</div></section>`).join("");
+      <div class="cs-grid">${tile(x.arr[0], false).replace('class="pt"', 'class="pt pt-big"')}${x.arr.slice(1, 5).map(smallCard).join("")}</div></section>`).join("");
   });
 
   mount("source-chips", () =>
