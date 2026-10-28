@@ -72,7 +72,8 @@
       top.innerHTML = `
       <div class="topbar"><div class="container">
         <span class="flagline"><span class="flagdot"></span>${T("সরকার অনুমোদিত সংস্থার তথ্যসূত্রে যাচাইকৃত আপডেট", "Updates verified from government-approved sources")}</span>
-        <span class="date">${bnDigits(new Date().toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { weekday: "long", year: "numeric", month: "long", day: "numeric" }))}</span>
+        <span class="date">${bnDigits(new Date().toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { timeZone: "Asia/Dhaka", weekday: "long", year: "numeric", month: "long", day: "numeric" }))}</span>
+        <span class="tb-soc">${Object.keys(C.social).map((k) => `<a href="${C.social[k]}" target="_blank" rel="noopener" aria-label="${LABEL[k]}">${ICON[k].replace(/fill="[^"]*"/g, "").replace(/<defs>.*<\/defs>/, "")}</a>`).join("")}</span>
       </div></div>
       <header class="site-header"><div class="container">
         <a class="brand" href="/" aria-label="Voice of Startup Bangladesh"><img src="/assets/logo.png" alt="Voice of Startup BD logo"></a>
