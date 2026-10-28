@@ -1,6 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/30-lakhs-start-profit-2-5-crores-in-three-years</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-28T06:20:00.000Z</news:publication_date>
+      <news:title>৩০ লাখে শুরু, তিন বছরে মুনাফা আড়াই কোটি টাকা</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/30-lakhs-start-profit-2-5-crores-in-three-years</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-28T06:20:00.000Z</news:publication_date>
+      <news:title>30 lakhs start, profit 2.5 crores in three years</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/arogya-of-health-care-big-success-in-five-years</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-28T06:04:00.000Z</news:publication_date>
+      <news:title>স্বাস্থ্যসেবার ‘আরোগ্য’, পাঁচ বছরেই বড় সাফল্য</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/arogya-of-health-care-big-success-in-five-years</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-28T06:04:00.000Z</news:publication_date>
+      <news:title>&#39;Arogya&#39; of health care, big success in five years</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/started-with-600-taka-now-the-business-is-crores-of-taka</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-28T04:31:00.000Z</news:publication_date>
+      <news:title>৬০০ টাকায় শুরু, এখন ব্যবসা কোটি টাকার</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/started-with-600-taka-now-the-business-is-crores-of-taka</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-28T04:31:00.000Z</news:publication_date>
+      <news:title>Started with 600 taka, now the business is crores of taka</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-28T02:00:00.000Z</news:publication_date>
+      <news:title>ইউটিউব দেখে ছাদে ড্রাগন চাষ, বছরে আয় লাখ টাকা</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-28T02:00:00.000Z</news:publication_date>
+      <news:title>Watching YouTube, dragon farming on the roof, annual income of lakhs of rupees</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/abu-manzoor-saif-is-a-successful-entrepreneur-who-left-the-government</loc>
     <news:news>
       <news:publication>

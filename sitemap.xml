@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.voiceofstartup.bd/</loc>
-    <lastmod>2026-10-27</lastmod>
+    <lastmod>2026-10-28</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/news</loc>
-    <lastmod>2026-10-27</lastmod>
+    <lastmod>2026-10-28</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -20,7 +20,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/founder-stories</loc>
-    <lastmod>2026-10-27</lastmod>
+    <lastmod>2026-10-28</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -108,6 +108,86 @@
     <loc>https://www.voiceofstartup.bd/usage-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/30-lakhs-start-profit-2-5-crores-in-three-years</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/30-lakhs-start-profit-2-5-crores-in-three-years"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/30-lakhs-start-profit-2-5-crores-in-three-years"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/30-lakhs-start-profit-2-5-crores-in-three-years"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvrq7nl5sf28.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/30-lakhs-start-profit-2-5-crores-in-three-years</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/30-lakhs-start-profit-2-5-crores-in-three-years"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/30-lakhs-start-profit-2-5-crores-in-three-years"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/30-lakhs-start-profit-2-5-crores-in-three-years"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvrq7nl5sf28.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/arogya-of-health-care-big-success-in-five-years</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/arogya-of-health-care-big-success-in-five-years"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/arogya-of-health-care-big-success-in-five-years"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/arogya-of-health-care-big-success-in-five-years"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvrpm0g9b15d.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/arogya-of-health-care-big-success-in-five-years</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/arogya-of-health-care-big-success-in-five-years"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/arogya-of-health-care-big-success-in-five-years"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/arogya-of-health-care-big-success-in-five-years"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvrpm0g9b15d.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/started-with-600-taka-now-the-business-is-crores-of-taka</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/started-with-600-taka-now-the-business-is-crores-of-taka"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/started-with-600-taka-now-the-business-is-crores-of-taka"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/started-with-600-taka-now-the-business-is-crores-of-taka"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvrp26s29om5.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/started-with-600-taka-now-the-business-is-crores-of-taka</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/started-with-600-taka-now-the-business-is-crores-of-taka"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/started-with-600-taka-now-the-business-is-crores-of-taka"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/started-with-600-taka-now-the-business-is-crores-of-taka"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvrp26s29om5.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvrpdm3cy25a.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvrpdm3cy25a.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/abu-manzoor-saif-is-a-successful-entrepreneur-who-left-the-government</loc>
