@@ -179,7 +179,7 @@ function articlePage(r, lang, all) {
   <script src="/js/splash.js?v=20261025b"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@600;700;800&family=Noto+Serif+Bengali:wght@600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@600;700;800&family=Noto+Serif+Bengali:wght@600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css?v=${V}">
   <script type="application/ld+json" id="ld-article">${JSON.stringify(ld[0]).replace(/</g, "\\u003c")}</script>
   <script type="application/ld+json">${JSON.stringify(ld[1]).replace(/</g, "\\u003c")}</script>

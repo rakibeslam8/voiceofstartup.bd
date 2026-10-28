@@ -33,7 +33,7 @@ const LEG = sbl.window.VOSB_LEGAL;
 
 const NAV = [
   ["/", "হোম", "Home"], ["/news", "সংবাদ", "News"], ["/funding", "ফান্ডিং", "Funding"], ["/founder-stories", "ফাউন্ডার স্টোরি", "Founder Stories"],
-  ["/about", "আমাদের সম্পর্কে", "About"], ["/contact", "যোগাযোগ", "Contact"],
+  ["/contact", "যোগাযোগ", "Contact"],
 ];
 const LEGAL = [
   ["/privacy-policy", "গোপনীয়তা নীতি", "Privacy Policy"], ["/terms-of-service", "ব্যবহারের শর্তাবলি", "Terms of Service"],
@@ -51,7 +51,7 @@ function topics(en) {
 }
 function top(en) {
   const t = (bn, e) => (en ? e : bn);
-  return `<!--s--><div class="topbar"><div class="container"><span class="flagline"><span class="flagdot"></span>${t("সরকার অনুমোদিত সংস্থার তথ্যসূত্রে যাচাইকৃত আপডেট", "Updates verified from government-approved sources")}</span></div></div>
+  return `<!--s--><div class="topbar"><div class="container"><span class="date"></span><a class="tb-brand" href="/" aria-label="Voice of Startup Bangladesh">Voice of Startup Bangladesh</a><span class="tb-soc"></span></div></div>
       <header class="site-header"><div class="container">
         <a class="brand" href="/" aria-label="Voice of Startup Bangladesh"><img src="/assets/logo.png" alt="Voice of Startup BD logo"></a>
         <nav class="nav" id="nav" aria-label="Main">${NAV.map(([h, bn, e], i) => `<a href="${h}">${esc(t(bn, e))}</a>${i === 1 ? topics(en) : ""}`).join("")}</nav>

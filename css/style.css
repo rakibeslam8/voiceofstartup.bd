@@ -1710,3 +1710,48 @@ html[data-theme="dark"] :is(.pt-meta, .pt-body p, .nc p, .post-excerpt) { color:
 
 /* active / hover filter chips: readable white-on-orange */
 .filter.active, .filter:hover { background: var(--orange-dark); border-color: var(--orange-dark); color: #fff; -webkit-text-fill-color: #fff; }
+
+/* ===== v2: top bar = date (left) · masthead title (centre) · socials (right) ===== */
+.topbar .container { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px; padding-block: 6px; }
+.topbar .date { grid-column: 1; justify-self: start; font-size: .82rem; font-weight: 600; letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: block; }
+.tb-brand { grid-column: 2; justify-self: center; font-family: "Noto Serif", Georgia, "Times New Roman", serif; font-weight: 800; font-size: 1.22rem; line-height: 1.2; letter-spacing: .035em; text-transform: uppercase; color: #fff; white-space: nowrap; text-decoration: none; }
+.tb-brand:hover { color: #fff; }
+.tb-soc { grid-column: 3; justify-self: end; }
+@media (max-width: 900px) { .tb-brand { font-size: 1.02rem; letter-spacing: .02em; } .topbar .date { font-size: .74rem; } }
+@media (max-width: 760px) {
+  .topbar .container { grid-template-columns: minmax(0, 1fr) auto; row-gap: 0; padding-block: 4px 3px; }
+  .tb-brand { grid-column: 1 / -1; grid-row: 1; font-size: .98rem; letter-spacing: .03em; padding-block: 2px 1px; }
+  .topbar .date { grid-column: 1; grid-row: 2; font-size: .72rem; }
+  .tb-soc { grid-column: 2; grid-row: 2; }
+  .tb-soc a { width: 28px; height: 28px; }
+  .tb-soc svg { width: 14px; height: 14px; }
+}
+@media (max-width: 360px) { .tb-brand { font-size: .86rem; letter-spacing: .01em; } }
+
+/* ===== navbar text in the same serif as titles ===== */
+.nav a, .nav-dd summary { font-family: var(--font-head); font-weight: 700; letter-spacing: -.005em; }
+
+/* ===== article reading text: previous sans (Inter / Hind Siliguri), titles stay serif ===== */
+.prose, .prose p, .prose li, .prose blockquote, .prose td, .prose th { font-family: "Inter", "Hind Siliguri", system-ui, -apple-system, "Segoe UI", sans-serif; }
+.prose p, .prose li, .prose blockquote { font-weight: 400; color: #231c14; }
+html[data-theme="dark"] .prose p, html[data-theme="dark"] .prose li, html[data-theme="dark"] .prose blockquote { color: #e4e4e4; }
+.prose h2, .prose h3, .prose h4 { font-family: var(--font-head); }
+
+/* ===== red lead card: text is white (the generic body-text colour was winning) ===== */
+.pt-lead .pt-body p, .pt-lead p, .news-lead .pt-body p, .news-lead p { color: #fff; }
+.pt-lead .pt-meta, .pt-lead .pt-meta *, .news-lead .pt-meta { color: rgba(255, 255, 255, .92); }
+
+/* ===== sunburst background on every page ===== */
+main { position: relative; isolation: isolate; overflow: clip; }
+main::before { content: ""; position: absolute; z-index: -1; pointer-events: none; top: -150px; right: -150px; width: 520px; height: 520px; border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255,117,34,.20) 0 5deg, rgba(255,117,34,0) 5deg 14deg);
+  -webkit-mask: radial-gradient(circle, #000 0 38%, transparent 70%); mask: radial-gradient(circle, #000 0 38%, transparent 70%); }
+body:has(.page-hero) main::before { display: none; }
+.home-top { background: transparent; }
+.page-hero { background: radial-gradient(820px 260px at 100% 0%, rgba(255,117,34,.16), transparent 62%), radial-gradient(520px 220px at 0% 100%, rgba(11,138,75,.08), transparent 62%), linear-gradient(var(--card), var(--bg)); }
+.page-hero::after { width: 460px; height: 460px; right: -150px; top: -190px; opacity: 1; border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255,117,34,.20) 0 5deg, rgba(255,117,34,0) 5deg 14deg);
+  -webkit-mask: radial-gradient(circle, #000 0 38%, transparent 70%); mask: radial-gradient(circle, #000 0 38%, transparent 70%); }
+@media (max-width: 760px) { main::before { width: 340px; height: 340px; top: -110px; right: -120px; } .page-hero::after { width: 320px; height: 320px; right: -130px; top: -150px; } }
+html[data-theme="dark"] main::before, html[data-theme="dark"] .page-hero::after { opacity: .45; }
+html[data-theme="dark"] .page-hero { background: var(--card); }
