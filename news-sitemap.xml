@@ -198,26 +198,4 @@
       <news:title>Grameenphone did a business of Tk 11,756 crore in 9 months</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/starting-with-10-duck-eggs-bibi-rahima-now-owns-a-16-acre-farm</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-26T14:57:00.000Z</news:publication_date>
-      <news:title>১০টি হাঁসের ডিম দিয়ে শুরু, এখন ১৬ একর খামারের মালিক বিবি রহিমা</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/starting-with-10-duck-eggs-bibi-rahima-now-owns-a-16-acre-farm</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-26T14:57:00.000Z</news:publication_date>
-      <news:title>Starting with 10 duck eggs, Bibi Rahima now owns a 16 acre farm</news:title>
-    </news:news>
-  </url>
 </urlset>
