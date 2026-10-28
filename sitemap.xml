@@ -32,7 +32,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/opportunities</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-28</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -108,6 +108,26 @@
     <loc>https://www.voiceofstartup.bd/usage-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/what-we-do</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/what-we-do"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/what-we-do"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/what-we-do"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvsdvlxwkt9v.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/what-we-do</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/what-we-do"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/what-we-do"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/what-we-do"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvsdvlxwkt9v.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/30-lakhs-start-profit-2-5-crores-in-three-years</loc>

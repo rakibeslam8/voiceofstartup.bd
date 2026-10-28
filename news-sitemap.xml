@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/what-we-do</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-28T17:23:00.000Z</news:publication_date>
+      <news:title>&#39;ভয়েস অব স্টার্টআপ বাংলাদেশ&#39;: নতুন ব্যবসার প্রসার ও অর্থায়নের নতুন দিগন্ত</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/what-we-do</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-28T17:23:00.000Z</news:publication_date>
+      <news:title>Voice of Startup Bangladesh: A New Horizon for Business Expansion and Funding</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/30-lakhs-start-profit-2-5-crores-in-three-years</loc>
     <news:news>
       <news:publication>
