@@ -1562,3 +1562,48 @@ html[data-theme="dark"] .filter.active { background: var(--orange); color: #fff;
   .month-sel select { padding: 5px 12px; font-size: .84rem; border-width: 1.5px; }
 }
 @media (min-width: 761px) { .nc-img { aspect-ratio: 16 / 9; } .nc-body { padding: 12px 14px 14px; } .nc h3 { font-size: 1.05rem; } .nc p { font-size: .88rem; margin-top: 5px; } #news-list, .related-grid { gap: 22px 20px; } }
+
+/* =====================================================================
+   Tablet/desktop: the same compact, professional spacing on the other pages
+   ===================================================================== */
+@media (min-width: 761px) {
+  .section { padding: 40px 0; }
+  /* home: top story grid + latest list */
+  .home-top { padding: 14px 0 4px; }
+  .lead-grid { gap: 16px 16px; }
+  .lead-grid > .pt:not(.pt-lead) .pt-img { aspect-ratio: 16 / 9; }
+  .lead-grid > .pt:not(.pt-lead) .pt-body { padding-top: 9px; gap: 4px; }
+  .lead-grid > .pt:not(.pt-lead) h3 { font-size: .96rem; -webkit-line-clamp: 2; }
+  .lead-grid > .pt-lead .pt-body { padding: 16px 20px 18px; gap: 8px; }
+  .lead-grid > .pt-lead h3 { font-size: clamp(1.25rem, 2vw, 1.65rem); -webkit-line-clamp: 3; }
+  .lead-grid > .pt-lead p { -webkit-line-clamp: 2; font-size: .92rem; }
+  .home-main { padding: 22px 0 6px; }
+  .home-cols { gap: 32px; }
+  .fx { grid-template-columns: 200px minmax(0, 1fr); gap: 16px; padding: 14px 0; }
+  .fx h3 { font-size: 1.08rem; -webkit-line-clamp: 2; }
+  .fx p { font-size: .9rem; -webkit-line-clamp: 2; }
+  .cs { margin-top: 26px; }
+  .cs .sec-head { margin-bottom: 12px; padding-bottom: 10px; }
+  .cs-grid { gap: 18px 18px; }
+  .pt-card .pt-img { aspect-ratio: 16 / 9; }
+  .pt-card .pt-body { padding: 11px 14px 13px; gap: 5px; }
+  .pt-card h3 { font-size: .98rem; }
+
+  /* article */
+  .article { padding: 26px 30px; }
+  .article h1 { margin: 10px 0; }
+  .article .related-h { margin-top: 28px; font-size: 1.25rem; }
+
+  /* contact */
+  .mail-card { padding: 18px 20px; }
+  .mc-ic { width: 40px; height: 40px; border-radius: 11px; font-size: 1.2rem; margin-bottom: 4px; }
+  .mc-go { margin-top: 6px; }
+  .mail-grid { gap: 14px; }
+  /* about */
+  .what-card { padding: 18px 18px; }
+  .what-card .ic { width: 42px; height: 42px; font-size: 1.25rem; margin-bottom: 10px; }
+  .what-grid { gap: 14px; }
+  /* careers */
+  .role { padding: 14px 18px; }
+  .role-list { gap: 10px; }
+}
