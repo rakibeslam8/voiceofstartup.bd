@@ -32,7 +32,6 @@
     { href: "/news", bn: "সংবাদ", en: "News" },
     { href: "/funding", bn: "ফান্ডিং", en: "Funding" },
     { href: "/founder-stories", bn: "ফাউন্ডার স্টোরি", en: "Founder Stories" },
-    { href: "/about", bn: "আমাদের সম্পর্কে", en: "About" },
     { href: "/contact", bn: "যোগাযোগ", en: "Contact" },
   ];
 
