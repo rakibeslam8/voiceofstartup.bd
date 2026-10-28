@@ -1803,3 +1803,14 @@ html[data-theme="dark"] .page-hero { background: var(--card); }
 }
 @media (max-width: 340px) { .tb-brand { font-size: .72rem; letter-spacing: .06em; } }
 @media (max-width: 760px) { .topbar .date, .tb-soc { align-self: stretch; } .tb-soc { align-items: center; } }
+
+/* phone top bar v2: bigger masthead title, roomier, date + icons at their normal size */
+@media (max-width: 760px) {
+  .tb-brand { font-size: clamp(.84rem, 4.5vw, 1.25rem); letter-spacing: .05em; gap: 9px; padding: 14px 0 12px; }
+  .topbar .date { font-size: .74rem; padding-block: 4px; }
+  .tb-soc { padding-block: 4px; }
+  .tb-soc a { width: 28px; height: 28px; }
+  .tb-soc svg { width: 14px; height: 14px; }
+}
+@media (max-width: 340px) { .tb-brand { font-size: .8rem; letter-spacing: .03em; } }
+@media (max-width: 760px) { .topbar .date { justify-self: stretch; } }

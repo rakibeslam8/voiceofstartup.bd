@@ -12,6 +12,6 @@
       try { if (sessionStorage.getItem('vosb-splash')) return; sessionStorage.setItem('vosb-splash', '1'); } catch (e) {}
     }
     w.__vosbSplash = { hold: /[?&]splash=hold(&|$)/.test(q), force: force };
-    d.write('<script src="/js/splash-art.js?v=20261025b"><\/script>');
+    d.write('<script src="/js/splash-art.js?v=20261029a"><\/script>');
   } catch (e) {}
 })();
