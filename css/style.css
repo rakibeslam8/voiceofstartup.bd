@@ -1520,3 +1520,45 @@ html[data-theme="dark"] .filter.active { background: var(--orange); color: #fff;
   .faq-item summary { padding: 11px 0; font-size: .95rem; }
   .faq-item p { font-size: .92rem; padding-bottom: 11px; }
 }
+
+/* =====================================================================
+   News + topic pages on tablet/desktop: a tighter, more professional top area
+   (compact banner, slim topic chips, one-line most-read strip, small sort row)
+   ===================================================================== */
+@media (min-width: 761px) {
+  body:has(#news-list) .page-hero { padding: 12px 0 14px; }
+  body:has(#news-list) .page-hero .crumbs { margin-bottom: 6px; font-size: .84rem; }
+  body:has(#news-list) .page-hero .eyebrow { display: none; }
+  body:has(#news-list) .page-hero h1 { font-size: clamp(1.45rem, 2.3vw, 1.85rem); line-height: 1.2; }
+  body:has(#news-list) .page-hero p:not(.eyebrow) { font-size: .92rem; margin-top: 4px; }
+  body:has(#news-list) .page-hero::after { width: 300px; height: 300px; right: -110px; top: -140px; }
+  .hero-side .hero-search { padding: 3px 3px 3px 14px; border-width: 1.5px; }
+  .hero-side .hero-search input { padding: 7px 4px; font-size: .95rem; }
+  .hero-side .hero-search .btn { padding: 8px 20px; font-size: .9rem; }
+  .hero-side .hero-pop { margin-top: 8px; gap: 6px; font-size: .8rem; }
+  .hero-side .hero-pop button { padding: 3px 11px; font-size: .8rem; }
+
+  body:has(#news-list) .section { padding-top: 14px; padding-bottom: 40px; }
+  /* the list heading repeats the page title - keep it for screen readers only */
+  .list-bar { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
+  .filters-wrap { margin-bottom: 10px; }
+  .filter { padding: 6px 14px; font-size: .85rem; gap: 6px; border-width: 1.5px; }
+  .filters { gap: 8px; padding-bottom: 6px; }
+  .f-arrow { width: 30px; height: 30px; font-size: 1.05rem; }
+
+  .most-read { padding: 10px 14px 8px; margin: 0 0 12px; border-radius: 14px; box-shadow: none; }
+  .mr-h { font-size: .92rem; margin: 0 0 8px; gap: 6px; }
+  .mr-h svg { width: 17px; height: 17px; }
+  .mr-list { gap: 10px; padding-bottom: 2px; grid-auto-columns: minmax(190px, 1fr); }
+  .mr-list a { flex-direction: row; align-items: flex-start; gap: 8px; min-height: 0; padding: 8px 10px; border-radius: 10px; }
+  .mr-n { font-size: 1.1rem; line-height: 1.25; flex: none; }
+  .mr-t { font-size: .84rem; line-height: 1.4; -webkit-line-clamp: 2; }
+  .mr-list small { display: none; }
+
+  .list-tools { gap: 8px 14px; margin: 0 0 14px; }
+  .seg { border-width: 1.5px; padding: 2px; }
+  .seg button { padding: 5px 14px; font-size: .84rem; }
+  .month-sel { font-size: .82rem; }
+  .month-sel select { padding: 5px 12px; font-size: .84rem; border-width: 1.5px; }
+}
+@media (min-width: 761px) { .nc-img { aspect-ratio: 16 / 9; } .nc-body { padding: 12px 14px 14px; } .nc h3 { font-size: 1.05rem; } .nc p { font-size: .88rem; margin-top: 5px; } #news-list, .related-grid { gap: 22px 20px; } }
