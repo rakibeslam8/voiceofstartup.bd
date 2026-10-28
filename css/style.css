@@ -14,8 +14,8 @@
   --line: #e7e7e7;
   --radius: 18px;
   --shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
-  --font-body: "Inter", "Hind Siliguri", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-head: "Inter", "Baloo Da 2", "Hind Siliguri", system-ui, sans-serif;
+  --font-body: "Noto Sans", "Hind Siliguri", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-head: "Noto Sans", "Noto Sans Bengali", "Baloo Da 2", "Hind Siliguri", system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1357,7 +1357,7 @@ body:has(#news-list) .page-hero::after { right: -120px; top: -150px; width: 440p
 }
 
 /* topic sections on the home page: an even grid of equal cards (3 x 2); phones keep the big card + list */
-.cs-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 22px; }
+.cs-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 18px; }
 .pt-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
 .pt-card .pt-img { border-radius: 0; aspect-ratio: 16 / 10; }
 .pt-card .pt-body { padding: 14px 16px 16px; gap: 7px; flex: 1 1 auto; }
@@ -1608,3 +1608,17 @@ html[data-theme="dark"] .filter.active { background: var(--orange); color: #fff;
   .role { padding: 14px 18px; }
   .role-list { gap: 10px; }
 }
+
+/* home topic sections: four compact cards in one row (tablet: 2 x 2, phone: big card + list) */
+@media (min-width: 1001px) {
+  .cs-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .cs-grid .pt-card .pt-img { aspect-ratio: 16 / 10; }
+  .cs-grid .pt-card .pt-body { padding: 10px 12px 12px; gap: 4px; }
+  .cs-grid .pt-card h3 { font-size: .93rem; line-height: 1.4; -webkit-line-clamp: 3; }
+  .cs-grid .pt-card .pt-cat { font-size: .7rem; }
+  .cs-grid .pt-card .pt-meta { font-size: .76rem; }
+}
+
+/* headline weight: bold (700) like a news site, instead of extra-heavy */
+h1, h2, h3, h4, .pt h3, .nc h3, .fx h3, .sc h3, .mr-t, .mr2-t, .list-h, .sec-head h2 { font-weight: 700; }
+.pt-lead h3 { font-weight: 700; }

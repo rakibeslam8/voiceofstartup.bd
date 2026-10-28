@@ -324,10 +324,10 @@
     const { seen } = homeSets();
     const secs = C.categories.map((c) => {
       const all = POSTS.filter((p) => p.cat === c.id);
-      if (all.length < 5) return null;
+      if (all.length < 4) return null;
       const fresh = all.filter((p) => !seen.has(p.slug));
       if (fresh.length < 2) return null;                       // skip a topic whose stories are all shown above
-      const n = all.length >= 6 ? 6 : 3;                       // a full 3 x 2 block, or one tidy row of three
+      const n = 4;                                              // one row of four cards
       const arr = fresh.concat(all.filter((p) => seen.has(p.slug))).slice(0, n).sort((a, b) => toDate(b.date) - toDate(a.date));
       return { c, arr };
     }).filter(Boolean).slice(0, 6);
