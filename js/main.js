@@ -327,7 +327,7 @@
       if (all.length < 4) return null;
       const fresh = all.filter((p) => !seen.has(p.slug));
       if (fresh.length < 2) return null;                       // skip a topic whose stories are all shown above
-      const n = 4;                                              // one row of four cards
+      const n = all.length >= 8 ? 8 : 4;                         // two rows of four cards (one row when a topic has fewer stories)
       const arr = fresh.concat(all.filter((p) => seen.has(p.slug))).slice(0, n).sort((a, b) => toDate(b.date) - toDate(a.date));
       return { c, arr };
     }).filter(Boolean).slice(0, 6);

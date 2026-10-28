@@ -1,3 +1,7 @@
+@font-face { font-family: "VOSB Digits"; font-weight: 400; font-style: normal; font-display: swap; src: url("/assets/fonts/bn-digits-400.woff2") format("woff2"); unicode-range: U+09E6-09EF; }
+@font-face { font-family: "VOSB Digits"; font-weight: 500; font-style: normal; font-display: swap; src: url("/assets/fonts/bn-digits-500.woff2") format("woff2"); unicode-range: U+09E6-09EF; }
+@font-face { font-family: "VOSB Digits"; font-weight: 600; font-style: normal; font-display: swap; src: url("/assets/fonts/bn-digits-600.woff2") format("woff2"); unicode-range: U+09E6-09EF; }
+@font-face { font-family: "VOSB Digits"; font-weight: 700; font-style: normal; font-display: swap; src: url("/assets/fonts/bn-digits-700.woff2") format("woff2"); unicode-range: U+09E6-09EF; }
 /* Voice of Startup Bangladesh — colors taken from logo, banner and poster */
 :root {
   --orange: #ff7522;
@@ -1755,3 +1759,47 @@ body:has(.page-hero) main::before { display: none; }
 @media (max-width: 760px) { main::before { width: 340px; height: 340px; top: -110px; right: -120px; } .page-hero::after { width: 320px; height: 320px; right: -130px; top: -150px; } }
 html[data-theme="dark"] main::before, html[data-theme="dark"] .page-hero::after { opacity: .45; }
 html[data-theme="dark"] .page-hero { background: var(--card); }
+
+/* ===== v3 ===== */
+/* Bangla digit 1 (১) was drawn as a tiny hook by Hind Siliguri at regular weights: use Noto Sans Bengali digits everywhere */
+:root {
+  --font-body: "VOSB Digits", "Source Sans 3", "Hind Siliguri", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.prose, .prose p, .prose li, .prose blockquote, .prose td, .prose th { font-family: "VOSB Digits", "Inter", "Hind Siliguri", system-ui, -apple-system, "Segoe UI", sans-serif; }
+
+/* logo never gets squeezed or cropped */
+.brand { flex: none; }
+.brand img { max-width: none; object-fit: contain; }
+
+/* news / topic listing: 4 cards per row on desktop, 3 on tablet */
+@media (min-width: 1001px) {
+  #news-list.post-grid, .related-grid.post-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px 16px; }
+  #news-list .nc h3, .related-grid .nc h3 { font-size: .97rem; line-height: 1.42; }
+  #news-list .nc p, .related-grid .nc p { font-size: .84rem; line-height: 1.55; }
+  #news-list .nc-cat, .related-grid .nc-cat { font-size: .72rem; }
+  #news-list .nc-date, .related-grid .nc-date { font-size: .76rem; }
+  #news-list .nc-body, .related-grid .nc-body { padding: 10px 12px 12px; }
+}
+@media (min-width: 761px) and (max-width: 1000px) { #news-list.post-grid, .related-grid.post-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 14px; } #news-list .nc h3 { font-size: .95rem; } }
+
+/* home topic sections: 8 cards = 2 rows x 4 on desktop; fewer on smaller screens */
+@media (min-width: 641px) and (max-width: 1000px) { .cs-grid > .pt-card:nth-child(n+7) { display: none; } }
+@media (max-width: 640px) { .cs-grid > .pt-card:nth-child(n+6) { display: none; } }
+@media (min-width: 1001px) { .cs-grid { row-gap: 18px; } }
+
+/* ===== phone top bar: masthead title with accent rules, date + socials on a hairline row ===== */
+@media (max-width: 760px) {
+  .topbar { background: linear-gradient(180deg, #2a2526, #1d1a1b); border-bottom: 2px solid var(--orange); }
+  .topbar .container { grid-template-columns: minmax(0, 1fr) auto; column-gap: 0; row-gap: 0; padding-block: 0; }
+  .tb-brand { grid-column: 1 / -1; grid-row: 1; display: flex; align-items: center; justify-content: center; gap: 9px; font-size: .8rem; letter-spacing: .1em; padding: 8px 0 7px; }
+  .tb-brand::before, .tb-brand::after { content: ""; flex: 1 1 0; min-width: 0; max-width: 46px; height: 1px; }
+  .tb-brand::before { background: linear-gradient(90deg, transparent, var(--orange)); }
+  .tb-brand::after { background: linear-gradient(270deg, transparent, var(--orange)); }
+  .topbar .date { grid-column: 1; grid-row: 2; font-size: .7rem; font-weight: 500; letter-spacing: .01em; color: #d8d0c4; padding-block: 3px; border-top: 1px solid rgba(255, 255, 255, .13); display: flex; align-items: center; gap: 7px; }
+  .topbar .date::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--orange); flex: none; }
+  .tb-soc { grid-column: 2; grid-row: 2; gap: 3px; border-top: 1px solid rgba(255, 255, 255, .13); padding-block: 3px; }
+  .tb-soc a { width: 24px; height: 24px; background: rgba(255, 255, 255, .08); }
+  .tb-soc svg { width: 12px; height: 12px; }
+}
+@media (max-width: 340px) { .tb-brand { font-size: .72rem; letter-spacing: .06em; } }
+@media (max-width: 760px) { .topbar .date, .tb-soc { align-self: stretch; } .tb-soc { align-items: center; } }
