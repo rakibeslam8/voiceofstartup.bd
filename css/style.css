@@ -1473,3 +1473,50 @@ html[data-theme="dark"] .filter.active { background: var(--orange); color: #fff;
   .month-sel select, #month-sel { padding: 6px 11px; font-size: .82rem; }
   .month-sel > span { font-size: .8rem; }
 }
+
+/* =====================================================================
+   Phones: compact sizes on the other pages too (contact, careers, about, articles)
+   ===================================================================== */
+@media (max-width: 640px) {
+  .section { padding: 34px 0; }
+  .page-hero { padding: 24px 0 20px; }
+  .page-hero h1 { font-size: 1.6rem; }
+  .page-hero p { font-size: .95rem; }
+  .btn { padding: 10px 20px; font-size: .95rem; }
+
+  /* contact */
+  .mail-grid { gap: 12px; }
+  .mail-card { padding: 16px 16px 14px; gap: 3px; border-radius: 14px; box-shadow: none; }
+  .mc-ic { width: 38px; height: 38px; border-radius: 11px; font-size: 1.15rem; margin-bottom: 4px; }
+  .mail-card h3 { font-size: 1rem; }
+  .mail-card p { font-size: .86rem; }
+  .mail-card .addr { margin-top: 4px; font-size: .9rem; }
+  .mc-go { margin-top: 4px; font-size: .85rem; }
+
+  /* careers */
+  .role-list { gap: 10px; }
+  .role { padding: 14px 16px; gap: 10px; border-radius: 14px; }
+  .role h3 { font-size: 1rem; }
+  .role .btn { width: auto; padding: 8px 18px; font-size: .86rem; box-shadow: none; }
+
+  /* about */
+  .what-grid { gap: 12px; }
+  .what-card { padding: 16px; border-radius: 14px; box-shadow: none; }
+  .what-card .ic { width: 40px; height: 40px; border-radius: 11px; font-size: 1.2rem; margin-bottom: 10px; }
+  .what-card h3 { font-size: 1rem; }
+  .what-card p { font-size: .88rem; }
+  .who-chip { padding: 6px 12px; font-size: .84rem; gap: 6px; box-shadow: none; }
+
+  /* article */
+  .share-bar { padding: 14px; margin-top: 22px; }
+  .share-btns { gap: 6px; }
+  .share-btn { padding: 7px 10px; font-size: .82rem; gap: 6px; }
+  .share-btn svg { width: 16px; height: 16px; }
+}
+@media (max-width: 640px) {
+  .newsletter { gap: 8px; margin-top: 14px; }
+  .newsletter input { padding: 10px 16px; font-size: 1rem; }
+  .newsletter .btn { padding: 9px 18px; font-size: .92rem; }
+  .faq-item summary { padding: 11px 0; font-size: .95rem; }
+  .faq-item p { font-size: .92rem; padding-bottom: 11px; }
+}
