@@ -14,8 +14,8 @@
   --line: #e7e7e7;
   --radius: 18px;
   --shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
-  --font-body: "Hind Siliguri", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-head: "Baloo Da 2", "Hind Siliguri", system-ui, sans-serif;
+  --font-body: "Inter", "Hind Siliguri", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-head: "Inter", "Baloo Da 2", "Hind Siliguri", system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
