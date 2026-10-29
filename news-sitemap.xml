@@ -110,48 +110,4 @@
       <news:title>Watching YouTube, dragon farming on the roof, annual income of lakhs of rupees</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/abu-manzoor-saif-is-a-successful-entrepreneur-who-left-the-government</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-27T16:21:00.000Z</news:publication_date>
-      <news:title>সরকারি চাকরি ছেড়ে সফল উদ্যোক্তা আবু মঞ্জুর সাঈফ</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/abu-manzoor-saif-is-a-successful-entrepreneur-who-left-the-government</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-27T16:21:00.000Z</news:publication_date>
-      <news:title>Abu Manzoor Saif is a successful entrepreneur who left the government job</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/successful-startup-crack-platoon-in-charging-station-initiative</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-27T16:12:00.000Z</news:publication_date>
-      <news:title>চার্জিং স্টেশন তৈরির উদ্যোগে সফল স্টার্টআপ ‘ক্র্যাক প্লাটুন’</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/successful-startup-crack-platoon-in-charging-station-initiative</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-27T16:12:00.000Z</news:publication_date>
-      <news:title>Successful startup &#39;Crack Platoon&#39; in charging station initiative</news:title>
-    </news:news>
-  </url>
 </urlset>
