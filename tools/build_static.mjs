@@ -61,6 +61,8 @@ async function fetchPosts() {
 
 /* ---- helpers ---- */
 const trim = (s) => String(s || "").trim();
+/* keep <title> / meta description inside what Google shows (about 60 / 155 characters) */
+const clip = (s, n) => { const t = String(s || "").replace(/\s+/g, " ").trim(); if (t.length <= n) return t; const cut = t.slice(0, n - 1); const sp = cut.lastIndexOf(" "); return (sp > n * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s,;:\-–—]+$/, "") + "…"; };
 function view(r, lang) {
   const other = lang === "bn" ? "en" : "bn";
   const title = trim(r["title_" + lang]) || trim(r["title_" + other]);
@@ -89,8 +91,8 @@ function articlePage(r, lang, all) {
   const c = catOf(r.category);
   const url = urlOf(r.slug, lang);
   const img = r.image_url || `${ORIGIN}/assets/og-image.png`;
-  const pageTitle = `${v.title} | Voice of Startup Bangladesh`;
-  const desc = v.excerpt;
+  const pageTitle = v.title.length <= 38 ? `${v.title} | Voice of Startup Bangladesh` : `${clip(v.title, 56)} | VOSB`;
+  const desc = clip(v.excerpt, 158);
   const bnOk = true, enOk = hasLang(r, "en");
   const alternates = [
     `<link rel="alternate" hreflang="bn" href="${urlOf(r.slug, "bn")}">`,
@@ -105,7 +107,7 @@ function articlePage(r, lang, all) {
       articleSection: c.en, isAccessibleForFree: true,
       keywords: [c.en, c.bn, "Bangladesh startup", "startup news Bangladesh", "Voice of Startup Bangladesh"].join(", "),
       author: r.author && r.author !== "VOSB Desk" ? { "@type": "Person", name: r.author } : { "@type": "Organization", name: C.site.name, url: ORIGIN },
-      publisher: { "@type": "Organization", name: C.site.name, url: ORIGIN, logo: { "@type": "ImageObject", url: `${ORIGIN}/assets/logo.png` }, sameAs },
+      publisher: { "@type": "Organization", name: C.site.name, url: ORIGIN, logo: { "@type": "ImageObject", url: `${ORIGIN}/assets/icon-512.png`, width: 512, height: 512 }, sameAs },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
       url,
     },
@@ -204,7 +206,7 @@ function articlePage(r, lang, all) {
 }
 
 /* ---- sitemap + feeds ---- */
-const STATIC = ["/", "/news", ...cats.map((c) => "/" + c.slug), "/about", "/contact", "/careers", "/privacy-policy", "/terms-of-service", "/cookie-policy", "/refund-policy", "/usage-policy"];
+const STATIC = ["/", "/news", ...cats.map((c) => "/" + c.slug), "/about", "/contact", "/careers", "/privacy-policy", "/terms-of-service", "/cookie-policy", "/refund-policy", "/usage-policy", "/editorial-policy"];
 const day = (iso) => String(iso).slice(0, 10);
 function sitemap(posts) {
   const newest = (list) => (list.length ? day(list.reduce((m, p) => ((p.updated_at || p.publish_at) > m ? (p.updated_at || p.publish_at) : m), list[0].updated_at || list[0].publish_at)) : null);

@@ -110,6 +110,11 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://www.voiceofstartup.bd/editorial-policy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/what-we-do</loc>
     <lastmod>2026-10-28</lastmod>
     <changefreq>weekly</changefreq>

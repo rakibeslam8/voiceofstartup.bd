@@ -41,6 +41,7 @@
     { href: "/cookie-policy",    bn: "কুকি নীতি", en: "Cookie Policy" },
     { href: "/refund-policy",    bn: "রিফান্ড নীতি", en: "Refund Policy" },
     { href: "/usage-policy",     bn: "ব্যবহার নীতি", en: "Usage Policy" },
+    { href: "/editorial-policy", bn: "সম্পাদকীয় নীতি", en: "Editorial Policy" },
   ];
 
   // Show clean URLs (/about instead of /about.html) if someone opens an old .html link

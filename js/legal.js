@@ -196,5 +196,39 @@
           p: [L("এই নীতি লঙ্ঘিত হলে আমরা সতর্ক করতে, কনটেন্ট সরাতে, অ্যাক্সেস বন্ধ করতে বা প্রয়োজনে আইনি ব্যবস্থা নিতে পারি।", "If this policy is breached we may warn you, remove content, block access or, where necessary, take legal action.")] },
       ],
     },
+    /* ------------------------------------------------------------ */
+    editorial: {
+      title: L("সম্পাদকীয় নীতি", "Editorial Policy"),
+      intro: L(
+        "Voice of Startup Bangladesh (“VOSB”) বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগ নিয়ে সংবাদ প্রকাশ করে। এই পাতায় ব্যাখ্যা করা হয়েছে আমরা কীভাবে তথ্য সংগ্রহ, যাচাই, প্রকাশ ও সংশোধন করি।",
+        "Voice of Startup Bangladesh (“VOSB”) publishes news on startups, business and investment in Bangladesh. This page explains how we gather, verify, publish and correct information."
+      ),
+      sections: [
+        { h: L("আমাদের লক্ষ্য", "Our mission"),
+          p: [L("উদ্যোক্তা, বিনিয়োগকারী ও নীতিনির্ধারকদের জন্য নির্ভরযোগ্য, সহজবোধ্য ও সময়োপযোগী তথ্য দেওয়া — বাংলা ও ইংরেজি, দুই ভাষাতেই।", "To give entrepreneurs, investors and policymakers reliable, clear and timely information — in both Bangla and English.")] },
+        { h: L("তথ্যের উৎস", "Sources"),
+          p: [L("আমরা যথাসম্ভব প্রাথমিক ও অফিসিয়াল উৎসকে অগ্রাধিকার দিই। প্রতিবেদনে প্রয়োজনে উৎসের নাম উল্লেখ করা হয়।", "We prioritise primary and official sources wherever possible and name the source in the report where appropriate.")],
+          ul: [
+            L("সরকারি ও নিয়ন্ত্রক সংস্থা: BIDA, BEPZA, BEZA, BSCIC, ICT বিভাগ, বাংলাদেশ হাই-টেক পার্ক কর্তৃপক্ষ, PPP অথরিটি ইত্যাদির প্রকাশিত বিজ্ঞপ্তি ও নীতিমালা।", "Government and regulators: published notices and policies of BIDA, BEPZA, BEZA, BSCIC, the ICT Division, the Bangladesh Hi-Tech Park Authority, the PPP Authority and similar bodies."),
+            L("কোম্পানি ও স্টার্টআপের অফিসিয়াল বিবৃতি, প্রেস বিজ্ঞপ্তি ও ঘোষণা।", "Official statements, press releases and announcements from companies and startups."),
+            L("প্রতিষ্ঠাতা, বিনিয়োগকারী ও বিশেষজ্ঞদের সাক্ষাৎকার ও সরাসরি বক্তব্য।", "Interviews and direct statements from founders, investors and experts."),
+            L("আমাদের পাঠকদের পাঠানো নিউজ টিপস — যা প্রকাশের আগে যাচাই করা হয়।", "News tips sent by our readers — which are checked before publication."),
+          ] },
+        { h: L("যাচাই প্রক্রিয়া", "Verification"),
+          p: [L("সংখ্যা, তারিখ, নাম ও পদবি প্রকাশের আগে উৎসের সঙ্গে মিলিয়ে দেখা হয়। একটি মাত্র অযাচাইকৃত সূত্রের ওপর ভিত্তি করে আমরা তথ্যকে নিশ্চিত হিসেবে প্রকাশ করি না; অনিশ্চিত তথ্য হলে তা স্পষ্টভাবে উল্লেখ করা হয়।", "Figures, dates, names and titles are checked against the source before publication. We do not present a claim as established on the basis of a single unverified source; where something is uncertain we say so.")] },
+        { h: L("লেখক ও বাইলাইন", "Authorship and bylines"),
+          p: [L("সম্পাদকীয় টিমের তৈরি প্রতিবেদন “VOSB Desk” নামে প্রকাশিত হয়। অতিথি লেখকের লেখায় লেখকের নাম থাকে এবং মতামতমূলক লেখা স্পষ্টভাবে “মতামত” হিসেবে চিহ্নিত থাকে; সেগুলো লেখকের নিজস্ব মত, VOSB-এর অবস্থান নয়।", "Reports produced by the editorial team are published under “VOSB Desk”. Guest contributions carry the author’s name, and opinion pieces are clearly labelled as such; they reflect the author’s views, not VOSB’s position.")] },
+        { h: L("বাংলা ও ইংরেজি সংস্করণ", "Bangla and English versions"),
+          p: [L("আমাদের মূল ভাষা বাংলা। ইংরেজি সংস্করণ স্বয়ংক্রিয় অনুবাদের মাধ্যমে তৈরি হতে পারে এবং তাতে ছোটখাটো অসঙ্গতি থাকতে পারে। কোনো পার্থক্য থাকলে বাংলা সংস্করণই চূড়ান্ত বলে গণ্য হবে।", "Our primary language is Bangla. English versions may be produced with automated translation and may contain minor inconsistencies. Where the two differ, the Bangla version prevails.")] },
+        { h: L("বিজ্ঞাপন ও স্পনসরড কনটেন্ট", "Advertising and sponsored content"),
+          p: [L("বিজ্ঞাপন ও স্পনসরড কনটেন্ট আমাদের সংবাদ থেকে আলাদা এবং স্পষ্টভাবে চিহ্নিত থাকে। বিজ্ঞাপনদাতা আমাদের সম্পাদকীয় সিদ্ধান্ত প্রভাবিত করতে পারেন না।", "Advertising and sponsored content are kept separate from our news and clearly labelled. Advertisers cannot influence our editorial decisions.")] },
+        { h: L("বিনিয়োগ বা আইনি পরামর্শ নয়", "Not investment or legal advice"),
+          p: [L("আমাদের কনটেন্ট তথ্যমূলক। এটি বিনিয়োগ, আইনি বা আর্থিক পরামর্শ নয়। সিদ্ধান্ত নেওয়ার আগে অফিসিয়াল উৎস দেখুন ও পেশাদার পরামর্শ নিন।", "Our content is informational. It is not investment, legal or financial advice. Check official sources and take professional advice before making decisions.")] },
+        { h: L("ভুল সংশোধন", "Corrections"),
+          p: [L("ভুল ধরা পড়লে আমরা দ্রুত সংশোধন করি এবং গুরুত্বপূর্ণ সংশোধনের ক্ষেত্রে লেখাটিতে তা উল্লেখ করি। ভুল তথ্য, ছবি বা নাম চোখে পড়লে লেখার লিংকসহ editor@voiceofstartup.bd ঠিকানায় জানান।", "When we find an error we correct it promptly and, for material corrections, note the change in the article. If you spot a wrong fact, image or name, email editor@voiceofstartup.bd with the link to the article.")] },
+        { h: L("মালিকানা ও যোগাযোগ", "Ownership and contact"),
+          p: [L("VOSB একটি স্বাধীন বাংলাদেশি মিডিয়া উদ্যোগ। সম্পাদকীয় বিষয়ে: editor@voiceofstartup.bd; সাধারণ যোগাযোগ: " + EMAIL + "।", "VOSB is an independent Bangladeshi media initiative. Editorial matters: editor@voiceofstartup.bd; general enquiries: " + EMAIL + ".")] },
+      ],
+    },
   };
 })();

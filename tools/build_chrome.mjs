@@ -38,6 +38,7 @@ const NAV = [
 const LEGAL = [
   ["/privacy-policy", "গোপনীয়তা নীতি", "Privacy Policy"], ["/terms-of-service", "ব্যবহারের শর্তাবলি", "Terms of Service"],
   ["/cookie-policy", "কুকি নীতি", "Cookie Policy"], ["/refund-policy", "রিফান্ড নীতি", "Refund Policy"], ["/usage-policy", "ব্যবহার নীতি", "Usage Policy"],
+  ["/editorial-policy", "সম্পাদকীয় নীতি", "Editorial Policy"],
 ];
 const LABEL = { facebook: "Facebook", instagram: "Instagram", linkedin: "LinkedIn", youtube: "YouTube", x: "X (Twitter)" };
 const PAGE_NAME = { "/news": ["সংবাদ", "News"], "/about": ["আমাদের সম্পর্কে", "About"], "/contact": ["যোগাযোগ", "Contact"], "/careers": ["ক্যারিয়ার", "Careers"] };
@@ -133,6 +134,8 @@ function processPage(file, { root }) {
       s = s.replace(/(<div class="filters-wrap")/, `<h2 class="list-h" data-bn="${esc(bn)}" data-en="${esc(e)}">${esc(bn)}</h2>\n      $1`);
     }
   }
+  if (!/application\/rss\+xml/.test(s) && !/\/(admin|article)\.html$/.test(file) && s.includes("</head>"))
+    s = s.replace("</head>", `  <link rel="alternate" type="application/rss+xml" title="Voice of Startup Bangladesh" href="/feed.xml">\n</head>`);
   if (s !== before) { fs.writeFileSync(file, s); console.log("updated", path.relative(ROOT, file)); }
 }
 
