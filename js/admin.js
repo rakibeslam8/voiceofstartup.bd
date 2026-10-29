@@ -415,7 +415,7 @@
 
   async function viewDashboard(view) {
     view.innerHTML = `<div class="page-h"><h1>Dashboard</h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div><div class="card"><p class="muted">Loading…</p></div>`;
-    let site = null, subs = null, subsNew = null;
+    let site = null, subs = null, subsNew = null, app = null;
     /* one exact server-side count (update-6 SQL); falls back to two plain counts if that update isn't installed yet */
     const loadSubs = async () => {
       try {
@@ -430,7 +430,8 @@
       return null;
     };
     await Promise.all([loadPosts(true), loadDaily(), loadSite(7).then((x) => { site = x; }).catch(() => {}),
-      loadSubs().then((x) => { if (x) { subs = x.active; subsNew = x.new7; } })]);
+      loadSubs().then((x) => { if (x) { subs = x.active; subsNew = x.new7; } }),
+      sb.rpc("admin_app_stats").then((r) => { if (!r.error && r.data && !Array.isArray(r.data)) app = r.data; }).catch(() => {})]);
     if (!view.isConnected) return;   // user navigated away while loading
     const total = posts.reduce((a, p) => a + Number(p.views || 0), 0);
     const shares = posts.reduce((a, p) => a + Number(p.shares || 0), 0);
@@ -467,6 +468,16 @@
         ${site ? `<div class="tile k"><small>Visitors · 30 days</small><b>${site.exact && site.exact.visitors_30d === false ? "≈ " : ""}${fmtN(site.totals.visitors_30d)}</b></div>` : ""}
         ${subs !== null ? `<a class="tile r" href="#/subscribers" style="text-decoration:none;color:inherit"><small>New subscribers · 7 days</small><b>${fmtN(subsNew || 0)}</b></a>` : ""}
       </div>
+      ${app ? `<h2 class="sec-h">App installs <span>Install App button · people who added the app</span></h2>
+      <div class="tiles">
+        <div class="tile g"><small>Total installs</small><b>${fmtN(app.installs_total)}</b></div>
+        <div class="tile"><small>Installs today</small><b>${fmtN(app.installs_today)}</b></div>
+        <div class="tile k"><small>Installs · 7 days</small><b>${fmtN(app.installs_7d)}</b></div>
+        <div class="tile r"><small>Installs · 30 days</small><b>${fmtN(app.installs_30d)}</b></div>
+        <div class="tile g"><small>Using the app · 30 days</small><b>${fmtN(app.active_30d)}</b></div>
+        <div class="tile"><small>Install button taps</small><b>${fmtN(app.taps_total)}</b></div>
+      </div>
+      <p class="muted" style="font-size:.8rem;margin:-4px 0 14px">${(app.platforms || []).length ? "By device: " + app.platforms.map((x) => `${esc(({ android: "Android", ios: "iPhone/iPad", windows: "Windows", mac: "Mac", linux: "Linux", other: "Other" })[x.platform] || x.platform)} ${fmtN(x.n)}`).join(" · ") + ". " : ""}Chrome/Edge/Android installs are counted exactly when the app is added. iPhone installs are counted the first time the home-screen app is opened. Counts exclude bots and your own admin browser.</p>` : ""}
       <div class="dash-cols">
         <div class="card">
           <div class="chart-h"><h2>Daily reads</h2>

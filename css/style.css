@@ -1680,8 +1680,7 @@ html:not([data-theme="dark"]) .ticker { background: var(--card); border-bottom-c
   .filters { gap: 6px; padding-block: 0 4px; }
   .filter { padding: 3px 11px; font-size: .78rem; gap: 5px; border-width: 1px; line-height: 1.35; }
   .filter .fi { font-size: .95em; }
-  .filter.active, .filter b { font-size: inherit; }
-  .filters-wrap { margin-bottom: 6px; }
+  .filter b { font-size: inherit; }
   .seg { padding: 2px; border-width: 1px; }
   .seg button { padding: 4px 12px; font-size: .78rem; }
   .month-sel select { padding: 4px 10px; font-size: .78rem; border-width: 1px; }
@@ -1838,3 +1837,34 @@ html[data-theme="dark"] .page-hero { background: var(--card); }
 .ins-x:hover { background: var(--orange-soft); }
 @media (min-width: 761px) and (max-width: 1000px) { .install-btn .ib-full { display: none; } .install-btn .ib-short { display: inline; } }
 @media (max-width: 340px) { .install-btn .ib-short { display: none; } .install-btn { padding: 0 6px; } }
+
+/* top bar bottom line = same tri-colour line as the admin panel navbar */
+.topbar { border-bottom: 0; }
+.topbar::after { content: ""; display: block; height: 3px; background: linear-gradient(90deg, var(--orange) 0 50%, var(--green) 50% 80%, var(--red) 80% 100%); }
+
+/* ===== tablet (761-1000px): two-row masthead like the phone, but roomier; bigger navigation ===== */
+@media (min-width: 761px) and (max-width: 1000px) {
+  .topbar .container { grid-template-columns: minmax(0, 1fr) auto; column-gap: 0; row-gap: 0; padding-block: 0; }
+  .tb-brand { grid-column: 1 / -1; grid-row: 1; justify-self: center; font-size: 1.5rem; letter-spacing: .06em; padding: 14px 0 12px; }
+  .topbar .date { grid-column: 1; grid-row: 2; display: flex; align-items: center; gap: 8px; font-size: .85rem; font-weight: 500; letter-spacing: .01em; color: #d8d0c4; padding-block: 6px; border-top: 1px solid rgba(255, 255, 255, .13); }
+  .topbar .date::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--orange); flex: none; }
+  .tb-soc { grid-column: 2; grid-row: 2; gap: 4px; padding-block: 5px; border-top: 1px solid rgba(255, 255, 255, .13); align-items: center; }
+  .tb-soc a { width: 30px; height: 30px; background: rgba(255, 255, 255, .08); }
+  .tb-soc svg { width: 15px; height: 15px; }
+  .install-btn { height: 28px; margin-right: 8px; }
+  .install-btn .ib-full { display: inline; }
+  .install-btn .ib-short { display: none; }
+  .tb-soc a[data-s="x"], .tb-soc a[data-s="instagram"] { display: grid; }
+}
+@media (min-width: 761px) and (max-width: 1100px) {
+  .nav a, .nav-dd summary { font-size: .98rem; padding: 9px 11px; }
+}
+.filters { scroll-padding-inline: 16px; }
+@media (min-width: 761px) and (max-width: 1000px) {
+  .topbar .date { justify-self: stretch; max-width: none; }
+}
+@media (min-width: 761px) and (max-width: 1000px) {
+  .tb-brand { border-bottom: 1px solid rgba(255, 255, 255, .13); }
+  .topbar .date, .tb-soc { border-top: 0; align-self: center; }
+  .topbar .container { padding-block: 0 2px; }
+}

@@ -147,6 +147,24 @@
     } catch (e) { return Promise.resolve(); }
   }
 
+  /* ---------- app installs (Install App button / home-screen app) ----------
+     events: "tap" (Install button pressed), "installed" (browser confirmed the install), "launch" (opened as an installed app). */
+  function trackApp(event) {
+    try {
+      const kind = visitKind();
+      if (!configured || !kind) return Promise.resolve();
+      let visitor = "";
+      try { visitor = localStorage.getItem("vosb-vid") || ""; if (!visitor) { visitor = rid(); localStorage.setItem("vosb-vid", visitor); } } catch (e) { visitor = rid(); }
+      if (event === "launch") {
+        try { const t = Number(localStorage.getItem("vosb-app-launch") || 0); if (Date.now() - t < 12 * 3600 * 1000) return Promise.resolve(); localStorage.setItem("vosb-app-launch", String(Date.now())); } catch (e) {}
+      }
+      const ua = navigator.userAgent || "";
+      const platform = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) ? "ios" : /Android/i.test(ua) ? "android" : /Windows/i.test(ua) ? "windows" : /Mac/i.test(ua) ? "mac" : /Linux|CrOS/i.test(ua) ? "linux" : "other";
+      const device = /iPad|Tablet/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua)) ? "tablet" : /Mobi|iPhone|iPod|Android/i.test(ua) ? "mobile" : "desktop";
+      return rpc("track_app_event", { p_event: event, p_visitor: visitor, p_platform: platform, p_device: device, p_kind: kind });
+    } catch (e) { return Promise.resolve(); }
+  }
+
   /* ---------- ads ---------- */
   const ADS_CACHE = "vosb-ads-cache";
   function cachedAds() { try { const c = JSON.parse(sessionStorage.getItem(ADS_CACHE) || "null"); return c && Array.isArray(c.a) ? c.a : []; } catch (e) { return []; } }
@@ -183,5 +201,5 @@
     return res.json();
   }
 
-  window.VOSB_API = { configured, normalize, listPosts, searchPosts, getPost, trackView, trackShare, trackVisit, listAds, cachedAds, adImpression, adClick, subscribe, unsubscribe };
+  window.VOSB_API = { configured, normalize, listPosts, searchPosts, getPost, trackView, trackShare, trackVisit, trackApp, listAds, cachedAds, adImpression, adClick, subscribe, unsubscribe };
 })();

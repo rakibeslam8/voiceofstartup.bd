@@ -32,7 +32,7 @@
      iPhone / Safari / others: a short how-to dialog, because those browsers have no install prompt. */
   const standalone = () => { try { return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true; } catch (e) { return false; } };
   const PWA = { done: standalone() };
-  window.addEventListener("appinstalled", () => { PWA.done = true; window.__vosbPrompt = null; $$(".install-btn").forEach((b) => b.remove()); });
+  window.addEventListener("appinstalled", () => { try { API && API.trackApp && API.trackApp("installed"); } catch (e) {} PWA.done = true; window.__vosbPrompt = null; $$(".install-btn").forEach((b) => b.remove()); });
   const installBtn = () => PWA.done ? "" : `<button type="button" class="install-btn" data-act="install" aria-label="${T("অ্যাপ ইনস্টল করুন", "Install App")}"><span class="ib-full">${T("অ্যাপ ইনস্টল", "Install App")}</span><span class="ib-short">${T("ইনস্টল", "Install")}</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v8M8.5 12.5l3.5 3.5 3.5-3.5"/></svg></button>`;
   function installHelp() {
     const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -58,6 +58,7 @@
     const b = e.target.closest('[data-act="install"]');
     if (!b) return;
     e.preventDefault();
+    try { API && API.trackApp && API.trackApp("tap"); } catch (err) {}
     const dp = window.__vosbPrompt;
     if (dp) {
       window.__vosbPrompt = null;
@@ -412,7 +413,7 @@
       };
       fbox.onscroll = sync;
       const on = fbox.querySelector(".filter.active");
-      if (on && fbox.scrollWidth > fbox.clientWidth) fbox.scrollLeft = Math.max(0, on.offsetLeft - (fbox.clientWidth - on.offsetWidth) / 2);
+      if (on && fbox.scrollWidth > fbox.clientWidth) fbox.scrollLeft = (on.offsetLeft + on.offsetWidth <= fbox.clientWidth - 8) ? 0 : Math.max(0, on.offsetLeft - (fbox.clientWidth - on.offsetWidth) / 2);
       sync();
       if (window.ResizeObserver && !fbox._ro) { fbox._ro = new ResizeObserver(sync); fbox._ro.observe(fbox); }
       // desktop helpers (added once): arrow buttons, click-and-drag, mouse wheel
@@ -1051,5 +1052,6 @@
     loadPosts();
     loadAds();
     if (API && API.trackVisit) API.trackVisit(lang);
+    if (PWA.done && API && API.trackApp) API.trackApp("launch");
   });
 })();
