@@ -2,6 +2,7 @@
  * Plays for every visitor on the first page of a visit (once per browser tab / app launch).
  * Skipped for search-engine bots, link-preview bots and speed-test tools so Google always sees the plain page.
  * Preview anywhere: add ?splash=1 to a page address (?splash=hold keeps it on screen). */
+(function () { try { window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); window.__vosbPrompt = e; }); } catch (e) {} })();
 (function () {
   try {
     var d = document, w = window, u = navigator.userAgent || '', q = location.search;
@@ -12,6 +13,6 @@
       try { if (sessionStorage.getItem('vosb-splash')) return; sessionStorage.setItem('vosb-splash', '1'); } catch (e) {}
     }
     w.__vosbSplash = { hold: /[?&]splash=hold(&|$)/.test(q), force: force };
-    d.write('<script src="/js/splash-art.js?v=20261029a"><\/script>');
+    d.write('<script src="/js/splash-art.js?v=20261029b"><\/script>');
   } catch (e) {}
 })();

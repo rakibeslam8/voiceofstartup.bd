@@ -530,11 +530,11 @@
   }
 
   /* ---------------- posts list ---------------- */
-  function rowHtml(p) {
+  function rowHtml(p, i) {
     const c = catOf(p.category);
     const title = p.title_bn || p.title_en || "(untitled)";
     return `<div class="row" data-id="${p.id}">
-      <div class="th">${p.image_url ? `<img src="${esc(p.image_url)}" alt="" loading="lazy">` : c.icon}</div>
+      <div class="th">${p.image_url ? `<img src="${esc(p.image_url)}" alt="" loading="lazy">` : c.icon}<span class="sn" title="Serial number">${(i | 0) + 1}</span></div>
       <div class="ti"><h3>${esc(title)}</h3>
         <div class="meta">${pillOf(p)}${p.featured ? `<span class="pill top">★ TOP</span>` : ""}<span>${esc(c.en)}</span><span>${esc(fmtDT(p.publish_at))}</span>
           <span>👁 <span class="stat">${fmtN(p.views)}</span></span><span>↗ <span class="stat">${fmtN(p.shares)}</span></span></div></div>
@@ -593,23 +593,29 @@
     view.innerHTML = `<div class="page-h"><h1>Articles</h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div><div class="card"><p class="muted">Loading…</p></div>`;
     await loadPosts(true);
     if (!view.isConnected) return;
-    const f = { q: "", st: "all", cat: "all" };
+    const f = { q: "", st: "all", cat: "all", sort: "new" };
     view.innerHTML = `
       <div class="page-h"><h1>Articles <span class="muted" style="font-size:1rem">(${posts.length})</span></h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div>
       <div class="filters">
         <input class="inp" id="q" type="search" placeholder="Search title…" aria-label="Search">
         <select class="sel" id="st" aria-label="Status"><option value="all">All status</option><option value="live">Live</option><option value="sched">Scheduled</option><option value="draft">Drafts</option></select>
         <select class="sel" id="ct" aria-label="Category"><option value="all">All categories</option>${cats.map((c) => `<option value="${c.id}">${c.icon} ${esc(c.en)}</option>`).join("")}</select>
+        <select class="sel" id="so" aria-label="Sort by"><option value="new">Sort: Newest first</option><option value="old">Sort: Oldest first</option><option value="views">Sort: Most read</option><option value="shares">Sort: Most shared</option></select>
       </div>
       <div class="rows" id="rows"></div>`;
     const draw = () => {
       const q = f.q.toLowerCase();
       const items = posts.filter((p) => (f.st === "all" || stateOf(p) === f.st) && (f.cat === "all" || p.category === f.cat) && (!q || (p.title_bn + " " + p.title_en + " " + p.slug).toLowerCase().includes(q)));
+      if (f.sort === "views") items.sort((a, b) => Number(b.views || 0) - Number(a.views || 0));
+      else if (f.sort === "shares") items.sort((a, b) => Number(b.shares || 0) - Number(a.shares || 0));
+      else if (f.sort === "old") items.sort((a, b) => new Date(a.publish_at) - new Date(b.publish_at));
+      else items.sort((a, b) => new Date(b.publish_at) - new Date(a.publish_at));
       $("#rows").innerHTML = items.length ? items.map(rowHtml).join("") : `<div class="card empty"><b>${posts.length ? "No matching articles" : "No articles yet"}</b>${posts.length ? "Try a different search or filter." : "Click “Write new article” to publish your first one."}</div>`;
     };
     $("#q").oninput = (e) => { f.q = e.target.value; draw(); };
     $("#st").onchange = (e) => { f.st = e.target.value; draw(); };
     $("#ct").onchange = (e) => { f.cat = e.target.value; draw(); };
+    $("#so").onchange = (e) => { f.sort = e.target.value; draw(); };
     draw();
     wireRows($("#rows"));
   }

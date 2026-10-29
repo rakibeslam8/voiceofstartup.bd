@@ -1,10 +1,10 @@
 {
  "name": "Voice of Startup Bangladesh",
  "short_name": "VOSB",
- "description": "Bangladesh startup, business & funding news",
- "start_url": "/",
+ "description": "বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর — Bangladesh startup, business & funding news",
+ "start_url": "/?utm_source=pwa",
  "display": "standalone",
- "background_color": "#ffffff",
+ "background_color": "#faefe0",
  "theme_color": "#ff7522",
  "lang": "bn",
  "icons": [
@@ -40,5 +40,45 @@
   }
  ],
  "id": "/",
- "scope": "/"
+ "scope": "/",
+ "categories": [
+  "news",
+  "business"
+ ],
+ "orientation": "any",
+ "shortcuts": [
+  {
+   "name": "Latest News",
+   "short_name": "News",
+   "url": "/news",
+   "icons": [
+    {
+     "src": "/assets/icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "Funding",
+   "short_name": "Funding",
+   "url": "/funding",
+   "icons": [
+    {
+     "src": "/assets/icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "Founder Stories",
+   "short_name": "Founders",
+   "url": "/founder-stories",
+   "icons": [
+    {
+     "src": "/assets/icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  }
+ ]
 }

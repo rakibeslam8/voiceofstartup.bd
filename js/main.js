@@ -27,6 +27,45 @@
   };
   const LABEL = { facebook: "Facebook", instagram: "Instagram", linkedin: "LinkedIn", youtube: "YouTube", x: "X (Twitter)" };
 
+  /* ---------- Install App (PWA) ----------
+     Chrome / Edge / Android: the real install prompt (captured early in splash.js as window.__vosbPrompt).
+     iPhone / Safari / others: a short how-to dialog, because those browsers have no install prompt. */
+  const standalone = () => { try { return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true; } catch (e) { return false; } };
+  const PWA = { done: standalone() };
+  window.addEventListener("appinstalled", () => { PWA.done = true; window.__vosbPrompt = null; $$(".install-btn").forEach((b) => b.remove()); });
+  const installBtn = () => PWA.done ? "" : `<button type="button" class="install-btn" data-act="install" aria-label="${T("অ্যাপ ইনস্টল করুন", "Install App")}"><span class="ib-full">${T("অ্যাপ ইনস্টল", "Install App")}</span><span class="ib-short">${T("ইনস্টল", "Install")}</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v8M8.5 12.5l3.5 3.5 3.5-3.5"/></svg></button>`;
+  function installHelp() {
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const steps = ios
+      ? [T("Safari-র নিচের <b>Share</b> (⬆︎) বাটনে ট্যাপ করুন।", "Tap the <b>Share</b> (⬆︎) button at the bottom of Safari."), T("<b>Add to Home Screen</b> বেছে নিন।", "Choose <b>Add to Home Screen</b>."), T("<b>Add</b> চাপুন — অ্যাপের আইকন হোম স্ক্রিনে চলে আসবে।", "Tap <b>Add</b> — the app icon appears on your home screen.")]
+      : [T("ব্রাউজারের মেনু (⋮ বা ⋯) খুলুন।", "Open the browser menu (⋮ or ⋯)."), T("<b>Install app</b> / <b>Add to Home screen</b> বেছে নিন।", "Choose <b>Install app</b> or <b>Add to Home screen</b>."), T("সবচেয়ে ভালো কাজ করে Chrome বা Edge-এ।", "Works best in Chrome or Edge.")];
+    const m = document.createElement("div");
+    m.className = "ins-modal";
+    m.innerHTML = `<div class="ins-card" role="dialog" aria-modal="true" aria-label="${T("অ্যাপ ইনস্টল", "Install App")}"><button type="button" class="ins-x" aria-label="${T("বন্ধ করুন", "Close")}">✕</button>
+      <img src="/assets/icon-192.png" width="64" height="64" alt="">
+      <h3>${T("Voice of Startup Bangladesh অ্যাপ", "Voice of Startup Bangladesh app")}</h3>
+      <p>${T("হোম স্ক্রিনে যোগ করে এক ট্যাপে খবর পড়ুন।", "Add it to your home screen and read the news in one tap.")}</p>
+      <ol>${steps.map((x) => `<li>${x}</li>`).join("")}</ol>
+      <button type="button" class="ins-ok">${T("ঠিক আছে", "Got it")}</button></div>`;
+    const close = () => { m.remove(); document.removeEventListener("keydown", esc2); };
+    const esc2 = (e) => { if (e.key === "Escape") close(); };
+    m.addEventListener("click", (e) => { if (e.target === m || e.target.closest(".ins-x,.ins-ok")) close(); });
+    document.addEventListener("keydown", esc2);
+    document.body.appendChild(m);
+    const ok = m.querySelector(".ins-ok"); if (ok) ok.focus();
+  }
+  document.addEventListener("click", async (e) => {
+    const b = e.target.closest('[data-act="install"]');
+    if (!b) return;
+    e.preventDefault();
+    const dp = window.__vosbPrompt;
+    if (dp) {
+      window.__vosbPrompt = null;
+      try { dp.prompt(); await dp.userChoice; } catch (err) {}
+    } else installHelp();
+  });
+  if ("serviceWorker" in navigator) window.addEventListener("load", () => { navigator.serviceWorker.register("/sw.js").catch(() => {}); });
+
   const NAV = [
     { href: "/", bn: "হোম", en: "Home" },
     { href: "/news", bn: "সংবাদ", en: "News" },
@@ -73,7 +112,7 @@
       <div class="topbar"><div class="container">
         <span class="date">${bnDigits(new Date().toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { timeZone: "Asia/Dhaka", weekday: "long", year: "numeric", month: "long", day: "numeric" }))}</span>
         <a class="tb-brand" href="/" aria-label="Voice of Startup Bangladesh">Voice of Startup Bangladesh</a>
-        <span class="tb-soc">${Object.keys(C.social).map((k) => `<a href="${C.social[k]}" target="_blank" rel="noopener" aria-label="${LABEL[k]}">${ICON[k].replace(/fill="[^"]*"/g, "").replace(/<defs>.*<\/defs>/, "")}</a>`).join("")}</span>
+        <span class="tb-soc">${installBtn()}${Object.keys(C.social).map((k) => `<a data-s="${k}" href="${C.social[k]}" target="_blank" rel="noopener" aria-label="${LABEL[k]}">${ICON[k].replace(/fill="[^"]*"/g, "").replace(/<defs>.*<\/defs>/, "")}</a>`).join("")}</span>
       </div></div>
       <header class="site-header"><div class="container">
         <a class="brand" href="/" aria-label="Voice of Startup Bangladesh"><img src="/assets/logo.png" alt="Voice of Startup BD logo"></a>

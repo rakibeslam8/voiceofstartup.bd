@@ -31,11 +31,12 @@ window.VOSB = {
 
   social: {
     facebook:  "https://www.facebook.com/voiceofstartupbd",
-    instagram: "https://www.instagram.com/voiceofstartupbd/",
     linkedin:  "https://www.linkedin.com/company/voiceofstartupbd/",
     youtube:   "https://www.youtube.com/@voiceofstartup-bd/",
     x:         "https://x.com/vostartupbd",
+    instagram: "https://www.instagram.com/voiceofstartupbd/",
   },
+
 
   // Verified information sources (shown as text, no logos used)
   sources: [

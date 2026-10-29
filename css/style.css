@@ -1814,3 +1814,27 @@ html[data-theme="dark"] .page-hero { background: var(--card); }
 }
 @media (max-width: 340px) { .tb-brand { font-size: .8rem; letter-spacing: .03em; } }
 @media (max-width: 760px) { .topbar .date { justify-self: stretch; } }
+
+/* ---- Install App button (top bar) ---- */
+.install-btn { display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 10px 0 13px; margin-right: 8px; border: 1px solid rgba(255, 255, 255, .45); border-radius: 999px; background: transparent; color: #fff; font: 700 .82rem/1 var(--font-body); letter-spacing: .01em; white-space: nowrap; cursor: pointer; transition: background .15s, border-color .15s; }
+.install-btn:hover, .install-btn:focus-visible { background: var(--orange); border-color: var(--orange); color: #fff; }
+.tb-soc .install-btn svg { width: 19px; height: 19px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.install-btn .ib-short { display: none; }
+@media (max-width: 760px) {
+  .tb-soc a[data-s="x"], .tb-soc a[data-s="instagram"] { display: none; }
+  .install-btn { height: 24px; padding: 0 7px 0 10px; margin-right: 6px; gap: 5px; font-size: .72rem; }
+  .install-btn .ib-full { display: none; }
+  .install-btn .ib-short { display: inline; }
+  .tb-soc .install-btn svg { width: 15px; height: 15px; }
+}
+.ins-modal { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 18px; background: rgba(23, 18, 13, .55); }
+.ins-card { position: relative; width: min(380px, 100%); background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 18px; padding: 24px 22px 20px; text-align: center; box-shadow: 0 20px 60px rgba(0, 0, 0, .35); }
+.ins-card img { border-radius: 16px; }
+.ins-card h3 { font-family: var(--font-head); font-size: 1.15rem; margin: 10px 0 4px; }
+.ins-card p { color: var(--muted); font-size: .92rem; margin-bottom: 10px; }
+.ins-card ol { text-align: left; margin: 0 0 16px; padding-left: 1.3em; display: grid; gap: 6px; font-size: .92rem; }
+.ins-ok { background: var(--orange-dark); color: #fff; border: 0; border-radius: 999px; padding: 10px 26px; font: 700 .95rem var(--font-body); cursor: pointer; }
+.ins-x { position: absolute; top: 8px; right: 10px; width: 32px; height: 32px; border: 0; background: transparent; color: var(--muted); font-size: 1rem; cursor: pointer; border-radius: 50%; }
+.ins-x:hover { background: var(--orange-soft); }
+@media (min-width: 761px) and (max-width: 1000px) { .install-btn .ib-full { display: none; } .install-btn .ib-short { display: inline; } }
+@media (max-width: 340px) { .install-btn .ib-short { display: none; } .install-btn { padding: 0 6px; } }
