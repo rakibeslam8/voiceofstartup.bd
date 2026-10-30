@@ -105,6 +105,47 @@
     const on = C.categories.some((c) => "/" + c.slug === page);
     return `<details class="nav-dd${on ? " active" : ""}"><summary>${T("বিষয়", "Topics")}</summary><div class="dd-menu">${C.categories.map((c) => `<a href="/${c.slug}" class="${"/" + c.slug === page ? "active" : ""}">${esc(pick(c))}</a>`).join("")}</div></details>`;
   }
+  /* ---------- Phone app bar (bottom tabs: Home, News, Topics, Settings) ---------- */
+  const AB_ICON = {
+    home: "M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10",
+    news: "M4 5h13v14H6a2 2 0 0 1-2-2V5zM17 9h3v8a2 2 0 0 1-2 2M7 9h7M7 12h7M7 15h4",
+    topics: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
+    settings: "M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0M9 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0M17 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0",
+    mail: "M4 6h16v12H4zM4 7l8 6 8-6",
+  };
+  const abIc = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${AB_ICON[k]}"/></svg>`;
+  function appBar(page) {
+    const isTopic = C.categories.some((c) => "/" + c.slug === page);
+    const on = (x) => (x ? " on" : "");
+    return `
+      <nav class="app-bar" aria-label="${T("অ্যাপ নেভিগেশন", "App navigation")}">
+        <a class="ab${on(page === "/")}" href="/">${abIc("home")}<span>${T("হোম", "Home")}</span></a>
+        <a class="ab${on(page === "/news")}" href="/news">${abIc("news")}<span>${T("সংবাদ", "News")}</span></a>
+        <button class="ab${on(isTopic)}" type="button" data-act="sheet" data-sheet="topics" aria-haspopup="dialog">${abIc("topics")}<span>${T("বিষয়", "Topics")}</span></button>
+        <button class="ab" type="button" data-act="sheet" data-sheet="more" aria-haspopup="dialog">${abIc("settings")}<span>${T("সেটিংস", "Settings")}</span></button>
+      </nav>
+      <div class="ab-sheet" id="sheet-topics" role="dialog" aria-modal="true" aria-label="${T("বিষয়", "Topics")}">
+        <div class="ab-back" data-act="sheet-close"></div>
+        <div class="ab-card"><i class="ab-grip"></i><h3>${T("বিষয়", "Topics")}</h3>
+          <div class="ab-topics">${C.categories.map((c) => `<a href="/${c.slug}" class="${"/" + c.slug === page ? "on" : ""}">${ci(c)}<span>${esc(pick(c))}</span></a>`).join("")}</div></div>
+      </div>
+      <div class="ab-sheet" id="sheet-more" role="dialog" aria-modal="true" aria-label="${T("সেটিংস", "Settings")}">
+        <div class="ab-back" data-act="sheet-close"></div>
+        <div class="ab-card"><i class="ab-grip"></i><h3>${T("সেটিংস", "Settings")}</h3>
+          <button class="ab-row" type="button" data-act="theme"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg><span>${T("ডার্ক মোড", "Dark mode")}</span><i class="ab-sw" aria-hidden="true"></i></button>
+          <button class="ab-row" type="button" data-act="lang"><b class="ab-lg">${lang === "bn" ? "EN" : "বা"}</b><span>${T("ভাষা", "Language")}</span><em>${lang === "bn" ? "English" : "বাংলা"}</em></button>
+          <a class="ab-row" href="/contact">${abIc("mail")}<span>${T("যোগাযোগ", "Contact")}</span></a>
+        </div>
+      </div>`;
+  }
+  const closeSheets = () => document.querySelectorAll(".ab-sheet.open").forEach((x) => x.classList.remove("open"));
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest('[data-act="sheet"]');
+    if (b) { e.preventDefault(); closeSheets(); const sh = document.getElementById("sheet-" + b.dataset.sheet); if (sh) sh.classList.add("open"); return; }
+    if (e.target.closest('[data-act="sheet-close"]') || e.target.closest(".ab-sheet a")) closeSheets();
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSheets(); });
+
   function renderChrome() {
     const page = location.pathname.replace(/index\.html$/, "").replace(/\.html$/, "") || "/";
     const top = $("#site-top");
@@ -132,7 +173,7 @@
           <button class="menu-btn" id="menu" aria-label="Menu">☰</button>
         </div>
       </div></header>
-      <div class="container"><div class="ad-slot ad-header" data-slot="header" data-i="0"></div></div>`;
+      <div class="container"><div class="ad-slot ad-header" data-slot="header" data-i="0"></div></div>${appBar(page)}`;
       $("#menu").onclick = () => $("#nav").classList.toggle("open");
       document.addEventListener("click", (e) => { document.querySelectorAll(".nav-dd[open]").forEach((d) => { if (!d.contains(e.target)) d.removeAttribute("open"); }); });
       const toggleTheme = () => {

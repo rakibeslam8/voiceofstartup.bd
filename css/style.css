@@ -1868,3 +1868,62 @@ html[data-theme="dark"] .page-hero { background: var(--card); }
   .topbar .date, .tb-soc { border-top: 0; align-self: center; }
   .topbar .container { padding-block: 0 2px; }
 }
+
+/* ===== more sunbursts: left-middle of every page and just above the footer ===== */
+main::after { content: ""; position: absolute; z-index: -1; pointer-events: none; left: -330px; top: 42%; width: 700px; height: 700px; border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 117, 34, .24) 0 5deg, rgba(255, 117, 34, 0) 5deg 14deg);
+  -webkit-mask: radial-gradient(circle, #000 0 36%, transparent 68%); mask: radial-gradient(circle, #000 0 36%, transparent 68%); }
+.site-footer { position: relative; border-top: 0; }
+.site-footer::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px; z-index: 2; background: linear-gradient(90deg, var(--orange) 0 50%, var(--green) 50% 80%, var(--red) 80% 100%); }
+.site-footer::after { content: ""; position: absolute; z-index: -1; pointer-events: none; right: 0; bottom: 100%; width: 340px; height: 340px;
+  background: repeating-conic-gradient(from 0deg at 100% 100%, rgba(255, 117, 34, .20) 0 5deg, rgba(255, 117, 34, 0) 5deg 14deg);
+  -webkit-mask: radial-gradient(circle at 100% 100%, #000 0 40%, transparent 72%); mask: radial-gradient(circle at 100% 100%, #000 0 40%, transparent 72%); }
+html[data-theme="dark"] main::after, html[data-theme="dark"] .site-footer::after { opacity: .45; }
+@media (max-width: 760px) {
+  main::after { left: -230px; width: 460px; height: 460px; top: 38%; }
+  .site-footer::after { width: 220px; height: 220px; }
+}
+
+/* ===== phone app bar (bottom tabs) + sheets ===== */
+.app-bar, .ab-sheet { display: none; }
+@media (max-width: 760px) {
+  body { padding-bottom: calc(66px + env(safe-area-inset-bottom, 0px)); }
+  .menu-btn, #nav { display: none !important; }
+  .header-actions { gap: 8px; }
+  .app-bar { position: fixed; z-index: 120; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); align-items: stretch;
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); background: var(--card); border-top: 1px solid var(--line); box-shadow: 0 -6px 22px rgba(60, 35, 10, .10); }
+  .app-bar::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 3px; background: linear-gradient(90deg, var(--orange) 0 50%, var(--green) 50% 80%, var(--red) 80% 100%); }
+  .ab { appearance: none; -webkit-appearance: none; border: 0; background: transparent; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    padding: 6px 2px 4px; border-radius: 14px; color: var(--muted); font-family: var(--font-body); font-weight: 700; font-size: .72rem; line-height: 1.1; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+  .ab svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .15s; }
+  .ab span { white-space: nowrap; }
+  .ab.on { color: var(--orange-dark); background: var(--orange-soft); }
+  .ab:active svg { transform: scale(.88); }
+  .ab-sheet { position: fixed; inset: 0; z-index: 130; display: block; visibility: hidden; pointer-events: none; }
+  .ab-sheet.open { visibility: visible; pointer-events: auto; }
+  .ab-back { position: absolute; inset: 0; background: rgba(23, 18, 13, .5); opacity: 0; transition: opacity .2s; }
+  .ab-sheet.open .ab-back { opacity: 1; }
+  .ab-card { position: absolute; left: 0; right: 0; bottom: 0; max-height: 82vh; overflow: auto; background: var(--card); color: var(--text); border-radius: 22px 22px 0 0; border: 1px solid var(--line); border-bottom: 0;
+    padding: 10px 16px calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateY(105%); transition: transform .25s ease; box-shadow: 0 -10px 40px rgba(0, 0, 0, .25); }
+  .ab-sheet.open .ab-card { transform: none; }
+  .ab-grip { display: block; width: 42px; height: 4px; border-radius: 4px; background: var(--line); margin: 0 auto 10px; }
+  .ab-card h3 { font-family: var(--font-head); font-size: 1.15rem; margin: 0 0 12px; }
+  .ab-topics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ab-topics a { display: flex; align-items: center; gap: 9px; padding: 11px 12px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--bg); color: var(--text); font-weight: 700; font-size: .86rem; line-height: 1.25; text-decoration: none; }
+  .ab-topics a.on { background: var(--orange-soft); border-color: var(--orange); color: var(--orange-dark); }
+  .ab-topics .ci { width: 20px; height: 20px; flex: none; fill: none; stroke: var(--orange-dark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .ab-row { appearance: none; -webkit-appearance: none; width: 100%; display: flex; align-items: center; gap: 12px; padding: 14px 12px; margin-bottom: 8px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--bg); color: var(--text);
+    font: 700 1rem var(--font-body); text-align: left; text-decoration: none; cursor: pointer; }
+  .ab-row svg { width: 22px; height: 22px; flex: none; fill: none; stroke: var(--orange-dark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .ab-row span { flex: 1; }
+  .ab-row .ti-sun { display: none; }
+  html[data-theme="dark"] .ab-row .ti-sun { display: block; }
+  html[data-theme="dark"] .ab-row .ti-moon { display: none; }
+  .ab-lg { display: inline-grid; place-items: center; min-width: 30px; height: 26px; padding: 0 6px; border-radius: 999px; background: linear-gradient(135deg, #ff7522, #e55f0f); color: #fff; font-size: .8rem; }
+  .ab-row em { font-style: normal; color: var(--muted); font-weight: 600; font-size: .9rem; }
+  .ab-sw { position: relative; width: 44px; height: 26px; border-radius: 999px; background: var(--line); flex: none; transition: background .2s; }
+  .ab-sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .3); transition: transform .2s; }
+  html[data-theme="dark"] .ab-sw { background: var(--orange); }
+  html[data-theme="dark"] .ab-sw::after { transform: translateX(18px); }
+  .ins-modal { z-index: 9999; }
+}
