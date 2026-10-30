@@ -11,7 +11,23 @@
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
   const esc = MD.esc;
-  const fmtN = (n) => Number(n || 0).toLocaleString("en-IN");
+  /* Number display: "full" = 1,284 · "compact" = 1.2k / 12.5k / 50k / 1.3M (chosen in Settings, remembered in this browser and on the account) */
+  const NUMFMT_KEY = "vosb-admin-numfmt";
+  function compactN(n) {
+    n = Math.round(Number(n || 0)); const a = Math.abs(n), sg = n < 0 ? "-" : "";
+    if (a < 1000) return String(n);
+    for (const [d, u] of [[1e9, "B"], [1e6, "M"], [1e3, "k"]]) {
+      if (a >= d) { const v = a >= d * 100 ? Math.floor(a / d) : Math.floor(a / (d / 10)) / 10; return sg + String(v).replace(/\.0$/, "") + u; }
+    }
+    return String(n);
+  }
+  const fullN = (n) => Number(n || 0).toLocaleString("en-IN");
+  const numMode = () => {
+    try { const v = localStorage.getItem(NUMFMT_KEY); if (v === "compact" || v === "full") return v; } catch (e) {}
+    try { const m = session && session.user && session.user.user_metadata && session.user.user_metadata.num_fmt; if (m === "compact" || m === "full") return m; } catch (e) {}
+    return "full";
+  };
+  const fmtN = (n) => (numMode() === "compact" ? compactN(n) : fullN(n));
   /* Short form for big numbers, e.g. 1,234,567 -> "1.23M" (shown next to the exact figure, never instead of it) */
   const fmtC = (n) => { n = Number(n || 0); const a = Math.abs(n); return a >= 1e9 ? (n / 1e9).toFixed(2) + "B" : a >= 1e6 ? (n / 1e6).toFixed(2) + "M" : (n / 1e3).toFixed(a >= 1e5 ? 0 : 1) + "K"; };
   /* Every stat tile: keep the exact number, add a short "≈ 1.23M" hint from 100,000 up, and shrink the digits
@@ -1742,6 +1758,13 @@
     view.innerHTML = `
       <div class="page-h"><h1>Settings</h1></div>
       <div class="set-grid">
+        <div class="card" id="nfc">
+          <h2>Number display</h2>
+          <p class="muted" style="margin-bottom:12px">How views, visitors, reads, shares and other counts are written in this admin panel.</p>
+          <div class="seg" id="nf" role="group" aria-label="Number display"><button type="button" data-m="full">Full numbers</button><button type="button" data-m="compact">Short (1.2k)</button></div>
+          <table class="t" style="margin-top:14px"><thead><tr><th>Example</th><th class="n">Full</th><th class="n">Short</th></tr></thead><tbody>${[842, 1284, 12500, 50000, 1300000].map((x) => `<tr><td>${fullN(x)} views</td><td class="n">${fullN(x)}</td><td class="n">${compactN(x)}</td></tr>`).join("")}</tbody></table>
+          <p class="muted" style="margin-top:10px;font-size:.82rem">Numbers below 1,000 always show in full. Short mode rounds down (1,999 shows 1.9k). Saved automatically.</p>
+        </div>
         <form class="card" id="pwf" autocomplete="off" novalidate>
           <h2>Change password</h2>
           <div id="pmsg"></div>
@@ -1764,6 +1787,14 @@
           <p class="muted" style="margin-top:10px;font-size:.88rem">Formatting: <code>**bold**</code> · <code>*italic*</code> · <code>## Heading</code> · <code>- list</code> · <code>[text](link)</code></p>
         </div>
       </div>`;
+    const paintNf = () => { const m = numMode(); document.querySelectorAll("#nf button").forEach((b) => b.classList.toggle("on", b.dataset.m === m)); };
+    paintNf();
+    document.querySelectorAll("#nf button").forEach((b) => (b.onclick = () => {
+      const m = b.dataset.m;
+      try { localStorage.setItem(NUMFMT_KEY, m); } catch (e) {}
+      paintNf(); toast(m === "compact" ? "Short numbers on (1.2k, 50k)" : "Full numbers on", "ok");
+      try { sb.auth.updateUser({ data: { num_fmt: m } }).then((r) => { if (r && r.data && r.data.user && session) session.user = r.data.user; }).catch(() => {}); } catch (e) {}
+    }));
     $("#so").onclick = () => logout("You have been signed out.");
     $("#cs").onclick = async () => toast((await copyText(C.site.origin + "/sitemap.xml")) ? "Sitemap link copied" : "Copy failed", "ok");
     $("#pwf").onsubmit = async (e) => {
