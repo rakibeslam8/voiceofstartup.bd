@@ -59,6 +59,7 @@
     if (!b) return;
     e.preventDefault();
     try { API && API.trackApp && API.trackApp("tap"); } catch (err) {}
+    try { document.querySelectorAll(".ab-sheet.open").forEach((x) => x.classList.remove("open")); } catch (err) {}
     const dp = window.__vosbPrompt;
     if (dp) {
       window.__vosbPrompt = null;
@@ -112,6 +113,11 @@
     topics: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
     settings: "M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1M15 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0M9 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0M17 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0",
     mail: "M4 6h16v12H4zM4 7l8 6 8-6",
+    info: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 11v5M12 7.6v.01",
+    briefcase: "M4 8h16v11H4zM9 8V5h6v3M4 13h16",
+    share: "M12 3v12M8 7l4-4 4 4M5 12v7h14v-7",
+    download: "M12 3v11M8 10l4 4 4-4M5 20h14",
+    bell: "M6 17v-6a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4",
   };
   const abIc = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${AB_ICON[k]}"/></svg>`;
   function appBar(page) {
@@ -134,13 +140,31 @@
         <div class="ab-card"><i class="ab-grip"></i><h3>${T("সেটিংস", "Settings")}</h3>
           <button class="ab-row" type="button" data-act="theme"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg><span>${T("ডার্ক মোড", "Dark mode")}</span><i class="ab-sw" aria-hidden="true"></i></button>
           <button class="ab-row" type="button" data-act="lang"><b class="ab-lg">${lang === "bn" ? "EN" : "বা"}</b><span>${T("ভাষা", "Language")}</span><em>${lang === "bn" ? "English" : "বাংলা"}</em></button>
-          <a class="ab-row" href="/contact">${abIc("mail")}<span>${T("যোগাযোগ", "Contact")}</span></a>
+          <div class="ab-topics ab-tiles">
+            ${PWA.done ? "" : `<button type="button" data-act="install">${abIc("download")}<span>${T("অ্যাপ ইনস্টল", "Install App")}</span></button>`}
+            <a href="/#subscribe">${abIc("bell")}<span>${T("নিউজলেটার", "Newsletter")}</span></a>
+            <button type="button" data-act="share-site">${abIc("share")}<span id="ab-share-l">${T("অ্যাপ শেয়ার", "Share App")}</span></button>
+            <a href="/about">${abIc("info")}<span>${T("আমাদের সম্পর্কে", "About us")}</span></a>
+            <a href="/careers">${abIc("briefcase")}<span>${T("ক্যারিয়ার", "Careers")}</span></a>
+            <a href="/contact">${abIc("mail")}<span>${T("যোগাযোগ", "Contact")}</span></a>
+          </div>
+          <p class="ab-sub">${T("আমাদের ফলো করুন", "Follow us")}</p>
+          <div class="ab-socs">${Object.keys(C.social).map((k) => `<a data-s="${k}" href="${C.social[k]}" target="_blank" rel="noopener" aria-label="${LABEL[k]}">${ICON[k].replace(/fill="[^"]*"/g, "").replace(/<defs>.*<\/defs>/, "")}</a>`).join("")}</div>
+          <nav class="ab-legal" aria-label="${T("আইনি", "Legal")}">${LEGAL.filter((l) => ["/privacy-policy", "/terms-of-service", "/editorial-policy", "/cookie-policy"].includes(l.href)).map((l) => `<a href="${l.href}">${esc(pick(l))}</a>`).join("")}</nav>
         </div>
       </div>`;
   }
   const closeSheets = () => document.querySelectorAll(".ab-sheet.open").forEach((x) => x.classList.remove("open"));
   document.addEventListener("click", (e) => {
     const b = e.target.closest('[data-act="sheet"]');
+    const sh2 = e.target.closest('[data-act="share-site"]');
+    if (sh2) {
+      e.preventDefault();
+      const data = { title: "Voice of Startup Bangladesh", text: T("বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের খবর", "Bangladesh startup, business & funding news"), url: location.origin + "/" };
+      if (navigator.share) navigator.share(data).catch(() => {});
+      else if (navigator.clipboard) navigator.clipboard.writeText(data.url).then(() => { const l = document.getElementById("ab-share-l"); if (l) l.textContent = T("লিংক কপি হয়েছে ✓", "Link copied ✓"); }).catch(() => {});
+      return;
+    }
     if (b) { e.preventDefault(); closeSheets(); const sh = document.getElementById("sheet-" + b.dataset.sheet); if (sh) sh.classList.add("open"); return; }
     if (e.target.closest('[data-act="sheet-close"]') || e.target.closest(".ab-sheet a")) closeSheets();
   });

@@ -1927,3 +1927,16 @@ html[data-theme="dark"] main::after, html[data-theme="dark"] .site-footer::after
   html[data-theme="dark"] .ab-sw::after { transform: translateX(18px); }
   .ins-modal { z-index: 9999; }
 }
+
+@media (max-width: 760px) {
+  .ab-topics button { appearance: none; -webkit-appearance: none; display: flex; align-items: center; gap: 9px; padding: 11px 12px; border: 1.5px solid var(--line); border-radius: 14px; background: var(--bg); color: var(--text); font-family: var(--font-body); font-weight: 700; font-size: .86rem; line-height: 1.25; text-align: left; cursor: pointer; }
+  .ab-tiles { margin-top: 2px; }
+  .ab-tiles svg { width: 20px; height: 20px; flex: none; fill: none; stroke: var(--orange-dark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .ab-card .ab-row { margin-bottom: 8px; }
+  .ab-sub { margin: 16px 2px 8px; font-size: .78rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .ab-socs { display: flex; gap: 10px; }
+  .ab-socs a { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: #231f20; color: #fff; }
+  .ab-socs svg { width: 20px; height: 20px; fill: #fff; }
+  .ab-legal { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .ab-legal a { font-size: .8rem; color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+}
