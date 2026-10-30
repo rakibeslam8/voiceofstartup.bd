@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/disbursement-of-loans-from-startup-funds-of-thousands-of-crores-of-rup</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-30T09:02:00.000Z</news:publication_date>
+      <news:title>হাজার কোটি টাকার স্টার্টআপ তহবিল থেকে ঋণ বিতরণ মাত্র ৩৫ কোটি টাকা</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/disbursement-of-loans-from-startup-funds-of-thousands-of-crores-of-rup</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-30T09:02:00.000Z</news:publication_date>
+      <news:title>Disbursement of loans from startup funds of thousands of crores of rupees is only 35 crores</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/started-business-with-9-thousand-taka-now-annual-sales-are-12-crores</loc>
     <news:news>
       <news:publication>
@@ -64,6 +86,28 @@
       </news:publication>
       <news:publication_date>2026-10-30T01:51:00.000Z</news:publication_date>
       <news:title>Started with 300 taka, now his business is worth thousands of taka</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/starting-with-30-thousand-rk-hannan-s-business-is-now-worth-half-a-cro</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-29T03:20:00.000Z</news:publication_date>
+      <news:title>৩০ হাজারে শুরু, আর কে হান্নানের ব্যবসা এখন অর্ধকোটি টাকার</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/starting-with-30-thousand-rk-hannan-s-business-is-now-worth-half-a-cro</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-29T03:20:00.000Z</news:publication_date>
+      <news:title>Starting with 30 thousand, RK Hannan&#39;s business is now worth half a crore</news:title>
     </news:news>
   </url>
   <url>
