@@ -1940,3 +1940,12 @@ html[data-theme="dark"] main::after, html[data-theme="dark"] .site-footer::after
   .ab-legal { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); }
   .ab-legal a { font-size: .8rem; color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
 }
+
+.prose { zoom: var(--read-zoom, 1); }
+@media (max-width: 760px) {
+  .ab-size { justify-content: space-between; cursor: default; }
+  .ab-step { display: flex; align-items: center; gap: 8px; }
+  .ab-step button { width: 40px; height: 36px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--card); color: var(--orange-dark); font: 800 1rem var(--font-body); cursor: pointer; }
+  .ab-step button:active { background: var(--orange-soft); }
+  .ab-step b { min-width: 44px; text-align: center; font-size: .9rem; }
+}

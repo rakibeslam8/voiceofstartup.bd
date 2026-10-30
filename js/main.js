@@ -106,6 +106,11 @@
     const on = C.categories.some((c) => "/" + c.slug === page);
     return `<details class="nav-dd${on ? " active" : ""}"><summary>${T("বিষয়", "Topics")}</summary><div class="dd-menu">${C.categories.map((c) => `<a href="/${c.slug}" class="${"/" + c.slug === page ? "active" : ""}">${esc(pick(c))}</a>`).join("")}</div></details>`;
   }
+  /* article text size (phone Settings): remembered in this browser */
+  const FS = [0.9, 1, 1.1, 1.2, 1.35];
+  function readZoom() { try { const v = parseFloat(localStorage.getItem("vosb-read")); return FS.includes(v) ? v : 1; } catch (e) { return 1; } }
+  function applyZoom(v) { document.documentElement.style.setProperty("--read-zoom", String(v)); }
+  applyZoom(readZoom());
   /* ---------- Phone app bar (bottom tabs: Home, News, Topics, Settings) ---------- */
   const AB_ICON = {
     home: "M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10",
@@ -117,6 +122,8 @@
     briefcase: "M4 8h16v11H4zM9 8V5h6v3M4 13h16",
     share: "M12 3v12M8 7l4-4 4 4M5 12v7h14v-7",
     download: "M12 3v11M8 10l4 4 4-4M5 20h14",
+    flame: "M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z",
+    send: "M21 3L3 10.5l7 2.5 2.5 7zM10 13l11-10",
     bell: "M6 17v-6a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4",
   };
   const abIc = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${AB_ICON[k]}"/></svg>`;
@@ -140,10 +147,13 @@
         <div class="ab-card"><i class="ab-grip"></i><h3>${T("সেটিংস", "Settings")}</h3>
           <button class="ab-row" type="button" data-act="theme"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg><span>${T("ডার্ক মোড", "Dark mode")}</span><i class="ab-sw" aria-hidden="true"></i></button>
           <button class="ab-row" type="button" data-act="lang"><b class="ab-lg">${lang === "bn" ? "EN" : "বা"}</b><span>${T("ভাষা", "Language")}</span><em>${lang === "bn" ? "English" : "বাংলা"}</em></button>
+          <div class="ab-row ab-size"><span>${T("লেখার আকার", "Article text size")}</span><div class="ab-step"><button type="button" data-act="fs-" aria-label="${T("ছোট করুন", "Smaller")}">A−</button><b id="ab-fs">${Math.round(readZoom() * 100)}%</b><button type="button" data-act="fs+" aria-label="${T("বড় করুন", "Larger")}">A+</button></div></div>
           <div class="ab-topics ab-tiles">
             ${PWA.done ? "" : `<button type="button" data-act="install">${abIc("download")}<span>${T("অ্যাপ ইনস্টল", "Install App")}</span></button>`}
+            <a href="/news?sort=top">${abIc("flame")}<span>${T("সর্বাধিক পঠিত", "Most read")}</span></a>
             <a href="/#subscribe">${abIc("bell")}<span>${T("নিউজলেটার", "Newsletter")}</span></a>
             <button type="button" data-act="share-site">${abIc("share")}<span id="ab-share-l">${T("অ্যাপ শেয়ার", "Share App")}</span></button>
+            <a href="mailto:editor@voiceofstartup.bd?subject=News%20tip">${abIc("send")}<span>${T("নিউজ টিপস পাঠান", "Send a news tip")}</span></a>
             <a href="/about">${abIc("info")}<span>${T("আমাদের সম্পর্কে", "About us")}</span></a>
             <a href="/careers">${abIc("briefcase")}<span>${T("ক্যারিয়ার", "Careers")}</span></a>
             <a href="/contact">${abIc("mail")}<span>${T("যোগাযোগ", "Contact")}</span></a>
@@ -157,6 +167,14 @@
   const closeSheets = () => document.querySelectorAll(".ab-sheet.open").forEach((x) => x.classList.remove("open"));
   document.addEventListener("click", (e) => {
     const b = e.target.closest('[data-act="sheet"]');
+    const fb = e.target.closest('[data-act="fs-"],[data-act="fs+"]');
+    if (fb) {
+      e.preventDefault();
+      let i = FS.indexOf(readZoom()); i = Math.max(0, Math.min(FS.length - 1, i + (fb.dataset.act === "fs+" ? 1 : -1)));
+      try { localStorage.setItem("vosb-read", String(FS[i])); } catch (err) {}
+      applyZoom(FS[i]); const l = document.getElementById("ab-fs"); if (l) l.textContent = Math.round(FS[i] * 100) + "%";
+      return;
+    }
     const sh2 = e.target.closest('[data-act="share-site"]');
     if (sh2) {
       e.preventDefault();
