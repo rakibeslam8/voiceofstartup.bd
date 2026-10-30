@@ -1,6 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/started-business-with-9-thousand-taka-now-annual-sales-are-12-crores</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-30T02:14:00.000Z</news:publication_date>
+      <news:title>৯ হাজার টাকায় ব্যবসা শুরু, এখন বছরে বিক্রি ১২ কোটি</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/started-business-with-9-thousand-taka-now-annual-sales-are-12-crores</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-30T02:14:00.000Z</news:publication_date>
+      <news:title>Started business with 9 thousand taka, now annual sales are 12 crores</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/loan-transfer-facility-at-brac-bank-at-9-percent-interest-no-additiona</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-30T02:00:00.000Z</news:publication_date>
+      <news:title>ব্র্যাক ব্যাংকে ৯ শতাংশ সুদে ঋণ স্থানান্তরের সুযোগ, বাড়তি খরচ নেই</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/loan-transfer-facility-at-brac-bank-at-9-percent-interest-no-additiona</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-30T02:00:00.000Z</news:publication_date>
+      <news:title>Loan transfer facility at BRAC Bank at 9 percent interest, no additional cost</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/started-with-300-taka-now-his-business-is-worth-thousands-of-taka</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-30T01:51:00.000Z</news:publication_date>
+      <news:title>৩০০ টাকা দিয়ে শুরু, এখন তাঁর ব্যবসা হাজার কোটি টাকার</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/started-with-300-taka-now-his-business-is-worth-thousands-of-taka</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-30T01:51:00.000Z</news:publication_date>
+      <news:title>Started with 300 taka, now his business is worth thousands of taka</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/what-we-do</loc>
     <news:news>
       <news:publication>
@@ -86,28 +152,6 @@
       </news:publication>
       <news:publication_date>2026-10-28T04:31:00.000Z</news:publication_date>
       <news:title>Started with 600 taka, now the business is crores of taka</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-28T02:00:00.000Z</news:publication_date>
-      <news:title>ইউটিউব দেখে ছাদে ড্রাগন চাষ, বছরে আয় লাখ টাকা</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/watching-youtube-dragon-farming-on-the-roof-annual-income-of-lakhs-of</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-28T02:00:00.000Z</news:publication_date>
-      <news:title>Watching YouTube, dragon farming on the roof, annual income of lakhs of rupees</news:title>
     </news:news>
   </url>
 </urlset>
