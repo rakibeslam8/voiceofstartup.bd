@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/the-story-of-saiful-a-successful-entrepreneur-who-left-his-traditional</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-31T12:41:00.000Z</news:publication_date>
+      <news:title>প্রথাগত চাকরি ছেড়ে কৃষিতে সফল উদ্যোক্তা সাইফুলের গল্প</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/the-story-of-saiful-a-successful-entrepreneur-who-left-his-traditional</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-31T12:41:00.000Z</news:publication_date>
+      <news:title>The story of Saiful, a successful entrepreneur who left his traditional job and became an agriculturist</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/disbursement-of-loans-from-startup-funds-of-thousands-of-crores-of-rup</loc>
     <news:news>
       <news:publication>

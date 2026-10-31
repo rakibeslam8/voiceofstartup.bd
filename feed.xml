@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Fri, 30 Oct 2026 09:02:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 31 Oct 2026 12:41:00 GMT</lastBuildDate>
+    <item>
+      <title>প্রথাগত চাকরি ছেড়ে কৃষিতে সফল উদ্যোক্তা সাইফুলের গল্প</title>
+      <link>https://www.voiceofstartup.bd/read/the-story-of-saiful-a-successful-entrepreneur-who-left-his-traditional</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/the-story-of-saiful-a-successful-entrepreneur-who-left-his-traditional</guid>
+      <pubDate>Sat, 31 Oct 2026 12:41:00 GMT</pubDate>
+      <category>ফাউন্ডার স্টোরি</category>
+      <description>ফরিদপুরের মাটি থেকে যাত্রা শুরু করে ‘বিসমিল্লাহ এগ্রো’ এখন দেশের একটি পরিচিত ও নির্ভরযোগ্য কৃষি ব্র্যান্ড। গতানুগতিক চাকরির পেছনে না ছুটে সাইফুল ইসলাম সাইফ বেছে নিয়েছেন কৃষিকাজ।</description>
+    </item>
     <item>
       <title>হাজার কোটি টাকার স্টার্টআপ তহবিল থেকে ঋণ বিতরণ মাত্র ৩৫ কোটি টাকা</title>
       <link>https://www.voiceofstartup.bd/read/disbursement-of-loans-from-startup-funds-of-thousands-of-crores-of-rup</link>
@@ -238,14 +246,6 @@
       <pubDate>Wed, 21 Oct 2026 07:36:00 GMT</pubDate>
       <category>ফাউন্ডার স্টোরি</category>
       <description>মোকাররম হোসেন, গাজীপুরের পুবাইল থানার ইজিবাইক গ্যারেজের স্বত্বাধিকারী। গত বছর তাঁর গ্যারেজের সব কটি ইজিবাইক চলত লেড অ্যাসিড ব্যাটারিতে। বছর না যেতেই এসব লেড অ্যাসিড ব্যাটারি কার্যক্ষমতা হারায়।</description>
-    </item>
-    <item>
-      <title>১০ হাজার টাকায় শুরু, এখন মাসে আয় ২০ লাখ টাকা</title>
-      <link>https://www.voiceofstartup.bd/read/started-with-10-thousand-taka-now-income-is-20-lakh-taka-per-month</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/started-with-10-thousand-taka-now-income-is-20-lakh-taka-per-month</guid>
-      <pubDate>Wed, 21 Oct 2026 02:26:00 GMT</pubDate>
-      <category>ফাউন্ডার স্টোরি</category>
-      <description>সিরাজুম মুনিরা ও ফেরদৌস আহমেদ—এই দম্পতির উভয়েই ঢাকা বিশ্ববিদ্যালয়ে পড়াশোনা শেষে বেসরকারি প্রতিষ্ঠানে চাকরি নিয়েছিলেন। কিন্তু কর্মস্থলে নিজেদের মানিয়ে নিতে পারছিলেন না।</description>
     </item>
   </channel>
 </rss>
