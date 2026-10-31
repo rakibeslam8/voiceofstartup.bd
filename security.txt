@@ -1,0 +1,5 @@
+Contact: mailto:rakib@voiceofstartup.bd
+Expires: 2027-10-31T00:00:00.000Z
+Preferred-Languages: bn, en
+Canonical: https://www.voiceofstartup.bd/.well-known/security.txt
+Policy: https://www.voiceofstartup.bd/terms-of-service

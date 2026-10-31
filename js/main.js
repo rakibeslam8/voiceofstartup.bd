@@ -16,6 +16,8 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const pick = (o) => (o && typeof o === "object" ? o[lang] || o.bn : o);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  // links coming from the database may only be http(s), mailto or site-relative (blocks javascript:/data: links)
+  const safeHref = (u) => { u = String(u == null ? "" : u).trim(); return /^(https?:\/\/|mailto:|\/(?!\/))/i.test(u) ? u : "#"; };
   const T = (bn, en) => (lang === "bn" ? bn : en);
 
   const ICON = {
@@ -798,7 +800,7 @@
     const minsTxt = lang === "bn" ? mins.toLocaleString("bn-BD") : mins;
     const src = p.source === "VOSB"
       ? T("মূল প্রতিবেদন: Voice of Startup Bangladesh", "Original reporting: Voice of Startup Bangladesh")
-      : `${T("তথ্যসূত্র", "Source")}: ${p.sourceUrl ? `<a href="${esc(p.sourceUrl)}" target="_blank" rel="noopener noreferrer nofollow">${esc(p.source)} ↗</a>` : esc(p.source)}`;
+      : `${T("তথ্যসূত্র", "Source")}: ${p.sourceUrl ? `<a href="${esc(safeHref(p.sourceUrl))}" target="_blank" rel="noopener noreferrer nofollow">${esc(p.source)} ↗</a>` : esc(p.source)}`;
     box.innerHTML = `
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">${T("হোম", "Home")}</a><span>›</span><a href="/${c.slug}">${esc(pick(c))}</a></nav>
       <div class="post-meta"><span class="badge">${ci(c)} ${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
@@ -887,7 +889,7 @@
   }
   function adHtml(a) {
     const label = `<span class="ad-label">${T("বিজ্ঞাপন", "Ad")}</span>`;
-    const attrs = `href="${esc(a.link_url)}" target="_blank" rel="sponsored nofollow noopener" data-ad="${esc(a.id)}"`;
+    const attrs = `href="${esc(safeHref(a.link_url))}" target="_blank" rel="sponsored nofollow noopener" data-ad="${esc(a.id)}"`;
     if (a.kind === "image" && a.image_url) {
       return `<a class="ad" ${attrs} aria-label="${esc(a.headline || T("স্পনসরড", "Sponsored"))}">${label}<img src="${esc(a.image_url)}" alt="${esc(a.headline || T("বিজ্ঞাপন", "Advertisement"))}" loading="lazy" decoding="async"></a>`;
     }

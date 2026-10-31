@@ -311,7 +311,8 @@
     } catch (e) {
       console.error(e);
       if (/JWT|expired|401/i.test(String(e.message || e))) { logout("Session expired. Please sign in again."); return; }
-      view.innerHTML = `<div class="card"><div class="msg err">Something went wrong: ${esc(e.message || e)}</div><button class="b b-orange" onclick="location.reload()">Reload</button></div>`;
+      view.innerHTML = `<div class="card"><div class="msg err">Something went wrong: ${esc(e.message || e)}</div><button class="b b-orange" data-reload>Reload</button></div>`;
+      const rb = view.querySelector("[data-reload]"); if (rb) rb.addEventListener("click", () => location.reload());
     }
   }
 

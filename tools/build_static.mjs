@@ -125,7 +125,7 @@ function articlePage(r, lang, all) {
   const relHtml = [...related, ...more].map((x) => { const xv = view(x, actualLang); return `<li><a href="${actualLang === "en" ? "/en" : ""}/read/${esc(x.slug)}">${esc(xv.title)}</a></li>`; }).join("");
   const srcLine = r.source === "VOSB"
     ? T(actualLang, "মূল প্রতিবেদন: Voice of Startup Bangladesh", "Original reporting: Voice of Startup Bangladesh")
-    : `${T(actualLang, "তথ্যসূত্র", "Source")}: ${r.source_url ? `<a href="${esc(r.source_url)}" target="_blank" rel="noopener noreferrer nofollow">${esc(r.source)} ↗</a>` : esc(r.source)}`;
+    : `${T(actualLang, "তথ্যসূত্র", "Source")}: ${r.source_url ? `<a href="${esc(/^https?:\/\//i.test(String(r.source_url).trim()) ? String(r.source_url).trim() : "#")}" target="_blank" rel="noopener noreferrer nofollow">${esc(r.source)} ↗</a>` : esc(r.source)}`;
   const auto = actualLang === "en" ? r.auto_translated_en : r.auto_translated_bn;
   const noteHtml = auto ? `<p class="tr-note">🌐 ${actualLang === "bn" ? "এই বাংলা সংস্করণটি স্বয়ংক্রিয়ভাবে অনুবাদ করা হয়েছে।" : "This English version was automatically translated from the original Bangla."}</p>` : "";
   const bodyHtml = `

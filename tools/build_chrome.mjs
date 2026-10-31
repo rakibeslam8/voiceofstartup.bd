@@ -145,3 +145,43 @@ for (const d of ["read", "en/read"]) {
   const dir = path.join(ROOT, d);
   if (fs.existsSync(dir)) fs.readdirSync(dir).filter((f) => f.endsWith(".html")).forEach((f) => processPage(path.join(dir, f), { root: false }));
 }
+
+/* ---------- security: Content-Security-Policy on every public page ----------
+   GitHub Pages cannot send HTTP headers, so the policy is delivered as a <meta> tag.
+   Scripts: only our own files (+ the tiny inline theme script, allowed by its hash). No eval, no
+   third-party scripts, no plugins, no <base> tricks. Data may only be sent to our own site and Supabase. */
+import crypto from "node:crypto";
+const SUPA = "https://hpanuojuazdqolgkafqg.supabase.co";
+function cspFor(html) {
+  const hashes = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+    .map((m) => `'sha256-${crypto.createHash("sha256").update(m[1], "utf8").digest("base64")}'`);
+  return [
+    "default-src 'self'",
+    `script-src 'self' ${[...new Set(hashes)].join(" ")}`.trim(),
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com data:",
+    "img-src 'self' data: blob: https:",
+    `connect-src 'self' ${SUPA}`,
+    "media-src 'self' https:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-src 'none'",
+    "worker-src 'self'",
+    "manifest-src 'self'",
+    "upgrade-insecure-requests",
+  ].join("; ");
+}
+function ensureSecurityMeta(file) {
+  let s = fs.readFileSync(file, "utf8"), before = s;
+  if (!/<head>/.test(s)) return;
+  s = s.replace(/\s*<meta http-equiv="Content-Security-Policy"[^>]*>/g, "").replace(/\s*<meta name="referrer"[^>]*>/g, "");
+  const tag = `\n  <meta http-equiv="Content-Security-Policy" content="${cspFor(s)}">\n  <meta name="referrer" content="strict-origin-when-cross-origin">`;
+  s = /<meta charset="utf-8">/.test(s) ? s.replace(/(<meta charset="utf-8">)/, `$1${tag}`) : s.replace("<head>", `<head>${tag}`);
+  if (s !== before) { fs.writeFileSync(file, s); console.log("security meta", path.relative(ROOT, file)); }
+}
+for (const f of fs.readdirSync(ROOT).filter((f) => f.endsWith(".html") && f !== "admin.html")) ensureSecurityMeta(path.join(ROOT, f));
+for (const d of ["read", "en/read"]) {
+  const dir = path.join(ROOT, d);
+  if (fs.existsSync(dir)) fs.readdirSync(dir).filter((f) => f.endsWith(".html")).forEach((f) => ensureSecurityMeta(path.join(dir, f)));
+}
