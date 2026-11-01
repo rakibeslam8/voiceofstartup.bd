@@ -1,6 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/rooftop-gardening-started-as-a-hobby-now-selling-trees-worth-2-lakh-ru</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-01T03:41:00.000Z</news:publication_date>
+      <news:title>শখে শুরু ছাদবাগান, এখন মাসে ২ লাখ টাকার গাছ বিক্রি</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/rooftop-gardening-started-as-a-hobby-now-selling-trees-worth-2-lakh-ru</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-01T03:41:00.000Z</news:publication_date>
+      <news:title>Rooftop gardening started as a hobby, now selling trees worth 2 lakh rupees a month</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/startups-will-get-loans-of-up-to-8-crore-rupees-funds-of-1200-crore-ru</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-01T03:25:00.000Z</news:publication_date>
+      <news:title>৮ কোটি টাকা পর্যন্ত ঋণ পাবে স্টার্টআপ, ১২০০ কোটি টাকার তহবিল</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/startups-will-get-loans-of-up-to-8-crore-rupees-funds-of-1200-crore-ru</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-01T03:25:00.000Z</news:publication_date>
+      <news:title>Startups will get loans of up to 8 crore rupees, funds of 1200 crore rupees</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/the-annual-income-of-hello-tasks-by-providing-domestic-workers-is-now</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-01T03:15:00.000Z</news:publication_date>
+      <news:title>গৃহকর্মী সরবরাহ করে হ্যালো টাস্কের বছরে আয় এখন ১ কোটি টাকা</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/the-annual-income-of-hello-tasks-by-providing-domestic-workers-is-now</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-01T03:15:00.000Z</news:publication_date>
+      <news:title>The annual income of Hello Tasks by providing domestic workers is now Rs 1 crore</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/two-entrepreneurs-earn-crores-of-rupees-a-year-by-making-games</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-01T03:10:00.000Z</news:publication_date>
+      <news:title>গেম বানিয়ে দুই উদ্যোক্তার বছরে আয় কোটি টাকা</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/two-entrepreneurs-earn-crores-of-rupees-a-year-by-making-games</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-01T03:10:00.000Z</news:publication_date>
+      <news:title>Two entrepreneurs earn crores of rupees a year by making games</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/bangladesh-s-path-and-possible-among-asia-s-top-100-startups-forbes-li</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-01T00:31:00.000Z</news:publication_date>
+      <news:title>এশিয়ার শীর্ষ ১০০ স্টার্টআপে বাংলাদেশের পাঠাও ও সম্ভব, ফোর্বসের তালিকা প্রকাশ</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/bangladesh-s-path-and-possible-among-asia-s-top-100-startups-forbes-li</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-01T00:31:00.000Z</news:publication_date>
+      <news:title>Bangladesh&#39;s Path and Possible among Asia&#39;s top 100 startups, Forbes list released</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/the-story-of-saiful-a-successful-entrepreneur-who-left-his-traditional</loc>
     <news:news>
       <news:publication>
@@ -20,28 +130,6 @@
       </news:publication>
       <news:publication_date>2026-10-31T12:41:00.000Z</news:publication_date>
       <news:title>The story of Saiful, a successful entrepreneur who left his traditional job and became an agriculturist</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/disbursement-of-loans-from-startup-funds-of-thousands-of-crores-of-rup</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-30T09:02:00.000Z</news:publication_date>
-      <news:title>হাজার কোটি টাকার স্টার্টআপ তহবিল থেকে ঋণ বিতরণ মাত্র ৩৫ কোটি টাকা</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/disbursement-of-loans-from-startup-funds-of-thousands-of-crores-of-rup</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-30T09:02:00.000Z</news:publication_date>
-      <news:title>Disbursement of loans from startup funds of thousands of crores of rupees is only 35 crores</news:title>
     </news:news>
   </url>
 </urlset>
