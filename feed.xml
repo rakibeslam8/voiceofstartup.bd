@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Sun, 01 Nov 2026 03:41:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 01 Nov 2026 12:38:00 GMT</lastBuildDate>
+    <item>
+      <title>কক্সবাজারে পরিবেশবান্ধব ই-বাইক রেন্টাল সার্ভিস ‘ইজিগো’: পর্যটকদের জন্য এক নতুন স্বাধীনতার গল্প</title>
+      <link>https://www.voiceofstartup.bd/read/eco-friendly-e-bike-rental-service-ezigo-in-cox-s-bazar-a-story-of-new</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/eco-friendly-e-bike-rental-service-ezigo-in-cox-s-bazar-a-story-of-new</guid>
+      <pubDate>Sun, 01 Nov 2026 12:38:00 GMT</pubDate>
+      <category>ফাউন্ডার স্টোরি</category>
+      <description>বাংলাদেশের অন্যতম প্রধান পর্যটন কেন্দ্র কক্সবাজার। প্রতি বছর লাখো মানুষের সমাগম ঘটে এখানে, বিশেষ করে দীর্ঘতম সমুদ্রসৈকত ও দৃষ্টিনন্দন মেরিন ড্রাইভের সৌন্দর্য উপভোগ করার জন্য।</description>
+    </item>
     <item>
       <title>শখে শুরু ছাদবাগান, এখন মাসে ২ লাখ টাকার গাছ বিক্রি</title>
       <link>https://www.voiceofstartup.bd/read/rooftop-gardening-started-as-a-hobby-now-selling-trees-worth-2-lakh-ru</link>
@@ -238,14 +246,6 @@
       <pubDate>Fri, 23 Oct 2026 15:55:00 GMT</pubDate>
       <category>ফাউন্ডার স্টোরি</category>
       <description>বাংলাদেশের ৬৪ জেলার কোন কোনটিতে ঘুরেছেন, এক ক্লিকেই তা দেখা যায় মানচিত্রে। নিজের নাম দিয়ে সেই মানচিত্র ডাউনলোডও করা যায়।</description>
-    </item>
-    <item>
-      <title>আপনার স্টার্টআপের গল্প হোক সবার অনুপ্রেরণা: &#39;ভয়েস অফ স্টার্টআপ বাংলাদেশ&#39;-এ বিনামূল্যে আর্টিকেল প্রকাশের সুযোগ</title>
-      <link>https://www.voiceofstartup.bd/read/let-your-startup-story-inspire-everyone-opportunity-to-publish-free-ar</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/let-your-startup-story-inspire-everyone-opportunity-to-publish-free-ar</guid>
-      <pubDate>Fri, 23 Oct 2026 15:15:00 GMT</pubDate>
-      <category>ফাউন্ডার স্টোরি</category>
-      <description>&#39;ভয়েস অফ স্টার্টআপ বাংলাদেশ&#39; (Voice of Startup Bangladesh) দেশের স্টার্টআপ, ব্যবসা এবং প্রযুক্তি বিষয়ক খবরের একটি শীর্ষস্থানীয় ডিজিটাল প্ল্যাটফর্ম।</description>
     </item>
   </channel>
 </rss>
