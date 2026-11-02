@@ -155,25 +155,34 @@
       <nav class="app-bar" aria-label="${T("অ্যাপ নেভিগেশন", "App navigation")}">
         <a class="ab${on(page === "/")}" href="/">${abIc("home")}<span>${T("হোম", "Home")}</span></a>
         <a class="ab${on(page === "/news")}" href="/news">${abIc("news")}<span>${T("সংবাদ", "News")}</span></a>
-        <a class="ab${on(isCompaniesPage(page))}" href="/companies">${abIc("company")}<span>${T("কোম্পানি", "Companies")}</span></a>
         <button class="ab${on(isTopic)}" type="button" data-act="sheet" data-sheet="topics" aria-haspopup="dialog">${abIc("topics")}<span>${T("বিষয়", "Topics")}</span></button>
-        <button class="ab" type="button" data-act="sheet" data-sheet="more" aria-haspopup="dialog">${abIc("settings")}<span>${T("সেটিংস", "Settings")}</span></button>
+        <a class="ab${on(isCompaniesPage(page))}" href="/companies">${abIc("company")}<span>${T("কোম্পানি", "Companies")}</span></a>
+        <a class="ab${on(page === "/settings")}" href="/settings">${abIc("settings")}<span>${T("সেটিংস", "Settings")}</span></a>
       </nav>
       <div class="ab-sheet" id="sheet-topics" role="dialog" aria-modal="true" aria-label="${T("বিষয়", "Topics")}">
         <div class="ab-back" data-act="sheet-close"></div>
         <div class="ab-card"><i class="ab-grip"></i><h3>${T("বিষয়", "Topics")}</h3>
           <div class="ab-topics">${C.categories.map((c) => `<a href="/${c.slug}" class="${"/" + c.slug === page ? "on" : ""}">${ci(c)}<span>${esc(pick(c))}</span></a>`).join("")}</div></div>
-      </div>
-      <div class="ab-sheet" id="sheet-more" role="dialog" aria-modal="true" aria-label="${T("সেটিংস", "Settings")}">
-        <div class="ab-back" data-act="sheet-close"></div>
-        <div class="ab-card"><i class="ab-grip"></i><h3>${T("সেটিংস", "Settings")}</h3>
+      </div>`;
+  }
+
+  /* Settings is a real page (/settings) — same controls the phone used to get in a pop-up, now also usable on desktop */
+  function settingsBody() {
+    return `<div class="st-wrap">
+      <div class="st-col">
+        <section class="st-card"><h2>${T("অ্যাকাউন্ট", "Account")}</h2>
           <div class="ab-acct" data-auth-slot="sheet">${authInitial("sheet")}</div>
+          <div class="st-links"><a href="/account#companies">${abIc("company")}<span>${T("আমার কোম্পানি", "My companies")}</span></a><a href="/list-your-company">${abIc("plus")}<span>${T("কোম্পানি লিস্ট করুন", "List your company")}</span></a></div></section>
+        <section class="st-card"><h2>${T("পছন্দ", "Preferences")}</h2>
           <button class="ab-row" type="button" data-act="theme"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg><span>${T("ডার্ক মোড", "Dark mode")}</span><i class="ab-sw" aria-hidden="true"></i></button>
           <button class="ab-row" type="button" data-act="lang"><b class="ab-lg">${lang === "bn" ? "EN" : "বা"}</b><span>${T("ভাষা", "Language")}</span><em>${lang === "bn" ? "English" : "বাংলা"}</em></button>
           <div class="ab-row ab-size"><span>${T("লেখার আকার", "Article text size")}</span><div class="ab-step"><button type="button" data-act="fs-" aria-label="${T("ছোট করুন", "Smaller")}">A−</button><b id="ab-fs">${Math.round(readZoom() * 100)}%</b><button type="button" data-act="fs+" aria-label="${T("বড় করুন", "Larger")}">A+</button></div></div>
+        </section>
+      </div>
+      <div class="st-col">
+        <section class="st-card"><h2>${T("এক্সপ্লোর", "Explore")}</h2>
           <div class="ab-topics ab-tiles">
             ${PWA.done ? "" : `<button type="button" data-act="install">${abIc("download")}<span>${T("অ্যাপ ইনস্টল", "Install App")}</span></button>`}
-            <a href="/list-your-company">${abIc("plus")}<span>${T("কোম্পানি লিস্ট করুন", "List your company")}</span></a>
             <a href="/news?sort=top">${abIc("flame")}<span>${T("সর্বাধিক পঠিত", "Most read")}</span></a>
             <a href="/#subscribe">${abIc("bell")}<span>${T("নিউজলেটার", "Newsletter")}</span></a>
             <button type="button" data-act="share-site">${abIc("share")}<span id="ab-share-l">${T("অ্যাপ শেয়ার", "Share App")}</span></button>
@@ -182,12 +191,15 @@
             <a href="/careers">${abIc("briefcase")}<span>${T("ক্যারিয়ার", "Careers")}</span></a>
             <a href="/contact">${abIc("mail")}<span>${T("যোগাযোগ", "Contact")}</span></a>
           </div>
-          <p class="ab-sub">${T("আমাদের ফলো করুন", "Follow us")}</p>
+        </section>
+        <section class="st-card"><h2>${T("আমাদের ফলো করুন", "Follow us")}</h2>
           <div class="ab-socs">${Object.keys(C.social).map((k) => `<a data-s="${k}" href="${C.social[k]}" target="_blank" rel="noopener" aria-label="${LABEL[k]}">${ICON[k].replace(/fill="[^"]*"/g, "").replace(/<defs>.*<\/defs>/, "")}</a>`).join("")}</div>
           <nav class="ab-legal" aria-label="${T("আইনি", "Legal")}">${LEGAL.filter((l) => ["/privacy-policy", "/terms-of-service", "/editorial-policy", "/cookie-policy"].includes(l.href)).map((l) => `<a href="${l.href}">${esc(pick(l))}</a>`).join("")}</nav>
-        </div>
-      </div>`;
+        </section>
+      </div>
+    </div>`;
   }
+  mount("st-root", settingsBody);
   const closeSheets = () => document.querySelectorAll(".ab-sheet.open").forEach((x) => x.classList.remove("open"));
   document.addEventListener("click", (e) => {
     const b = e.target.closest('[data-act="sheet"]');
@@ -1169,7 +1181,7 @@
   window.VOSB_UI = { get lang() { return lang; }, T, esc, pick, safeHref, bnDigits, formatDate, formatDateTime, money, $, $$, onRender(fn) { renderers.push(fn); }, refresh };
   (function loadAuth() {
     const s = document.createElement("script");
-    s.src = "/js/auth.js?v=20261102a";
+    s.src = "/js/auth.js?v=20261102b";
     s.onload = () => { try { window.VOSB_AUTH && window.VOSB_AUTH.paint(); } catch (e) {} };
     document.head.appendChild(s);
   })();

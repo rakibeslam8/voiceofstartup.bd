@@ -122,7 +122,7 @@
       <img class="au-logo" src="/assets/logo.png" alt="Voice of Startup Bangladesh" width="132" height="44">
       <h2>${title}</h2><p class="au-sub">${reasonHtml ? reasonHtml : sub}</p>
       ${showTabs ? `<div class="au-tabs" role="tablist"><button type="button" role="tab" aria-selected="${mode === "login"}" data-m="login">${T("লগইন", "Login")}</button><button type="button" role="tab" aria-selected="${mode === "signup"}" data-m="signup">${T("সাইন আপ", "Sign up")}</button></div>` : ""}
-      ${showTabs && google ? `<button type="button" class="au-google" data-google>${GOOGLE_SVG}<span>${T("Google দিয়ে চালিয়ে যান", "Continue with Google")}</span></button><div class="au-or"><span>${T("অথবা ইমেইল দিয়ে", "or with email")}</span></div>` : ""}
+      ${showTabs ? (google ? `<button type="button" class="au-google" data-google>${GOOGLE_SVG}<span>${T("Google দিয়ে চালিয়ে যান", "Continue with Google")}</span></button>` : `<button type="button" class="au-google au-soon" disabled aria-disabled="true">${GOOGLE_SVG}<span>${T("Google দিয়ে চালিয়ে যান", "Continue with Google")}</span><em>${T("শীঘ্রই আসছে", "Coming soon")}</em></button>`) + `<div class="au-or"><span>${T("অথবা ইমেইল দিয়ে", "or with email")}</span></div>` : ""}
       <div class="au-msg" id="au-msg" role="alert" aria-live="polite"></div>
       <form class="au-form" id="au-form" novalidate>
         ${mode === "signup" ? `<label>${T("আপনার নাম", "Your name")}<input name="name" autocomplete="name" maxlength="120" required></label>` : ""}
