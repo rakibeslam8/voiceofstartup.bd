@@ -13,6 +13,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.voiceofstartup.bd/companies</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/list-your-company</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/funding</loc>
     <lastmod>2026-11-01</lastmod>
     <changefreq>hourly</changefreq>
