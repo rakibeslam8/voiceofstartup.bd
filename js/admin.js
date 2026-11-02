@@ -235,19 +235,25 @@
     ads: '<path d="M3.500 10v4a1 1 0 0 0 1 1H7l5.500 4V5L7 9H4.500a1 1 0 0 0-1 1z"/><path d="M16 9.200a4 4 0 0 1 0 5.600M18.500 6.700a7.500 7.500 0 0 1 0 10.600"/>',
     subscribers: '<rect x="3" y="5" width="18" height="14" rx="2.500"/><path d="m3.500 7.500 8.500 6 8.500-6"/>',
     settings: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.200"/><circle cx="9" cy="17" r="2.200"/>',
+    companies: '<path d="M4 20V6.500A1.500 1.500 0 0 1 5.500 5H13a1.500 1.500 0 0 1 1.500 1.500V20"/><path d="M14.500 10H18a2 2 0 0 1 2 2v8"/><path d="M3 20h18M8 9h3M8 12.500h3M8 16h3"/>',
+    users: '<circle cx="12" cy="8" r="3.600"/><path d="M4.500 20.500c.7-4 3.700-6 7.500-6s6.800 2 7.500 6"/>',
     out: '<path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8l4 4-4 4M19 12H9"/>',
     site: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/>',
   };
   const svg = (k, cls) => `<svg class="ic ${cls || ""}" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg>`;
   const NAV = [
     { r: "dashboard", t: "Dashboard", s: "Home" },
-    { r: "visitors", t: "Visitors" },
-    { r: "posts", t: "Articles" },
+    { r: "visitors", t: "Visitors", s: "Visits" },
+    { r: "posts", t: "Articles", s: "Posts" },
     { r: "edit/new", t: "New article", s: "New" },
     { r: "ads", t: "Ads" },
     { r: "subscribers", t: "Subscribers", s: "Mail" },
-    { r: "settings", t: "Settings" },
+    { r: "companies", t: "Companies", s: "Firms", badge: true },
+    { r: "users", t: "Users" },
+    { r: "settings", t: "Settings", s: "Setup" },
   ];
+  /* Company Directory control centre (js/admin-co.js): users, applications, payments, reviews, investor interest */
+  const CO = typeof window.VOSB_ADMIN_CO === "function" ? window.VOSB_ADMIN_CO({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll }) : null;
   let shellOn = false;
   function shell() {
     const email = session.user.email || "";
@@ -256,7 +262,7 @@
       <header class="topbar"><div class="topbar-in">
         <a class="brand" href="#/dashboard" aria-label="Dashboard"><img src="/assets/logo.png" alt="Voice of Startup Bangladesh" width="90" height="36"></a>
         <span class="tag">Admin</span>
-        <nav class="tabs" id="tabs" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}" title="${n.t}">${svg(n.r)}<span class="lbl">${n.t}</span></a>`).join("")}</nav>
+        <nav class="tabs" id="tabs" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}" title="${n.t}">${svg(n.r)}<span class="lbl">${n.t}</span>${n.badge ? '<i class="nbadge" data-badge="companies" hidden></i>' : ""}</a>`).join("")}</nav>
         <span class="sp"></span>
         <a class="site-link" href="/" target="_blank" rel="noopener" title="Open the public website">${svg("site", "sm")}<span>View site</span></a>
         <div class="acct" id="acct">
@@ -270,7 +276,7 @@
         </div>
       </div></header>
       <main class="main" id="view"></main>
-      <nav class="bottom-nav" id="bnav" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}">${svg(n.r)}<em>${n.s || n.t}</em></a>`).join("")}</nav>`;
+      <nav class="bottom-nav" id="bnav" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}">${svg(n.r)}<em>${n.s || n.t}</em>${n.badge ? '<i class="nbadge" data-badge="companies" hidden></i>' : ""}</a>`).join("")}</nav>`;
     const btn = $("#acctBtn"), menu = $("#acctMenu");
     const close = () => { menu.hidden = true; btn.setAttribute("aria-expanded", "false"); };
     btn.onclick = (e) => { e.stopPropagation(); const open = menu.hidden; menu.hidden = !open; btn.setAttribute("aria-expanded", String(open)); };
@@ -279,10 +285,13 @@
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { close(); btn.focus(); } });
     $("#out").onclick = () => { close(); logout("You have been signed out."); };
     shellOn = true;
+    if (CO) { try { CO.refreshBadges(true); } catch (e) {} }
   }
 
   function markNav(r) {
-    const base = r.startsWith("edit") ? "edit/new" : r.startsWith("ads") ? "ads" : r.startsWith("newsletter") ? "subscribers" : r;
+    const base = r.startsWith("edit") ? "edit/new" : r.startsWith("ads") ? "ads" : r.startsWith("newsletter") ? "subscribers"
+      : (r === "companies" || r.startsWith("companies/") || ["payments", "reviews", "interests", "company-settings"].includes(r)) ? "companies"
+      : (r === "users" || r === "deletions") ? "users" : r;
     $$("[data-r]").forEach((a) => a.classList.toggle("on", a.dataset.r === base || (base === "edit/new" && a.dataset.r === "edit/new")));
   }
 
@@ -307,6 +316,7 @@
       else if (h === "posts") await viewPosts(view);
       else if (h === "settings") viewSettings(view);
       else if (h.startsWith("edit/")) await viewEditor(view, h.slice(5));
+      else if (CO && CO.handles(h)) await CO.render(h, view);
       else { location.hash = "#/dashboard"; }
     } catch (e) {
       console.error(e);
@@ -432,7 +442,7 @@
 
   async function viewDashboard(view) {
     view.innerHTML = `<div class="page-h"><h1>Dashboard</h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div><div class="card"><p class="muted">Loading…</p></div>`;
-    let site = null, subs = null, subsNew = null, app = null;
+    let site = null, subs = null, subsNew = null, app = null, coHtml = "";
     /* one exact server-side count (update-6 SQL); falls back to two plain counts if that update isn't installed yet */
     const loadSubs = async () => {
       try {
@@ -448,7 +458,8 @@
     };
     await Promise.all([loadPosts(true), loadDaily(), loadSite(7).then((x) => { site = x; }).catch(() => {}),
       loadSubs().then((x) => { if (x) { subs = x.active; subsNew = x.new7; } }),
-      sb.rpc("admin_app_stats").then((r) => { if (!r.error && r.data && !Array.isArray(r.data)) app = r.data; }).catch(() => {})]);
+      sb.rpc("admin_app_stats").then((r) => { if (!r.error && r.data && !Array.isArray(r.data)) app = r.data; }).catch(() => {}),
+      (CO ? CO.counts(true).then((c) => { coHtml = CO.dashSection(c) || ""; }) : Promise.resolve()).catch(() => {})]);
     if (!view.isConnected) return;   // user navigated away while loading
     const total = posts.reduce((a, p) => a + Number(p.views || 0), 0);
     const shares = posts.reduce((a, p) => a + Number(p.shares || 0), 0);
@@ -495,6 +506,7 @@
         <div class="tile"><small>Install button taps</small><b>${fmtN(app.taps_total)}</b></div>
       </div>
       <p class="muted" style="font-size:.8rem;margin:-4px 0 14px">${(app.platforms || []).length ? "By device: " + app.platforms.map((x) => `${esc(({ android: "Android", ios: "iPhone/iPad", windows: "Windows", mac: "Mac", linux: "Linux", other: "Other" })[x.platform] || x.platform)} ${fmtN(x.n)}`).join(" · ") + ". " : ""}Chrome/Edge/Android installs are counted exactly when the app is added. iPhone installs are counted the first time the home-screen app is opened. Counts exclude bots and your own admin browser.</p>` : ""}
+      ${coHtml}
       <div class="dash-cols">
         <div class="card">
           <div class="chart-h"><h2>Daily reads</h2>

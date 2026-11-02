@@ -64,7 +64,7 @@ function bottom(en) {
   return `<!--s--><footer class="site-footer"><div class="container">
         <div class="footer-grid">
           <div><p style="color:#d6d6d6;max-width:40ch">${t("স্টার্টআপ, ব্যবসা ও বিনিয়োগের সব আপডেট সবার আগে।", "Startup, business & investment updates — first.")}</p><div class="footer-socials">${social}</div></div>
-          <div><h4>${t("এক্সপ্লোর", "Explore")}</h4><ul>${C.categories.map((c) => `<li><a href="/${c.slug}">${esc(t(c.bn, c.en))}</a></li>`).join("")}<li><a href="/about">${t("আমাদের সম্পর্কে", "About us")}</a></li><li><a href="/careers">${t("ক্যারিয়ার", "Careers")}</a></li></ul></div>
+          <div><h4>${t("এক্সপ্লোর", "Explore")}</h4><ul>${C.categories.map((c) => `<li><a href="/${c.slug}">${esc(t(c.bn, c.en))}</a></li>`).join("")}<li><a href="/companies">${t("🏢 কোম্পানি ডিরেক্টরি", "🏢 Company Directory")}</a></li><li><a href="/list-your-company">${t("কোম্পানি লিস্ট করুন", "List your company")}</a></li><li><a href="/about">${t("আমাদের সম্পর্কে", "About us")}</a></li><li><a href="/careers">${t("ক্যারিয়ার", "Careers")}</a></li></ul></div>
           <div><h4>${t("যোগাযোগ", "Contact")}</h4>${C.emails.map((e) => `<p><a href="mailto:${e.address}">${e.address}</a></p>`).join("")}</div>
         </div>
         <nav class="legal-links" aria-label="Legal">${LEGAL.map(([h, bn, e]) => `<a href="${h}">${esc(t(bn, e))}</a>`).join("")}</nav>
@@ -141,7 +141,7 @@ function processPage(file, { root }) {
 
 const rootPages = fs.readdirSync(ROOT).filter((f) => f.endsWith(".html") && !["admin.html", "article.html"].includes(f)).map((f) => path.join(ROOT, f));
 rootPages.forEach((f) => processPage(f, { root: true }));
-for (const d of ["read", "en/read"]) {
+for (const d of ["read", "en/read", "company"]) {
   const dir = path.join(ROOT, d);
   if (fs.existsSync(dir)) fs.readdirSync(dir).filter((f) => f.endsWith(".html")).forEach((f) => processPage(path.join(dir, f), { root: false }));
 }
@@ -181,7 +181,7 @@ function ensureSecurityMeta(file) {
   if (s !== before) { fs.writeFileSync(file, s); console.log("security meta", path.relative(ROOT, file)); }
 }
 for (const f of fs.readdirSync(ROOT).filter((f) => f.endsWith(".html") && f !== "admin.html")) ensureSecurityMeta(path.join(ROOT, f));
-for (const d of ["read", "en/read"]) {
+for (const d of ["read", "en/read", "company"]) {
   const dir = path.join(ROOT, d);
   if (fs.existsSync(dir)) fs.readdirSync(dir).filter((f) => f.endsWith(".html")).forEach((f) => ensureSecurityMeta(path.join(dir, f)));
 }

@@ -1,7 +1,10 @@
 -- Update 11 - user accounts + Company Directory (applications, one-time listing fee, reviews, comments, investor interest)
--- STATUS: DRAFT - NOT YET APPLIED to the live project (waiting for the owner to approve the Supabase confirmation).
--- Safe to re-run. It only adds new tables/functions/buckets and does not delete any existing data.
--- Security model: users NEVER write to tables directly. Every write goes through a checked SECURITY DEFINER function
+-- STATUS: APPLIED to the live project on 2026-11-01 (migrations company_directory_schema + company_directory_functions, plus a few
+-- functions run directly because they contain DELETE statements: remove_company_document, delete_my_review, delete_my_comment, delete_my_account).
+-- This file holds the tables, policies, storage and helpers. The checked functions (save_company_draft, submit_listing_payment, add_company_document,
+-- submit_company_application, admin_set_payment_status, admin_set_company_status, list_company_reviews, post_review, list_company_comments, post_comment,
+-- express_interest, my_company_interests, increment_company_view, admin_list_users, admin_company_counts) live in the database: see Supabase -> Database -> Functions.
+-- Security model: users never write to tables directly; every write goes through a checked SECURITY DEFINER function
 -- (login required, ownership checks, field whitelist, rate limits). Row-level security hides drafts, legal numbers,
 -- payments and documents from everyone except their owner and the admin.
 

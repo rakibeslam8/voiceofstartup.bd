@@ -17,8 +17,16 @@
       sections: [
         { h: L("আমরা কারা", "Who we are"),
           p: [L("VOSB বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগ বিষয়ক একটি নিউজ ও মিডিয়া প্ল্যাটফর্ম। এই নীতি সংক্রান্ত যেকোনো বিষয়ে আমাদের সাথে যোগাযোগের ঠিকানা: " + EMAIL + "।", "VOSB is a news and media platform covering startups, business and investment in Bangladesh. For anything related to this policy, contact us at " + EMAIL + ".")] },
+        { h: L("অ্যাকাউন্ট ও কোম্পানি লিস্টিং", "Accounts and company listings"),
+          p: [L("আপনি লগইন করলে আমরা আপনার নাম, ইমেইল, (থাকলে) মোবাইল নম্বর ও প্রোফাইল তথ্য রাখি। Google দিয়ে লগইন করলে Google আমাদের আপনার নাম, ইমেইল ও ছবি দেয়; পাসওয়ার্ড আমরা দেখতে পাই না।", "When you log in we keep your name, email, mobile number (if given) and profile details. If you use Google sign-in, Google shares your name, email and picture with us; we never see your password.")],
+          ul: [
+            L("কোম্পানি আবেদনে দেওয়া আইনি তথ্য, যোগাযোগ, টিআইএন/বিআইএন ও আপলোড করা ডকুমেন্ট শুধু VOSB অ্যাডমিন যাচাইয়ের জন্য দেখতে পারে; এগুলো পাবলিক পেজে দেখানো হয় না।", "Legal details, contact details, TIN/BIN and uploaded documents in a company application are visible only to VOSB admins for verification and are never shown publicly."),
+            L("পেমেন্টের জন্য আপনার বিকাশ নম্বর ও TrxID রাখা হয় — শুধু পেমেন্ট যাচাই ও হিসাবের জন্য।", "For payments we keep your bKash number and TrxID — only to verify payments and keep accounts."),
+            L("রিভিউ, কমেন্ট ও বিনিয়োগ-আগ্রহ আপনার নামসহ সংরক্ষিত হয়। বিনিয়োগ-আগ্রহে আপনি টিক দিলেই কেবল আপনার ইমেইল/মোবাইল ওই কোম্পানির সাথে শেয়ার হয়।", "Reviews, comments and investor interests are stored with your name. Your email/mobile is shared with a company only if you tick the box in an investor-interest message."),
+            L("অ্যাকাউন্ট মুছলে আপনি কারণ জানাবেন এবং আমরা সেই কারণ ও অ্যাকাউন্টের তথ্যের একটি রেকর্ড অ্যাডমিন রেকর্ডে রাখি (সেবার মান উন্নয়ন, জালিয়াতি রোধ ও আইনি প্রয়োজনে)। আপনার রিভিউ/কমেন্ট “Deleted user” নামে থাকে এবং কোম্পানি লিস্টিং VOSB-এর কাছে থাকে।", "When you delete your account you tell us why, and we keep a record of that reason and your account details in our admin records (to improve the service, prevent fraud and meet legal needs). Your reviews/comments remain under “Deleted user” and company listings stay with VOSB."),
+          ] },
         { h: L("আমরা কোন তথ্য সংগ্রহ করি", "Information we collect"),
-          p: [L("এই ওয়েবসাইটে অ্যাকাউন্ট, লগইন বা অনলাইন পেমেন্ট নেই। আমরা সীমিত পরিসরে নিচের তথ্য পেতে পারি:", "This website has no accounts, logins or online payments. We may receive limited information as follows:")],
+          p: [L("পাঠকদের জন্য অ্যাকাউন্ট ঐচ্ছিক। আমরা সীমিত পরিসরে নিচের তথ্য পেতে পারি:", "Accounts are optional for readers. We may receive limited information as follows:")],
           ul: [
             L("আপনি যে তথ্য আমাদের পাঠান: যোগাযোগ ফর্ম, নিউজলেটার সাবস্ক্রিপশন বা ইমেইলের মাধ্যমে আপনার নাম, ইমেইল ঠিকানা, বার্তা এবং (ক্যারিয়ারের ক্ষেত্রে) সিভি বা সংযুক্ত ফাইল। ফর্মগুলো আপনার নিজের ইমেইল অ্যাপ খুলে বার্তা তৈরি করে; আপনি “সেন্ড” করলেই কেবল তা আমাদের কাছে পৌঁছায়।", "Information you send us: your name, email address, message and (for careers) CV or attachments, via the contact form, newsletter sign-up or email. Our forms open your own email app with a pre-filled message; it only reaches us when you press send."),
             L("প্রযুক্তিগত তথ্য: ওয়েবসাইট হোস্টিং প্রদানকারী (GitHub Pages) সার্ভার লগ হিসেবে আইপি ঠিকানা, ব্রাউজার ও ডিভাইসের ধরন, দেখা পেজ এবং সময় রেকর্ড করতে পারে।", "Technical data: our hosting provider (GitHub Pages) may record server logs such as IP address, browser and device type, pages requested and timestamps."),
@@ -88,6 +96,15 @@
           p: [L("ওয়েবসাইট ব্যবহারের নিয়ম ও নিষিদ্ধ কাজের তালিকা আমাদের ব্যবহার নীতিতে দেওয়া আছে, যা এই শর্তাবলির অংশ।", "The rules for using the website and the list of prohibited conduct are in our Usage Policy, which forms part of these Terms.")] },
         { h: L("শর্ত পরিবর্তন", "Changes to the terms"),
           p: [L("আমরা এই শর্তাবলি পরিবর্তন করতে পারি। পরিবর্তনের পর ওয়েবসাইট ব্যবহার চালিয়ে গেলে আপনি নতুন শর্ত মেনে নিয়েছেন বলে গণ্য হবে।", "We may change these Terms. Continued use of the website after a change means you accept the updated Terms.")] },
+        { h: L("অ্যাকাউন্ট ও কোম্পানি ডিরেক্টরি", "Accounts and the Company Directory"),
+          p: [L("VOSB একটি মিডিয়া ও লিস্টিং প্ল্যাটফর্ম — ব্রোকার, বিনিয়োগ উপদেষ্টা বা তহবিল সংগ্রহকারী নয় এবং এখানে বিনিয়োগের কোনো টাকা নেওয়া বা লেনদেন করা হয় না। বিনিয়োগকারী ও কোম্পানির মধ্যে যেকোনো চুক্তি বা লেনদেন তাদের নিজ দায়িত্বে।", "VOSB is a media and listing platform — not a broker, investment adviser or fundraiser. No investment money is collected or transacted here. Any agreement or transaction between an investor and a company is at their own responsibility.")],
+          ul: [
+            L("আবেদনকারীকে নিশ্চিত করতে হবে যে তথ্য সঠিক এবং তিনি কোম্পানির প্রতিনিধিত্ব করার অধিকার রাখেন। ভুল বা জাল তথ্য/ডকুমেন্ট দিলে লিস্টিং বাতিল হবে এবং ফি ফেরত নয়।", "The applicant must confirm the information is accurate and that they are authorised to represent the company. False or forged information or documents lead to removal and no refund."),
+            L("প্রতিটি আবেদন VOSB যাচাই করে; আমরা পরিবর্তন চাইতে, আবেদন বাতিল বা লিস্টিং স্থগিত করতে পারি। লিস্টেড হওয়া মানে VOSB কোম্পানিটিকে সুপারিশ বা গ্যারান্টি দিচ্ছে না।", "VOSB reviews every application; we may ask for changes, reject an application or pause a listing. Being listed is not a recommendation or guarantee by VOSB."),
+            L("“VOSB ভ্যালুয়েশন” শুধু ইঙ্গিতমূলক মূল্যায়ন — বিনিয়োগ পরামর্শ নয়। বিনিয়োগে ঝুঁকি আছে; সিদ্ধান্তের আগে নিজে যাচাই করুন।", "A “VOSB valuation” is an indicative assessment only — not investment advice. Investing is risky; do your own due diligence."),
+            L("রিভিউ ও কমেন্ট সত্য, নিজের অভিজ্ঞতাভিত্তিক ও ভদ্র হতে হবে। অপমানজনক, মিথ্যা বা বিজ্ঞাপনমূলক কনটেন্ট আমরা সরিয়ে দিতে পারি।", "Reviews and comments must be truthful, based on your own experience and civil. We may remove abusive, false or promotional content."),
+            L("একবারের লিস্টিং ফির বিস্তারিত রিফান্ড নীতিতে আছে।", "The one-time listing fee is explained in the Refund Policy."),
+          ] },
         { h: L("প্রযোজ্য আইন", "Governing law"),
           p: [L("এই শর্তাবলি বাংলাদেশের আইন দ্বারা পরিচালিত হবে এবং যেকোনো বিরোধ ঢাকার উপযুক্ত আদালতের এখতিয়ারভুক্ত হবে।", "These Terms are governed by the laws of Bangladesh and any dispute will be subject to the jurisdiction of the competent courts of Dhaka.")] },
       ],
@@ -127,10 +144,18 @@
     refund: {
       title: L("রিফান্ড নীতি", "Refund Policy"),
       intro: L(
-        "VOSB-এর বর্তমান ওয়েবসাইট সবার জন্য বিনামূল্যে এবং এখানে কোনো পেইড সাবস্ক্রিপশন বা অনলাইন কেনাকাটা নেই। এই নীতি প্রযোজ্য হবে আমাদের সাথে লিখিতভাবে সম্মত পেইড সেবার ক্ষেত্রে, যেমন স্পনসরশিপ, বিজ্ঞাপন, প্রচারমূলক কনটেন্ট ও ইভেন্ট পার্টনারশিপ।",
-        "VOSB's website is free to everyone and has no paid subscriptions or online purchases. This policy applies to paid services agreed with us in writing, such as sponsorships, advertising, promotional content and event partnerships."
+        "VOSB-এর ওয়েবসাইট পাঠকদের জন্য বিনামূল্যে। এই নীতি প্রযোজ্য হবে (ক) কোম্পানি লিস্টিংয়ের একবারের ফি এবং (খ) আমাদের সাথে লিখিতভাবে সম্মত পেইড সেবার ক্ষেত্রে, যেমন স্পনসরশিপ, বিজ্ঞাপন, প্রচারমূলক কনটেন্ট ও ইভেন্ট পার্টনারশিপ।",
+        "VOSB's website is free for readers. This policy applies to (a) the one-time company listing fee and (b) paid services agreed with us in writing, such as sponsorships, advertising, promotional content and event partnerships."
       ),
       sections: [
+        { h: L("কোম্পানি লিস্টিং ফি", "Company listing fee"),
+          p: [L("লিস্টিং ফি একবারের এবং চিরকালের জন্য — নবায়ন বা বার্ষিক ফি নেই। ফি আমাদের রিভিউ, যাচাই ও লিস্টিং পরিচালনার খরচ। পেমেন্ট বিকাশে পাঠিয়ে TrxID জমা দিতে হয় এবং VOSB টিম হাতে-কলমে যাচাই করে।", "The listing fee is one-time and valid forever — no renewal or annual fee. It covers our review, verification and listing management. You send the payment by bKash and submit the TrxID, and the VOSB team verifies it manually.")],
+          ul: [
+            L("আমাদের ভুলে একই আবেদনে দুইবার পেমেন্ট নেওয়া হলে অতিরিক্তটি ফেরত দেওয়া হবে।", "If we take a payment twice for the same application by our mistake, the extra amount is refunded."),
+            L("যাচাইয়ে কোনো কারণে পেমেন্ট গৃহীত না হলে (যেমন ভুল TrxID) আপনি সঠিক তথ্য দিয়ে আবার জমা দিতে পারবেন; টাকা আমাদের কাছে না এলে কোনো ফি কাটা হয় না।", "If a payment cannot be accepted (for example a wrong TrxID) you can resubmit with the correct details; if no money reached us nothing is charged."),
+            L("আবেদন যাচাইয়ের পর সম্পূর্ণ বাতিল হলে (আমাদের মানদণ্ডে অনুত্তীর্ণ হলে) আপনি লিখিতভাবে অনুরোধ করলে ফি ফেরত দেওয়া হবে, তবে জাল বা ভুল তথ্য/ডকুমেন্টের কারণে বাতিল হলে ফি ফেরত নয়।", "If an application is finally rejected after review (it does not meet our criteria) the fee is refunded on written request — except where it was rejected for false or forged information or documents."),
+            L("লিস্টিং প্রকাশের পর আপনার অনুরোধে সরিয়ে নিলে ফি ফেরত নয়।", "No refund if you ask us to remove the listing after it was published."),
+          ] },
         { h: L("পরিধি", "Scope"),
           p: [L("সাধারণ পাঠকদের জন্য কোনো ফি নেই, তাই রিফান্ডের প্রশ্ন ওঠে না। পেইড পার্টনারদের ক্ষেত্রে লিখিত চুক্তি বা ইনভয়েসে ভিন্ন শর্ত থাকলে সেটিই প্রাধান্য পাবে।", "Readers pay nothing, so refunds do not arise. For paid partners, any different terms in a written agreement or invoice take priority over this policy.")] },
         { h: L("যেসব ক্ষেত্রে পূর্ণ রিফান্ড", "When you get a full refund"),

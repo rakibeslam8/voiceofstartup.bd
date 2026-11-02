@@ -75,8 +75,11 @@
     { href: "/news", bn: "সংবাদ", en: "News" },
     { href: "/funding", bn: "ফান্ডিং", en: "Funding" },
     { href: "/founder-stories", bn: "ফাউন্ডার স্টোরি", en: "Founder Stories" },
+    { href: "/companies", bn: "কোম্পানি", en: "Companies" },
     { href: "/contact", bn: "যোগাযোগ", en: "Contact" },
   ];
+  /* "is this link the current page?" – company pages (/company/<slug>, /list-your-company, /apply) belong to the Companies tab */
+  const isCompaniesPage = (page) => /^\/(companies|company|list-your-company|apply)(\/|$)/.test(page);
 
   const LEGAL = [
     { href: "/privacy-policy",   bn: "গোপনীয়তা নীতি", en: "Privacy Policy" },
@@ -127,7 +130,23 @@
     flame: "M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z",
     send: "M21 3L3 10.5l7 2.5 2.5 7zM10 13l11-10",
     bell: "M6 17v-6a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4",
+    company: "M4 20V6.500A1.500 1.500 0 0 1 5.500 5H13a1.500 1.500 0 0 1 1.500 1.500V20M14.500 10H18a2 2 0 0 1 2 2v8M3 20h18M8 9h3M8 12.500h3M8 16h3",
+    user: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.500 20.500c.7-4 3.700-6 7.500-6s6.800 2 7.500 6",
+    plus: "M12 5v14M5 12h14",
   };
+  /* login state is read from the saved session so the header never flashes the wrong button; js/auth.js takes over after it loads */
+  function authStored() { try { const j = JSON.parse(localStorage.getItem("vosb-user-auth") || "null"); return j && j.user ? j.user : null; } catch (e) { return null; } }
+  function authInitial(kind) {
+    const u = authStored();
+    if (kind === "sheet") {
+      if (!u) return `<button class="ab-login" type="button" data-act="auth"><span class="ab-login-ic">${abIc("user")}</span><span class="ab-login-tx"><b>${T("লগইন / সাইন আপ", "Login / Sign up")}</b><small>${T("রিভিউ, কমেন্ট ও কোম্পানি লিস্টিংয়ের জন্য", "To review, comment and list your company")}</small></span></button>`;
+      const m = u.user_metadata || {}, n = (m.full_name || m.name || u.email || "?").trim();
+      return `<a class="ab-login ab-in" href="/account"><span class="au-av">${esc(n[0].toUpperCase())}</span><span class="ab-login-tx"><b>${esc(n)}</b><small>${T("আমার অ্যাকাউন্ট", "My account")}</small></span></a>`;
+    }
+    if (!u) return `<button class="btn btn-green au-login" type="button" data-act="auth">${T("লগইন", "Login")}</button>`;
+    const m = u.user_metadata || {}, n = (m.full_name || m.name || u.email || "?").trim();
+    return `<a class="au-av" href="/account" aria-label="${T("আমার অ্যাকাউন্ট", "My account")}">${esc(n[0].toUpperCase())}</a>`;
+  }
   const abIc = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${AB_ICON[k]}"/></svg>`;
   function appBar(page) {
     const isTopic = C.categories.some((c) => "/" + c.slug === page);
@@ -136,6 +155,7 @@
       <nav class="app-bar" aria-label="${T("অ্যাপ নেভিগেশন", "App navigation")}">
         <a class="ab${on(page === "/")}" href="/">${abIc("home")}<span>${T("হোম", "Home")}</span></a>
         <a class="ab${on(page === "/news")}" href="/news">${abIc("news")}<span>${T("সংবাদ", "News")}</span></a>
+        <a class="ab${on(isCompaniesPage(page))}" href="/companies">${abIc("company")}<span>${T("কোম্পানি", "Companies")}</span></a>
         <button class="ab${on(isTopic)}" type="button" data-act="sheet" data-sheet="topics" aria-haspopup="dialog">${abIc("topics")}<span>${T("বিষয়", "Topics")}</span></button>
         <button class="ab" type="button" data-act="sheet" data-sheet="more" aria-haspopup="dialog">${abIc("settings")}<span>${T("সেটিংস", "Settings")}</span></button>
       </nav>
@@ -147,11 +167,13 @@
       <div class="ab-sheet" id="sheet-more" role="dialog" aria-modal="true" aria-label="${T("সেটিংস", "Settings")}">
         <div class="ab-back" data-act="sheet-close"></div>
         <div class="ab-card"><i class="ab-grip"></i><h3>${T("সেটিংস", "Settings")}</h3>
+          <div class="ab-acct" data-auth-slot="sheet">${authInitial("sheet")}</div>
           <button class="ab-row" type="button" data-act="theme"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg><span>${T("ডার্ক মোড", "Dark mode")}</span><i class="ab-sw" aria-hidden="true"></i></button>
           <button class="ab-row" type="button" data-act="lang"><b class="ab-lg">${lang === "bn" ? "EN" : "বা"}</b><span>${T("ভাষা", "Language")}</span><em>${lang === "bn" ? "English" : "বাংলা"}</em></button>
           <div class="ab-row ab-size"><span>${T("লেখার আকার", "Article text size")}</span><div class="ab-step"><button type="button" data-act="fs-" aria-label="${T("ছোট করুন", "Smaller")}">A−</button><b id="ab-fs">${Math.round(readZoom() * 100)}%</b><button type="button" data-act="fs+" aria-label="${T("বড় করুন", "Larger")}">A+</button></div></div>
           <div class="ab-topics ab-tiles">
             ${PWA.done ? "" : `<button type="button" data-act="install">${abIc("download")}<span>${T("অ্যাপ ইনস্টল", "Install App")}</span></button>`}
+            <a href="/list-your-company">${abIc("plus")}<span>${T("কোম্পানি লিস্ট করুন", "List your company")}</span></a>
             <a href="/news?sort=top">${abIc("flame")}<span>${T("সর্বাধিক পঠিত", "Most read")}</span></a>
             <a href="/#subscribe">${abIc("bell")}<span>${T("নিউজলেটার", "Newsletter")}</span></a>
             <button type="button" data-act="share-site">${abIc("share")}<span id="ab-share-l">${T("অ্যাপ শেয়ার", "Share App")}</span></button>
@@ -203,7 +225,7 @@
       <header class="site-header"><div class="container">
         <a class="brand" href="/" aria-label="Voice of Startup Bangladesh"><img src="/assets/logo.png" alt="Voice of Startup BD logo"></a>
         <nav class="nav" id="nav" aria-label="Main">
-          ${NAV.map((n, i) => `<a href="${n.href}" class="${n.href === page ? "active" : ""}">${esc(pick(n))}</a>${i === 1 ? topicsMenu(page) : ""}`).join("")}
+          ${NAV.map((n, i) => `<a href="${n.href}" class="${n.href === page || (n.href === "/companies" && isCompaniesPage(page)) ? "active" : ""}">${esc(pick(n))}</a>${i === 1 ? topicsMenu(page) : ""}`).join("")}
           <div class="nav-tools">
             <button class="nt-btn theme-toggle" data-act="theme" type="button"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg><span>${T("ডার্ক / লাইট", "Dark / Light")}</span></button>
             <button class="nt-btn" data-act="lang" type="button"><b>${lang === "bn" ? "EN" : "বা"}</b><span>${lang === "bn" ? "English" : "বাংলা"}</span></button>
@@ -213,7 +235,7 @@
           <a class="hdr-search" href="/news?s=1" aria-label="${T("খবর খুঁজুন", "Search stories")}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg></a>
           <button class="theme-toggle" data-act="theme" type="button" aria-label="${T("ডার্ক / লাইট মোড", "Dark / light mode")}" title="${T("ডার্ক / লাইট মোড", "Dark / light mode")}"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg></button>
           <button class="lang-toggle" data-act="lang" aria-label="Switch language">${lang === "bn" ? "EN" : "বাংলা"}</button>
-          <a class="btn btn-green" href="#follow">${T("ফলো করুন", "Follow Now")}</a>
+          <span class="au-slot" data-auth-slot="header">${authInitial("header")}</span>
           <button class="menu-btn" id="menu" aria-label="Menu">☰</button>
         </div>
       </div></header>
@@ -250,6 +272,8 @@
           <div>
             <h4>${T("এক্সপ্লোর", "Explore")}</h4>
             <ul>${C.categories.map((c) => `<li><a href="/${c.slug}">${ci(c)} ${esc(pick(c))}</a></li>`).join("")}
+            <li><a href="/companies">${T("🏢 কোম্পানি ডিরেক্টরি", "🏢 Company Directory")}</a></li>
+            <li><a href="/list-your-company">${T("কোম্পানি লিস্ট করুন", "List your company")}</a></li>
             <li><a href="/about">${T("আমাদের সম্পর্কে", "About us")}</a></li>
             <li><a href="/careers">${T("ক্যারিয়ার", "Careers")}</a></li></ul>
           </div>
@@ -1110,6 +1134,7 @@
 
   function renderAll() {
     renderChrome();
+    try { if (window.VOSB_AUTH) window.VOSB_AUTH.paint(); } catch (e) {}
     refresh();
     wireForms();
   }
@@ -1131,6 +1156,23 @@
   }
 
   document.addEventListener("click", (e) => { if (e.target.closest("[data-retry]")) loadPosts(); });
+
+  /* ---------- shared helpers for the Companies / account pages (js/companies.js, js/apply.js, js/account.js) ---------- */
+  const money = (n) => {
+    n = Number(n);
+    if (!isFinite(n) || n <= 0) return "—";
+    const f = (v) => bnDigits(String(Math.round(v * 100) / 100));
+    if (n >= 1e7) return "৳" + f(n / 1e7) + T(" কোটি", " crore");
+    if (n >= 1e5) return "৳" + f(n / 1e5) + T(" লাখ", " lakh");
+    return "৳" + bnDigits(Math.round(n).toLocaleString("en-IN"));
+  };
+  window.VOSB_UI = { get lang() { return lang; }, T, esc, pick, safeHref, bnDigits, formatDate, formatDateTime, money, $, $$, onRender(fn) { renderers.push(fn); }, refresh };
+  (function loadAuth() {
+    const s = document.createElement("script");
+    s.src = "/js/auth.js?v=20261102a";
+    s.onload = () => { try { window.VOSB_AUTH && window.VOSB_AUTH.paint(); } catch (e) {} };
+    document.head.appendChild(s);
+  })();
 
   document.addEventListener("DOMContentLoaded", () => {
     renderAll();

@@ -59,6 +59,22 @@ async function fetchPosts() {
   return all;
 }
 
+/* ---- fetch live (approved) companies: only rows the database already shows to the public ---- */
+const CO_COLS = "id,slug,name,tagline,description,category,stage,founded_year,website,social,logo_url,cover_url,division,district,team_size,business_model,highlights,vosb_valuation,seeking_amount,verified,featured,rating_avg,rating_count,published_at";
+async function fetchCompanies() {
+  const all = [];
+  for (let from = 0; from < 20000; from += 1000) {
+    const url = `${SB_URL}/rest/v1/companies?select=${CO_COLS}&status=eq.published&order=published_at.desc,id.asc`;
+    const res = await fetch(url, { headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY, Range: `${from}-${from + 999}`, "Range-Unit": "items" } });
+    if (!res.ok) { console.warn("Companies not readable yet (" + res.status + ") — skipped"); return null; }   // null = keep existing pages untouched
+    const rows = await res.json();
+    if (!Array.isArray(rows)) return null;
+    all.push(...rows);
+    if (rows.length < 1000) break;
+  }
+  return all;
+}
+
 /* ---- helpers ---- */
 const trim = (s) => String(s || "").trim();
 /* keep <title> / meta description inside what Google shows (about 60 / 155 characters) */
@@ -205,10 +221,41 @@ function articlePage(r, lang, all) {
 `;
 }
 
+/* ---- company profile page (static copy for search engines; js/companies.js then draws the live, interactive page) ---- */
+const coLabel = (list, id) => { const o = (list || []).find((x) => x.id === id); return o ? o.en : id || ""; };
+function companyPage(c, shell) {
+  const url = `${ORIGIN}/company/${c.slug}`;
+  const title = `${clip(c.name, 40)} — Company profile | VOSB`;
+  const desc = clip([c.tagline, c.description].filter(Boolean).join(" — "), 158);
+  const same = [c.website, ...Object.values(c.social || {})].filter((u) => /^https?:\/\//.test(String(u || "")));
+  const ld = { "@context": "https://schema.org", "@type": "Organization", name: c.name, url, description: c.tagline || undefined, logo: c.logo_url || undefined, sameAs: same.length ? same : undefined };
+  if (c.rating_count > 0) ld.aggregateRating = { "@type": "AggregateRating", ratingValue: Number(c.rating_avg), reviewCount: c.rating_count, bestRating: 5, worstRating: 1 };
+  const paras = String(c.description || "").split(/\n{2,}/).map((p) => trim(p)).filter(Boolean).map((p) => `<p>${esc(p)}</p>`).join("");
+  const facts = [["Industry", coLabel(C.companies.industries, c.category)], ["Stage", coLabel(C.companies.stages, c.stage)], ["Location", [c.district, c.division].filter(Boolean).join(", ")], ["Founded", c.founded_year || ""]].filter((f) => f[1]).map((f) => `<li><b>${f[0]}:</b> ${esc(f[1])}</li>`).join("");
+  const body = `<main>
+    <section class="section co-section"><div class="container" id="co-page" data-slug="${esc(c.slug)}">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/companies">Companies</a><span aria-hidden="true">›</span><span aria-current="page">${esc(c.name)}</span></nav>
+      <article class="co-sec"><h1>${esc(c.name)}</h1><p class="co-ptag">${esc(c.tagline || "")}</p>${paras}<ul>${facts}</ul><p><a href="/companies">All listed companies</a></p></article>
+    </div></section>
+  </main>`;
+  let h = shell.replace(/<main>[\s\S]*<\/main>/, () => body);
+  h = h.replace(/<title>[\s\S]*?<\/title>/, () => `<title>${esc(title)}</title>`)
+    .replace(/<meta name="description" content="[^"]*">/, () => `<meta name="description" content="${esc(desc)}">`)
+    .replace(/<meta name="robots" content="[^"]*">/, () => `<meta name="robots" content="index, follow, max-image-preview:large">`)
+    .replace(/<link rel="canonical" href="[^"]*">/, () => `<link rel="canonical" href="${url}">`)
+    .replace(/<meta property="og:title" content="[^"]*">/, () => `<meta property="og:title" content="${esc(c.name)} | VOSB">`)
+    .replace(/<meta property="og:description" content="[^"]*">/, () => `<meta property="og:description" content="${esc(desc)}">`)
+    .replace(/<meta property="og:url" content="[^"]*">/, () => `<meta property="og:url" content="${url}">`)
+    .replace(/<script type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>\s*/g, "");
+  h = h.replace("</head>", () => `  <script type="application/ld+json" id="ld-company">${JSON.stringify(ld).replace(/</g, "\\u003c")}</script>\n</head>`);
+  h = h.replace('<body data-page="companies">', '<body data-page="company">').replace(/<body([^>]*)>/, (m) => (m.includes("data-page") ? m : m));
+  return h.replace(/<script src="\/js\/companies\.js[^"]*"><\/script>/, (m) => m);
+}
+
 /* ---- sitemap + feeds ---- */
-const STATIC = ["/", "/news", ...cats.map((c) => "/" + c.slug), "/about", "/contact", "/careers", "/privacy-policy", "/terms-of-service", "/cookie-policy", "/refund-policy", "/usage-policy", "/editorial-policy"];
+const STATIC = ["/", "/news", "/companies", "/list-your-company", ...cats.map((c) => "/" + c.slug), "/about", "/contact", "/careers", "/privacy-policy", "/terms-of-service", "/cookie-policy", "/refund-policy", "/usage-policy", "/editorial-policy"];
 const day = (iso) => String(iso).slice(0, 10);
-function sitemap(posts) {
+function sitemap(posts, companies) {
   const newest = (list) => (list.length ? day(list.reduce((m, p) => ((p.updated_at || p.publish_at) > m ? (p.updated_at || p.publish_at) : m), list[0].updated_at || list[0].publish_at)) : null);
   const urls = [];
   for (const p of STATIC) {
@@ -224,6 +271,10 @@ function sitemap(posts) {
     for (const lang of en ? ["bn", "en"] : ["bn"]) {
       urls.push(`  <url>\n    <loc>${urlOf(r.slug, lang)}</loc>\n    <lastmod>${day(r.updated_at || r.publish_at)}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>${alts}${image}\n  </url>`);
     }
+  }
+  for (const c of companies || []) {
+    const image = c.logo_url ? `\n    <image:image><image:loc>${esc(c.logo_url)}</image:loc></image:image>` : "";
+    urls.push(`  <url>\n    <loc>${ORIGIN}/company/${c.slug}</loc>\n    <lastmod>${day(c.published_at || new Date().toISOString())}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>${image}\n  </url>`);
   }
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n${urls.join("\n")}\n</urlset>\n`;
 }
@@ -283,6 +334,7 @@ function injectHeadlines(posts) {
 /* ---- main ---- */
 (async () => {
   const posts = await fetchPosts();
+  const companies = await fetchCompanies();
   let changed = 0;
   const keep = new Set();
   for (const r of posts) {
@@ -300,10 +352,20 @@ function injectHeadlines(posts) {
       if (f.endsWith(".html") && !keep.has(rel)) { fs.unlinkSync(path.join(ROOT, rel)); changed++; }
     }
   }
+  if (companies) {
+    const shell = fs.readFileSync(path.join(ROOT, "companies.html"), "utf8");
+    const keepCo = new Set();
+    for (const c of companies) {
+      if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(c.slug || "")) continue;
+      keepCo.add(`company/${c.slug}.html`); if (write(`company/${c.slug}.html`, companyPage(c, shell))) changed++;
+    }
+    const cd = path.join(ROOT, "company");
+    if (fs.existsSync(cd)) for (const f of fs.readdirSync(cd)) if (f.endsWith(".html") && !keepCo.has(`company/${f}`)) { fs.unlinkSync(path.join(cd, f)); changed++; }
+  }
   changed += injectHeadlines(posts);
-  if (write("sitemap.xml", sitemap(posts))) changed++;
+  if (write("sitemap.xml", sitemap(posts, companies))) changed++;
   if (write("news-sitemap.xml", newsSitemap(posts))) changed++;
   if (write("feed.xml", feed(posts, "bn"))) changed++;
   if (write("en/feed.xml", feed(posts, "en"))) changed++;
-  console.log(`Built ${posts.length} article(s); ${changed} file(s) changed.`);
+  console.log(`Built ${posts.length} article(s), ${companies ? companies.length : "no"} company page(s); ${changed} file(s) changed.`);
 })().catch((e) => { console.error("BUILD FAILED:", e.message); process.exit(1); });
