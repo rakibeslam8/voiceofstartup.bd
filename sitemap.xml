@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.voiceofstartup.bd/</loc>
-    <lastmod>2026-11-01</lastmod>
+    <lastmod>2026-11-03</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/news</loc>
-    <lastmod>2026-11-01</lastmod>
+    <lastmod>2026-11-03</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -30,7 +30,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/founder-stories</loc>
-    <lastmod>2026-11-01</lastmod>
+    <lastmod>2026-11-03</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -644,6 +644,26 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/central-bank-advises-citigroup-not-to-default"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/central-bank-advises-citigroup-not-to-default"/>
     <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mvur36nwxwnd.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/new-way-to-surprise-your-loved-ones-wishly-a-fully-indigenous-personal</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/new-way-to-surprise-your-loved-ones-wishly-a-fully-indigenous-personal"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/new-way-to-surprise-your-loved-ones-wishly-a-fully-indigenous-personal"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/new-way-to-surprise-your-loved-ones-wishly-a-fully-indigenous-personal"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw05dgd7uwgk.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/new-way-to-surprise-your-loved-ones-wishly-a-fully-indigenous-personal</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/new-way-to-surprise-your-loved-ones-wishly-a-fully-indigenous-personal"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/new-way-to-surprise-your-loved-ones-wishly-a-fully-indigenous-personal"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/new-way-to-surprise-your-loved-ones-wishly-a-fully-indigenous-personal"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw05dgd7uwgk.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/to-emerge-as-a-producer-and-exporter-of-technology</loc>
