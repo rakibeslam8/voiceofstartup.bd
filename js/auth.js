@@ -28,6 +28,14 @@
   };
   function stored() { try { const j = JSON.parse(localStorage.getItem(KEY) || "null"); return j && j.user && j.access_token ? j : null; } catch (e) { return null; } }
   let user = mapUser((stored() || {}).user);
+  /* profile photo uploaded on VOSB wins over the Google picture; cached so every page can show it without a request */
+  const AVK = "vosb-avatar";
+  const avCached = () => { try { const j = JSON.parse(localStorage.getItem(AVK) || "null"); return j && user && j.id === user.id && /^https:\/\//.test(j.url) ? j.url : ""; } catch (e) { return ""; } };
+  function setAvatar(url) {
+    if (!user) return; try { if (url) localStorage.setItem(AVK, JSON.stringify({ id: user.id, url })); else localStorage.removeItem(AVK); } catch (e) {}
+    const next = url || mapUser((stored() || {}).user).avatar || ""; if (next !== user.avatar) { user.avatar = next; paint(); }
+  }
+  if (user && avCached()) user.avatar = avCached();
   const isIn = () => !!user;
 
   /* ---------- library + client ---------- */
@@ -62,7 +70,7 @@
   function profile(force) {
     if (!user) return Promise.resolve(null);
     if (profileP && !force) return profileP;
-    profileP = rpc("ensure_profile").then((r) => { profileRow = r.error ? null : r.data; return profileRow; }).catch(() => null);
+    profileP = rpc("ensure_profile").then((r) => { profileRow = r.error ? null : r.data; if (profileRow) setAvatar(/^https:\/\//.test(profileRow.avatar_url || "") ? profileRow.avatar_url : ""); return profileRow; }).catch(() => null);
     return profileP;
   }
 
@@ -219,6 +227,30 @@
   /* ---------- header + phone sheet ---------- */
   const initial = (u) => esc(((u.name || u.email || "?").trim()[0] || "?").toUpperCase());
   const avatar = (u, cls) => u.avatar ? `<img class="${cls}" src="${esc(u.avatar)}" alt="" referrerpolicy="no-referrer">` : `<span class="${cls}">${initial(u)}</span>`;
+
+  /* ---------- notifications (bell) ---------- */
+  let notif = { unread: 0, items: [], loaded: false };
+  const ago = (d) => { const m = Math.max(1, Math.round((Date.now() - new Date(d)) / 60000)); const nd = (n) => (UI().bnDigits ? UI().bnDigits(String(n)) : n); return m < 60 ? T(nd(m) + " মিনিট আগে", m + "m ago") : m < 1440 ? T(nd(Math.round(m / 60)) + " ঘণ্টা আগে", Math.round(m / 60) + "h ago") : T(nd(Math.round(m / 1440)) + " দিন আগে", Math.round(m / 1440) + "d ago"); };
+  async function loadNotifs() {
+    if (!user) { notif = { unread: 0, items: [], loaded: false }; return; }
+    try { const r = await rpc("my_notifications", { p_limit: 30 }); if (!r.error && r.data) { notif = { unread: r.data.unread || 0, items: r.data.items || [], loaded: true }; paintBell(); } } catch (e) {}
+  }
+  function paintBell() { document.querySelectorAll("[data-bell]").forEach((b) => { const n = notif.unread; b.querySelector(".au-dot").textContent = n > 9 ? "9+" : String(n); b.querySelector(".au-dot").hidden = !n; b.setAttribute("aria-label", T("নোটিফিকেশন", "Notifications") + (n ? " (" + n + ")" : "")); }); }
+  function closeNotifs() { const p = document.getElementById("au-np"); if (p) p.remove(); document.removeEventListener("keydown", npKey); }
+  function npKey(e) { if (e.key === "Escape") closeNotifs(); }
+  async function openNotifs() {
+    closeNotifs(); if (!notif.loaded) await loadNotifs();
+    const list = notif.items.length ? notif.items.map((n) => `<a class="au-ni ${n.read_at ? "" : "un"}" href="${esc(n.link || "/account")}" data-nid="${esc(n.id)}"><span class="au-nk" aria-hidden="true">${({ investor_interest: "💼", investment_proposed: "🤝", investment_confirmed: "🤝", investment_verified: "✅", valuation_approved: "📊", valuation_rejected: "📊", valuation_request: "📊", payment_verified: "✅", payment_rejected: "⚠️", payment_submitted: "💳", company_published: "🎉", application_submitted: "📨" })[n.kind] || "🔔"}</span><span class="au-nb"><b>${esc(UI().lang === "en" ? n.title_en || n.title_bn : n.title_bn || n.title_en)}</b>${(UI().lang === "en" ? n.body_en : n.body_bn) ? `<small>${esc(UI().lang === "en" ? n.body_en : n.body_bn)}</small>` : ""}<em>${esc(ago(n.created_at))}</em></span></a>`).join("") : `<p class="au-ne">${T("এখনও কোনো নোটিফিকেশন নেই।", "No notifications yet.")}</p>`;
+    const p = document.createElement("div"); p.id = "au-np"; p.className = "au-np"; p.setAttribute("role", "dialog"); p.setAttribute("aria-label", T("নোটিফিকেশন", "Notifications"));
+    p.innerHTML = `<div class="au-np-bg" data-npclose></div><div class="au-np-box"><div class="au-np-h"><b>🔔 ${T("নোটিফিকেশন", "Notifications")}</b><span>${notif.unread ? `<button type="button" data-npall>${T("সব পড়া হয়েছে", "Mark all read")}</button>` : ""}<button type="button" data-npclose aria-label="${T("বন্ধ", "Close")}">✕</button></span></div><div class="au-np-l">${list}</div></div>`;
+    document.body.appendChild(p); document.addEventListener("keydown", npKey);
+  }
+  document.addEventListener("click", async (e) => {
+    if (e.target.closest("[data-npclose]")) { closeNotifs(); return; }
+    if (e.target.closest("[data-npall]")) { try { await rpc("mark_notifications_read", { p_ids: null }); notif.items.forEach((n) => { n.read_at = n.read_at || new Date().toISOString(); }); notif.unread = 0; paintBell(); openNotifs(); } catch (x) {} return; }
+    const ni = e.target.closest("[data-nid]"); if (ni) { try { rpc("mark_notifications_read", { p_ids: [ni.dataset.nid] }); } catch (x) {} return; }
+    if (e.target.closest("[data-bell]") || e.target.closest('[data-act="notifs"]')) { e.preventDefault(); document.querySelectorAll(".ab-sheet.open").forEach((x) => x.classList.remove("open")); openNotifs(); }
+  });
   function paint() {
     document.querySelectorAll("[data-auth-slot]").forEach((el) => {
       const kind = el.dataset.authSlot;
@@ -231,9 +263,9 @@
       const nm = user.name || user.email;
       if (kind === "sheet") {
         el.innerHTML = `<a class="ab-login ab-in" href="/account">${avatar(user, "au-av")}<span class="ab-login-tx"><b>${esc(nm)}</b><small>${T("আমার অ্যাকাউন্ট", "My account")}</small></span></a>
-          <div class="ab-acct-row"><a href="/account#companies">${T("আমার কোম্পানি", "My companies")}</a><button type="button" data-act="signout">${T("লগআউট", "Log out")}</button></div>`;
+          <div class="ab-acct-row"><button type="button" data-act="notifs">🔔 ${T("নোটিফিকেশন", "Notifications")} <i class="au-dot" ${notif.unread ? "" : "hidden"}>${notif.unread > 9 ? "9+" : notif.unread}</i></button><a href="/account#companies">${T("আমার কোম্পানি", "My companies")}</a><button type="button" data-act="signout">${T("লগআউট", "Log out")}</button></div>`;
       } else {
-        el.innerHTML = `<div class="au-menu"><button type="button" class="au-avb" aria-haspopup="menu" aria-expanded="false" aria-label="${T("অ্যাকাউন্ট মেনু", "Account menu")}">${avatar(user, "au-av")}</button>
+        el.innerHTML = `<div class="au-bellwrap"><button type="button" class="au-bell" data-bell aria-label="${T("নোটিফিকেশন", "Notifications")}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17h12l-1.5-2V11a4.500 4.500 0 0 0-9 0v4zM10 20a2 2 0 0 0 4 0"/></svg><i class="au-dot" ${notif.unread ? "" : "hidden"}>${notif.unread > 9 ? "9+" : notif.unread}</i></button></div><div class="au-menu"><button type="button" class="au-avb" aria-haspopup="menu" aria-expanded="false" aria-label="${T("অ্যাকাউন্ট মেনু", "Account menu")}">${avatar(user, "au-av")}</button>
           <div class="au-dd" role="menu" hidden><div class="au-who">${avatar(user, "au-av lg")}<div><b>${esc(nm)}</b><small>${esc(user.email)}</small></div></div>
             <a role="menuitem" href="/account">${T("আমার অ্যাকাউন্ট", "My account")}</a><a role="menuitem" href="/account#companies">${T("আমার কোম্পানি", "My companies")}</a>
             <a role="menuitem" href="/list-your-company">${T("কোম্পানি লিস্ট করুন", "List your company")}</a><button role="menuitem" type="button" data-act="signout">${T("লগআউট", "Log out")}</button></div></div>`;
@@ -262,6 +294,8 @@
     setTimeout(() => { client().then((c) => c.auth.getSession()).catch(() => {}); }, 1500);
   }
 
-  window.VOSB_AUTH = { user: () => user, isIn, onChange, client, rpc, requireLogin, open, signOut, profile, paint, toast };
+  window.VOSB_AUTH = { user: () => user, isIn, onChange, client, rpc, requireLogin, open, signOut, profile, paint, toast, setAvatar, loadNotifs, openNotifs, avatarHtml: (url, name, cls) => (url && /^https:\/\//.test(url) ? `<img class="${cls || "au-av"}" src="${esc(url)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="${cls || "au-av"}">${esc(((name || "?").trim()[0] || "?").toUpperCase())}</span>`) };
   paint();
+  if (user) { setTimeout(() => { loadNotifs(); try { if (!sessionStorage.getItem("vosb-prof")) { sessionStorage.setItem("vosb-prof", "1"); profile(); } } catch (e) { profile(); } }, 900); }
+  onChange((u) => { if (u) { loadNotifs(); profile(true); } else { notif = { unread: 0, items: [], loaded: false }; try { localStorage.removeItem(AVK); sessionStorage.removeItem("vosb-prof"); } catch (e) {} } });
 })();

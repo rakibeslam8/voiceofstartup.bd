@@ -1,5 +1,6 @@
 /* Voice of Startup Bangladesh — company listing application (wizard)
-   ① Company info  ② Documents  ③ Listing fee (one-time ৳1000, bKash)  ④ Review & submit
+   ① Company info  ② Financials (for the valuation)  ③ Documents  ④ Listing fee (one-time ৳1000, bKash — submit instantly, VOSB verifies in the background)  ⑤ Review & submit
+   Registered companies and new / not-yet-registered brands can both apply.
    The screen only collects and displays. Ownership, status rules, the payment lock and the
    "paid + documents + details" check on submit are all enforced by the database functions. */
 (function () {
@@ -12,8 +13,8 @@
   if (!root) return;
 
   const REG = [["proprietorship", "একক মালিকানা (প্রোপ্রাইটরশিপ)", "Sole proprietorship"], ["partnership", "অংশীদারি", "Partnership"], ["private_ltd", "প্রাইভেট লিমিটেড কোম্পানি", "Private limited company"], ["public_ltd", "পাবলিক লিমিটেড কোম্পানি", "Public limited company"], ["ngo", "এনজিও / সমবায়", "NGO / cooperative"], ["not_registered", "এখনও নিবন্ধিত নয়", "Not registered yet"], ["other", "অন্যান্য", "Other"]];
-  const STEPS = [["info", "🏢", "কোম্পানির তথ্য", "Company info"], ["docs", "📄", "ডকুমেন্ট", "Documents"], ["pay", "💳", "লিস্টিং ফি", "Listing fee"], ["submit", "✅", "জমা দিন", "Review & submit"]];
-  const MISS = { name: ["info", "কোম্পানির নাম", "Company name"], tagline: ["info", "এক লাইনের পরিচিতি", "Tagline"], description: ["info", "বিস্তারিত বিবরণ (কমপক্ষে ৮০ অক্ষর)", "Description (at least 80 characters)"], category: ["info", "ইন্ডাস্ট্রি", "Industry"], stage: ["info", "ধাপ", "Stage"], division: ["info", "বিভাগ", "Division"], legal_name: ["info", "আইনি নাম", "Legal name"], contact_email: ["info", "যোগাযোগের ইমেইল", "Contact email"], contact_phone: ["info", "যোগাযোগের মোবাইল", "Contact mobile"], terms: ["info", "শর্তে সম্মতি", "Accept the terms"], payment: ["pay", "লিস্টিং ফি পরিশোধ", "Listing fee payment"], doc_trade_license: ["docs", "ট্রেড লাইসেন্স", "Trade licence"], doc_tin: ["docs", "টিআইএন সনদ", "TIN certificate"] };
+  const STEPS = [["info", "🏢", "কোম্পানির তথ্য", "Company info"], ["fin", "📊", "আর্থিক তথ্য", "Financials"], ["docs", "📄", "ডকুমেন্ট", "Documents"], ["pay", "💳", "লিস্টিং ফি", "Listing fee"], ["submit", "✅", "জমা দিন", "Review & submit"]];
+  const MISS = { name: ["info", "কোম্পানির নাম", "Company name"], tagline: ["info", "এক লাইনের পরিচিতি", "Tagline"], description: ["info", "বিস্তারিত বিবরণ (কমপক্ষে ৮০ অক্ষর)", "Description (at least 80 characters)"], category: ["info", "ইন্ডাস্ট্রি", "Industry"], stage: ["info", "ধাপ", "Stage"], division: ["info", "বিভাগ", "Division"], legal_name: ["info", "আইনি নাম", "Legal name"], reg_type: ["info", "নিবন্ধনের অবস্থা", "Registration status"], financials: ["fin", "আর্থিক তথ্য (সংরক্ষণ করুন)", "Financial details (save them)"], doc_founder_id: ["docs", "প্রতিষ্ঠাতার NID / পাসপোর্ট", "Founder NID / passport"], contact_email: ["info", "যোগাযোগের ইমেইল", "Contact email"], contact_phone: ["info", "যোগাযোগের মোবাইল", "Contact mobile"], terms: ["info", "শর্তে সম্মতি", "Accept the terms"], payment: ["pay", "লিস্টিং ফি পরিশোধ", "Listing fee payment"], doc_trade_license: ["docs", "ট্রেড লাইসেন্স", "Trade licence"], doc_tin: ["docs", "টিআইএন সনদ", "TIN certificate"] };
   const FIELDS = ["name", "tagline", "category", "stage", "founded_year", "website", "division", "district", "team_size", "description", "business_model", "highlights", "revenue_range", "seeking_amount", "equity_offered", "expected_valuation", "use_of_funds", "legal_name", "reg_type", "reg_no", "tin", "bin", "contact_email", "contact_phone", "address"];
   const SOC = [["facebook", "Facebook"], ["linkedin", "LinkedIn"], ["x", "X (Twitter)"], ["instagram", "Instagram"], ["youtube", "YouTube"]];
   const nd = (n) => U().bnDigits(String(n));
@@ -21,12 +22,14 @@
   const rid = () => Math.random().toString(36).slice(2, 10);
   const MIN_DESC = 80;
 
-  const st = { ready: false, id: null, co: null, priv: {}, pays: [], docs: [], step: "info", vals: {}, social: {}, team: [{ name: "", role: "" }], dirty: false, saving: null, saveMsg: "", settings: null, pay: { screen: "A", method: "bkash", sender: "", trx: "", msg: "", busy: false, until: 0 }, subMsg: "", missing: [], err: "", done: false };
+  const st = { ready: false, id: null, co: null, priv: {}, fin: {}, finSaved: false, pays: [], docs: [], step: "info", vals: {}, social: {}, team: [{ name: "", role: "" }], dirty: false, saving: null, saveMsg: "", settings: null, pay: { screen: "A", method: "bkash", sender: "", trx: "", msg: "", busy: false, until: 0 }, subMsg: "", missing: [], err: "", done: false };
   let timer = null, poll = null, tick = null, saveT = null, rendering = false;
 
   const editable = () => !st.co || st.co.status === "draft" || st.co.status === "changes_requested";
   const live = () => st.co && st.co.status === "published";
   const paid = () => st.pays.some((p) => p.status === "verified");
+  const hasPay = () => st.pays.some((p) => p.status === "verified" || p.status === "pending");
+  const unreg = () => String(st.vals.reg_type || "") === "not_registered";
   const pendingPay = () => st.pays.find((p) => p.status === "pending") || null;
 
   /* ---------- load ---------- */
@@ -39,6 +42,7 @@
     for (const k of FIELDS) st.vals[k] = (k in st.co ? st.co[k] : st.priv[k]);
     st.vals.accepted_terms = !!st.priv.accepted_terms;
     for (const k of FIELDS) if (st.vals[k] == null) st.vals[k] = "";
+    try { const fr = await c.from("company_financials").select("*").eq("company_id", id).maybeSingle(); st.fin = fr.data || {}; st.finSaved = !!fr.data; } catch (e) { st.fin = {}; }
     st.social = Object.assign({}, st.co.social || {}); st.team = [].concat(st.co.team || []).map((m) => ({ name: m.name || "", role: m.role || "" }));
     if (!st.team.length) st.team = [{ name: "", role: "" }];
     return true;
@@ -102,21 +106,27 @@
     if (!String(v.name).trim()) m.push("name"); if (!String(v.tagline).trim()) m.push("tagline");
     if (String(v.description).trim().length < MIN_DESC) m.push("description");
     if (!v.category) m.push("category"); if (!v.stage) m.push("stage"); if (!v.division) m.push("division");
-    if (!String(v.legal_name).trim()) m.push("legal_name");
+    if (!v.reg_type) m.push("reg_type");
+    if (!String(v.legal_name).trim() && v.reg_type !== "not_registered") m.push("legal_name");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(v.contact_email).trim())) m.push("contact_email");
     if (!/^(\+?88)?01[3-9]\d{8}$/.test(String(v.contact_phone).replace(/[\s-]/g, ""))) m.push("contact_phone");
     if (!v.accepted_terms) m.push("terms");
     return m;
   }
   const hasDoc = (t) => st.docs.some((d) => d.doc_type === t);
-  const docsMissing = () => (CFG().docTypes || []).filter((d) => d.required && !hasDoc(d.id)).map((d) => "doc_" + d.id);
+  /* which documents are required depends on whether the business is registered */
+  const docTypes = () => (CFG().docTypes || []).map((d) => Object.assign({}, d, { required: unreg() ? d.id === "founder_id" : (d.id === "trade_license" || d.id === "tin") }))
+    .sort((a, b) => (b.required ? 1 : 0) - (a.required ? 1 : 0));
+  const docsMissing = () => docTypes().filter((d) => d.required && !hasDoc(d.id)).map((d) => "doc_" + d.id);
+  const finMissing = () => (st.finSaved ? [] : ["financials"]);
 
   /* ---------- shell ---------- */
   function stepIdx() { return STEPS.findIndex((s) => s[0] === st.step); }
   function stepState(k) {
     if (k === "info") return st.id && !infoMissing().length ? "ok" : "";
+    if (k === "fin") return st.finSaved ? "ok" : "";
     if (k === "docs") return !docsMissing().length && st.id ? "ok" : "";
-    if (k === "pay") return paid() ? "ok" : pendingPay() ? "wait" : "";
+    if (k === "pay") return hasPay() ? "ok" : "";
     return st.co && ["submitted", "in_review", "published"].includes(st.co.status) ? "ok" : "";
   }
   function stepper() {
@@ -145,7 +155,7 @@
     const el = $("#ap-body"); if (!el) return;
     clearInterval(poll); poll = null;
     if (st.co && !editable()) { if (live()) { st.step = "info"; infoView(el, true); } else lockedView(el); return; }
-    if (st.step === "info") infoView(el); else if (st.step === "docs") docsView(el); else if (st.step === "pay") payView(el); else submitView(el);
+    if (st.step === "info") infoView(el); else if (st.step === "fin") finView(el); else if (st.step === "docs") docsView(el); else if (st.step === "pay") payView(el); else submitView(el);
   }
   function loginCard() {
     root.innerHTML = `<div class="ac-card ac-center"><div class="ac-big" aria-hidden="true">🔐</div><h2>${T("আবেদন করতে লগইন করুন", "Log in to apply")}</h2>
@@ -161,7 +171,7 @@
   }
   function doneView() {
     root.innerHTML = `<div class="ac-card ac-center ap-done"><div class="ac-big" aria-hidden="true">🎉</div><h2>${T("আবেদন জমা হয়েছে!", "Application submitted!")}</h2>
-      <p>${T("ধন্যবাদ। VOSB টিম আপনার ডকুমেন্ট যাচাই করে মূল্যায়ন করবে। অনুমোদন হলেই আপনার কোম্পানি লাইভ হবে — আপনার অ্যাকাউন্টে স্ট্যাটাস দেখতে পারবেন।", "Thank you. The VOSB team will verify your documents and assess your company. It goes live once approved — you can follow the status in your account.")}</p>
+      <p>${T("ধন্যবাদ। সিস্টেম আপনার তথ্য থেকে একটি ভ্যালুয়েশন রেঞ্জ তৈরি করেছে; VOSB টিম ডকুমেন্ট ও পেমেন্ট যাচাই করে অনুমোদন দেবে। অনুমোদন হলেই কোম্পানি লাইভ হবে — অ্যাকাউন্টে স্ট্যাটাস ও নোটিফিকেশন পাবেন।", "Thank you. The system has prepared a valuation range from your figures; the VOSB team will verify your documents and payment, then approve. It goes live once approved — follow the status and notifications in your account.")}</p>
       <ul class="ap-next"><li>1. ${T("ডকুমেন্ট যাচাই", "Document check")}</li><li>2. ${T("ভ্যালুয়েশন মূল্যায়ন", "Valuation assessment")}</li><li>3. ${T("অনুমোদন ও লাইভ", "Approval & go-live")}</li></ul>
       <p><a class="btn btn-orange" href="/account#companies">${T("আমার কোম্পানি দেখুন", "View my companies")}</a> <a class="btn btn-outline" href="/companies">${T("সব কোম্পানি", "Browse companies")}</a></p></div>`;
   }
@@ -186,6 +196,11 @@
     const f = (k, l, o) => fld(k, l, Object.assign({ dis: ro && ["name", "category", "stage", "founded_year", "division", "district", "revenue_range", "seeking_amount", "equity_offered", "expected_valuation", "use_of_funds"].includes(k) }, o || {}));
     el.innerHTML = `${liveMode ? `<div class="ac-note"><b>${T("আপনার কোম্পানি লাইভ আছে।", "Your company is live.")}</b> ${T("এখানে শুধু পাবলিক প্রোফাইলের তথ্য (বিবরণ, লোগো, ওয়েবসাইট, টিম, সোশ্যাল) বদলানো যাবে। নাম, ভ্যালুয়েশন বা ডকুমেন্ট বদলাতে VOSB-কে জানান।", "You can edit public profile details here (description, logo, website, team, social). To change the name, valuation or documents, contact VOSB.")}</div>` : ""}
       <form id="ap-form" class="ac-card ac-form ap-form" novalidate>
+        ${liveMode ? "" : `<fieldset class="ap-reg"><legend>🪪 ${T("আপনার ব্যবসা কি নিবন্ধিত?", "Is your business registered?")}</legend>
+          <div class="ap-regpick" role="radiogroup">${[["registered", "🏢", "নিবন্ধিত কোম্পানি / প্রতিষ্ঠান", "Registered company", "ট্রেড লাইসেন্স ও TIN আছে"], ["not_registered", "🌱", "নতুন ব্র্যান্ড / এখনও নিবন্ধিত নয়", "New brand — not registered yet", "শুধু প্রতিষ্ঠাতার NID/পাসপোর্ট লাগবে"]].map((o) => { const on = o[0] === "not_registered" ? v.reg_type === "not_registered" : !!v.reg_type && v.reg_type !== "not_registered"; return `<button type="button" role="radio" aria-checked="${on}" class="ap-rp ${on ? "sel" : ""}" data-regpick="${o[0]}"><span aria-hidden="true">${o[1]}</span><b>${T(o[2], o[3])}</b><small>${T(o[4], o[4] === "ট্রেড লাইসেন্স ও TIN আছে" ? "Trade licence & TIN available" : "Only the founder's NID / passport needed")}</small></button>`; }).join("")}</div>
+          ${v.reg_type && v.reg_type !== "not_registered" ? `<div class="ac-grid2">${f("reg_type", T("প্রতিষ্ঠানের ধরন", "Business type"), { req: 1, sel: REG.filter((r) => r[0] !== "not_registered").map((r) => [r[0], T(r[1], r[2])]) })}</div>` : ""}
+          ${v.reg_type === "not_registered" ? `<div class="ac-note"><b>${T("কোনো সমস্যা নেই — নতুন ব্র্যান্ডও আবেদন করতে পারে।", "No problem — new brands can apply too.")}</b> ${T("ট্রেড লাইসেন্স/TIN-এর বদলে প্রতিষ্ঠাতার NID বা পাসপোর্ট দিন। পাবলিক পেজে “এখনও নিবন্ধিত নয়” লেবেল দেখানো হবে, যাতে বিনিয়োগকারীরা জেনে সিদ্ধান্ত নিতে পারেন; ভ্যালুয়েশনেও এর প্রভাব থাকবে।", "Upload the founder's NID or passport instead of a trade licence/TIN. Your public page shows a “Not registered yet” label so investors can decide with open eyes, and the valuation accounts for it.")}</div>` : ""}
+          <small class="ac-err" data-err="reg_type"></small></fieldset>`}
         <fieldset${""}><legend>🏢 ${T("১. কোম্পানির পরিচিতি", "1. About the company")}</legend><div class="ac-grid2">
           ${f("name", T("কোম্পানি / ব্র্যান্ডের নাম", "Company / brand name"), { req: 1, max: 120, ac: "organization" })}
           ${f("tagline", T("এক লাইনে পরিচিতি", "One-line tagline"), { req: 1, max: 160, ph: T("যেমন: গ্রামের কৃষকদের জন্য ডিজিটাল বাজার", "e.g. A digital market for village farmers") })}
@@ -210,9 +225,8 @@
           ${f("equity_offered", T("অফার করা ইকুইটি (%)", "Equity offered (%)"), { type: "number", min: 0, maxn: 100, inm: "decimal", max: 6 })}${f("expected_valuation", T("আপনার প্রত্যাশিত ভ্যালুয়েশন (৳)", "Your expected valuation (৳)"), { type: "number", min: 0, inm: "numeric", max: 14 })}
           ${f("use_of_funds", T("তহবিল কোথায় ব্যবহার করবেন", "How you will use the funds"), { area: 3, max: 1500, span: 1 })}</div></fieldset>
         ${liveMode ? "" : `<fieldset><legend>🔒 ${T("৫. আইনি ও যোগাযোগের তথ্য", "5. Legal & contact details")}</legend><p class="muted ap-priv">🔒 ${T("এই অংশ শুধু VOSB অ্যাডমিন দেখতে পাবে — পাবলিক পেজে দেখানো হবে না।", "Only VOSB admins can see this section — it is never shown publicly.")}</p><div class="ac-grid2">
-          ${f("legal_name", T("আইনি নাম (ট্রেড লাইসেন্স অনুযায়ী)", "Legal name (as on trade licence)"), { req: 1, max: 160 })}${f("reg_type", T("প্রতিষ্ঠানের ধরন", "Business type"), { sel: REG.map((r) => [r[0], T(r[1], r[2])]) })}
-          ${f("reg_no", T("ট্রেড লাইসেন্স / রেজিস্ট্রেশন নম্বর", "Trade licence / registration no."), { max: 60 })}${f("tin", T("টিআইএন (TIN)", "TIN"), { max: 40, inm: "numeric" })}
-          ${f("bin", T("বিআইএন (BIN, থাকলে)", "BIN (if any)"), { max: 40 })}${f("contact_email", T("যোগাযোগের ইমেইল", "Contact email"), { req: 1, type: "email", max: 200, ac: "email" })}
+          ${f("legal_name", unreg() ? T("আপনার পূর্ণ নাম / ব্র্যান্ডের নাম (ঐচ্ছিক)", "Your full name / brand name (optional)") : T("আইনি নাম (ট্রেড লাইসেন্স অনুযায়ী)", "Legal name (as on trade licence)"), { req: unreg() ? 0 : 1, max: 160 })}
+          ${unreg() ? "" : f("reg_no", T("ট্রেড লাইসেন্স / রেজিস্ট্রেশন নম্বর", "Trade licence / registration no."), { max: 60 }) + f("tin", T("টিআইএন (TIN)", "TIN"), { max: 40, inm: "numeric" }) + f("bin", T("বিআইএন (BIN, থাকলে)", "BIN (if any)"), { max: 40 })}${f("contact_email", T("যোগাযোগের ইমেইল", "Contact email"), { req: 1, type: "email", max: 200, ac: "email" })}
           ${f("contact_phone", T("যোগাযোগের মোবাইল", "Contact mobile"), { req: 1, type: "tel", max: 20, inm: "tel", ph: "01XXXXXXXXX", ac: "tel" })}${f("address", T("ঠিকানা", "Address"), { max: 400 })}
           <div class="ac-fld ac-span"><label class="ac-chk"><input type="checkbox" name="accepted_terms" ${v.accepted_terms ? "checked" : ""}><span>${T("আমি নিশ্চিত করছি, দেওয়া তথ্য সঠিক এবং আমি এই কোম্পানির প্রতিনিধিত্ব করার অধিকার রাখি। আমি <a href='/terms-of-service' target='_blank' rel='noopener'>শর্তাবলী</a>, <a href='/privacy-policy' target='_blank' rel='noopener'>প্রাইভেসি</a> ও <a href='/refund-policy' target='_blank' rel='noopener'>রিফান্ড নীতি</a> পড়েছি ও মেনে নিচ্ছি।", "I confirm the information is accurate and that I am authorised to represent this company. I have read and accept the <a href='/terms-of-service' target='_blank' rel='noopener'>Terms</a>, <a href='/privacy-policy' target='_blank' rel='noopener'>Privacy Policy</a> and <a href='/refund-policy' target='_blank' rel='noopener'>Refund Policy</a>.")}</span></label><small class="ac-err" data-err="terms"></small></div>
         </div></fieldset>`}
@@ -235,7 +249,51 @@
       return;
     }
     const btn = $("#ap-form [type=submit]"); btn.disabled = true;
-    try { await saveNow(liveMode ? false : true); if (liveMode) { msg.className = "ac-msg ok"; msg.textContent = T("সংরক্ষণ হয়েছে ✓", "Saved ✓"); } else go("docs"); }
+    try { await saveNow(liveMode ? false : true); if (liveMode) { msg.className = "ac-msg ok"; msg.textContent = T("সংরক্ষণ হয়েছে ✓", "Saved ✓"); } else go("fin"); }
+    catch (e) { msg.className = "ac-msg err"; msg.textContent = friendly(e); }
+    btn.disabled = false;
+  }
+
+
+  /* ---------- step 2: financials (feeds the valuation) ---------- */
+  const FIN_NUM = ["annual_revenue", "monthly_revenue", "growth_mom", "gross_margin", "annual_net_profit", "monthly_burn", "cash_in_bank", "debt", "assets_value", "ip_value", "customers", "paying_customers", "team_ft", "total_raised", "market_size"];
+  function lakh(n) {
+    n = Number(n); if (!isFinite(n) || n === 0) return ""; const a = Math.abs(n), sg = n < 0 ? "−" : "";
+    const f = (x) => (U().lang === "bn" ? nd(String(+x.toFixed(2))) : String(+x.toFixed(2)));
+    if (a >= 1e7) return "≈ " + sg + f(a / 1e7) + T(" কোটি টাকা", " crore");
+    if (a >= 1e5) return "≈ " + sg + f(a / 1e5) + T(" লাখ টাকা", " lakh");
+    return "";
+  }
+  const nf = (k, lbl, o) => { o = o || {}; const v = st.fin[k] == null ? "" : st.fin[k];
+    return `<div class="ac-fld"><label for="n-${k}">${lbl}</label><div class="ap-numwrap"><input id="n-${k}" name="${k}" type="number" step="any" ${o.min != null ? `min="${o.min}"` : ""} ${o.max != null ? `max="${o.max}"` : ""} inputmode="decimal" value="${esc(v)}" placeholder="${esc(o.ph || "0")}" data-hint="${o.pct || o.cnt ? "" : "1"}"><span class="ap-unit">${o.pct ? "%" : o.cnt ? "" : "৳"}</span></div><small class="ac-help" data-h="${k}">${o.pct || o.cnt ? "" : esc(lakh(v))}</small>${o.help ? `<small class="ac-help">${o.help}</small>` : ""}</div>`; };
+  function finView(el) {
+    if (!st.id) { el.innerHTML = `<div class="ac-card ac-center"><p>${T("আগে কোম্পানির তথ্য সংরক্ষণ করুন।", "Save your company details first.")}</p><button class="btn btn-orange" data-step="info">${T("তথ্য দিন", "Company info")}</button></div>`; return; }
+    el.innerHTML = `<form id="fin-form" class="ac-card ac-form ap-form" novalidate>
+      <div class="ap-valint"><div class="ap-valic" aria-hidden="true">📊</div><div><h3>${T("আয়-ব্যয় ও ভ্যালুয়েশনের তথ্য", "Financials & valuation inputs")}</h3>
+        <p class="muted">${T("এই তথ্য থেকে সিস্টেম নিজেই একটি ভ্যালুয়েশন রেঞ্জ হিসাব করে (রেভিনিউ মাল্টিপল, আর্নিংস মাল্টিপল, বার্কাস স্কোরকার্ড ও অ্যাসেট/ক্যাশ ফ্লোর — সাথে বাংলাদেশের প্রাইভেট কোম্পানির লিকুইডিটি ডিসকাউন্ট)। VOSB অ্যাডমিন শুধু যাচাই করে অনুমোদন দেন। যত সঠিক ও সম্পূর্ণ তথ্য দেবেন, রেঞ্জ তত সংকীর্ণ ও নির্ভরযোগ্য হবে। তথ্য কখনো পাবলিকলি দেখানো হয় না — শুধু অনুমোদিত রেঞ্জ দেখানো হয়।", "From these figures the system calculates a valuation range itself (revenue multiple, earnings multiple, Berkus scorecard and an asset/cash floor — with a Bangladesh private-company liquidity discount). A VOSB admin only checks and approves it. The more accurate and complete your figures, the tighter and more reliable the range. Your figures are never shown publicly — only the approved range is.")}</p></div></div>
+      <fieldset><legend>💰 ${T("আয়", "Revenue")}</legend><div class="ac-grid2">
+        ${nf("annual_revenue", T("গত ১২ মাসের মোট আয় (৳)", "Revenue, last 12 months (৳)"), { min: 0 })}${nf("monthly_revenue", T("বর্তমান মাসিক আয় (৳)", "Current monthly revenue (৳)"), { min: 0 })}
+        ${nf("growth_mom", T("গড় মাসিক প্রবৃদ্ধি (%)", "Average monthly growth (%)"), { pct: 1, min: -100, max: 1000, ph: "8" })}${nf("gross_margin", T("গ্রস মার্জিন (%)", "Gross margin (%)"), { pct: 1, min: -100, max: 100, ph: "40", help: T("(আয় − সরাসরি খরচ) ÷ আয়", "(revenue − direct costs) ÷ revenue") })}
+        ${nf("annual_net_profit", T("বার্ষিক নিট মুনাফা (৳)", "Annual net profit (৳)"), { help: T("লোকসান হলে মাইনাস (−) দিন", "Use a minus (−) for a loss") })}</div></fieldset>
+      <fieldset><legend>🔥 ${T("খরচ, ক্যাশ ও সম্পদ", "Costs, cash & assets")}</legend><div class="ac-grid2">
+        ${nf("monthly_burn", T("মাসিক বার্ন / নগদ খরচ (৳)", "Monthly burn / cash spend (৳)"), { min: 0, help: T("প্রতি মাসে ব্যবসা চালাতে যত নগদ বের হয়", "Cash leaving the business each month") })}${nf("cash_in_bank", T("হাতে ও ব্যাংকে নগদ (৳)", "Cash on hand & in bank (৳)"), { min: 0 })}
+        ${nf("debt", T("মোট দেনা / ঋণ (৳)", "Total debt / liabilities (৳)"), { min: 0 })}${nf("assets_value", T("সম্পদের মূল্য — যন্ত্রপাতি, স্টক (৳)", "Assets — equipment, stock (৳)"), { min: 0 })}
+        ${nf("ip_value", T("আইপি / সফটওয়্যার / ব্র্যান্ডের মূল্য (৳)", "IP / software / brand value (৳)"), { min: 0 })}${nf("total_raised", T("এ পর্যন্ত তোলা তহবিল (৳)", "Funding raised so far (৳)"), { min: 0 })}</div></fieldset>
+      <fieldset><legend>👥 ${T("গ্রাহক ও টিম", "Customers & team")}</legend><div class="ac-grid2">
+        ${nf("customers", T("মোট গ্রাহক / ইউজার", "Total customers / users"), { cnt: 1, min: 0 })}${nf("paying_customers", T("পেইং গ্রাহক", "Paying customers"), { cnt: 1, min: 0 })}
+        ${nf("team_ft", T("ফুল-টাইম সদস্য", "Full-time team members"), { cnt: 1, min: 0 })}${nf("market_size", T("টার্গেট বাজারের আকার (৳, ঐচ্ছিক)", "Target market size (৳, optional)"), { min: 0 })}
+        <div class="ac-fld ac-span"><label for="n-traction">${T("মূল অর্জন / ট্র্যাকশন", "Key traction & milestones")}</label><textarea id="n-traction" name="traction" rows="3" maxlength="1500" placeholder="${T("যেমন: ৩টি বড় ক্লায়েন্ট, মাসে ২০০০ অর্ডার, ফ্যাক্টরি চালু…", "e.g. 3 enterprise clients, 2,000 orders/month, factory running…")}">${esc(st.fin.traction || "")}</textarea></div>
+        <div class="ac-fld ac-span"><label for="n-note">${T("ভ্যালুয়েশন নিয়ে আপনার মন্তব্য (ঐচ্ছিক)", "Anything we should know for the valuation (optional)")}</label><textarea id="n-note" name="owner_note" rows="2" maxlength="1500">${esc(st.fin.owner_note || "")}</textarea></div></div></fieldset>
+      <div class="ac-note">${T("💡 আপনার প্রত্যাশিত ভ্যালুয়েশন “কোম্পানির তথ্য” ধাপে দেওয়া আছে — সিস্টেমের রেঞ্জের সাথে সেটি তুলনা করা হবে। ফাঁকা রাখা ঘর রেঞ্জের নির্ভরযোগ্যতা কমায়।", "💡 Your expected valuation is in the “Company info” step — it is compared with the system range. Blank fields lower the range's confidence.")}</div>
+      <div class="ac-msg" id="ap-msg" role="alert" aria-live="polite"></div>
+      <div class="ap-nav"><button class="btn btn-outline" type="button" data-step="info">← ${T("পেছনে", "Back")}</button><div class="ac-acts"><button class="btn btn-orange" type="submit">${T("সংরক্ষণ করে এগিয়ে যান →", "Save & continue →")}</button></div></div></form>`;
+  }
+  async function finSubmit() {
+    const f = $("#fin-form"), msg = $("#ap-msg"), p = {}; msg.className = "ac-msg"; msg.textContent = "";
+    for (const k of FIN_NUM) { const el = f.elements[k]; if (!el) continue; const v = el.value.trim(); p[k] = v === "" ? null : Number(v); if (v !== "" && !isFinite(p[k])) { msg.className = "ac-msg err"; msg.textContent = T("সংখ্যা ঠিকভাবে লিখুন।", "Please enter valid numbers."); return; } }
+    p.traction = f.elements.traction.value; p.owner_note = f.elements.owner_note.value;
+    const btn = $("[type=submit]", f); btn.disabled = true;
+    try { await rpc("save_company_financials", { p_company: st.id, p }); st.fin = Object.assign({}, st.fin, p); st.finSaved = true; go("docs"); }
     catch (e) { msg.className = "ac-msg err"; msg.textContent = friendly(e); }
     btn.disabled = false;
   }
@@ -270,15 +328,16 @@
   /* ---------- step 2: documents ---------- */
   function fmtSize(n) { n = Number(n) || 0; return n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB"; }
   function docsView(el) {
-    const types = CFG().docTypes || [], miss = docsMissing();
+    const types = docTypes(), miss = docsMissing();
     el.innerHTML = `<div class="ac-card ap-docs"><h3>📄 ${T("প্রয়োজনীয় ডকুমেন্ট", "Supporting documents")}</h3>
+      ${unreg() ? `<div class="ac-note">${T("আপনি “এখনও নিবন্ধিত নয়” বেছেছেন — তাই শুধু প্রতিষ্ঠাতার NID/পাসপোর্ট বাধ্যতামূলক। ব্যাংক/বিকাশ স্টেটমেন্ট, বিক্রয়ের প্রমাণ ও ব্যবসায়িক পরিকল্পনা দিলে ভ্যালুয়েশনের নির্ভরযোগ্যতা বাড়ে।", "You chose “not registered yet” — only the founder's NID/passport is required. A bank/wallet statement, sales proof and a business plan raise the confidence of your valuation.")}</div>` : `<div class="ac-note">${T("ট্রেড লাইসেন্স ও টিআইএন বাধ্যতামূলক। আর্থিক স্টেটমেন্ট ও বিক্রয়ের প্রমাণ দিলে ভ্যালুয়েশনের নির্ভরযোগ্যতা বাড়ে।", "Trade licence and TIN are required. A financial statement and sales proof raise the confidence of your valuation.")}</div>`}
       <p class="muted">${T("PDF, JPG, PNG বা WebP — প্রতিটি সর্বোচ্চ ১০ MB। ডকুমেন্ট শুধু VOSB অ্যাডমিন দেখতে পাবে, পাবলিকলি দেখানো হবে না।", "PDF, JPG, PNG or WebP — up to 10 MB each. Documents are visible only to VOSB admins and are never shown publicly.")}</p>
       <div class="ap-doclist">${types.map((t) => { const ds = st.docs.filter((d) => d.doc_type === t.id);
         return `<div class="ap-doc ${ds.length ? "ok" : t.required ? "need" : ""}"><div class="ap-doc-h"><b>${esc(pickL(t))}</b><span class="ap-tag ${t.required ? "req" : ""}">${t.required ? T("বাধ্যতামূলক", "Required") : T("ঐচ্ছিক", "Optional")}</span></div>
           ${ds.map((d) => `<div class="ap-file-row"><span class="ap-fi">📎</span><span class="ap-fn">${esc(d.file_name)}<small>${esc(fmtSize(d.file_size))}${d.status && d.status !== "pending" ? " · " + esc(d.status) : ""}</small></span><button type="button" class="co-link bad" data-docrm="${esc(d.id)}">${T("সরান", "Remove")}</button></div>`).join("")}
           <label class="btn btn-outline ac-sm ap-file">${ds.length ? T("আরেকটি যোগ করুন", "Add another") : T("ফাইল আপলোড", "Upload file")}<input type="file" accept="application/pdf,image/png,image/jpeg,image/webp" data-doc="${esc(t.id)}" hidden></label></div>`; }).join("")}</div>
       <div class="ac-msg" id="ap-msg" role="alert" aria-live="polite"></div>
-      <div class="ap-nav"><button class="btn btn-outline" type="button" data-step="info">← ${T("পেছনে", "Back")}</button><div class="ac-acts">${miss.length ? `<span class="muted ap-warn">${T("এখনও বাকি: ", "Still needed: ")}${miss.map((k) => T(MISS[k][1], MISS[k][2])).join(", ")}</span>` : ""}<button class="btn btn-orange" type="button" data-step="pay">${T("এগিয়ে যান →", "Continue →")}</button></div></div></div>`;
+      <div class="ap-nav"><button class="btn btn-outline" type="button" data-step="fin">← ${T("পেছনে", "Back")}</button><div class="ac-acts">${miss.length ? `<span class="muted ap-warn">${T("এখনও বাকি: ", "Still needed: ")}${miss.map((k) => T(MISS[k][1], MISS[k][2])).join(", ")}</span>` : ""}<button class="btn btn-orange" type="button" data-step="pay">${T("এগিয়ে যান →", "Continue →")}</button></div></div></div>`;
   }
   async function uploadDoc(type, file) {
     const msg = $("#ap-msg"); const say = (t, k) => { if (msg) { msg.className = "ac-msg " + (k || ""); msg.textContent = t; } };
@@ -315,7 +374,7 @@
         <div class="ac-acts"><button class="btn btn-outline" data-step="docs">← ${T("পেছনে", "Back")}</button><button class="btn btn-orange" data-step="submit">${T("পরের ধাপ →", "Next →")}</button></div></div></div>`;
       return;
     }
-    if (pr) { waitView(el, pr); return; }
+    if (pr) { sentView(el, pr); return; }
     const P = st.pay;
     const last = st.pays[0];
     const rejected = last && last.status === "rejected" ? `<div class="ac-note bad"><b>${T("আগের পেমেন্ট গৃহীত হয়নি", "Your previous payment was not accepted")}</b>${last.note ? ": " + esc(last.note) : ""}. ${T("সঠিক ট্রানজেকশন আইডি দিয়ে আবার চেষ্টা করুন।", "Please try again with the correct Transaction ID.")}</div>` : "";
@@ -337,21 +396,19 @@
         <div class="pay-from">${T("আপনার নম্বর:", "Your number:")} <b>${esc(P.sender)}</b> <button type="button" class="co-link" data-pay="toB">${T("বদলান", "Change")}</button></div>
         <div class="ac-fld"><label for="pay-trx">${T("ট্রানজেকশন আইডি (TrxID)", "Transaction ID (TrxID)")}</label><input id="pay-trx" maxlength="14" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="${T("যেমন: 9AB3C4D5EF", "e.g. 9AB3C4D5EF")}" value="${esc(P.trx)}"></div>
         <div class="ac-msg ${P.msg ? "err" : ""}" id="pay-msg" role="alert">${esc(P.msg)}</div>
-        <button class="btn btn-orange pay-go" type="button" data-pay="verify" ${P.busy ? "disabled" : ""}>${T("TrxID দিয়ে ভেরিফাই করুন", "Verify with TrxID")}</button>
-        <p class="pay-note">${T("আপনার পেমেন্ট VOSB টিম যাচাই করবে — সাধারণত কয়েক মিনিট থেকে কয়েক ঘণ্টার মধ্যে। যাচাই হলেই আবেদন জমা দিতে পারবেন।", "The VOSB team verifies each payment — usually within minutes to a few hours. Once verified you can submit your application.")}</p>
+        <button class="btn btn-orange pay-go" type="button" data-pay="verify" ${P.busy ? "disabled" : ""}>${P.busy ? T("জমা হচ্ছে…", "Saving…") : T("পেমেন্ট নিশ্চিত করুন — এখনই এগিয়ে যান", "Confirm payment — continue now")}</button>
+        <p class="pay-note">${T("TrxID দিলেই আপনি সাথে সাথে আবেদন জমা দিতে পারবেন — অপেক্ষার দরকার নেই। VOSB টিম পরে মিলিয়ে দেখবে; ভুল হলে আপনাকে জানানো হবে এবং ঠিক তথ্য দিতে হবে।", "Enter your TrxID and you can submit straight away — no waiting. The VOSB team checks it afterwards; if something is wrong we notify you so you can correct it.")}</p>
         <button class="btn btn-outline" type="button" data-pay="toB">← ${T("পেছনে", "Back")}</button></div>`;
       clearInterval(tick); tick = setInterval(() => { const t = $("#pay-t"); if (!t) return clearInterval(tick); const s = Math.max(0, Math.round((P.until - Date.now()) / 1000)); t.textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); if (!s) { clearInterval(tick); P.until = 0; P.screen = "B"; P.msg = T("সময় শেষ হয়েছে — আবার শুরু করুন।", "Time is up — please start again."); payView($("#ap-body")); } }, 1000);
     }
   }
-  function waitView(el, pr) {
-    el.innerHTML = `<div class="ac-card pay-card pay-wait">${payHead()}<div class="pay-state"><div class="pay-spin" aria-hidden="true"></div><h3>${T("পেমেন্ট যাচাই চলছে", "Verifying your payment")}</h3>
-      <p>${T("আপনার TrxID পেয়েছি। VOSB টিম যাচাই করছে — এই পেজ খোলা রাখতে পারেন, যাচাই হলে নিজে থেকেই জানাবে। চাইলে পরে ফিরে এসে অ্যাকাউন্ট থেকেও দেখতে পারবেন।", "We have your TrxID and the VOSB team is verifying it. You can keep this page open — it updates by itself. You can also come back later from your account.")}</p>
-      <p class="pay-inv">${esc(pr.invoice_no)} · ${esc(pr.method)} · TrxID ${esc(pr.trx_id)}</p><div class="ac-acts"><button class="btn btn-outline" data-step="docs">← ${T("ডকুমেন্ট", "Documents")}</button><button class="btn btn-outline" data-act="recheck">${T("এখনই দেখুন", "Check now")}</button></div></div></div>`;
-    clearInterval(poll);
-    poll = setInterval(async () => { if (!$(".pay-wait")) return clearInterval(poll); await recheck(true); }, 8000);
+  function sentView(el, pr) {
+    el.innerHTML = `<div class="ac-card pay-card pay-ok">${payHead()}<div class="pay-state"><div class="pay-tick" aria-hidden="true">✓</div><h3>${T("পেমেন্টের তথ্য পেয়েছি", "Payment details received")}</h3>
+      <p>${T("আর অপেক্ষা করতে হবে না — এখনই আবেদন জমা দিতে পারবেন। VOSB টিম ব্যাকগ্রাউন্ডে আপনার TrxID মিলিয়ে নেবে এবং নিশ্চিত হলে নোটিফিকেশন পাঠাবে।", "No waiting needed — you can submit your application right now. The VOSB team matches your TrxID in the background and notifies you once it is confirmed.")}</p>
+      <p class="pay-inv">${esc(pr.invoice_no)} · ${esc(pr.method)} · TrxID ${esc(pr.trx_id)}</p><div class="ac-acts"><button class="btn btn-outline" data-step="docs">← ${T("ডকুমেন্ট", "Documents")}</button><button class="btn btn-orange" data-step="submit">${T("জমা দেওয়ার ধাপে যান →", "Go to submit →")}</button></div></div></div>`;
   }
   async function recheck(quiet) {
-    try { const before = paid(); await reloadParts(); if (paid() && !before) { toast(T("পেমেন্ট যাচাই হয়েছে ✓", "Payment verified ✓"), "ok"); render(); } else if (!pendingPay() && !paid()) render(); else if (!quiet) toast(T("এখনও যাচাই চলছে…", "Still being verified…"), ""); } catch (e) {}
+    try { await reloadParts(); render(); } catch (e) {}
   }
   async function payAct(a) {
     const P = st.pay;
@@ -365,20 +422,21 @@
       P.trx = ($("#pay-trx").value || "").replace(/\s/g, "").toUpperCase();
       if (!/^[A-Z0-9]{8,14}$/.test(P.trx)) { P.msg = T("পেমেন্টের SMS-এ যেমন আছে হুবহু TrxID লিখুন (৮–১৪ অক্ষর, ইংরেজি অক্ষর ও সংখ্যা)।", "Enter the TrxID exactly as in your payment SMS (8–14 letters/numbers)."); return payView($("#ap-body")); }
       P.busy = true; P.msg = ""; payView($("#ap-body"));
-      try { await rpc("submit_listing_payment", { p_company: st.id, p_method: P.method, p_sender: P.sender, p_trx: P.trx }); P.busy = false; P.trx = ""; P.until = 0; clearInterval(tick); await reloadParts(); payView($("#ap-body")); }
+      try { await rpc("submit_listing_payment", { p_company: st.id, p_method: P.method, p_sender: P.sender, p_trx: P.trx }); P.busy = false; P.trx = ""; P.until = 0; clearInterval(tick); await reloadParts(); toast(T("পেমেন্টের তথ্য জমা হয়েছে ✓", "Payment details saved ✓"), "ok"); payView($("#ap-body")); }
       catch (e) { P.busy = false; P.msg = friendly(e); payView($("#ap-body")); }
     }
   }
 
   /* ---------- step 4: review & submit ---------- */
   function submitView(el) {
-    const im = infoMissing(), dm = docsMissing(), pm = paid() ? [] : ["payment"];
+    const im = infoMissing(), dm = docsMissing(), fm = finMissing(), pm = hasPay() ? [] : ["payment"];
     const row = (ok, bn, en, step, hint) => `<li class="${ok ? "ok" : "bad"}"><span class="ap-ck">${ok ? "✓" : "!"}</span><span>${T(bn, en)}${hint ? `<small>${hint}</small>` : ""}</span>${ok ? "" : `<button type="button" class="co-link" data-step="${step}">${T("ঠিক করুন", "Fix")}</button>`}</li>`;
-    const all = !im.length && !dm.length && !pm.length, pr = pendingPay();
+    const all = !im.length && !dm.length && !pm.length && !fm.length, pr = pendingPay();
     el.innerHTML = `<div class="ac-card ap-sub"><h3>✅ ${T("রিভিউ ও জমা", "Review & submit")}</h3><p class="muted">${T("জমা দেওয়ার পর VOSB টিম রিভিউ শেষ না হওয়া পর্যন্ত তথ্য বদলানো যাবে না।", "After you submit, details are locked while the VOSB team reviews them.")}</p>
       <ul class="ap-check">${row(!im.length, "কোম্পানির তথ্য সম্পূর্ণ", "Company details complete", "info", im.length ? esc(im.map((k) => T(MISS[k][1], MISS[k][2])).join(", ")) : "")}
-        ${row(!dm.length, "বাধ্যতামূলক ডকুমেন্ট (ট্রেড লাইসেন্স, টিআইএন)", "Required documents (trade licence, TIN)", "docs", dm.length ? esc(dm.map((k) => T(MISS[k][1], MISS[k][2])).join(", ")) : "")}
-        ${row(!pm.length, "লিস্টিং ফি পরিশোধ (একবারের ৳" + nd(fee()) + ")", "Listing fee paid (one-time ৳" + fee() + ")", "pay", pr ? T("যাচাই চলছে — যাচাই হলে জমা দিতে পারবেন।", "Being verified — you can submit once it is confirmed.") : "")}</ul>
+        ${row(!fm.length, "আর্থিক তথ্য (ভ্যালুয়েশনের জন্য)", "Financial details (for the valuation)", "fin", "")}
+        ${row(!dm.length, unreg() ? "বাধ্যতামূলক ডকুমেন্ট (প্রতিষ্ঠাতার NID/পাসপোর্ট)" : "বাধ্যতামূলক ডকুমেন্ট (ট্রেড লাইসেন্স, টিআইএন)", unreg() ? "Required document (founder NID / passport)" : "Required documents (trade licence, TIN)", "docs", dm.length ? esc(dm.map((k) => T(MISS[k][1], MISS[k][2])).join(", ")) : "")}
+        ${row(!pm.length, "লিস্টিং ফি পরিশোধ (একবারের ৳" + nd(fee()) + ")", "Listing fee paid (one-time ৳" + fee() + ")", "pay", pr ? T("পেমেন্ট পেয়েছি — VOSB ব্যাকগ্রাউন্ডে যাচাই করবে, আপনাকে অপেক্ষা করতে হবে না।", "Payment received — VOSB verifies it in the background; you do not have to wait.") : "")}</ul>
       <div class="ac-msg ${st.subMsg ? "err" : ""}" id="ap-msg" role="alert">${esc(st.subMsg)}</div>
       <div class="ap-nav"><button class="btn btn-outline" type="button" data-step="pay">← ${T("পেছনে", "Back")}</button><button class="btn btn-orange" type="button" data-act="submit" ${all ? "" : "disabled"}>${T("আবেদন জমা দিন", "Submit application")}</button></div></div>`;
   }
@@ -415,6 +473,7 @@
       if (a === "recheck") return recheck(false);
     }
     const dm = t.closest("[data-delmember]"); if (dm) { collect(); st.team.splice(+dm.dataset.delmember, 1); if (!st.team.length) st.team = [{ name: "", role: "" }]; infoView($("#ap-body"), live()); autosave(); return; }
+    const rp = t.closest("[data-regpick]"); if (rp) { collect(); const k = rp.dataset.regpick; if (k === "not_registered") st.vals.reg_type = "not_registered"; else if (!st.vals.reg_type || st.vals.reg_type === "not_registered") st.vals.reg_type = "proprietorship"; infoView($("#ap-body"), live()); autosave(); return; }
     const pm = t.closest("[data-pm]"); if (pm && !pm.disabled) { st.pay.method = pm.dataset.pm; return payView($("#ap-body")); }
     const pa = t.closest("[data-pay]"); if (pa) return payAct(pa.dataset.pay);
     const dr = t.closest("[data-docrm]"); if (dr) return removeDoc(dr.dataset.docrm);
@@ -424,11 +483,12 @@
     const el = e.target;
     if (el.dataset && el.dataset.up) { const f = el.files && el.files[0]; el.value = ""; if (f) uploadImg(el.dataset.up, f); return; }
     if (el.dataset && el.dataset.doc) { const f = el.files && el.files[0]; el.value = ""; if (f) uploadDoc(el.dataset.doc, f); return; }
+    if (el.name === "reg_type" && el.closest("#ap-form")) { collect(); infoView($("#ap-body"), live()); autosave(); return; }
     if (el.name === "division") { collect(); st.vals.district = ""; infoView($("#ap-body"), live()); autosave(); return; }
     if (el.closest("#ap-form")) autosave();
   });
-  root.addEventListener("input", (e) => { if (e.target.closest("#ap-form") && !/^(SELECT)$/.test(e.target.tagName)) autosave(); });
-  root.addEventListener("submit", (e) => { const f = e.target.closest("#ap-form"); if (f) { e.preventDefault(); infoSubmit(live()); } });
+  root.addEventListener("input", (e) => { const n = e.target; if (n.dataset && n.dataset.hint) { const h = $(`[data-h="${n.name}"]`); if (h) h.textContent = lakh(n.value); return; } if (e.target.closest("#ap-form") && !/^(SELECT)$/.test(e.target.tagName)) autosave(); });
+  root.addEventListener("submit", (e) => { const f = e.target.closest("#ap-form"); if (f) { e.preventDefault(); infoSubmit(live()); return; } if (e.target.closest("#fin-form")) { e.preventDefault(); finSubmit(); } });
   window.addEventListener("beforeunload", (e) => { if (st.dirty && editable()) { e.preventDefault(); e.returnValue = ""; } });
 
   /* ---------- boot ---------- */

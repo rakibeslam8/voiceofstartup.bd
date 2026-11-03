@@ -113,14 +113,14 @@ window.VOSB_ADMIN_CO = function (X) {
   }
 
   /* ---------------- shared page furniture ---------------- */
-  const COTABS = [["apps", "Applications", "#/companies"], ["all", "All companies", "#/companies/all"], ["pay", "Payments", "#/payments"], ["rev", "Reviews & comments", "#/reviews"], ["int", "Investor interest", "#/interests"], ["set", "Listing settings", "#/company-settings"]];
+  const COTABS = [["apps", "Applications", "#/companies"], ["all", "All companies", "#/companies/all"], ["pay", "Payments", "#/payments"], ["rev", "Reviews & comments", "#/reviews"], ["val", "Valuations", "#/valuations"], ["deals", "Investments", "#/deals"], ["int", "Investor interest", "#/interests"], ["set", "Listing settings", "#/company-settings"]];
   function tabs(active, c) {
     const badge = { apps: waiting(c), pay: Number(c && c.payments_pending) || 0, int: Number(c && c.interests_new) || 0 };
     return `<div class="co-tabs" role="tablist" aria-label="Company Directory">${COTABS.map(([k, t, h]) => `<a href="${h}" role="tab" class="${k === active ? "on" : ""}" ${k === active ? 'aria-selected="true"' : ""}>${esc(t)}${badge[k] ? `<i>${badge[k] > 99 ? "99+" : badge[k]}</i>` : ""}</a>`).join("")}</div>`;
   }
   function userTabs(active, c) {
     const d = Number(c && c.deletions) || 0, u = Number(c && c.users) || 0;
-    return `<div class="co-tabs" role="tablist" aria-label="Users"><a href="#/users" role="tab" class="${active === "users" ? "on" : ""}">Users${u ? `<i class="soft">${fmtN(u)}</i>` : ""}</a><a href="#/deletions" role="tab" class="${active === "del" ? "on" : ""}">Deleted accounts${d ? `<i class="soft">${fmtN(d)}</i>` : ""}</a></div>`;
+    return `<div class="co-tabs" role="tablist" aria-label="Users"><a href="#/users" role="tab" class="${active === "users" ? "on" : ""}">People${u ? `<i class="soft">${fmtN(u)}</i>` : ""}</a><a href="#/deletions" role="tab" class="${active === "del" ? "on" : ""}">Deleted accounts${d ? `<i class="soft">${fmtN(d)}</i>` : ""}</a></div>`;
   }
   const loadingCard = () => `<div class="card"><p class="muted">Loading…</p></div>`;
   const errorCard = (e) => `<div class="card"><div class="msg err">${esc(errMsg(e))}</div><p class="muted" style="font-size:.85rem">If this says "permission denied" or "relation does not exist", the Company Directory SQL (supabase/update-11-companies.sql) has not been applied to this project.</p></div>`;
@@ -229,7 +229,8 @@ window.VOSB_ADMIN_CO = function (X) {
     const team = Array.isArray(c.team) ? c.team : [];
     const divs = Object.keys(CFG.divisions || {});
     const dists = (CFG.divisions && CFG.divisions[c.division]) || [];
-    const reqMissing = (CFG.docTypes || []).filter((d) => d.required && !docs.some((x) => x.doc_type === d.id));
+    const unreg = p.reg_type === "not_registered";
+    const reqMissing = unreg ? (docs.some((x) => x.doc_type === "founder_id") ? [] : [{ en: "Founder's NID / passport" }]) : (CFG.docTypes || []).filter((d) => d.required && !docs.some((x) => x.doc_type === d.id));
     const pub = c.status === "published" && c.slug;
 
     const payCard = pays.length ? pays.map((x) => `<div class="co-pay">
@@ -251,7 +252,7 @@ window.VOSB_ADMIN_CO = function (X) {
 
     view.innerHTML = `
       <div class="page-h"><div><a class="muted" href="#/companies" style="font-size:.88rem">← All applications</a><h1 style="margin-top:2px">${esc(c.name || "(no name yet)")}</h1></div>
-        <div class="co-top-acts">${stPill(c.status)}${payPill(payState(pays))}${pub ? `<a class="b b-line b-sm" href="${esc(safeHref("/company/" + c.slug))}" target="_blank" rel="noopener">View public page ↗</a>` : ""}</div></div>
+        <div class="co-top-acts">${stPill(c.status)}${payPill(payState(pays))}${unreg ? '<span class="pill p-changes_requested">Not registered</span>' : ""}${c.invest_open === false ? '<span class="pill p-draft">Investing off</span>' : ""}${pub ? `<a class="b b-line b-sm" href="${esc(safeHref("/company/" + c.slug))}" target="_blank" rel="noopener">View public page ↗</a>` : ""}</div></div>
       ${p.review_note ? `<div class="msg info"><b>Last note to the applicant:</b> ${esc(p.review_note)}</div>` : ""}
       ${reqMissing.length && ["draft", "changes_requested", "submitted", "in_review"].includes(c.status) ? `<div class="msg err">Required documents missing: ${reqMissing.map((d) => esc(d.en)).join(", ")}.</div>` : ""}
       <form id="cof" novalidate>
@@ -284,6 +285,9 @@ window.VOSB_ADMIN_CO = function (X) {
             <div class="co-wf">${transitions(c.status).map(([s, t, cls]) => `<button type="button" class="b ${cls} b-sm" data-a="st" data-s="${s}">${esc(t)}</button>`).join("")}</div>
             <p class="muted co-sub" style="margin-top:10px">“Request changes” and “Reject” need a note — the applicant sees it. Publishing makes the company page live.</p></div>
           <div class="card"><h2>Payment</h2>${payCard}</div>
+          <div class="card" id="co-valcard"><h2>Valuation</h2><p class="muted">Loading…</p></div>
+          <div class="card" id="co-invcard"><h2>Investors &amp; fees</h2><p class="muted">Loading…</p></div>
+          <div class="card"><h2>Your private fields</h2><div id="co-meta"><p class="muted">Loading…</p></div></div>
           <div class="card"><h2>Documents</h2>${docRows}<p class="muted co-sub" id="doclink"></p></div>
           <div class="card"><h2>VOSB assessment</h2><p class="muted co-sub">Shown publicly as “VOSB assessed valuation (indicative)”.</p>
             ${inp("f-vv", "VOSB valuation (৳)", c.vosb_valuation, { mode: "decimal" })}
@@ -303,6 +307,8 @@ window.VOSB_ADMIN_CO = function (X) {
       <div class="card co-sec"><h2>Reviews <span class="muted">(${fmtN(reviews.length)})</span></h2>${reviews.length ? reviews.map((r) => reviewItem(r)).join("") : `<p class="muted">No reviews yet.</p>`}</div>
       <div class="card co-sec"><h2>Comments <span class="muted">(${fmtN(comments.length)})</span></h2>${comments.length ? comments.map((r) => commentItem(r)).join("") : `<p class="muted">No comments yet.</p>`}</div>
       <div class="card co-sec"><h2>Investor interest <span class="muted">(${fmtN(interests.length)})</span></h2>${interests.length ? interests.map((r) => interestItem(r)).join("") : `<p class="muted">No investor has shown interest yet.</p>`}</div>`;
+
+    companyMoney(view, c, pays); metaBox("company", c.id, $("#co-meta", view));
 
     /* ---- form state ---- */
     const form = $("#cof", view);
@@ -606,43 +612,214 @@ window.VOSB_ADMIN_CO = function (X) {
   /* ======================================================================
      Users hub + deleted accounts
      ====================================================================== */
+  /* ======================================================================
+     Valuation · Investments · People (investor / founder / reader) — added in update 12
+     ====================================================================== */
+  const FLAG = {
+    thin_financials: ["Few financial figures given", "warn"], runway_short: ["Cash runway under 6 months", "warn"], not_registered: ["Not legally registered yet", "warn"],
+    no_documents: ["No documents uploaded", "bad"], documents_unverified: ["Documents not checked yet", "warn"], burn_exceeds_revenue: ["Burn is high compared with revenue", "warn"],
+    expectation_high: ["Owner expects much more than the estimate", "bad"], expectation_low: ["Owner expects less than the estimate", "info"], expectation_reasonable: ["Owner's expectation is in line", "good"],
+  };
+  const ADJ = { runway_lt_3m: "Cash runway < 3 months", runway_lt_6m: "Cash runway < 6 months", burn_exceeds_revenue: "Burn > 1.5× revenue", not_registered: "Not registered (−20%)", no_documents: "No documents (−10%)", private_company_discount: "Private-company / illiquidity discount" };
+  const ROLE = { investor: "Investor", founder: "Founder", reader: "Reader", other: "Other" };
+  const rolePill = (r) => `<span class="pill role-${esc(r)}">${esc(ROLE[r] || r)}</span>`;
+  const dealPill = (s) => `<span class="pill deal-${esc(s)}">${esc(({ proposed: "Waiting for other side", confirmed: "Both confirmed", verified: "Verified by VOSB", cancelled: "Cancelled" })[s] || s)}</span>`;
+  const rel = (iso) => { if (!iso) return "never"; const d = (Date.now() - new Date(iso).getTime()) / 86400000; return d < 1 ? "today" : d < 2 ? "yesterday" : d < 60 ? Math.floor(d) + " days ago" : fmtD(iso); };
+
+  /* the calculation, laid out so the admin can see why the number is what it is */
+  function valBody(v) {
+    const r = v.result || {}, m = r.methods || {}, flags = arr(r.flags), adj = arr(r.adjustments);
+    const row = (name, o, extra) => o && Number(o.value) > 0 ? `<tr><td>${name}</td><td>${esc(bdt(o.value))}</td><td>${Math.round((Number(o.weight) || 0) * 100)}%</td><td class="muted">${extra || ""}</td></tr>` : "";
+    return `<div class="co-valrange"><div><small>Low</small><b>${money(v.low)}</b></div><div class="mid"><small>Estimate</small><b>${money(v.mid)}</b></div><div><small>High</small><b>${money(v.high)}</b></div></div>
+      <p class="muted co-sub">Confidence <b>${esc(v.confidence)}%</b> — the more figures and documents the owner gives, the narrower the range.${v.expected_by_owner ? ` Owner expects <b>${esc(bdt(v.expected_by_owner))}</b>${r.expected_ratio ? ` (${Number(r.expected_ratio).toFixed(1)}× the estimate)` : ""}.` : ""}</p>
+      ${flags.length ? `<div class="co-flags">${flags.map((f) => { const x = FLAG[f] || [f, "info"]; return `<span class="flag f-${x[1]}">${esc(x[0])}</span>`; }).join("")}</div>` : ""}
+      <details class="co-how"><summary>How this was calculated</summary>
+        <table class="co-tbl"><thead><tr><th>Method</th><th>Value</th><th>Weight</th><th>Basis</th></tr></thead><tbody>
+          ${row("Revenue multiple", m.revenue, `${esc(m.revenue && m.revenue.multiple)}× sector × margin ${esc(m.revenue && m.revenue.margin_factor)}`)}
+          ${row("Earnings (profit multiple)", m.earnings, "")}
+          ${row("Scorecard (idea · stage · team · strategy · rollout)", m.scorecard, "")}
+          ${m.floor && Number(m.floor.value) > 0 ? `<tr><td>Asset / cash floor</td><td>${esc(bdt(m.floor.value))}</td><td>—</td><td class="muted">estimate is never below this</td></tr>` : ""}
+        </tbody></table>
+        ${adj.length ? `<p class="muted co-sub">Adjustments applied: ${adj.map((a) => `${esc(ADJ[a.k] || a.k)} ×${esc(a.f)}`).join(" · ")}</p>` : ""}
+        ${m.runway_months != null ? `<p class="muted co-sub">Cash runway: ${esc(m.runway_months)} months</p>` : ""}</details>`;
+  }
+  async function decideVal(b, view, reload) {
+    await busy(b, async () => {
+      const approve = b.dataset.ok === "1"; let mid = null, note = null;
+      if (approve && b.dataset.edit === "1") {
+        const v = await ask({ title: "Approve with a different estimate", body: `Calculated estimate: ${bdt(b.dataset.mid)}. Enter your own estimate (the range moves with it), or leave as is.`, label: "Estimate (৳)", value: String(b.dataset.mid || ""), ok: "Approve" });
+        if (v === null) return; const n = num(v); if (n === null || !(n > 0)) throw new Error("Enter a valid amount"); mid = n;
+        note = await ask({ title: "Public note (optional)", body: "Shown on the company page under the valuation.", label: "Note", ok: "Save" }); if (note === null) return;
+      } else if (approve) { if (!(await modal({ title: "Approve this valuation?", body: "The range will go live on the company page and the owner is notified.", ok: "Approve" }))) return; }
+      else { note = await ask({ title: "Decline this valuation", body: "The owner sees your note.", label: "Reason", required: true, ok: "Decline", danger: true }); if (note === null) return; }
+      must(await sb.rpc("admin_decide_valuation", { p_id: b.dataset.id, p_approve: approve, p_mid: mid, p_note: note || null }));
+      toast(approve ? "Valuation approved" : "Valuation declined", "ok"); await reload();
+    });
+  }
+
+  async function viewValuations(view) {
+    bind(view);
+    view.innerHTML = `<div class="page-h"><h1>Valuations</h1></div>${tabs("val", cc)}${loadingCard()}`;
+    let pend, done;
+    try {
+      const [a, d] = await Promise.all([
+        sb.from("company_valuations").select("*, companies(id,name,slug,registered,category,stage)").eq("status", "pending").order("created_at", { ascending: true }),
+        sb.from("company_valuations").select("*, companies(id,name,slug)").neq("status", "pending").order("decided_at", { ascending: false, nullsFirst: false }).limit(15)]);
+      pend = must(a) || []; done = must(d) || [];
+    } catch (e) { view.innerHTML = `<div class="page-h"><h1>Valuations</h1></div>${errorCard(e)}`; return; }
+    if (!view.isConnected) return;
+    const card = (v) => { const co = one(v.companies) || {};
+      return `<div class="card co-valcard"><div class="co-pay-h"><b><a href="#/companies/${esc(co.id)}">${esc(co.name || "(company)")}</a></b>${simplePill(v.status)}<span class="pill p-draft">${v.source === "update_request" ? "Update requested by owner" : v.source === "admin" ? "Recalculated" : "New application"}</span><span class="muted">${esc(fmtDT(v.created_at))}</span></div>
+        ${v.reason ? `<p class="co-quote">“${esc(v.reason)}”</p>` : ""}${valBody(v)}
+        ${v.status === "pending" ? `<div class="acts co-acts"><button type="button" class="b b-green" data-a="vok" data-ok="1" data-id="${esc(v.id)}" data-mid="${esc(v.mid)}">✓ Approve</button><button type="button" class="b b-line" data-a="vok" data-ok="1" data-edit="1" data-id="${esc(v.id)}" data-mid="${esc(v.mid)}">Approve with my number…</button><button type="button" class="b b-red" data-a="vok" data-ok="0" data-id="${esc(v.id)}">Decline</button></div>` : v.note ? `<p class="muted co-sub">Note: ${esc(v.note)}</p>` : ""}</div>`; };
+    view.innerHTML = `<div class="page-h"><h1>Valuations</h1></div>${tabs("val", cc)}
+      <div class="msg info">The system calculates every valuation from the owner's figures and documents. Check the flags, then press <b>Approve</b> — nothing else is needed. Owners can ask for an update after an investment is confirmed.</div>
+      <h2 class="sec-h">Waiting for approval <span>${fmtN(pend.length)}</span></h2>${pend.length ? pend.map(card).join("") : `<div class="card"><div class="empty"><b>All caught up</b>No valuation is waiting.</div></div>`}
+      ${done.length ? `<h2 class="sec-h" style="margin-top:22px">Recently decided</h2>${done.map(card).join("")}` : ""}`;
+    view._h.vok = (b) => decideVal(b, view, () => viewValuations(view));
+  }
+
+  async function viewDeals(view) {
+    bind(view);
+    const st = view._dst || (view._dst = { s: "" });
+    view.innerHTML = `<div class="page-h"><h1>Investments</h1></div>${tabs("deals", cc)}${loadingCard()}`;
+    let rows;
+    try { rows = must(await sb.rpc("admin_list_investments", { p_status: st.s || null, p_limit: 200 })) || []; } catch (e) { view.innerHTML = `<div class="page-h"><h1>Investments</h1></div>${errorCard(e)}`; return; }
+    if (!view.isConnected) return;
+    const sum = (f) => rows.filter(f).reduce((a, r) => a + Number(r.amount || 0), 0);
+    view.innerHTML = `<div class="page-h"><h1>Investments</h1></div>${tabs("deals", cc)}
+      <div class="tiles co-tiles"><div class="tile r"><small>Both sides confirmed — verify</small><b>${fmtN(rows.filter((r) => r.status === "confirmed").length)}</b></div><div class="tile g"><small>Verified by VOSB</small><b>${esc(bdt(sum((r) => r.status === "verified")))}</b></div><div class="tile"><small>Confirmed total</small><b>${esc(bdt(sum((r) => r.status === "confirmed" || r.status === "verified")))}</b></div></div>
+      <div class="msg info">An investment is <b>recorded</b> by the owner or the investor and must be <b>confirmed by the other side</b>. Then you verify it with one click — after that the owner may ask for a valuation update.</div>
+      <div class="co-filters"><select class="sel" id="ds" aria-label="Status"><option value="">All records</option>${["proposed", "confirmed", "verified", "cancelled"].map((k) => `<option value="${k}"${st.s === k ? " selected" : ""}>${esc(({ proposed: "Waiting for other side", confirmed: "Both confirmed", verified: "Verified", cancelled: "Cancelled" })[k])}</option>`).join("")}</select></div>
+      <div class="rows" style="margin-top:12px">${rows.length ? rows.map((r) => `<div class="row"><div class="th co-logo">৳</div><div class="ti"><h3>${esc(bdt(r.amount))} → <a href="#/companies/${esc(r.company_id)}">${esc(r.company || "")}</a> ${dealPill(r.status)}</h3>
+          <div class="meta"><span>Investor <b>${esc(r.investor || "—")}</b>${r.email ? ` · ${esc(r.email)}` : ""}</span>${r.equity_pct != null ? `<span>${esc(r.equity_pct)}% equity</span>` : ""}${r.invested_on ? `<span>${esc(fmtD(r.invested_on))}</span>` : ""}<span>recorded by ${esc(r.recorded_by || "—")}</span></div>
+          <div class="meta"><span>${r.investor_confirmed_at ? "✓" : "○"} Investor confirmed</span><span>${r.owner_confirmed_at ? "✓" : "○"} Owner confirmed</span>${r.verified_at ? `<span>✓ Verified ${esc(fmtD(r.verified_at))}</span>` : ""}${r.note ? `<span>Note: ${esc(r.note)}</span>` : ""}</div></div>
+          <div class="acts">${r.status === "confirmed" ? `<button type="button" class="b b-green b-sm" data-a="dv" data-id="${esc(r.id)}">Verify</button>` : r.status === "proposed" ? `<button type="button" class="b b-line b-sm" data-a="dv" data-force="1" data-id="${esc(r.id)}">Verify anyway</button>` : ""}</div></div>`).join("") : `<div class="empty"><b>No investments yet</b>They appear here when an owner or investor records one.</div>`}</div>`;
+    $("#ds", view).addEventListener("change", (e) => { st.s = e.target.value; viewDeals(view); });
+    view._h.dv = (b) => busy(b, async () => {
+      if (b.dataset.force === "1" && !(await modal({ title: "Verify without the other side?", body: "Only one side has confirmed. Verify only if you have checked the payment yourself.", ok: "Verify anyway" }))) return;
+      must(await sb.rpc("admin_verify_investment", { p_id: b.dataset.id, p_force: b.dataset.force === "1" })); toast("Investment verified", "ok"); viewDeals(view);
+    });
+  }
+
+  /* extra fields the admin defines (e.g. "KYC status") — stored privately, never shown on the public site */
+  async function metaBox(scope, refId, host) {
+    let defs = [], meta = null;
+    try { [defs, meta] = await Promise.all([sb.from("admin_field_defs").select("*").eq("scope", scope).eq("active", true).order("sort").order("created_at").then(must), sb.from("admin_meta").select("*").eq("scope", scope).eq("ref_id", refId).maybeSingle().then(must)]); }
+    catch (e) { host.innerHTML = `<p class="msg err">${esc(errMsg(e))}</p>`; return; }
+    defs = defs || []; const data = (meta && meta.data) || {};
+    const field = (d) => { const id = "mf-" + d.key, v = data[d.key] == null ? "" : data[d.key], lbl = esc(d.label_en);
+      if (d.kind === "select") return `<div class="fld"><label for="${id}">${lbl}</label><select class="sel" id="${id}" data-k="${esc(d.key)}"><option value=""></option>${arr(d.options).map((o) => `<option${o === v ? " selected" : ""}>${esc(o)}</option>`).join("")}</select></div>`;
+      if (d.kind === "bool") return `<label class="chk"><input type="checkbox" id="${id}" data-k="${esc(d.key)}"${v === true ? " checked" : ""}> ${lbl}</label>`;
+      return `<div class="fld"><label for="${id}">${lbl}</label><input class="inp" id="${id}" data-k="${esc(d.key)}" type="${d.kind === "number" ? "number" : d.kind === "date" ? "date" : "text"}" maxlength="300" value="${esc(v)}"></div>`; };
+    host.innerHTML = `${defs.length ? defs.map(field).join("") : `<p class="muted">No extra fields yet. Add one from <a href="#/users">People → Custom fields</a>.</p>`}
+      <div class="fld"><label for="mf-note">Private note</label><textarea class="txt" id="mf-note" rows="3" maxlength="2000">${esc((meta && meta.note) || "")}</textarea></div>
+      <p><button type="button" class="b b-dark b-sm" data-mf-save>Save</button> <span class="muted" data-mf-msg></span></p>`;
+    $("[data-mf-save]", host).addEventListener("click", (e) => busy(e.currentTarget, async () => {
+      const out = {}; $$("[data-k]", host).forEach((el) => { const k = el.dataset.k; out[k] = el.type === "checkbox" ? el.checked : el.value.trim() === "" ? null : (el.type === "number" ? Number(el.value) : el.value.trim()); });
+      Object.keys(out).forEach((k) => out[k] === null && delete out[k]);
+      must(await sb.from("admin_meta").upsert({ scope, ref_id: refId, data: out, note: $("#mf-note", host).value.trim() || null, updated_at: new Date().toISOString() }, { onConflict: "scope,ref_id" }));
+      $("[data-mf-msg]", host).textContent = "Saved ✓";
+    }));
+  }
+
+  /* company page: valuation + investment control cards */
+  async function companyMoney(view, c, pays) {
+    const val = $("#co-valcard", view), inv = $("#co-invcard", view);
+    if (!val || !inv) return;
+    const reload = () => companyMoney(view, c, pays);
+    let V = null, O = null;
+    try { [V, O] = await Promise.all([sb.rpc("my_valuations", { p_company: c.id }).then(must), sb.rpc("company_investor_overview", { p_company: c.id }).then(must)]); } catch (e) { val.innerHTML = `<h2>Valuation</h2><p class="msg err">${esc(errMsg(e))}</p>`; return; }
+    if (!view.isConnected) return;
+    const items = (V && V.items) || [], pend = items.find((x) => x.status === "pending"), appr = items.find((x) => x.status === "approved"), fin = V && V.financials;
+    val.innerHTML = `<h2>Valuation <span class="muted" style="font-weight:600;font-size:.8rem">system-calculated</span></h2>
+      ${pend ? `<p><span class="pill p-submitted">Waiting for your approval</span></p>${valBody(pend)}<div class="acts co-acts"><button type="button" class="b b-green b-sm" data-a="vok" data-ok="1" data-id="${esc(pend.id)}" data-mid="${esc(pend.mid)}">✓ Approve</button><button type="button" class="b b-line b-sm" data-a="vok" data-ok="1" data-edit="1" data-id="${esc(pend.id)}" data-mid="${esc(pend.mid)}">My number…</button><button type="button" class="b b-red b-sm" data-a="vok" data-ok="0" data-id="${esc(pend.id)}">Decline</button></div>`
+        : appr ? `<p><span class="pill p-published">Approved ${esc(fmtD(appr.decided_at))}</span></p>${valBody(appr)}` : `<p class="muted">${fin ? "No valuation calculated yet." : "The owner has not given any financial figures yet."}</p>`}
+      ${fin ? `<details class="co-how"><summary>Figures the owner gave</summary>${kv([["Annual revenue", bdt(fin.annual_revenue)], ["Monthly revenue", bdt(fin.monthly_revenue)], ["Monthly growth", fin.growth_mom != null ? fin.growth_mom + "%" : ""], ["Gross margin", fin.gross_margin != null ? fin.gross_margin + "%" : ""], ["Annual net profit", fin.annual_net_profit != null ? bdt(fin.annual_net_profit) : ""], ["Monthly burn", fin.monthly_burn != null ? bdt(fin.monthly_burn) : ""], ["Cash in bank", fin.cash_in_bank != null ? bdt(fin.cash_in_bank) : ""], ["Debt", fin.debt != null ? bdt(fin.debt) : ""], ["Assets", fin.assets_value != null ? bdt(fin.assets_value) : ""], ["IP value", fin.ip_value != null ? bdt(fin.ip_value) : ""], ["Customers (paying)", fin.customers != null ? `${fin.customers} (${fin.paying_customers ?? "?"})` : ""], ["Full-time team", fin.team_ft], ["Raised before", fin.total_raised != null ? bdt(fin.total_raised) : ""], ["Market size", fin.market_size != null ? bdt(fin.market_size) : ""], ["Traction", esc(fin.traction)], ["Owner's note", esc(fin.owner_note)]])}</details>` : ""}
+      <p style="margin-top:10px"><button type="button" class="b b-line b-sm" data-a="vre">↻ Recalculate</button></p>`;
+    const T = O.totals || {};
+    inv.innerHTML = `<h2>Investors &amp; fees</h2>
+      <div class="co-switch"><div><b>Open for investment</b><small class="muted">${O.invest_open ? "Investors can send interest." : "Closed — investors cannot send interest."}</small></div><button type="button" class="b ${O.invest_open ? "b-green" : "b-line"} b-sm" data-a="iopen" data-v="${O.invest_open ? "0" : "1"}">${O.invest_open ? "On — turn off" : "Off — turn on"}</button></div>
+      <div class="co-switch"><div><b>Listing fee</b><small class="muted">${pays.some((p) => p.status === "verified") ? "Paid" : "Not paid (or waiting)"}</small></div><span class="co-sw-b"><button type="button" class="b b-line b-sm" data-a="waive" data-v="1">Waive</button><button type="button" class="b b-line b-sm" data-a="waive" data-v="0">Undo</button></span></div>
+      ${kv([["Interested investors", fmtN(T.interested)], ["Confirmed investors", fmtN(T.investors)], ["Confirmed amount", bdt(T.confirmed)], ["Verified amount", bdt(T.verified)]])}
+      ${arr(O.investments).length ? `<h3 class="co-h3">Deals</h3><ul class="co-ul">${O.investments.map((d) => `<li>${esc(bdt(d.amount))} · ${esc(d.investor_name || "—")} ${dealPill(d.status)} ${d.status === "confirmed" ? `<button type="button" class="b b-green b-sm" data-a="dv2" data-id="${esc(d.id)}">Verify</button>` : ""}</li>`).join("")}</ul>` : ""}`;
+    view._h.vok = (b) => decideVal(b, view, reload);
+    view._h.vre = (b) => busy(b, async () => { must(await sb.rpc("admin_recompute_valuation", { p_company: c.id })); toast("Recalculated", "ok"); await reload(); });
+    view._h.iopen = (b) => busy(b, async () => { must(await sb.rpc("set_invest_open", { p_company: c.id, p_open: b.dataset.v === "1" })); toast("Saved", "ok"); await reload(); });
+    view._h.waive = (b) => busy(b, async () => { must(await sb.rpc("admin_waive_fee", { p_company: c.id, p_waive: b.dataset.v === "1" })); toast(b.dataset.v === "1" ? "Fee waived — you can publish without payment" : "Waiver removed", "ok"); });
+    view._h.dv2 = (b) => busy(b, async () => { must(await sb.rpc("admin_verify_investment", { p_id: b.dataset.id, p_force: false })); toast("Verified", "ok"); await reload(); });
+  }
+
+  /* People: who is investor / founder / reader, active or not, top investors, custom fields */
   async function viewUsers(view) {
     bind(view);
-    const st = view._ust || (view._ust = { q: "", page: 0 }); const PER = 50;
-    view.innerHTML = `<div class="page-h"><h1>Users</h1></div>${userTabs("users", cc)}${loadingCard()}`;
-    const load = async () => {
-      const r = await sb.rpc("admin_list_users", { p_q: st.q || null, p_limit: PER, p_offset: st.page * PER });
-      return must(r) || { total: 0, items: [] };
-    };
-    let d, c;
-    try { [d, c] = await Promise.all([load(), counts()]); } catch (e) { view.innerHTML = `<div class="page-h"><h1>Users</h1></div>${errorCard(e)}`; return; }
+    const st = view._ust || (view._ust = { q: "", page: 0, role: "", active: "", sort: "new" }); const PER = 40;
+    view.innerHTML = `<div class="page-h"><h1>People</h1></div>${userTabs("users", cc)}${loadingCard()}`;
+    let d, c, S;
+    try {
+      [d, c, S] = await Promise.all([sb.rpc("admin_list_users", { p_q: st.q || null, p_limit: PER, p_offset: st.page * PER, p_role: st.role || null, p_active: st.active || null, p_sort: st.sort }).then(must), counts(), sb.rpc("admin_user_stats").then(must)]);
+    } catch (e) { view.innerHTML = `<div class="page-h"><h1>People</h1></div>${errorCard(e)}`; return; }
     if (!view.isConnected) return;
-    const total = Number(d.total) || 0, items = d.items || [], pages = Math.max(1, Math.ceil(total / PER));
-    view.innerHTML = `<div class="page-h"><h1>Users</h1></div>${userTabs("users", c)}
-      <form class="co-filters" id="uf"><input class="inp" id="q" type="search" placeholder="Search name or e-mail…" aria-label="Search" value="${esc(st.q)}" autocomplete="off"><button class="b b-dark b-sm" type="submit">Search</button></form>
-      <p class="muted co-count">${fmtN(total)} registered user${total === 1 ? "" : "s"}${st.q ? ` matching “${esc(st.q)}”` : ""} · page ${st.page + 1} of ${pages}</p>
+    d = d || { total: 0, items: [] }; S = S || {};
+    const total = Number(d.total) || 0, items = d.items || [], pages = Math.max(1, Math.ceil(total / PER)), R = S.roles || {};
+    const chip = (k, label, n) => `<button type="button" class="co-chip${st.role === k ? " on" : ""}" data-a="role" data-v="${k}">${label}${n != null ? ` <i>${fmtN(n)}</i>` : ""}</button>`;
+    view.innerHTML = `<div class="page-h"><h1>People</h1></div>${userTabs("users", c)}
+      <div class="tiles co-tiles"><div class="tile"><small>Registered</small><b>${fmtN(S.total)}</b></div><div class="tile g"><small>Active (30 days)</small><b>${fmtN(S.active)}</b></div><div class="tile"><small>Inactive</small><b>${fmtN(S.inactive)}</b></div><div class="tile k"><small>Invested (confirmed)</small><b>${esc(bdt(S.invested_total))}</b></div><div class="tile r"><small>Deals to verify</small><b>${fmtN(S.awaiting_verify)}</b></div><div class="tile"><small>Joined this week</small><b>${fmtN(S.new7)}</b></div></div>
+      ${arr(S.top_investors).length ? `<div class="card"><h2>🏆 Top investors</h2><ol class="co-top">${S.top_investors.map((t, i) => `<li><span class="co-rank">${i + 1}</span><span class="co-av">${t.avatar_url && isUrl(t.avatar_url) ? `<img src="${esc(t.avatar_url)}" alt="" referrerpolicy="no-referrer">` : initial(t.name)}</span><span class="co-u-main"><b>${esc(t.name || "—")}</b><small>${fmtN(t.deals)} deal${t.deals == 1 ? "" : "s"} · ${fmtN(t.companies)} company</small></span><b>${esc(bdt(t.total))}</b></li>`).join("")}</ol></div>` : ""}
+      <div class="co-chips">${chip("", "Everyone", S.total)}${chip("investor", "Investors", R.investor || 0)}${chip("founder", "Founders", R.founder || 0)}${chip("reader", "Readers", R.reader || 0)}${chip("other", "Others", R.other || 0)}</div>
+      <form class="co-filters" id="uf"><input class="inp" id="q" type="search" placeholder="Search name or e-mail…" aria-label="Search" value="${esc(st.q)}" autocomplete="off">
+        <select class="sel" id="fa" aria-label="Activity"><option value="">Active &amp; inactive</option><option value="active"${st.active === "active" ? " selected" : ""}>Active (30 days)</option><option value="inactive"${st.active === "inactive" ? " selected" : ""}>Inactive</option></select>
+        <select class="sel" id="fo" aria-label="Sort"><option value="new">Newest</option><option value="invested"${st.sort === "invested" ? " selected" : ""}>Highest investor</option><option value="active"${st.sort === "active" ? " selected" : ""}>Recently active</option></select>
+        <button class="b b-dark b-sm" type="submit">Apply</button></form>
+      <p class="muted co-count">${fmtN(total)} ${total === 1 ? "person" : "people"} · page ${st.page + 1} of ${pages}</p>
       <div class="co-list">${items.length ? items.map((u) => `<details class="card co-user" data-uid="${esc(u.id)}"><summary>
-          <span class="co-av">${initial(u.full_name || u.email)}</span>
+          <span class="co-av">${u.avatar_url && isUrl(u.avatar_url) ? `<img src="${esc(u.avatar_url)}" alt="" referrerpolicy="no-referrer">` : initial(u.full_name || u.email)}</span>
           <span class="co-u-main"><b>${esc(u.full_name || "(no name)")}</b><small>${esc(u.email || "")}</small></span>
-          <span class="co-u-meta"><span class="pill ${u.provider === "google" ? "p-in_review" : "p-draft"}">${esc(u.provider || "email")}</span>${u.email_confirmed ? "" : '<span class="pill p-changes_requested">unconfirmed</span>'}</span>
-          <span class="co-u-counts" title="companies · reviews · comments · interests"><i>🏢 ${fmtN(u.companies)}</i><i>★ ${fmtN(u.reviews)}</i><i>💬 ${fmtN(u.comments)}</i><i>💰 ${fmtN(u.interests)}</i></span></summary>
-          <div class="co-u-body"><p class="muted">Joined ${esc(fmtDT(u.created_at))} · last sign-in ${u.last_sign_in_at ? esc(fmtDT(u.last_sign_in_at)) : "never"}</p><div class="co-u-prof muted">Loading profile…</div>
-            <p class="acts" style="justify-content:flex-start">${u.email ? `<a class="b b-line b-sm" href="mailto:${esc(u.email)}">E-mail</a>` : ""}<button type="button" class="b b-line b-sm" data-a="copy" data-v="${esc(u.id)}">Copy user ID</button>${u.email ? `<button type="button" class="b b-line b-sm" data-a="copy" data-v="${esc(u.email)}">Copy e-mail</button>` : ""}</p></div></details>`).join("")
-        : `<div class="empty"><b>No users</b>${st.q ? "Nobody matches this search." : "Nobody has signed up yet."}</div>`}</div>
-      <div class="co-pager"><button type="button" class="b b-line b-sm" data-a="pg" data-d="-1"${st.page <= 0 ? " disabled" : ""}>← Previous</button><span class="muted">${st.page + 1} / ${pages}</span><button type="button" class="b b-line b-sm" data-a="pg" data-d="1"${st.page + 1 >= pages ? " disabled" : ""}>Next →</button></div>`;
+          <span class="co-u-meta">${rolePill(u.role)}<span class="co-dot ${u.active ? "on" : ""}" title="Last active ${esc(rel(u.last_active))}"></span><small class="muted">${u.active ? "Active" : "Inactive"} · ${esc(rel(u.last_active))}</small>${u.email_confirmed ? "" : '<span class="pill p-changes_requested">unconfirmed</span>'}</span>
+          <span class="co-u-counts" title="invested · interests · companies · reviews · comments">${Number(u.invested_total) > 0 ? `<i class="inv">${esc(bdtShort(u.invested_total) || fmtN(u.invested_total))}</i>` : ""}<i>💰 ${fmtN(u.interests)}</i><i>🏢 ${fmtN(u.companies)}</i><i>★ ${fmtN(u.reviews)}</i><i>💬 ${fmtN(Number(u.comments) + Number(u.article_comments || 0))}</i></span></summary>
+          <div class="co-u-body"><p class="muted">Joined ${esc(fmtDT(u.created_at))} · last sign-in ${u.last_sign_in_at ? esc(fmtDT(u.last_sign_in_at)) : "never"} · signed up with ${esc(u.provider || "email")}</p><div class="co-u-prof muted">Loading…</div></div></details>`).join("")
+        : `<div class="empty"><b>Nobody here</b>No one matches these filters.</div>`}</div>
+      <div class="co-pager"><button type="button" class="b b-line b-sm" data-a="pg" data-d="-1"${st.page <= 0 ? " disabled" : ""}>← Previous</button><span class="muted">${st.page + 1} / ${pages}</span><button type="button" class="b b-line b-sm" data-a="pg" data-d="1"${st.page + 1 >= pages ? " disabled" : ""}>Next →</button></div>
+      <div class="card" style="margin-top:18px" id="fdefs"></div>`;
     view._h.copy = (b) => copyV(b);
     view._h.pg = (b) => { st.page = Math.max(0, st.page + Number(b.dataset.d)); viewUsers(view); };
-    $("#uf", view).addEventListener("submit", (e) => { e.preventDefault(); st.q = $("#q", view).value.trim(); st.page = 0; viewUsers(view); });
-    view.addEventListener("toggle", async (e) => {
+    view._h.role = (b) => { st.role = b.dataset.v; st.page = 0; viewUsers(view); };
+    $("#uf", view).addEventListener("submit", (e) => { e.preventDefault(); st.q = $("#q", view).value.trim(); st.active = $("#fa", view).value; st.sort = $("#fo", view).value; st.page = 0; viewUsers(view); });
+    fieldDefs($("#fdefs", view), () => viewUsers(view));
+    if (view._tg) view.removeEventListener("toggle", view._tg, true);
+    view._tg = async (e) => {
       const el = e.target; if (!el.matches || !el.matches("details.co-user") || !el.open || el.dataset.loaded) return;
       el.dataset.loaded = "1";
-      const box = el.querySelector(".co-u-prof");
+      const box = el.querySelector(".co-u-prof"), uid = el.dataset.uid;
       try {
-        const p = one(must(await sb.from("profiles").select("*").eq("id", el.dataset.uid).maybeSingle()));
+        const D = must(await sb.rpc("admin_user_detail", { p_user: uid })) || {}, p = D.profile || {};
         box.classList.remove("muted");
-        box.innerHTML = p ? kv([["Phone", esc(p.phone)], ["Type", esc(p.user_type)], ["Headline", esc(p.headline)], ["Location", esc(p.location)], ["About", esc(p.bio)], ["Signed up with", esc(p.provider)], ["Last seen", p.last_seen_at ? esc(fmtDT(p.last_seen_at)) : ""], ["Profile photo", p.avatar_url && isUrl(p.avatar_url) ? `<a href="${esc(p.avatar_url)}" target="_blank" rel="noopener noreferrer">open</a>` : ""]]) : `<span class="muted">No profile saved yet (the person has not opened My account).</span>`;
+        box.innerHTML = `<div class="co-2x"><div>${kv([["Phone", esc(p.phone)], ["Type chosen", esc(p.user_type)], ["Headline", esc(p.headline)], ["Location", esc(p.location)], ["About", esc(p.bio)]])}
+            <p class="acts" style="justify-content:flex-start">${p.email ? `<a class="b b-line b-sm" href="mailto:${esc(p.email)}">E-mail</a>` : ""}<button type="button" class="b b-line b-sm" data-a="copy" data-v="${esc(uid)}">Copy user ID</button></p></div>
+          <div><h3 class="co-h3">Your private fields</h3><div data-meta></div></div></div>
+          ${arr(D.investments).length ? `<h3 class="co-h3">Investments</h3><ul class="co-ul">${D.investments.map((x) => `<li><b>${esc(bdt(x.amount))}</b> in <a href="#/companies/${esc(x.company_id)}">${esc(x.company)}</a> ${x.equity_pct != null ? `· ${esc(x.equity_pct)}%` : ""} ${dealPill(x.status)}</li>`).join("")}</ul>` : ""}
+          ${arr(D.interests).length ? `<h3 class="co-h3">Showed interest in</h3><ul class="co-ul">${D.interests.map((x) => `<li><a href="#/companies/${esc(x.company_id)}">${esc(x.company)}</a> · ${esc(bdt(x.ticket_min))}–${esc(bdt(x.ticket_max))} · ${esc(x.investor_type)} · ${simplePill(x.status)}</li>`).join("")}</ul>` : ""}
+          ${arr(D.companies).length ? `<h3 class="co-h3">Companies</h3><ul class="co-ul">${D.companies.map((x) => `<li><a href="#/companies/${esc(x.id)}">${esc(x.name || "(no name)")}</a> ${stPill(x.status)} ${x.registered === false ? '<span class="pill p-changes_requested">not registered</span>' : ""} ${Number(x.raised_amount) > 0 ? `· raised ${esc(bdt(x.raised_amount))} from ${fmtN(x.investor_count)}` : ""}</li>`).join("")}</ul>` : ""}`;
+        metaBox("user", uid, $("[data-meta]", box));
       } catch (err) { box.textContent = errMsg(err); }
-    }, true);
+    };
+    view.addEventListener("toggle", view._tg, true);
+  }
+
+  /* admin can add more data fields whenever needed */
+  async function fieldDefs(host, after) {
+    let defs = [];
+    try { defs = must(await sb.from("admin_field_defs").select("*").order("scope").order("sort").order("created_at")) || []; } catch (e) { host.innerHTML = `<p class="msg err">${esc(errMsg(e))}</p>`; return; }
+    host.innerHTML = `<h2>Custom fields</h2><p class="muted co-sub">Need to track something new about people or companies (e.g. “KYC status”, “Referred by”)? Add a field here — it appears in the private box on every user / company page. Visitors never see it.</p>
+      ${defs.length ? `<ul class="co-ul co-defs">${defs.map((f) => `<li><b>${esc(f.label_en)}</b> <span class="pill p-draft">${esc(f.scope)}</span> <span class="muted">${esc(f.kind)}${arr(f.options).length ? " · " + esc(arr(f.options).join(", ")) : ""}</span> <button type="button" class="b b-line b-sm" data-a="fdt" data-id="${esc(f.id)}" data-v="${f.active ? "0" : "1"}">${f.active ? "Hide" : "Show"}</button></li>`).join("")}</ul>` : ""}
+      <form id="fdf" class="co-fdf"><select class="sel" name="scope" aria-label="Where"><option value="user">People</option><option value="company">Companies</option></select><input class="inp" name="label" placeholder="Field name, e.g. KYC status" maxlength="60" required>
+        <select class="sel" name="kind" aria-label="Type"><option value="text">Text</option><option value="number">Number</option><option value="date">Date</option><option value="bool">Yes / No</option><option value="select">Choice list</option></select>
+        <input class="inp" name="opts" placeholder="Choices, comma separated (for Choice list)" maxlength="300"><button class="b b-dark b-sm" type="submit">Add field</button></form><div class="msg err" hidden id="fdm"></div>`;
+    host.addEventListener("click", (e) => { const b = e.target.closest("[data-a='fdt']"); if (!b) return; busy(b, async () => { must(await sb.from("admin_field_defs").update({ active: b.dataset.v === "1" }).eq("id", b.dataset.id)); after(); }); });
+    $("#fdf", host).addEventListener("submit", (e) => { e.preventDefault(); const f = e.target, m = $("#fdm", host); m.hidden = true;
+      const label = f.label.value.trim(), key = label.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 40);
+      if (!/^[a-z][a-z0-9_]{1,40}$/.test(key)) { m.hidden = false; m.textContent = "Use a name that starts with a letter."; return; }
+      busy(f.querySelector("[type=submit]"), async () => { try { must(await sb.from("admin_field_defs").insert({ scope: f.scope.value, key, label_en: label, label_bn: label, kind: f.kind.value, options: f.kind.value === "select" ? f.opts.value.split(",").map((s) => s.trim()).filter(Boolean) : [], sort: 100 })); toast("Field added", "ok"); after(); } catch (er) { m.hidden = false; m.textContent = /duplicate/i.test(errMsg(er)) ? "A field with this name already exists." : errMsg(er); } }); });
   }
 
   async function viewDeletions(view) {
@@ -671,7 +848,7 @@ window.VOSB_ADMIN_CO = function (X) {
   /* ---------------- router entry ---------------- */
   const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   function handles(h) {
-    return ["companies", "companies/all", "payments", "reviews", "interests", "company-settings", "users", "deletions"].includes(h) || (h.startsWith("companies/") && UUID.test(h.slice(10)));
+    return ["companies", "companies/all", "payments", "reviews", "interests", "company-settings", "users", "deletions", "valuations", "deals"].includes(h) || (h.startsWith("companies/") && UUID.test(h.slice(10)));
   }
   async function render(h, view) {
     refreshBadges();
@@ -683,6 +860,8 @@ window.VOSB_ADMIN_CO = function (X) {
     if (h === "interests") return viewInterests(view);
     if (h === "company-settings") return viewSettings(view);
     if (h === "users") return viewUsers(view);
+    if (h === "valuations") return viewValuations(view);
+    if (h === "deals") return viewDeals(view);
     if (h === "deletions") return viewDeletions(view);
   }
   return { handles, render, refreshBadges, counts, dashSection };

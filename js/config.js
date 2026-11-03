@@ -103,6 +103,10 @@ window.VOSB = {
       { id: "incorporation", required: false, bn: "ইনকর্পোরেশন / পার্টনারশিপ ডিড (RJSC)", en: "Incorporation / partnership deed (RJSC)" },
       { id: "financials",    required: false, bn: "আর্থিক বিবরণী / ব্যাংক স্টেটমেন্ট", en: "Financial statements / bank statement" },
       { id: "pitch_deck",    required: false, bn: "পিচ ডেক", en: "Pitch deck" },
+      { id: "founder_id",     required: false, bn: "প্রতিষ্ঠাতার NID / পাসপোর্ট", en: "Founder's NID / passport" },
+      { id: "business_plan",  required: false, bn: "ব্যবসায়িক পরিকল্পনা", en: "Business plan" },
+      { id: "bank_statement", required: false, bn: "ব্যাংক / বিকাশ-নগদ স্টেটমেন্ট (৬ মাস)", en: "Bank / mobile-wallet statement (6 months)" },
+      { id: "sales_proof",    required: false, bn: "বিক্রয়ের প্রমাণ (ইনভয়েস, অর্ডার, স্ক্রিনশট)", en: "Sales proof (invoices, orders, screenshots)" },
       { id: "other",         required: false, bn: "অন্যান্য প্রমাণপত্র", en: "Other supporting document" },
     ],
     investorTypes: [

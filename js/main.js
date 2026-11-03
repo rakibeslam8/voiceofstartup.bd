@@ -855,6 +855,7 @@
         </div>
       </div>
       <div class="ad-slot" data-slot="after_article" data-i="0"></div>
+      <section class="ps" id="post-social" data-slug="${esc(p.slug)}" aria-label="${T("লাইক ও কমেন্ট", "Likes and comments")}"></section>
       <div id="related"></div>
       <p style="margin-top:28px"><a class="btn btn-outline" href="/news">← ${T("সব সংবাদ", "All news")}</a></p>`;
     wireShare(p);
@@ -1181,8 +1182,13 @@
   window.VOSB_UI = { get lang() { return lang; }, T, esc, pick, safeHref, bnDigits, formatDate, formatDateTime, money, $, $$, onRender(fn) { renderers.push(fn); }, refresh };
   (function loadAuth() {
     const s = document.createElement("script");
-    s.src = "/js/auth.js?v=20261103a";
-    s.onload = () => { try { window.VOSB_AUTH && window.VOSB_AUTH.paint(); } catch (e) {} };
+    s.src = "/js/auth.js?v=20261103b";
+    s.onload = () => {
+      try { window.VOSB_AUTH && window.VOSB_AUTH.paint(); } catch (e) {}
+      if (document.getElementById("article") || /^\/(en\/)?read\//.test(location.pathname)) {   // article pages: likes + comments
+        const t = document.createElement("script"); t.src = "/js/social.js?v=20261103b"; document.head.appendChild(t);
+      }
+    };
     document.head.appendChild(s);
   })();
 

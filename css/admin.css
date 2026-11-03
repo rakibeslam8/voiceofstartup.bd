@@ -534,3 +534,28 @@ a.co-row:active { transform: scale(.995); }
   .row.co-pay-row .acts .b { flex: 1 1 calc(50% - 6px); min-height: 40px; }
   .co-pm-sw { margin-left: 0; width: 100%; }
 }
+
+/* ---------- valuation · investments · people (update 12) ---------- */
+.co-valrange { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 8px; margin: 8px 0; }
+.co-valrange > div { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.co-valrange > .mid { background: #eaf7f0; border-color: #bfe3d0; }
+.co-valrange small { display: block; color: var(--muted); font-weight: 700; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; }
+.co-valrange b { font-size: 1.05rem; word-break: break-word; }
+.co-flags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.flag { font-size: .76rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: #eee; color: #555; }
+.flag.f-warn { background: #fff1d6; color: #8a5a00; } .flag.f-bad { background: #fdecec; color: #a11b19; } .flag.f-good { background: #eaf7f0; color: var(--green-dark); } .flag.f-info { background: #e6f0ff; color: #1c4aa8; }
+.co-how { margin: 8px 0; } .co-how summary { cursor: pointer; font-weight: 700; font-size: .88rem; color: var(--muted); }
+.co-tbl { width: 100%; border-collapse: collapse; font-size: .86rem; margin-top: 8px; } .co-tbl th, .co-tbl td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; } .co-tbl th { font-size: .72rem; text-transform: uppercase; color: var(--muted); }
+.co-valcard { margin-bottom: 14px; }
+.co-switch { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); } .co-switch small { display: block; } .co-sw-b { display: inline-flex; gap: 6px; }
+.pill.role-investor { background: #eaf7f0; color: var(--green-dark); } .pill.role-founder { background: var(--orange-soft); color: #9a3d06; } .pill.role-reader { background: #e6f0ff; color: #1c4aa8; } .pill.role-other { background: #eee; color: #555; }
+.pill.deal-proposed { background: #fff1d6; color: #8a5a00; } .pill.deal-confirmed { background: #e6f0ff; color: #1c4aa8; } .pill.deal-verified { background: #eaf7f0; color: var(--green-dark); } .pill.deal-cancelled { background: #eee; color: #777; }
+.co-dot { width: 9px; height: 9px; border-radius: 50%; background: #c9c9c9; display: inline-block; } .co-dot.on { background: #0b8a4b; box-shadow: 0 0 0 3px #0b8a4b26; }
+.co-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0 12px; }
+.co-chip { border: 1.5px solid var(--line); background: var(--card); border-radius: 999px; padding: 6px 14px; font: 700 .86rem var(--font-body); cursor: pointer; color: var(--text); } .co-chip i { font-style: normal; opacity: .6; margin-left: 4px; } .co-chip.on { background: var(--black); border-color: var(--black); color: #fff; }
+.co-top { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; } .co-top li { display: flex; align-items: center; gap: 12px; } .co-top .co-u-main { flex: 1; min-width: 0; }
+.co-rank { width: 24px; height: 24px; border-radius: 50%; background: var(--black); color: #fff; display: grid; place-items: center; font: 800 .78rem var(--font-body); flex: none; }
+.co-av { overflow: hidden; flex: none; } .co-av img { width: 100%; height: 100%; object-fit: cover; }
+.co-u-counts i.inv { background: #eaf7f0; color: var(--green-dark); font-weight: 800; }
+.co-2x { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; } @media (max-width: 760px) { .co-2x { grid-template-columns: 1fr; } .co-valrange { grid-template-columns: 1fr; } }
+.co-fdf { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; } .co-fdf .inp { flex: 1 1 180px; } .co-defs li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }

@@ -233,3 +233,14 @@ html[data-theme="dark"] .co-vbar b { background: #fff; }
   .co-hvis { min-height: 330px; } .co-pv { width: 88%; padding: 16px; } .co-pv-fee { right: 0; top: 0; } .co-pv-note { left: -2px; bottom: 0; max-width: 220px; }
   .co-who, .co-bens, .co-tl, .co-valx .co-ticks, .co-need2 { grid-template-columns: 1fr; } .co-vcard { padding: 20px; } .co-valx h2 { font-size: 1.35rem; }
 }
+
+/* ---------- avatars, investment status, valuation range ---------- */
+.co-av { flex: none; width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--bg); }
+.co-av.ph { display: grid; place-items: center; background: linear-gradient(135deg, #ff7522, #e55f0f); color: #fff; font: 800 .95rem var(--font-head); }
+li.co-hasav { display: flex; gap: 10px; align-items: flex-start; }
+li.co-hasav > .co-avb { min-width: 0; flex: 1; }
+li.co-hasav.re .co-av { width: 30px; height: 30px; font-size: .8rem; }
+.co-b.open { background: color-mix(in srgb, var(--green) 12%, var(--card)); color: var(--green); border-color: color-mix(in srgb, var(--green) 35%, transparent); }
+.co-b.off { background: var(--bg); color: var(--muted); }
+.co-b.warn { background: color-mix(in srgb, var(--orange) 12%, var(--card)); color: var(--orange-dark); border-color: color-mix(in srgb, var(--orange) 40%, transparent); }
+.co-conf { display: block; font-weight: 600; color: var(--muted); font-size: .78rem; margin-top: 2px; }
