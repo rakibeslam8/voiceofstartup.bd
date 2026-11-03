@@ -6,7 +6,39 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Tue, 03 Nov 2026 04:38:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 03 Nov 2026 13:26:00 GMT</lastBuildDate>
+    <item>
+      <title>দেশের আর্থিক খাত সংস্কারে ৪৫ কোটি ডলার ঋণ দেবে বিশ্বব্যাংক</title>
+      <link>https://www.voiceofstartup.bd/read/the-world-bank-will-give-a-loan-of-450-million-dollars-to-reform-the-c</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/the-world-bank-will-give-a-loan-of-450-million-dollars-to-reform-the-c</guid>
+      <pubDate>Tue, 03 Nov 2026 13:26:00 GMT</pubDate>
+      <category>ব্যবসা, বিনিয়োগ ও নীতিমালা</category>
+      <description>দেশের আর্থিক খাতের সুরক্ষা ব্যবস্থা ও তদারকি সক্ষমতা জোরদার করতে ৪৫ কোটি ডলার ঋণ দিচ্ছে বিশ্বব্যাংক। এ অর্থ দিয়ে ‘আর্থিক খাত সহায়তা প্রকল্প-২’ বাস্তবায়ন করা হবে।</description>
+    </item>
+    <item>
+      <title>কোডিং ছাড়াই এআই দিয়ে গেম তৈরি করা যাবে গুগলের প্লেগ্রাউন্ড প্ল্যাটফর্মে</title>
+      <link>https://www.voiceofstartup.bd/read/games-can-be-created-with-ai-without-coding-on-google-s-playground-pla</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/games-can-be-created-with-ai-without-coding-on-google-s-playground-pla</guid>
+      <pubDate>Tue, 03 Nov 2026 13:05:00 GMT</pubDate>
+      <category>প্রযুক্তি ও এআই</category>
+      <description>নিজেদের পছন্দের গেম তৈরি করতে প্রোগ্রামিং জানা বা জটিল সফটওয়্যার ব্যবহার করতে হবে না আর। নিজের পছন্দের গেমটি কেমন হবে, তা সাধারণ ভাষায় লিখে জানালেই কৃত্রিম বুদ্ধিমত্তা (এআই)…</description>
+    </item>
+    <item>
+      <title>ছবি-ভিডিও-অডিও-লেখা এআই কি না, তা জানাবে গুগল</title>
+      <link>https://www.voiceofstartup.bd/read/image-video-audio-writing-ai-or-not-google-will-tell</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/image-video-audio-writing-ai-or-not-google-will-tell</guid>
+      <pubDate>Tue, 03 Nov 2026 12:11:00 GMT</pubDate>
+      <category>প্রযুক্তি ও এআই</category>
+      <description>অনলাইন দুনিয়ায় কোনো ছবি, ভিডিও বা অডিও ক্লিপ দেখে সেটি কৃত্রিম বুদ্ধিমত্তা বা এআই দিয়ে তৈরি কি না, তা নিয়ে বিভ্রান্তি দূর করতে গুগল নিয়ে এসেছে নতুন এক সমাধান।</description>
+    </item>
+    <item>
+      <title>বেসরকারি খাতের ৫৫% কর্মী এআই ব্যবহার করেন, মেটলাইফের জরিপ</title>
+      <link>https://www.voiceofstartup.bd/read/55-of-private-sector-workers-use-ai-metlife-survey</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/55-of-private-sector-workers-use-ai-metlife-survey</guid>
+      <pubDate>Tue, 03 Nov 2026 11:22:00 GMT</pubDate>
+      <category>প্রযুক্তি ও এআই</category>
+      <description>দ্রুত পরিবর্তনশীল কর্মক্ষেত্রে কর্মীদের মানসিক চাপ কমাতে বড় ভরসা হয়ে উঠছে কৃত্রিম বুদ্ধিমত্তা বা এআই। দেশের বেসরকারি খাতের প্রায় ৫৫ শতাংশ বা অর্ধেকের বেশি কর্মী বর্তমানে এআই ব্যবহার করছেন।</description>
+    </item>
     <item>
       <title>এআইয়ের ডেটা থেকে মেটার নেতৃত্ব, কে এই ২৯ বছর বয়সী আলেকজান্ডার ওয়াং</title>
       <link>https://www.voiceofstartup.bd/read/the-leader-of-meta-from-ai-data-who-is-29-year-old-alexander-wang</link>
@@ -214,38 +246,6 @@
       <pubDate>Tue, 27 Oct 2026 16:21:00 GMT</pubDate>
       <category>ফাউন্ডার স্টোরি</category>
       <description>পাঙাশ মাছ প্রক্রিয়াজাত করে ‘বাচা ফিলে’ (মাছের কাঁটাবিহীন মাংস) তৈরি করছেন উদ্যোক্তা আবু মঞ্জুর সাঈফ। মাছের এই ফিলে তিনি দেশের বিভিন্ন হোটেল-রেস্তোরাঁসহ ব্যবসায়িক ও শিক্ষাপ্রতিষ্ঠানে সরবরাহ করেন। এতে ব্যাপক সাড়া পাচ্ছেন।</description>
-    </item>
-    <item>
-      <title>চার্জিং স্টেশন তৈরির উদ্যোগে সফল স্টার্টআপ ‘ক্র্যাক প্লাটুন’</title>
-      <link>https://www.voiceofstartup.bd/read/successful-startup-crack-platoon-in-charging-station-initiative</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/successful-startup-crack-platoon-in-charging-station-initiative</guid>
-      <pubDate>Tue, 27 Oct 2026 16:12:00 GMT</pubDate>
-      <category>ফাউন্ডার স্টোরি</category>
-      <description>বিশ্বের উন্নত দেশে দ্রুত বৈদ্যুতিক গাড়ির ব্যবহার বাড়ছে। সেই তুলনায় দেশে বৈদ্যুতিক গাড়ির চাহিদা বাড়ছে ধীরে। খাতসংশ্লিষ্টরা বলছেন, দেশে বৈদ্যুতিক গাড়ির প্রতি ক্রেতাদের কম আগ্রহের বড় কারণ বেশি দাম ও চার্জিং অবকাঠামোর ঘাটতি।</description>
-    </item>
-    <item>
-      <title>মাছ চাষ করেই এক ইউনিয়নে শতজন কোটিপতি</title>
-      <link>https://www.voiceofstartup.bd/read/hundreds-of-millionaires-in-one-union-by-farming-fish</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/hundreds-of-millionaires-in-one-union-by-farming-fish</guid>
-      <pubDate>Tue, 27 Oct 2026 09:58:00 GMT</pubDate>
-      <category>ফাউন্ডার স্টোরি</category>
-      <description>সম্প্রতি ওসমানপুর ইউনিয়নের মুহুরী নদী এলাকা, পশ্চিম বাঁশখালী ও পাতাকোট ঘুরে দেখা যায়, বিস্তীর্ণ এলাকাজুড়ে গড়ে উঠেছে মাছের খামার। কোথাও শ্রমিকেরা খামারে মাছকে খাবার দিচ্ছেন, কোথাও চলছে মাছ ধরার প্রস্তুতি।</description>
-    </item>
-    <item>
-      <title>বাংলাদেশের নিজস্ব সার্চ ইঞ্জিন &#39;দোয়েল&#39;-এর যাত্রা শুরু</title>
-      <link>https://www.voiceofstartup.bd/read/bangladesh-s-own-search-engine-doel-has-started-its-journey</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/bangladesh-s-own-search-engine-doel-has-started-its-journey</guid>
-      <pubDate>Tue, 27 Oct 2026 06:12:00 GMT</pubDate>
-      <category>ফাউন্ডার স্টোরি</category>
-      <description>বাংলাদেশের প্রযুক্তি খাতে আরেকটি নতুন পালক যুক্ত হলো &#39;দোয়েল&#39; (Doel) সার্চ ইঞ্জিনের মাধ্যমে। সম্পূর্ণ দেশীয় প্রযুক্তিতে তৈরি এই প্ল্যাটফর্মটি বিশ্বব্যাপী ব্যবহারকারীদের জন্য আধুনিক সার্চ সুবিধা নিয়ে এসেছে।</description>
-    </item>
-    <item>
-      <title>টিনের ব্যবসা থেকে ৩০ দেশে পাটপণ্য রপ্তানি</title>
-      <link>https://www.voiceofstartup.bd/read/jute-export-to-30-countries-from-tin-business</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/jute-export-to-30-countries-from-tin-business</guid>
-      <pubDate>Tue, 27 Oct 2026 04:30:00 GMT</pubDate>
-      <category>ফাউন্ডার স্টোরি</category>
-      <description>মায়ের অনুপ্রেরণায় গড়ে ওঠা পাটকলে তৈরি হচ্ছে বিশ্বমানের হাইড্রো-কার্বনমুক্ত ব্যাগ। বছরে আয় ২০০ কোটি টাকার বেশি বৈদেশিক মুদ্রা। চাঙা হচ্ছে উত্তরবঙ্গের গ্রামীণ অর্থনীতি।</description>
     </item>
   </channel>
 </rss>

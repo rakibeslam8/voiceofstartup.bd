@@ -1,6 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/the-world-bank-will-give-a-loan-of-450-million-dollars-to-reform-the-c</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-03T13:26:00.000Z</news:publication_date>
+      <news:title>দেশের আর্থিক খাত সংস্কারে ৪৫ কোটি ডলার ঋণ দেবে বিশ্বব্যাংক</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/the-world-bank-will-give-a-loan-of-450-million-dollars-to-reform-the-c</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-03T13:26:00.000Z</news:publication_date>
+      <news:title>The World Bank will give a loan of 450 million dollars to reform the country&#39;s financial sector</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/games-can-be-created-with-ai-without-coding-on-google-s-playground-pla</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-03T13:05:00.000Z</news:publication_date>
+      <news:title>কোডিং ছাড়াই এআই দিয়ে গেম তৈরি করা যাবে গুগলের প্লেগ্রাউন্ড প্ল্যাটফর্মে</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/games-can-be-created-with-ai-without-coding-on-google-s-playground-pla</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-03T13:05:00.000Z</news:publication_date>
+      <news:title>Games can be created with AI without coding on Google&#39;s Playground platform</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/image-video-audio-writing-ai-or-not-google-will-tell</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-03T12:11:00.000Z</news:publication_date>
+      <news:title>ছবি-ভিডিও-অডিও-লেখা এআই কি না, তা জানাবে গুগল</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/image-video-audio-writing-ai-or-not-google-will-tell</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-03T12:11:00.000Z</news:publication_date>
+      <news:title>Image-video-audio-writing AI or not, Google will tell</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/55-of-private-sector-workers-use-ai-metlife-survey</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-03T11:22:00.000Z</news:publication_date>
+      <news:title>বেসরকারি খাতের ৫৫% কর্মী এআই ব্যবহার করেন, মেটলাইফের জরিপ</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/55-of-private-sector-workers-use-ai-metlife-survey</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-03T11:22:00.000Z</news:publication_date>
+      <news:title>55% of private sector workers use AI, MetLife survey</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/the-leader-of-meta-from-ai-data-who-is-29-year-old-alexander-wang</loc>
     <news:news>
       <news:publication>
@@ -152,28 +240,6 @@
       </news:publication>
       <news:publication_date>2026-11-02T22:54:00.000Z</news:publication_date>
       <news:title>Threats of Internet-World Chaos with Meta&#39;s New AI Agent</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/eco-friendly-e-bike-rental-service-ezigo-in-cox-s-bazar-a-story-of-new</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-01T12:38:00.000Z</news:publication_date>
-      <news:title>কক্সবাজারে পরিবেশবান্ধব ই-বাইক রেন্টাল সার্ভিস ‘ইজিগো’: পর্যটকদের জন্য এক নতুন স্বাধীনতার গল্প</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/eco-friendly-e-bike-rental-service-ezigo-in-cox-s-bazar-a-story-of-new</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-01T12:38:00.000Z</news:publication_date>
-      <news:title>Eco-Friendly E-Bike Rental Service &#39;Ezigo&#39; in Cox&#39;s Bazar: A Story of New Freedom for Tourists</news:title>
     </news:news>
   </url>
 </urlset>
