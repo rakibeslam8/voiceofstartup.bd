@@ -1181,7 +1181,7 @@
   window.VOSB_UI = { get lang() { return lang; }, T, esc, pick, safeHref, bnDigits, formatDate, formatDateTime, money, $, $$, onRender(fn) { renderers.push(fn); }, refresh };
   (function loadAuth() {
     const s = document.createElement("script");
-    s.src = "/js/auth.js?v=20261102b";
+    s.src = "/js/auth.js?v=20261103a";
     s.onload = () => { try { window.VOSB_AUTH && window.VOSB_AUTH.paint(); } catch (e) {} };
     document.head.appendChild(s);
   })();

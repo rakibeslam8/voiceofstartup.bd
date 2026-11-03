@@ -1789,6 +1789,10 @@
           <dl class="kv"><dt>Signed in as</dt><dd>${esc(session.user.email)}</dd><dt>User ID</dt><dd>${esc(C.admin.userId)}</dd><dt>Website</dt><dd><a href="${esc(C.site.origin)}" target="_blank" rel="noopener" style="color:var(--orange-dark)">${esc(C.site.domain)}</a></dd><dt>Idle sign-out</dt><dd>30 minutes</dd></dl>
           <p style="margin-top:14px"><button class="b b-line" id="so">Sign out on this device</button></p>
         </div>
+        <div class="card" id="sgc"><h2>Visitor sign-up status</h2>
+          <p class="muted" style="margin-bottom:10px">Checks your Supabase login settings live, so you can see whether visitors are able to create accounts.</p>
+          <div id="sgs" class="muted">Checking…</div>
+        </div>
         <div class="card"><h2>Google Search Console</h2>
           <p class="muted" style="margin-bottom:10px">Submit this link once in Search Console. New articles can be found by Google through the site's links, and are shared instantly via their own article link.</p>
           <div class="url" style="background:#f6f6f3;padding:9px 12px;border-radius:10px;overflow-wrap:anywhere;font-size:.9rem">${esc(C.site.origin)}/sitemap.xml</div>
@@ -1810,6 +1814,17 @@
     }));
     $("#so").onclick = () => logout("You have been signed out.");
     $("#cs").onclick = async () => toast((await copyText(C.site.origin + "/sitemap.xml")) ? "Sitemap link copied" : "Copy failed", "ok");
+    (async () => {
+      const box = $("#sgs"); if (!box) return;
+      try {
+        const r = await fetch(S.url + "/auth/v1/settings", { headers: { apikey: S.anonKey } }); const j = await r.json();
+        const open = !j.disable_signup, g = !!(j.external && j.external.google), em = !!(j.external && j.external.email);
+        const row = (ok, t, h) => `<div style="display:flex;gap:10px;align-items:flex-start;margin:8px 0"><span style="font-weight:800;color:${ok ? "#0b8a4b" : "#d92d20"}">${ok ? "✓" : "✕"}</span><span><b>${t}</b><br><span class="muted" style="font-size:.86rem">${h}</span></span></div>`;
+        box.innerHTML = row(open, open ? "Sign-up is OPEN" : "Sign-up is CLOSED", open ? "Anyone can create an account with email and password." : "Visitors see “sign-ups are paused”. Fix: Supabase → Authentication → Sign In / Providers → turn ON “Allow new users to sign up”, then Save.")
+          + row(em, em ? "Email + password login is on" : "Email login is off", em ? "Works for sign-up and login." : "Supabase → Authentication → Sign In / Providers → Email → enable.")
+          + row(g, g ? "Google login is ON" : "Google login is not enabled yet", g ? "The “Continue with Google” button is live." : "Visitors see “Continue with Google — coming soon”. Turn it on in Supabase → Authentication → Sign In / Providers → Google.");
+      } catch (e) { box.textContent = "Could not read the setting right now — check your connection."; }
+    })();
     $("#pwf").onsubmit = async (e) => {
       e.preventDefault();
       const a = $("#np").value, b = $("#np2").value, m = $("#pmsg");

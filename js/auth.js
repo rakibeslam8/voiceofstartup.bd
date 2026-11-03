@@ -133,7 +133,7 @@
         <button class="au-go" type="submit">${{ login: T("লগইন", "Login"), signup: T("অ্যাকাউন্ট খুলুন", "Create account"), forgot: T("রিসেট লিংক পাঠান", "Send reset link"), reset: T("পাসওয়ার্ড সংরক্ষণ", "Save password") }[mode]}</button>
       </form>
       <p class="au-foot">${mode === "login" ? `<button type="button" class="au-link" data-m="forgot">${T("পাসওয়ার্ড ভুলে গেছেন?", "Forgot password?")}</button>` : mode === "forgot" ? `<button type="button" class="au-link" data-m="login">← ${T("লগইনে ফিরুন", "Back to login")}</button>` : ""}</p>`;
-    if (mode === "signup" && noSignup) setMsg(T("এই মুহূর্তে নতুন অ্যাকাউন্ট খোলা বন্ধ আছে।", "New sign-ups are paused right now."), "err");
+    if (mode === "signup" && noSignup) setMsg(T("নতুন অ্যাকাউন্ট খোলা সাময়িকভাবে বন্ধ আছে। একটু পরে আবার চেষ্টা করুন — অথবা editor@voiceofstartup.bd-এ জানান।", "New sign-ups are temporarily closed. Please try again shortly — or tell us at editor@voiceofstartup.bd."), "err");
     card.querySelectorAll("[data-m]").forEach((b) => b.addEventListener("click", () => { mode = b.dataset.m; draw(cfg); }));
     const sh = card.querySelector("[data-show]");
     if (sh) sh.addEventListener("click", () => { const i = card.querySelector('[name="pw"]'); const h = i.type === "password"; i.type = h ? "text" : "password"; sh.textContent = h ? T("লুকান", "Hide") : EYE; });
@@ -157,7 +157,7 @@
     if (/invalid login/i.test(m)) return T("ইমেইল বা পাসওয়ার্ড ঠিক নয়।", "Wrong email or password.");
     if (/not confirmed/i.test(m)) return T("আগে ইমেইলের লিংকে ক্লিক করে অ্যাকাউন্ট কনফার্ম করুন।", "Please confirm your email first (check your inbox).");
     if (/already registered|already been registered/i.test(m)) return T("এই ইমেইলে আগেই অ্যাকাউন্ট আছে — লগইন করুন।", "This email already has an account — please log in.");
-    if (/signups? not allowed|signup.*disabled/i.test(m)) return T("এই মুহূর্তে নতুন অ্যাকাউন্ট খোলা বন্ধ আছে।", "New sign-ups are paused right now.");
+    if (/signups? not allowed|signup.*disabled/i.test(m)) return T("নতুন অ্যাকাউন্ট খোলা সাময়িকভাবে বন্ধ আছে। একটু পরে আবার চেষ্টা করুন — অথবা editor@voiceofstartup.bd-এ জানান।", "New sign-ups are temporarily closed. Please try again shortly — or tell us at editor@voiceofstartup.bd.");
     if (/rate limit|too many|over_email_send/i.test(m)) return T("অনেকবার চেষ্টা হয়েছে। একটু পরে আবার চেষ্টা করুন।", "Too many attempts. Please try again in a little while.");
     if (/provider is not enabled|unsupported provider/i.test(m)) return T("Google লগইন এখনও চালু হয়নি।", "Google login is not switched on yet.");
     if (/weak|password should|at least/i.test(m)) return T("পাসওয়ার্ড আরও শক্ত করুন (কমপক্ষে ৮ অক্ষর)।", "Please use a stronger password (at least 8 characters).");
