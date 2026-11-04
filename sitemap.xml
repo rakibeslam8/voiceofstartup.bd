@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.voiceofstartup.bd/</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/news</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -54,7 +54,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/market-insights</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -70,7 +70,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/international-startups</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-04</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -124,6 +124,66 @@
     <loc>https://www.voiceofstartup.bd/editorial-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/elon-musk-s-wealth-increased-by-61-billion-dollars-in-one-day-and-he-i</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/elon-musk-s-wealth-increased-by-61-billion-dollars-in-one-day-and-he-i"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/elon-musk-s-wealth-increased-by-61-billion-dollars-in-one-day-and-he-i"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/elon-musk-s-wealth-increased-by-61-billion-dollars-in-one-day-and-he-i"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-01-16%2Fw93g0tqo%2FMusk.jpg?rect=110%2C0%2C591%2C394&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/elon-musk-s-wealth-increased-by-61-billion-dollars-in-one-day-and-he-i</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/elon-musk-s-wealth-increased-by-61-billion-dollars-in-one-day-and-he-i"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/elon-musk-s-wealth-increased-by-61-billion-dollars-in-one-day-and-he-i"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/elon-musk-s-wealth-increased-by-61-billion-dollars-in-one-day-and-he-i"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-01-16%2Fw93g0tqo%2FMusk.jpg?rect=110%2C0%2C591%2C394&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/vanilla-cultivation-has-started-in-the-country-the-price-of-one-kg-in</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/vanilla-cultivation-has-started-in-the-country-the-price-of-one-kg-in"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/vanilla-cultivation-has-started-in-the-country-the-price-of-one-kg-in"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/vanilla-cultivation-has-started-in-the-country-the-price-of-one-kg-in"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-11-03%2F1srra3ep%2FVanilla-2.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/vanilla-cultivation-has-started-in-the-country-the-price-of-one-kg-in</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/vanilla-cultivation-has-started-in-the-country-the-price-of-one-kg-in"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/vanilla-cultivation-has-started-in-the-country-the-price-of-one-kg-in"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/vanilla-cultivation-has-started-in-the-country-the-price-of-one-kg-in"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-11-03%2F1srra3ep%2FVanilla-2.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/the-wealth-of-the-top-10-richest-people-in-the-world-decreased-by-27-b</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/the-wealth-of-the-top-10-richest-people-in-the-world-decreased-by-27-b"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/the-wealth-of-the-top-10-richest-people-in-the-world-decreased-by-27-b"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/the-wealth-of-the-top-10-richest-people-in-the-world-decreased-by-27-b"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-11-02%2Ffxnezvq3%2FWhatsApp-Image-2026-11-02-at-10.18.02-PM.jpeg?rect=0%2C0%2C1600%2C1067&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/the-wealth-of-the-top-10-richest-people-in-the-world-decreased-by-27-b</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/the-wealth-of-the-top-10-richest-people-in-the-world-decreased-by-27-b"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/the-wealth-of-the-top-10-richest-people-in-the-world-decreased-by-27-b"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/the-wealth-of-the-top-10-richest-people-in-the-world-decreased-by-27-b"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-11-02%2Ffxnezvq3%2FWhatsApp-Image-2026-11-02-at-10.18.02-PM.jpeg?rect=0%2C0%2C1600%2C1067&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/the-world-bank-will-give-a-loan-of-450-million-dollars-to-reform-the-c</loc>
