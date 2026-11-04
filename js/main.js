@@ -1188,11 +1188,11 @@
   window.VOSB_UI = { get lang() { return lang; }, T, esc, pick, safeHref, bnDigits, formatDate, formatDateTime, money, $, $$, onRender(fn) { renderers.push(fn); }, refresh };
   (function loadAuth() {
     const s = document.createElement("script");
-    s.src = "/js/auth.js?v=20261103b";
+    s.src = "/js/auth.js?v=20261104a";
     s.onload = () => {
       try { window.VOSB_AUTH && window.VOSB_AUTH.paint(); } catch (e) {}
       if (document.getElementById("article") || /^\/(en\/)?read\//.test(location.pathname)) {   // article pages: likes + comments
-        const t = document.createElement("script"); t.src = "/js/social.js?v=20261103b"; document.head.appendChild(t);
+        const t = document.createElement("script"); t.src = "/js/social.js?v=20261104a"; document.head.appendChild(t);
       }
     };
     document.head.appendChild(s);
