@@ -172,10 +172,11 @@
       <div class="st-col">
         <section class="st-card"><h2>${T("অ্যাকাউন্ট", "Account")}</h2>
           <div class="ab-acct" data-auth-slot="sheet">${authInitial("sheet")}</div>
-          <div class="st-links"><a href="/account#companies">${abIc("company")}<span>${T("আমার কোম্পানি", "My companies")}</span></a><a href="/list-your-company">${abIc("plus")}<span>${T("কোম্পানি লিস্ট করুন", "List your company")}</span></a></div></section>
+          <div class="st-links"><a href="/account#companies">${abIc("company")}<span>${T("আমার কোম্পানি", "My companies")}</span></a><a href="/account#invest">${abIc("flame")}<span>${T("আমার বিনিয়োগ", "My investments")}</span></a><a href="/list-your-company">${abIc("plus")}<span>${T("কোম্পানি লিস্ট করুন", "List your company")}</span></a></div></section>
         <section class="st-card"><h2>${T("পছন্দ", "Preferences")}</h2>
           <button class="ab-row" type="button" data-act="theme"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg><span>${T("ডার্ক মোড", "Dark mode")}</span><i class="ab-sw" aria-hidden="true"></i></button>
           <button class="ab-row" type="button" data-act="lang"><b class="ab-lg">${lang === "bn" ? "EN" : "বা"}</b><span>${T("ভাষা", "Language")}</span><em>${lang === "bn" ? "English" : "বাংলা"}</em></button>
+          <button class="ab-row" type="button" data-act="refresh-app"><span class="ab-lg">↻</span><span>${T("অ্যাপ রিফ্রেশ (সমস্যা হলে)", "Refresh app (if something looks stale)")}</span></button>
           <div class="ab-row ab-size"><span>${T("লেখার আকার", "Article text size")}</span><div class="ab-step"><button type="button" data-act="fs-" aria-label="${T("ছোট করুন", "Smaller")}">A−</button><b id="ab-fs">${Math.round(readZoom() * 100)}%</b><button type="button" data-act="fs+" aria-label="${T("বড় করুন", "Larger")}">A+</button></div></div>
         </section>
       </div>
@@ -194,7 +195,7 @@
         </section>
         <section class="st-card"><h2>${T("আমাদের ফলো করুন", "Follow us")}</h2>
           <div class="ab-socs">${Object.keys(C.social).map((k) => `<a data-s="${k}" href="${C.social[k]}" target="_blank" rel="noopener" aria-label="${LABEL[k]}">${ICON[k].replace(/fill="[^"]*"/g, "").replace(/<defs>.*<\/defs>/, "")}</a>`).join("")}</div>
-          <nav class="ab-legal" aria-label="${T("আইনি", "Legal")}">${LEGAL.filter((l) => ["/privacy-policy", "/terms-of-service", "/editorial-policy", "/cookie-policy"].includes(l.href)).map((l) => `<a href="${l.href}">${esc(pick(l))}</a>`).join("")}</nav>
+          <nav class="ab-legal" aria-label="${T("আইনি", "Legal")}">${LEGAL.filter((l) => ["/privacy-policy", "/terms-of-service", "/refund-policy", "/editorial-policy", "/cookie-policy", "/usage-policy"].includes(l.href)).map((l) => `<a href="${l.href}">${esc(pick(l))}</a>`).join("")}</nav>
         </section>
       </div>
     </div>`;
@@ -209,6 +210,11 @@
       let i = FS.indexOf(readZoom()); i = Math.max(0, Math.min(FS.length - 1, i + (fb.dataset.act === "fs+" ? 1 : -1)));
       try { localStorage.setItem("vosb-read", String(FS[i])); } catch (err) {}
       applyZoom(FS[i]); const l = document.getElementById("ab-fs"); if (l) l.textContent = Math.round(FS[i] * 100) + "%";
+      return;
+    }
+    if (e.target.closest('[data-act="refresh-app"]')) {
+      e.preventDefault();
+      (async () => { try { if (window.caches) for (const k of await caches.keys()) await caches.delete(k); const rs = navigator.serviceWorker ? await navigator.serviceWorker.getRegistrations() : []; for (const r of rs) await r.unregister(); } catch (x) {} location.reload(); })();
       return;
     }
     const sh2 = e.target.closest('[data-act="share-site"]');
@@ -841,7 +847,7 @@
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/">${T("হোম", "Home")}</a><span>›</span><a href="/${c.slug}">${esc(pick(c))}</a></nav>
       <div class="post-meta"><span class="badge">${ci(c)} ${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
       <h1>${esc(pick(p.title))}</h1>
-      <div class="byline"><span>${T("লেখক", "By")} <b>${esc(p.author)}</b></span><span>${formatDateTime(p.date)}</span><span>${T(`${minsTxt} মিনিটে পড়া`, `${minsTxt} min read`)}</span></div>
+      <div class="byline"><span>${T("লেখক", "By")} <b>${esc(p.author)}</b></span><span>${formatDateTime(p.date)}</span><span>${T(`${minsTxt} মিনিটে পড়া`, `${minsTxt} min read`)}</span><span class="fs-ctl" role="group" aria-label="${T("লেখার আকার", "Text size")}"><button type="button" data-act="fs-" aria-label="${T("লেখা ছোট করুন", "Smaller text")}">A−</button><button type="button" data-act="fs+" aria-label="${T("লেখা বড় করুন", "Larger text")}">A+</button></span></div>
       ${p.image ? `<figure class="cover"><div class="cv"><img class="cv-bg" src="${esc(p.image)}" alt="" aria-hidden="true" decoding="async"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" width="1200" height="675" decoding="async" fetchpriority="high"></div>${p.imageAlt ? `<figcaption>${esc(p.imageAlt)}</figcaption>` : ""}</figure>` : ""}
       <div class="prose">${withArticleAds(MD.render(bodyMd))}</div>
       ${(lang === "bn" ? p.autoBn : p.autoEn) ? `<p class="tr-note">🌐 ${T("এই বাংলা সংস্করণটি স্বয়ংক্রিয়ভাবে অনুবাদ করা হয়েছে। কোনো ভুল চোখে পড়লে editor@voiceofstartup.bd-এ জানান।", "This English version was automatically translated from the original Bangla. If you spot a mistake, tell editor@voiceofstartup.bd.")}</p>` : ""}

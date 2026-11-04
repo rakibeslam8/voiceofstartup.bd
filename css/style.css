@@ -2076,7 +2076,7 @@ img.au-av { object-fit: cover; }
 .au-nb small { color: var(--muted); font-size: .84rem; line-height: 1.4; overflow-wrap: anywhere; } .au-nb em { color: var(--muted); font-size: .76rem; font-style: normal; opacity: .85; }
 .au-ne { text-align: center; color: var(--muted); padding: 28px 12px; }
 @media (max-width: 640px) { .au-np { padding: 0; align-items: flex-end; } .au-np-box { width: 100%; max-height: 82vh; border-radius: 22px 22px 0 0; animation: none; } }
-@media (max-width: 900px) { .site-header .au-bellwrap { display: none; } }
+@media (max-width: 640px) { .site-header .au-bell { width: 36px; height: 36px; } .site-header .au-bell svg { width: 18px; height: 18px; } .site-header .au-av:not(.lg) { width: 34px; height: 34px; } }
 
 /* ---------- article likes & comments ---------- */
 .ps { margin: 28px 0 8px; }
@@ -2115,3 +2115,9 @@ img.au-av { object-fit: cover; }
 .ps-err { color: var(--red); }
 .ps-empty { padding: 8px 0; }
 @media (max-width: 560px) { .ps-av { width: 34px; height: 34px; } .ps-cb { padding: 9px 12px; } .ps-form { gap: 8px; } }
+
+/* article text-size control (works on phone and desktop; also in Settings) */
+.fs-ctl { margin-left: auto; display: inline-flex; border: 1.5px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--card); }
+.fs-ctl button { appearance: none; border: 0; background: transparent; color: var(--text); font: 800 .9rem var(--font-body); padding: 5px 14px; min-width: 44px; cursor: pointer; }
+.fs-ctl button + button { border-left: 1.5px solid var(--line); }
+.fs-ctl button:hover, .fs-ctl button:active { background: var(--orange-soft); color: var(--orange-dark); }

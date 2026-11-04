@@ -107,7 +107,10 @@
       if (e.target.closest("[data-co-retry]")) load(true);
       if (e.target.closest("[data-co-clear]")) { st.q = st.cat = st.stage = st.div = ""; st.sort = "feat"; sync(); draw(); load(true); }
     });
-    U().onRender(draw);
+    const stats = { n: null, open: null, val: null };
+    const drawStats = () => { const el = $("#co-stats"); if (!el) return; if (stats.n == null) { el.innerHTML = ""; return; } el.innerHTML = [[stats.n, T("লিস্টেড কোম্পানি", "Listed companies")], [stats.open, T("বিনিয়োগে উন্মুক্ত", "Open to invest")], [stats.val, T("ভ্যালুয়েশনসহ", "With valuation")]].map((x) => `<div class="co-stat"><b>${nd(x[0] || 0)}</b><span>${x[1]}</span></div>`).join(""); };
+    (async () => { try { const base = "companies?select=id&status=eq.published&limit=1"; const [a, b, c] = await Promise.all([rest(base, true), rest(base + "&invest_open=eq.true", true), rest(base + "&vosb_valuation=not.is.null", true)]); stats.n = a.total; stats.open = b.total; stats.val = c.total; drawStats(); } catch (e) { /* stats are optional */ } })();
+    U().onRender(() => { draw(); drawStats(); });
     draw(); load(true);
   }
 

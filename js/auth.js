@@ -215,7 +215,14 @@
 
   /* ---------- public actions ---------- */
   async function signOut() {
-    try { const c = await client(); await c.auth.signOut(); } catch (e) { try { localStorage.removeItem(KEY); } catch (e2) {} user = null; paint(); }
+    try { const c = await client(); await Promise.race([c.auth.signOut({ scope: "local" }), new Promise((r) => setTimeout(r, 4000))]); } catch (e) { /* cleaned up below either way */ }
+    /* belt and braces: whatever the library did, this device must forget the user right now */
+    try { localStorage.removeItem(KEY); localStorage.removeItem(AVK); sessionStorage.removeItem("vosb-prof"); } catch (e) {}
+    if (user) {
+      user = null; profileRow = null; profileP = null; notif = { unread: 0, items: [], loaded: false };
+      closeNotifs(); document.querySelectorAll(".ab-sheet.open").forEach((x) => x.classList.remove("open"));
+      paint(); listeners.slice().forEach((f) => { try { f(user); } catch (e) {} }); document.dispatchEvent(new CustomEvent("vosb:auth", { detail: user }));
+    }
     toast(T("লগআউট হয়েছে।", "You are logged out."), "ok");
     if (/^\/(account|apply)/.test(location.pathname)) setTimeout(() => { location.href = "/"; }, 500);
   }

@@ -392,6 +392,7 @@
       if (!P.until) P.until = Date.now() + 15 * 60 * 1000;
       el.innerHTML = `<div class="ac-card pay-card">${payHead(`<div class="pay-timer" aria-live="off">${T("সময় বাকি", "Time left")} <b id="pay-t">15:00</b></div>`)}
         <ol class="pay-how"><li>${T("আপনার বিকাশ অ্যাপ বা *247# ডায়াল করে <b>Send Money</b> বেছে নিন।", "Open your bKash app (or dial *247#) and choose <b>Send Money</b>.")}</li><li>${T("নিচের নম্বরে ঠিক", "Send exactly")} <b>${money(fee())}</b> ${T("পাঠান।", "to the number below.")}</li><li>${T("পেমেন্টের SMS-এ পাওয়া <b>TrxID</b> নিচে লিখে ভেরিফাই করুন।", "Enter the <b>TrxID</b> from the payment SMS below and verify.")}</li></ol>
+        <div class="pay-num pay-amt"><span class="pay-nl">${T("পাঠানোর পরিমাণ", "Amount to send")}</span><b id="pay-amt" data-v="${fee()}">${money(fee())}</b><button type="button" class="btn btn-outline ac-sm" data-pay="copyamt">${T("কপি", "Copy")}</button></div>
         <div class="pay-num" ${num ? "" : "hidden"}><span class="pay-nl">${T("Send Money নম্বর", "Send Money number")}</span><b id="pay-num">${esc(num)}</b><button type="button" class="btn btn-outline ac-sm" data-pay="copy">${T("কপি", "Copy")}</button></div>
         <div class="pay-from">${T("আপনার নম্বর:", "Your number:")} <b>${esc(P.sender)}</b> <button type="button" class="co-link" data-pay="toB">${T("বদলান", "Change")}</button></div>
         <div class="ac-fld"><label for="pay-trx">${T("ট্রানজেকশন আইডি (TrxID)", "Transaction ID (TrxID)")}</label><input id="pay-trx" maxlength="14" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="${T("যেমন: 9AB3C4D5EF", "e.g. 9AB3C4D5EF")}" value="${esc(P.trx)}"></div>
@@ -417,6 +418,7 @@
     if (a === "toC") { const s = ($("#pay-snd").value || "").replace(/[\s-]/g, ""); P.sender = s;
       if (!/^(\+?88)?01[3-9]\d{8}$/.test(s)) { P.msg = T("সঠিক মোবাইল নম্বর দিন (01XXXXXXXXX)।", "Enter a valid mobile number (01XXXXXXXXX)."); return payView($("#ap-body")); }
       P.msg = ""; P.screen = "C"; P.until = 0; return payView($("#ap-body")); }
+    if (a === "copyamt") { const n = String(($("#pay-amt") || { dataset: {} }).dataset.v || ""); try { await navigator.clipboard.writeText(n); toast(T("পরিমাণ কপি হয়েছে ✓ (" + n + ")", "Amount copied ✓ (" + n + ")"), "ok"); } catch (e) { toast(n, ""); } return; }
     if (a === "copy") { const n = ($("#pay-num") || {}).textContent || ""; try { await navigator.clipboard.writeText(n); toast(T("নম্বর কপি হয়েছে ✓", "Number copied ✓"), "ok"); } catch (e) { toast(n, ""); } return; }
     if (a === "verify") {
       P.trx = ($("#pay-trx").value || "").replace(/\s/g, "").toUpperCase();
