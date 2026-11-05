@@ -559,3 +559,12 @@ a.co-row:active { transform: scale(.995); }
 .co-u-counts i.inv { background: #eaf7f0; color: var(--green-dark); font-weight: 800; }
 .co-2x { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; } @media (max-width: 760px) { .co-2x { grid-template-columns: 1fr; } .co-valrange { grid-template-columns: 1fr; } }
 .co-fdf { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; } .co-fdf .inp { flex: 1 1 180px; } .co-defs li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pill.p-deleted { background: #5b1111; color: #fff; }
+.co-trashbtn { color: var(--red, #c4242a); border-color: currentColor; }
+.co-trow { display: flex; flex-wrap: wrap; gap: 10px 16px; justify-content: space-between; align-items: flex-start; padding: 12px 0; border-top: 1px solid var(--line, #e7dccb); }
+.co-trow:first-child { border-top: 0; }
+.co-trow .ti { flex: 1 1 260px; min-width: 0; }
+.co-trow .ti h3 { margin: 0 0 4px; font-size: 1rem; }
+.co-trow .meta { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: .84rem; color: var(--muted, #6b6258); }
+.co-trow .co-quote, .co-trow .co-sub { margin: 6px 0 0; }
+.co-trow .acts { display: flex; flex-wrap: wrap; gap: 8px; flex: 0 0 auto; }

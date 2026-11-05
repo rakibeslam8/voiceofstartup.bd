@@ -222,6 +222,7 @@
           .eq("company_private.owner_id", uid).order("created_at", { ascending: false });
         if (error) throw error;
         st.cos = data || [];
+        try { st.dreq = (await rpc("my_deletion_requests")) || []; } catch (e) { st.dreq = st.dreq || []; }
       } catch (e) { st.cos = null; st.cosErr = friendly(e); }
     }
     function companiesView(el) {
@@ -254,9 +255,15 @@
           ${c.status === "published" ? `<a class="btn btn-green ac-sm" href="/company/${esc(c.slug)}">${T("পাবলিক পেজ দেখুন", "View public page")}</a><a class="btn btn-outline ac-sm" href="/apply?c=${esc(c.id)}">${T("পাবলিক প্রোফাইল এডিট", "Edit public profile")}</a><button type="button" class="btn btn-outline ac-sm" data-act="ints" data-id="${esc(c.id)}">💼 ${T("বিনিয়োগকারী ও ডিল", "Investors & deals")} (${U().bnDigits(c.interest_count || 0)})</button>` : ""}
         </div>
         ${c.status !== "draft" ? `<div class="ac-btns ac-btns2"><button type="button" class="btn btn-outline ac-sm" data-act="val" data-id="${esc(c.id)}">📊 ${T("ভ্যালুয়েশন", "Valuation")}${c.vosb_valuation ? " · " + esc(moneyShort(c.vosb_valuation)) : ""}</button></div>` : ""}
+        ${delBlock(c)}
         ${ints ? `<div class="ac-ints">${ints === "loading" ? `<p class="muted">…</p>` : ints === "error" ? `<p class="ac-msg err">${T("লোড করা যায়নি।", "Could not load.")}</p>` : ovPanel(c, ints)}</div>` : ""}
         ${vp ? `<div class="ac-ints">${vp === "loading" ? `<p class="muted">…</p>` : vp === "error" ? `<p class="ac-msg err">${T("লোড করা যায়নি।", "Could not load.")}</p>` : valPanel(c, vp)}</div>` : ""}
       </article>`;
+    }
+    function delBlock(c) {
+      const rq = (st.dreq || []).find((r) => r.company_id === c.id), pend = rq && rq.status === "pending", last = rq && rq.status === "rejected" ? rq : null;
+      if (pend) return `<div class="ac-delreq"><span>🗑 ${T("সরানোর অনুরোধ অ্যাডমিনের অনুমোদনের অপেক্ষায় — ততক্ষণ কোম্পানি যেমন আছে তেমনই থাকবে।", "Removal requested — waiting for the VOSB admin. Your company stays as it is until then.")}</span><button type="button" class="btn btn-outline ac-sm" data-act="delcancel" data-id="${esc(c.id)}">${T("অনুরোধ বাতিল", "Cancel request")}</button></div>`;
+      return `${last ? `<div class="ac-note warn"><b>${T("সরানোর অনুরোধ অনুমোদিত হয়নি", "Removal request was declined")}</b>${last.admin_note ? `<p>${esc(last.admin_note)}</p>` : ""}</div>` : ""}<div class="ac-btns ac-btns2"><button type="button" class="btn btn-outline ac-sm ac-danger" data-act="delco" data-id="${esc(c.id)}" data-name="${esc(c.name || "")}">🗑 ${T("কোম্পানি সরানোর অনুরোধ", "Request removal")}</button></div>`;
     }
     const inv = { individual: ["ব্যক্তিগত", "Individual"], angel: ["এঞ্জেল", "Angel"], vc: ["ভিসি", "VC"], institution: ["প্রতিষ্ঠান", "Institution"], other: ["অন্যান্য", "Other"] };
     const avHtml = (url, name, cls) => (url && /^https:\/\//.test(url) ? `<img class="${cls || "ac-pav"}" src="${esc(url)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="${cls || "ac-pav"}">${esc(initialOf(name))}</span>`);
@@ -286,12 +293,13 @@
       return `<div class="ac-range"><div class="ac-range-v"><span>${esc(moneyShort(lo))}</span><b>${esc(moneyShort(mi))}</b><span>${esc(moneyShort(hi))}</span></div><div class="ac-range-bar" aria-hidden="true"><i style="left:${pos}%"></i></div><div class="ac-range-l"><span>${T("সর্বনিম্ন", "Low")}</span><span>${T("মধ্যম", "Mid")}</span><span>${T("সর্বোচ্চ", "High")}</span></div></div>`; }
     function valPanel(c, vp) {
       const items = vp.items || [], cur = items.find((x) => x.status === "approved"), pend = items.find((x) => x.status === "pending");
-      const shown = pend || cur || items[0];
+      const shown = cur || pend || items[0];
       let h = `<h5 class="ac-sub">📊 ${T("ভ্যালুয়েশন", "Valuation")}</h5>`;
       if (!shown) h += `<p class="muted">${T("এখনও কোনো ভ্যালুয়েশন তৈরি হয়নি।", "No valuation has been prepared yet.")}</p>`;
       else {
         const o = VST[shown.status] || VST.pending, r = shown.result || {};
-        h += `<div class="ac-val"><div class="ac-val-h"><span class="ac-pill ${o[0]}">${T(o[1], o[2])}</span><small class="muted">v${nd(shown.version)} · ${U().formatDate(shown.created_at)} · ${shown.source === "update_request" ? T("আপডেট অনুরোধ", "update request") : T("আবেদনের সময়", "at application")}</small></div>
+        if (shown.status === "pending") h += `<div class="ac-val"><div class="ac-val-h"><span class="ac-pill ${o[0]}">${T(o[1], o[2])}</span><small class="muted">${U().formatDate(shown.created_at)}</small></div><p>${T("আপনার তথ্য থেকে VOSB ভ্যালুয়েশন তৈরি করছে ও যাচাই করছে। অনুমোদনের পর এখানে রেঞ্জ ও বিশ্লেষণ দেখতে পাবেন — তার আগে এটি গোপন থাকে।", "VOSB is preparing and checking your valuation. The range and analysis appear here once it is approved — until then it stays private.")}</p></div>`;
+        else h += `<div class="ac-val"><div class="ac-val-h"><span class="ac-pill ${o[0]}">${T(o[1], o[2])}</span><small class="muted">v${nd(shown.version)} · ${U().formatDate(shown.created_at)} · ${shown.source === "update_request" ? T("আপডেট অনুরোধ", "update request") : T("আবেদনের সময়", "at application")}</small></div>
           ${rangeBar(shown)}<div class="ac-conf"><span>${T("নির্ভরযোগ্যতা", "Confidence")}</span><div class="ac-meter" aria-hidden="true"><i style="width:${Math.min(100, shown.confidence || 0)}%"></i></div><b>${nd(shown.confidence || 0)}%</b></div>
           ${shown.expected_by_owner ? `<p class="muted">${T("আপনার প্রত্যাশা", "Your expectation")}: <b>${esc(moneyShort(shown.expected_by_owner))}</b></p>` : ""}
           ${(r.flags || []).length ? `<ul class="ac-flags">${r.flags.map((f) => (FLAGS[f] ? `<li>${T(FLAGS[f][0], FLAGS[f][1])}</li>` : "")).join("")}</ul>` : ""}
@@ -338,6 +346,20 @@
         btn.disabled = true; msg.className = "ac-msg"; msg.textContent = "…";
         try { await rpc("record_investment", { p_company: coId, p_investor: investor || null, p_amount: amt, p_equity: $("#r-eq", el).value ? Number($("#r-eq", el).value) : null, p_date: $("#r-dt", el).value || null, p_note: $("#r-nt", el).value.trim() || null });
           d.close(); toast(T("রেকর্ড হয়েছে — অপর পক্ষকে জানানো হয়েছে ✓", "Recorded — the other side was notified ✓"), "ok"); if (asOwner) await refreshCo(coId); else { st.inv = null; await loadInv(); panel(); } }
+        catch (e) { msg.className = "ac-msg err"; msg.textContent = friendly(e); btn.disabled = false; }
+      });
+    }
+    function delCoDialog(coId, name) {
+      const d = dialog(`<button type="button" class="ac-dlg-x" data-x aria-label="${T("বন্ধ করুন", "Close")}">✕</button><h2>🗑 ${T("কোম্পানি সরানোর অনুরোধ", "Request to remove your company")}</h2>
+        <p class="muted">${T(`“${esc(name || "")}” সরাতে VOSB অ্যাডমিনের অনুমোদন লাগবে। অনুমোদন না পাওয়া পর্যন্ত কোম্পানি যেমন আছে তেমনই থাকবে। তথ্য মুছে ফেলা হয় না — চাইলে পরে ফিরিয়ে আনা যায়।`, `Removing “${esc(name || "")}” needs approval from the VOSB admin. Until then nothing changes. Your data is never erased — it can be restored later.`)}</p>
+        <div class="ac-fld"><label for="dq-r">${T("কেন সরাতে চান?", "Why do you want to remove it?")} <i class="req">*</i></label><textarea id="dq-r" rows="3" maxlength="800"></textarea></div>
+        <div class="ac-msg" role="alert" aria-live="polite"></div><div class="ac-acts"><button type="button" class="btn btn-outline" data-x>${T("বাতিল", "Cancel")}</button><button type="button" class="btn btn-orange" id="dq-go">${T("অনুরোধ পাঠান", "Send request")}</button></div>`);
+      const el = d.el; el.addEventListener("click", (e) => { if (e.target.closest("[data-x]")) d.close(); });
+      $("#dq-go", el).addEventListener("click", async () => {
+        const msg = $(".ac-msg", el), btn = $("#dq-go", el), r = $("#dq-r", el).value.trim();
+        if (r.length < 5) { msg.className = "ac-msg err"; msg.textContent = T("কারণ লিখুন (অন্তত ৫ অক্ষর)।", "Please write a reason (at least 5 characters)."); return; }
+        btn.disabled = true; msg.className = "ac-msg"; msg.textContent = "…";
+        try { await rpc("request_company_deletion", { p_company: coId, p_reason: r }); d.close(); toast(T("অনুরোধ পাঠানো হয়েছে ✓", "Request sent ✓"), "ok"); await loadCompanies(); panel(); }
         catch (e) { msg.className = "ac-msg err"; msg.textContent = friendly(e); btn.disabled = false; }
       });
     }
@@ -449,6 +471,8 @@
       else if (act === "ints") toggleInts(t.dataset.id);
       else if (act === "val") toggleVal(t.dataset.id);
       else if (act === "valreq") valReqDialog(t.dataset.id);
+      else if (act === "delco") delCoDialog(t.dataset.id, t.dataset.name);
+      else if (act === "delcancel") { t.disabled = true; try { await rpc("cancel_company_deletion", { p_company: t.dataset.id }); toast(T("অনুরোধ বাতিল হয়েছে", "Request cancelled"), "ok"); await loadCompanies(); } catch (er) { toast(friendly(er), "err"); } panel(); }
       else if (act === "avrm") removeAvatar();
       else if (act === "retry-inv") { st.invErr = ""; st.inv = null; panel(); await loadInv(); panel(); }
       else if (act === "recinv") recordDialog(t.dataset.co, t.dataset.inv, t.dataset.name, true);

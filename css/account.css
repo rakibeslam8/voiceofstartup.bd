@@ -203,3 +203,5 @@ html[data-theme="dark"] .pay-num { background: #2b0f1c; }
   .ac-avrow { gap: 12px; } .ac-avbox { width: 64px; height: 64px; font-size: 1.5rem; }
   .ac-range-v b { font-size: 1.4rem; } .ac-deal { padding: 10px 12px; }
 }
+.ac-delreq { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 12px; background: var(--card); font-size: .88rem; }
+.ac-danger { color: #b3261e; border-color: currentColor; }

@@ -290,7 +290,7 @@
 
   function markNav(r) {
     const base = r.startsWith("edit") ? "edit/new" : r.startsWith("ads") ? "ads" : r.startsWith("newsletter") ? "subscribers"
-      : (r === "companies" || r.startsWith("companies/") || ["payments", "reviews", "interests", "company-settings", "valuations", "deals"].includes(r)) ? "companies"
+      : (r === "companies" || r.startsWith("companies/") || ["payments", "reviews", "interests", "company-settings", "valuations", "deals", "trash"].includes(r)) ? "companies"
       : (r === "users" || r === "deletions") ? "users" : r;
     $$("[data-r]").forEach((a) => a.classList.toggle("on", a.dataset.r === base || (base === "edit/new" && a.dataset.r === "edit/new")));
   }

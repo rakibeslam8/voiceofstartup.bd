@@ -29,7 +29,7 @@ window.VOSB_ADMIN_CO = function (X) {
   const fmtSize = (b) => (!b ? "" : b >= 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB");
   const errMsg = (e) => String((e && (e.message || e.details)) || e || "Something went wrong");
   const must = (res) => { if (res && res.error) throw new Error(errMsg(res.error)); return res ? res.data : null; };
-  const ST = { draft: "Draft", submitted: "Submitted", in_review: "In review", changes_requested: "Changes requested", rejected: "Rejected", published: "Published", suspended: "Suspended" };
+  const ST = { draft: "Draft", submitted: "Submitted", in_review: "In review", changes_requested: "Changes requested", rejected: "Rejected", published: "Published", suspended: "Suspended", deleted: "Removed" };
   const stPill = (s) => `<span class="pill p-${esc(s)}">${esc(ST[s] || s)}</span>`;
   const PAYST = { pending: "Payment waiting", verified: "Paid", rejected: "Payment rejected", none: "Unpaid" };
   const payState = (list) => { const l = arr(list); return l.some((p) => p.status === "verified") ? "verified" : l.some((p) => p.status === "pending") ? "pending" : l.length ? "rejected" : "none"; };
@@ -113,14 +113,14 @@ window.VOSB_ADMIN_CO = function (X) {
   }
 
   /* ---------------- shared page furniture ---------------- */
-  const COTABS = [["apps", "Applications", "#/companies"], ["all", "All companies", "#/companies/all"], ["pay", "Payments", "#/payments"], ["rev", "Reviews & comments", "#/reviews"], ["val", "Valuations", "#/valuations"], ["deals", "Investments", "#/deals"], ["int", "Investor interest", "#/interests"], ["set", "Listing settings", "#/company-settings"]];
+  const COTABS = [["apps", "Applications", "#/companies"], ["all", "All companies", "#/companies/all"], ["pay", "Payments", "#/payments"], ["rev", "Reviews & comments", "#/reviews"], ["val", "Valuations", "#/valuations"], ["deals", "Investments", "#/deals"], ["int", "Investor interest", "#/interests"], ["set", "Listing settings", "#/company-settings"], ["trash", "Trash", "#/trash"]];
   function tabs(active, c) {
     const badge = { apps: waiting(c), pay: Number(c && c.payments_pending) || 0, int: Number(c && c.interests_new) || 0 };
     return `<div class="co-tabs" role="tablist" aria-label="Company Directory">${COTABS.map(([k, t, h]) => `<a href="${h}" role="tab" class="${k === active ? "on" : ""}" ${k === active ? 'aria-selected="true"' : ""}>${esc(t)}${badge[k] ? `<i>${badge[k] > 99 ? "99+" : badge[k]}</i>` : ""}</a>`).join("")}</div>`;
   }
   function userTabs(active, c) {
     const d = Number(c && c.deletions) || 0, u = Number(c && c.users) || 0;
-    return `<div class="co-tabs" role="tablist" aria-label="Users"><a href="#/users" role="tab" class="${active === "users" ? "on" : ""}">People${u ? `<i class="soft">${fmtN(u)}</i>` : ""}</a><a href="#/deletions" role="tab" class="${active === "del" ? "on" : ""}">Deleted accounts${d ? `<i class="soft">${fmtN(d)}</i>` : ""}</a></div>`;
+    return `<div class="co-tabs" role="tablist" aria-label="Users"><a href="#/users" role="tab" class="${active === "users" ? "on" : ""}">People${u ? `<i class="soft">${fmtN(u)}</i>` : ""}</a><a href="#/deletions" role="tab" class="${active === "del" ? "on" : ""}">Deleted accounts${d ? `<i class="soft">${fmtN(d)}</i>` : ""}</a><a href="#/trash" role="tab">Trash &amp; suspended</a></div>`;
   }
   const loadingCard = () => `<div class="card"><p class="muted">Loading…</p></div>`;
   const errorCard = (e) => `<div class="card"><div class="msg err">${esc(errMsg(e))}</div><p class="muted" style="font-size:.85rem">If this says "permission denied" or "relation does not exist", the Company Directory SQL (supabase/update-11-companies.sql) has not been applied to this project.</p></div>`;
@@ -159,7 +159,7 @@ window.VOSB_ADMIN_CO = function (X) {
     const paint = () => {
       const q = st.q.toLowerCase();
       let l = rows.filter((r) => {
-        if (st.status === "action" ? !["submitted", "in_review"].includes(r.status) : st.status !== "all" && r.status !== st.status) return false;
+        if (st.status === "action" ? !["submitted", "in_review"].includes(r.status) : st.status === "all" ? r.status === "deleted" : r.status !== st.status) return false;
         if (!q) return true;
         const p = one(r.company_private) || {};
         return [r.name, r.tagline, r.slug, p.owner_name, p.owner_email].some((x) => (x || "").toLowerCase().includes(q));
@@ -202,6 +202,7 @@ window.VOSB_ADMIN_CO = function (X) {
       rejected: [["in_review", "Re-open for review", "b-dark"]],
       published: [["suspended", "Suspend", "b-red"], ["in_review", "Unpublish → in review", "b-line"], ["changes_requested", "Request changes", "b-line"]],
       suspended: [["published", "Re-publish", "b-green"], ["in_review", "Unpublish → in review", "b-line"]],
+      deleted: [],
       draft: [["in_review", "Move to review", "b-dark"], ["published", "Publish now", "b-green"]],
     };
     return T[s] || [];
@@ -283,6 +284,8 @@ window.VOSB_ADMIN_CO = function (X) {
           <div class="card"><h2>Review &amp; status</h2>
             <p>${stPill(c.status)} ${c.submitted_at ? `<span class="muted" style="font-size:.82rem">submitted ${esc(fmtDT(c.submitted_at))}</span>` : ""}</p>
             <div class="co-wf">${transitions(c.status).map(([s, t, cls]) => `<button type="button" class="b ${cls} b-sm" data-a="st" data-s="${s}">${esc(t)}</button>`).join("")}</div>
+            ${c.status === "deleted" ? `<div class="msg info" style="margin-top:10px">Removed ${c.deleted_at ? esc(fmtDT(c.deleted_at)) : ""}${c.delete_reason ? " — " + esc(c.delete_reason) : ""}. Nothing is erased: the owner's data, payments and reviews are all kept.</div><p><button type="button" class="b b-green" data-a="restore">↩ Restore this company</button></p>`
+              : `<p style="margin-top:10px"><button type="button" class="b b-line b-sm co-trashbtn" data-a="trash">🗑 Move to trash</button></p>`}
             <p class="muted co-sub" style="margin-top:10px">“Request changes” and “Reject” need a note — the applicant sees it. Publishing makes the company page live.</p></div>
           <div class="card"><h2>Payment</h2>${payCard}</div>
           <div class="card" id="co-valcard"><h2>Valuation</h2><p class="muted">Loading…</p></div>
@@ -377,6 +380,17 @@ window.VOSB_ADMIN_CO = function (X) {
       must(await sb.rpc("admin_set_company_status", { p_id: id, p_status: s, p_note: n || null }));
       toast("Status: " + (ST[s] || s), "ok");
       await reload();
+    });
+    view._h.trash = (b) => busy(b, async () => {
+      const n = await ask({ title: "Move to trash", body: "The company disappears from the site and from the owner's account. Nothing is erased — you can restore it any time from Trash.", label: "Reason (the owner sees it)", ok: "Move to trash", danger: true });
+      if (n === null) return;
+      must(await sb.rpc("admin_set_company_deleted", { p_company: id, p_deleted: true, p_reason: n || null }));
+      toast("Moved to trash", "ok"); await reload();
+    });
+    view._h.restore = (b) => busy(b, async () => {
+      if (!(await modal({ title: "Restore this company?", body: "It returns to the status it had before (published companies go live again).", ok: "Restore" }))) return;
+      must(await sb.rpc("admin_set_company_deleted", { p_company: id, p_deleted: false }));
+      toast("Restored", "ok"); await reload();
     });
     view._h.pay = (b) => busy(b, async () => {
       const s = b.dataset.s; let n = null;
@@ -782,6 +796,13 @@ window.VOSB_ADMIN_CO = function (X) {
       <div class="co-pager"><button type="button" class="b b-line b-sm" data-a="pg" data-d="-1"${st.page <= 0 ? " disabled" : ""}>← Previous</button><span class="muted">${st.page + 1} / ${pages}</span><button type="button" class="b b-line b-sm" data-a="pg" data-d="1"${st.page + 1 >= pages ? " disabled" : ""}>Next →</button></div>
       <div class="card" style="margin-top:18px" id="fdefs"></div>`;
     view._h.copy = (b) => copyV(b);
+    view._h.uoff = (b) => busy(b, async () => {
+      const off = b.dataset.off === "1";
+      let n = null;
+      if (off) { n = await ask({ title: "Suspend this account", body: "They are signed out and cannot sign in or post anything. Their data is kept. You can restore the account any time from Trash.", label: "Reason (only you see it)", ok: "Suspend account", danger: true }); if (n === null) return; }
+      must(await sb.rpc("admin_set_user_disabled", { p_user: b.dataset.id, p_disabled: off, p_reason: n || null }));
+      toast(off ? "Account suspended" : "Account restored", "ok"); viewUsers(view);
+    });
     view._h.pg = (b) => { st.page = Math.max(0, st.page + Number(b.dataset.d)); viewUsers(view); };
     view._h.role = (b) => { st.role = b.dataset.v; st.page = 0; viewUsers(view); };
     $("#uf", view).addEventListener("submit", (e) => { e.preventDefault(); st.q = $("#q", view).value.trim(); st.active = $("#fa", view).value; st.sort = $("#fo", view).value; st.page = 0; viewUsers(view); });
@@ -795,7 +816,7 @@ window.VOSB_ADMIN_CO = function (X) {
         const D = must(await sb.rpc("admin_user_detail", { p_user: uid })) || {}, p = D.profile || {};
         box.classList.remove("muted");
         box.innerHTML = `<div class="co-2x"><div>${kv([["Phone", esc(p.phone)], ["Type chosen", esc(p.user_type)], ["Headline", esc(p.headline)], ["Location", esc(p.location)], ["About", esc(p.bio)]])}
-            <p class="acts" style="justify-content:flex-start">${p.email ? `<a class="b b-line b-sm" href="mailto:${esc(p.email)}">E-mail</a>` : ""}<button type="button" class="b b-line b-sm" data-a="copy" data-v="${esc(uid)}">Copy user ID</button></p></div>
+            <p class="acts" style="justify-content:flex-start">${p.email ? `<a class="b b-line b-sm" href="mailto:${esc(p.email)}">E-mail</a>` : ""}<button type="button" class="b b-line b-sm" data-a="copy" data-v="${esc(uid)}">Copy user ID</button>${p.disabled_at ? `<button type="button" class="b b-green b-sm" data-a="uoff" data-id="${esc(uid)}" data-off="0">↩ Restore account</button>` : `<button type="button" class="b b-line b-sm co-trashbtn" data-a="uoff" data-id="${esc(uid)}" data-off="1">🗑 Suspend account</button>`}</p>${p.disabled_at ? `<p class="msg err">Suspended ${esc(fmtDT(p.disabled_at))}${p.disabled_reason ? " — " + esc(p.disabled_reason) : ""}. They cannot sign in or write anything.</p>` : ""}</div>
           <div><h3 class="co-h3">Your private fields</h3><div data-meta></div></div></div>
           ${arr(D.investments).length ? `<h3 class="co-h3">Investments</h3><ul class="co-ul">${D.investments.map((x) => `<li><b>${esc(bdt(x.amount))}</b> in <a href="#/companies/${esc(x.company_id)}">${esc(x.company)}</a> ${x.equity_pct != null ? `· ${esc(x.equity_pct)}%` : ""} ${dealPill(x.status)}</li>`).join("")}</ul>` : ""}
           ${arr(D.interests).length ? `<h3 class="co-h3">Showed interest in</h3><ul class="co-ul">${D.interests.map((x) => `<li><a href="#/companies/${esc(x.company_id)}">${esc(x.company)}</a> · ${esc(bdt(x.ticket_min))}–${esc(bdt(x.ticket_max))} · ${esc(x.investor_type)} · ${simplePill(x.status)}</li>`).join("")}</ul>` : ""}
@@ -845,10 +866,42 @@ window.VOSB_ADMIN_CO = function (X) {
         : `<div class="empty"><b>No deleted accounts</b>Nobody has deleted their account.</div>`}</div>`;
   }
 
+  /* ======================================================================
+     Trash: removal requests from owners, removed companies, suspended users — all restorable
+     ====================================================================== */
+  async function viewTrash(view) {
+    bind(view);
+    view.innerHTML = `<div class="page-h"><h1>Trash</h1></div>${tabs("trash", cc)}${loadingCard()}`;
+    let T;
+    try { T = must(await sb.rpc("admin_trash")) || {}; } catch (e) { view.innerHTML = `<div class="page-h"><h1>Trash</h1></div>${errorCard(e)}`; return; }
+    if (!view.isConnected) return;
+    const reqs = arr(T.requests), cos = arr(T.companies), us = arr(T.users);
+    view.innerHTML = `<div class="page-h"><h1>Trash</h1></div>${tabs("trash", cc)}
+      <div class="msg info">Nothing here is ever erased. Removed companies and suspended people can be brought back with one click.</div>
+      <div class="card"><h2>Removal requests from owners <span class="pill p-submitted">${reqs.length}</span></h2>
+        ${reqs.length ? `<div class="co-trows">${reqs.map((r) => `<div class="co-trow"><div class="ti"><h3><a href="#/companies/${esc(r.company_id)}">${esc(r.company || "(company)")}</a></h3><div class="meta"><span>${esc(r.owner || "")}</span><span>${esc(fmtDT(r.created_at))}</span></div><p class="co-quote">“${esc(r.reason)}”</p></div>
+          <div class="acts"><button type="button" class="b b-red b-sm" data-a="dok" data-id="${esc(r.id)}" data-ok="1">Approve &amp; remove</button><button type="button" class="b b-line b-sm" data-a="dok" data-id="${esc(r.id)}" data-ok="0">Decline</button></div></div>`).join("")}</div>` : `<p class="muted">No owner is waiting for a decision.</p>`}</div>
+      <div class="card"><h2>Removed companies <span class="pill p-draft">${cos.length}</span></h2>
+        ${cos.length ? `<div class="co-trows">${cos.map((c) => `<div class="co-trow"><div class="ti"><h3><a href="#/companies/${esc(c.id)}">${esc(c.name || "(no name)")}</a></h3><div class="meta"><span>was ${esc(ST[c.prev_status] || c.prev_status || "—")}</span><span>removed ${esc(fmtDT(c.deleted_at))}</span></div>${c.reason ? `<p class="muted co-sub">${esc(c.reason)}</p>` : ""}</div>
+          <div class="acts"><button type="button" class="b b-green b-sm" data-a="rco" data-id="${esc(c.id)}">↩ Restore</button></div></div>`).join("")}</div>` : `<p class="muted">The trash is empty.</p>`}</div>
+      <div class="card"><h2>Suspended people <span class="pill p-draft">${us.length}</span></h2>
+        ${us.length ? `<div class="co-trows">${us.map((u) => `<div class="co-trow"><div class="ti"><h3>${esc(u.name || "(no name)")}</h3><div class="meta"><span>${esc(u.email || "")}</span><span>suspended ${esc(fmtDT(u.disabled_at))}</span></div>${u.reason ? `<p class="muted co-sub">${esc(u.reason)}</p>` : ""}</div>
+          <div class="acts"><button type="button" class="b b-green b-sm" data-a="rus" data-id="${esc(u.id)}">↩ Restore account</button></div></div>`).join("")}</div>` : `<p class="muted">Nobody is suspended.</p>`}</div>`;
+    view._h.dok = (b) => busy(b, async () => {
+      const ok = b.dataset.ok === "1";
+      const n = await ask({ title: ok ? "Approve removal" : "Decline removal", body: ok ? "The company is moved to the trash and disappears from the site. You can restore it later." : "The owner sees your note and the company stays as it is.", label: ok ? "Note to owner (optional)" : "Reason", required: !ok, ok: ok ? "Approve & remove" : "Decline", danger: ok });
+      if (n === null) return;
+      must(await sb.rpc("admin_decide_company_deletion", { p_id: b.dataset.id, p_approve: ok, p_note: n || null }));
+      toast(ok ? "Company removed" : "Request declined", "ok"); refreshBadges(true); viewTrash(view);
+    });
+    view._h.rco = (b) => busy(b, async () => { must(await sb.rpc("admin_set_company_deleted", { p_company: b.dataset.id, p_deleted: false })); toast("Restored", "ok"); viewTrash(view); });
+    view._h.rus = (b) => busy(b, async () => { must(await sb.rpc("admin_set_user_disabled", { p_user: b.dataset.id, p_disabled: false })); toast("Account restored", "ok"); viewTrash(view); });
+  }
+
   /* ---------------- router entry ---------------- */
   const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   function handles(h) {
-    return ["companies", "companies/all", "payments", "reviews", "interests", "company-settings", "users", "deletions", "valuations", "deals"].includes(h) || (h.startsWith("companies/") && UUID.test(h.slice(10)));
+    return ["companies", "companies/all", "payments", "reviews", "interests", "company-settings", "users", "deletions", "valuations", "deals", "trash"].includes(h) || (h.startsWith("companies/") && UUID.test(h.slice(10)));
   }
   async function render(h, view) {
     refreshBadges();
@@ -862,6 +915,7 @@ window.VOSB_ADMIN_CO = function (X) {
     if (h === "users") return viewUsers(view);
     if (h === "valuations") return viewValuations(view);
     if (h === "deals") return viewDeals(view);
+    if (h === "trash") return viewTrash(view);
     if (h === "deletions") return viewDeletions(view);
   }
   return { handles, render, refreshBadges, counts, dashSection };
