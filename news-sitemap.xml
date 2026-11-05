@@ -111,6 +111,28 @@
     </news:news>
   </url>
   <url>
+    <loc>https://www.voiceofstartup.bd/read/bangladesh-bank-s-new-udyog-udyog-collateral-free-loans-and-grants-to</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-04T01:56:00.000Z</news:publication_date>
+      <news:title>বাংলাদেশ ব্যাংকের নতুন ‘উদ্যোগ’ (UDYOG): উপজেলাভিত্তিক ৫০০০ নতুন তরুণ উদ্যোক্তাকে বিনা জামানতে ঋণ ও অনুদান</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/bangladesh-bank-s-new-udyog-udyog-collateral-free-loans-and-grants-to</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-04T01:56:00.000Z</news:publication_date>
+      <news:title>Bangladesh Bank&#39;s New &#39;Udyog&#39; (UDYOG): Collateral-free loans and grants to upazila-based 5000 new young entrepreneurs</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/separate-digital-shopping-malls-for-men-and-women-hevalier-and-chivali</loc>
     <news:news>
       <news:publication>
@@ -218,94 +240,6 @@
       </news:publication>
       <news:publication_date>2026-11-03T11:22:00.000Z</news:publication_date>
       <news:title>55% of private sector workers use AI, MetLife survey</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/the-leader-of-meta-from-ai-data-who-is-29-year-old-alexander-wang</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T04:38:00.000Z</news:publication_date>
-      <news:title>এআইয়ের ডেটা থেকে মেটার নেতৃত্ব, কে এই ২৯ বছর বয়সী আলেকজান্ডার ওয়াং</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/the-leader-of-meta-from-ai-data-who-is-29-year-old-alexander-wang</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T04:38:00.000Z</news:publication_date>
-      <news:title>The leader of Meta from AI data, who is 29-year-old Alexander Wang</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/google-meta-and-reliance-partnership-in-artificial-intelligence-begins</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T04:07:00.000Z</news:publication_date>
-      <news:title>গুগল, মেটা ও রিলায়েন্স: যৌথ বিনিয়োগ থেকে এবার কৃত্রিম বুদ্ধিমত্তায় অংশীদারত্ব শুরু</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/google-meta-and-reliance-partnership-in-artificial-intelligence-begins</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T04:07:00.000Z</news:publication_date>
-      <news:title>Google, Meta and Reliance: Partnership in artificial intelligence begins with joint investment</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/the-impact-of-ai-in-advertising-the-market-value-of-google-decreased-b</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T03:58:00.000Z</news:publication_date>
-      <news:title>বিজ্ঞাপনে এআইয়ের ধাক্কা, গুগলের বাজারমূল্য কমল ৫০০ বিলিয়ন ডলার</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/the-impact-of-ai-in-advertising-the-market-value-of-google-decreased-b</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T03:58:00.000Z</news:publication_date>
-      <news:title>The impact of AI in advertising, the market value of Google decreased by 500 billion dollars</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/where-butter-shoes-can-be-bought-for-tk-600-all-year-round-1-lakh-pair</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T03:52:00.000Z</news:publication_date>
-      <news:title>যেখানে সারা বছর ৬০০ টাকায় বাটার জুতা কেনা যায়, বছরে বিক্রি ১ লাখ জোড়া</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/where-butter-shoes-can-be-bought-for-tk-600-all-year-round-1-lakh-pair</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T03:52:00.000Z</news:publication_date>
-      <news:title>Where butter shoes can be bought for Tk 600 all year round, 1 lakh pairs are sold annually</news:title>
     </news:news>
   </url>
 </urlset>

@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.voiceofstartup.bd/</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/news</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -36,7 +36,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/business-policy</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -224,6 +224,26 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/the-wealth-of-the-top-10-richest-people-in-the-world-decreased-by-27-b"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/the-wealth-of-the-top-10-richest-people-in-the-world-decreased-by-27-b"/>
     <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-11-02%2Ffxnezvq3%2FWhatsApp-Image-2026-11-02-at-10.18.02-PM.jpeg?rect=0%2C0%2C1600%2C1067&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/bangladesh-bank-s-new-udyog-udyog-collateral-free-loans-and-grants-to</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/bangladesh-bank-s-new-udyog-udyog-collateral-free-loans-and-grants-to"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/bangladesh-bank-s-new-udyog-udyog-collateral-free-loans-and-grants-to"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/bangladesh-bank-s-new-udyog-udyog-collateral-free-loans-and-grants-to"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw2wmcjhznj7.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/bangladesh-bank-s-new-udyog-udyog-collateral-free-loans-and-grants-to</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/bangladesh-bank-s-new-udyog-udyog-collateral-free-loans-and-grants-to"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/bangladesh-bank-s-new-udyog-udyog-collateral-free-loans-and-grants-to"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/bangladesh-bank-s-new-udyog-udyog-collateral-free-loans-and-grants-to"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw2wmcjhznj7.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/separate-digital-shopping-malls-for-men-and-women-hevalier-and-chivali</loc>
