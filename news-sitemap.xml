@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/pet-parenting-is-now-at-your-fingertips-bangladesh-s-digital-pet-care</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-05T09:59:00.000Z</news:publication_date>
+      <news:title>পেট-প্যারেন্টিং এখন হাতের মুঠোয়: বাংলাদেশের ডিজিটাল পেট-কেয়ার স্টার্টআপ &#39;পেটমাম্মা&#39;</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/pet-parenting-is-now-at-your-fingertips-bangladesh-s-digital-pet-care</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-05T09:59:00.000Z</news:publication_date>
+      <news:title>Pet-parenting is now at your fingertips: Bangladesh&#39;s digital pet-care startup &#39;Petmamma&#39;</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/trusted-by-870-investors-and-22-top-companies-get-your-brand-across-to</loc>
     <news:news>
       <news:publication>
         <news:name>Voice of Startup Bangladesh</news:name>
         <news:language>bn</news:language>
       </news:publication>
-      <news:publication_date>2026-11-04T14:24:00.000Z</news:publication_date>
+      <news:publication_date>2026-11-05T09:47:00.000Z</news:publication_date>
       <news:title>৮৭০+ বিনিয়োগকারী ও ২২টি শীর্ষ কোম্পানির আস্থা: আপনার ব্র্যান্ড পৌঁছে দিন গ্রাহক ও বিনিয়োগকারীদের কাছে</news:title>
     </news:news>
   </url>
@@ -18,7 +40,7 @@
         <news:name>Voice of Startup Bangladesh</news:name>
         <news:language>en</news:language>
       </news:publication>
-      <news:publication_date>2026-11-04T14:24:00.000Z</news:publication_date>
+      <news:publication_date>2026-11-05T09:47:00.000Z</news:publication_date>
       <news:title>Trusted by 870+ investors and 22 top companies: Get your brand across to customers and investors</news:title>
     </news:news>
   </url>
@@ -152,94 +174,6 @@
       </news:publication>
       <news:publication_date>2026-11-04T00:08:00.000Z</news:publication_date>
       <news:title>Separate digital shopping malls for men and women: Hevalier and Chivalier&#39;s revolution in e-commerce</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/the-world-bank-will-give-a-loan-of-450-million-dollars-to-reform-the-c</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T13:26:00.000Z</news:publication_date>
-      <news:title>দেশের আর্থিক খাত সংস্কারে ৪৫ কোটি ডলার ঋণ দেবে বিশ্বব্যাংক</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/the-world-bank-will-give-a-loan-of-450-million-dollars-to-reform-the-c</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T13:26:00.000Z</news:publication_date>
-      <news:title>The World Bank will give a loan of 450 million dollars to reform the country&#39;s financial sector</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/games-can-be-created-with-ai-without-coding-on-google-s-playground-pla</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T13:05:00.000Z</news:publication_date>
-      <news:title>কোডিং ছাড়াই এআই দিয়ে গেম তৈরি করা যাবে গুগলের প্লেগ্রাউন্ড প্ল্যাটফর্মে</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/games-can-be-created-with-ai-without-coding-on-google-s-playground-pla</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T13:05:00.000Z</news:publication_date>
-      <news:title>Games can be created with AI without coding on Google&#39;s Playground platform</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/image-video-audio-writing-ai-or-not-google-will-tell</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T12:11:00.000Z</news:publication_date>
-      <news:title>ছবি-ভিডিও-অডিও-লেখা এআই কি না, তা জানাবে গুগল</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/image-video-audio-writing-ai-or-not-google-will-tell</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T12:11:00.000Z</news:publication_date>
-      <news:title>Image-video-audio-writing AI or not, Google will tell</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/55-of-private-sector-workers-use-ai-metlife-survey</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T11:22:00.000Z</news:publication_date>
-      <news:title>বেসরকারি খাতের ৫৫% কর্মী এআই ব্যবহার করেন, মেটলাইফের জরিপ</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/55-of-private-sector-workers-use-ai-metlife-survey</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-03T11:22:00.000Z</news:publication_date>
-      <news:title>55% of private sector workers use AI, MetLife survey</news:title>
     </news:news>
   </url>
 </urlset>

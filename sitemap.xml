@@ -30,7 +30,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/founder-stories</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -126,8 +126,28 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://www.voiceofstartup.bd/read/pet-parenting-is-now-at-your-fingertips-bangladesh-s-digital-pet-care</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/pet-parenting-is-now-at-your-fingertips-bangladesh-s-digital-pet-care"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/pet-parenting-is-now-at-your-fingertips-bangladesh-s-digital-pet-care"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/pet-parenting-is-now-at-your-fingertips-bangladesh-s-digital-pet-care"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw3dpt91ibsh.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/pet-parenting-is-now-at-your-fingertips-bangladesh-s-digital-pet-care</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/pet-parenting-is-now-at-your-fingertips-bangladesh-s-digital-pet-care"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/pet-parenting-is-now-at-your-fingertips-bangladesh-s-digital-pet-care"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/pet-parenting-is-now-at-your-fingertips-bangladesh-s-digital-pet-care"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw3dpt91ibsh.webp</image:loc></image:image>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/trusted-by-870-investors-and-22-top-companies-get-your-brand-across-to</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/trusted-by-870-investors-and-22-top-companies-get-your-brand-across-to"/>
@@ -137,7 +157,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/en/read/trusted-by-870-investors-and-22-top-companies-get-your-brand-across-to</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/trusted-by-870-investors-and-22-top-companies-get-your-brand-across-to"/>
