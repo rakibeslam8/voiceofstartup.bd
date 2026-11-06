@@ -27,12 +27,12 @@ html[data-theme="dark"] .co-head .btn-outline:hover, html[data-theme="dark"] .co
 
 /* ---------- cards ---------- */
 .co-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-.co-card { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 18px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 2px 10px rgba(0, 0, 0, .04); transition: transform .18s, box-shadow .18s, border-color .18s; color: var(--text); }
-a.co-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--orange); }
+.co-card { position: relative; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 18px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 2px 10px rgba(0, 0, 0, .04); transition: transform .18s, box-shadow .18s, border-color .18s; color: var(--text); }
+.co-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--orange); }
 .co-card.feat { border-color: #f4c08f; background: linear-gradient(180deg, var(--orange-soft), var(--card) 46%); }
 .co-feat { position: absolute; top: 12px; right: 12px; background: var(--orange); color: #fff; font: 700 .72rem var(--font-body); padding: 3px 9px; border-radius: 999px; }
 .co-top { display: flex; align-items: center; gap: 12px; min-width: 0; padding-right: 54px; }
-.co-logo { width: 52px; height: 52px; flex: none; border-radius: 14px; object-fit: cover; background: #fff; border: 1px solid var(--line); }
+.co-logo { width: 52px; height: 52px; flex: none; border-radius: 14px; object-fit: contain; padding: 4px; background: #fff; border: 1px solid var(--line); }
 .co-logo.ph { display: grid; place-items: center; background: var(--orange-soft); color: var(--orange-dark); font: 800 1.4rem var(--font-head); }
 .co-logo.lg { width: 92px; height: 92px; border-radius: 22px; font-size: 2.4rem; }
 .co-nm { min-width: 0; }
@@ -177,7 +177,7 @@ html[data-theme="dark"] .co-pick button { color: #3b3c42; }
 @media (max-width: 640px) {
   .co-hero { padding: 24px 0 20px; }
   .co-search { padding-left: 12px; } .co-search .btn { padding: 9px 16px; }
-  .co-grid { grid-template-columns: 1fr; gap: 14px; }
+  .co-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
   .co-selrow { grid-template-columns: 1fr 1fr; } .co-selrow .co-sel:last-child { grid-column: 1 / -1; }
   .co-bens, .co-steps { grid-template-columns: 1fr; }
   .co-lhero { padding: 28px 0 26px; } .co-lcta .btn { flex: 1 1 100%; }
@@ -271,8 +271,12 @@ li.co-hasav.re .co-av { width: 30px; height: 30px; font-size: .8rem; }
   /* list-your-company */
   .co-lhero { padding: 12px 0 18px; } .co-lhero h1 { font-size: 1.45rem; line-height: 1.25; text-wrap: balance; } .co-lead { font-size: .9rem; line-height: 1.55; margin-top: 6px; }
   .co-lcta { display: flex; gap: 8px; flex-wrap: nowrap; margin-top: 12px; } .co-lcta .btn, .co-lcta .btn-lg { width: auto; flex: 1 1 0; min-width: 0; padding: 10px 10px; font-size: .88rem; min-height: 0; border-radius: 12px; white-space: normal; line-height: 1.25; text-align: center; box-shadow: none; }
-  .co-chips-row { gap: 6px; margin-top: 10px; } .co-chips-row li { font-size: .74rem; padding: 4px 9px; }
-  .co-hvis { min-height: 250px; } .co-pv { padding: 12px; } .co-pv h3, .co-pv b { font-size: .95rem; }
+  .co-chips-row { gap: 6px; margin-top: 10px; align-items: flex-start; } .co-chips-row li { font-size: .74rem; padding: 4px 10px; line-height: 1.3; white-space: nowrap; }
+  .co-chips-row .co-fee-amt { font-size: inherit; }
+  .co-hvis { min-height: 0; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding: 6px 0 4px; } .co-hvis::before { inset: 0; border-radius: 28px; }
+  .co-pv { width: 100%; max-width: 360px; margin: 0 auto; padding: 12px; transform: none; } .co-pv h3, .co-pv b { font-size: .95rem; }
+  .co-pv-fee { display: none; position: static; transform: none; order: -1; margin: 0 6px -10px auto; z-index: 2; padding: 6px 12px; border-radius: 14px; width: max-content; } .co-pv-fee b { font-size: 1.1rem; }
+  .co-pv-note { position: static; transform: none; max-width: none; margin: 10px auto 0; width: 100%; max-width: 360px; box-sizing: border-box; }
   .co-who, .co-bens, .co-tl { gap: 8px; } .co-wcard, .co-ben, .co-vcard { padding: 12px 14px; } .co-wcard h3, .co-ben h3 { font-size: .98rem; } .co-wcard p, .co-ben p { font-size: .84rem; line-height: 1.5; }
   .section-head h2, .co-valx h2 { font-size: 1.2rem; } .section { padding-top: 22px; padding-bottom: 22px; }
   .co-fee-amt { font-size: 2rem; } .co-fee-btn { padding: 10px 16px; font-size: .92rem; }
@@ -285,3 +289,16 @@ li.co-hasav.re .co-av { width: 30px; height: 30px; font-size: .8rem; }
   .co-filters select, .co-filters input, select.co-sel { font-size: .85rem; padding: 8px 10px; min-height: 0; height: 38px; }
   .co-card2 { padding: 12px; } .co-card2 h3 { font-size: 1rem; }
 }
+
+/* card = one link (the info) + an action row (view / invest) */
+.co-main { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; color: inherit; }
+.co-main:hover { color: inherit; }
+.co-act { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+.co-btn { display: flex; align-items: center; justify-content: center; text-align: center; min-height: 40px; padding: 8px 10px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); color: var(--text); font: 700 .88rem var(--font-body); line-height: 1.2; transition: background .15s, border-color .15s, color .15s; }
+.co-btn:hover { border-color: var(--orange); color: var(--orange-dark); }
+.co-btn.inv { background: var(--green); border-color: var(--green); color: #fff; }
+.co-btn.inv:hover { background: #087a41; border-color: #087a41; color: #fff; }
+.co-btn.off { color: var(--muted); border-style: dashed; cursor: default; background: transparent; }
+.co-btn.off:hover { border-color: var(--line); color: var(--muted); }
+.co-nm h3 { max-width: 100%; }
+@media (max-width: 640px) { .co-card { padding: 14px; } .co-top { padding-right: 0; } .co-card.feat .co-top { padding-top: 24px; } .co-card.feat .co-feat { top: 10px; right: 10px; } .co-logo { width: 48px; height: 48px; } .co-btn { min-height: 42px; font-size: .9rem; } }

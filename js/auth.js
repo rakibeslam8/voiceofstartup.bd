@@ -105,7 +105,7 @@
       sb.auth.onAuthStateChange((ev, sess) => {
         const nu = mapUser(sess && sess.user);
         const changed = (nu && nu.id) !== (user && user.id);
-        user = nu;
+        if (nu) { const keep = (user && user.id === nu.id && user.avatar) || ""; user = nu; const c2 = avCached(); if (c2 || keep) user.avatar = c2 || keep; } else user = nu;
         if (ev === "PASSWORD_RECOVERY") { open("reset"); }
         if (changed) { profileRow = null; profileP = null; paint(); listeners.slice().forEach((f) => { try { f(user); } catch (e) {} }); document.dispatchEvent(new CustomEvent("vosb:auth", { detail: user })); }
         if (changed && nu) { closeModal(); resolvePending(nu); }
@@ -115,12 +115,40 @@
     return sbP;
   }
   const rpc = async (name, args) => { const c = await client(); return c.rpc(name, args || {}); };
+  /* the calls the page needs to draw a signed-in person (profile, menu, bell) must survive a slow network, an expired
+     token that is still being refreshed, or the auth library's tab lock: retry a few times, refresh the session once */
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  async function rpcR(name, args, tries) {
+    let last = null; tries = tries || 3;
+    for (let i = 0; i < tries; i++) {
+      try {
+        const c = await client();
+        if (i > 0) { try { await c.auth.getSession(); } catch (e) {} if (i === tries - 1) { try { await c.auth.refreshSession(); } catch (e) {} } }
+        const r = await c.rpc(name, args || {});
+        if (!r.error) return r;
+        last = r;
+        const m = String(r.error.message || "") + " " + String(r.error.code || "");
+        if (/sign in|jwt|expired|401|28000|fetch|network|abort|lock|timeout|503|502|504/i.test(m)) { await sleep(450 * (i + 1)); continue; }
+        return r;
+      } catch (e) { last = { error: e }; await sleep(450 * (i + 1)); }
+    }
+    return last || { error: new Error("failed") };
+  }
   const onChange = (fn) => { listeners.push(fn); };
   function profile(force) {
     if (!user) return Promise.resolve(null);
     if (profileP && !force) return profileP;
-    profileP = rpc("ensure_profile").then((r) => { profileRow = r.error ? null : r.data; if (profileRow) { rpc("my_context").then((x) => { if (!x.error && x.data) setCtx(x.data); }).catch(() => {}); applyPending(); } if (profileRow) setAvatar(/^https:\/\//.test(profileRow.avatar_url || "") ? profileRow.avatar_url : ""); return profileRow; }).catch(() => null);
-    return profileP;
+    const mine = rpcR("ensure_profile").then((r) => {
+      profileRow = r.error ? null : r.data;
+      if (profileRow) {
+        rpcR("my_context").then((x) => { if (!x.error && x.data) setCtx(x.data); }).catch(() => {});
+        applyPending();
+        setAvatar(/^https:\/\//.test(profileRow.avatar_url || "") ? profileRow.avatar_url : "");
+      }
+      return profileRow;
+    }).catch(() => null).then((row) => { if (!row && profileP === mine) profileP = null; return row; });   // a failed load is never remembered
+    profileP = mine;
+    return mine;
   }
 
   /* ---------- what the project allows (Google on? sign-up on?) ---------- */
@@ -304,7 +332,7 @@
   const ago = (d) => { const m = Math.max(1, Math.round((Date.now() - new Date(d)) / 60000)); const nd = (n) => (UI().bnDigits ? UI().bnDigits(String(n)) : n); return m < 60 ? T(nd(m) + " মিনিট আগে", m + "m ago") : m < 1440 ? T(nd(Math.round(m / 60)) + " ঘণ্টা আগে", Math.round(m / 60) + "h ago") : T(nd(Math.round(m / 1440)) + " দিন আগে", Math.round(m / 1440) + "d ago"); };
   async function loadNotifs() {
     if (!user) { notif = { unread: 0, items: [], loaded: false }; return; }
-    try { const r = await rpc("my_notifications", { p_limit: 30 }); if (!r.error && r.data) { notif = { unread: r.data.unread || 0, items: r.data.items || [], loaded: true }; paintBell(); } } catch (e) {}
+    try { const r = await rpcR("my_notifications", { p_limit: 30 }); if (!r.error && r.data) { notif = { unread: r.data.unread || 0, items: r.data.items || [], loaded: true }; paintBell(); } } catch (e) {}
   }
   function paintBell() { document.querySelectorAll("[data-bell]").forEach((b) => { const n = notif.unread; b.querySelector(".au-dot").textContent = n > 9 ? "9+" : String(n); b.querySelector(".au-dot").hidden = !n; b.setAttribute("aria-label", T("নোটিফিকেশন", "Notifications") + (n ? " (" + n + ")" : "")); }); }
   function closeNotifs() { const p = document.getElementById("au-np"); if (p) p.remove(); document.removeEventListener("keydown", npKey); }
@@ -323,6 +351,7 @@
     if (e.target.closest("[data-bell]") || e.target.closest('[data-act="notifs"]')) { e.preventDefault(); document.querySelectorAll(".ab-sheet.open").forEach((x) => x.classList.remove("open")); openNotifs(); }
   });
   function paint() {
+    document.documentElement.classList.toggle("has-user", !!user);
     document.querySelectorAll("[data-auth-slot]").forEach((el) => {
       const kind = el.dataset.authSlot;
       if (!user) {
@@ -339,7 +368,9 @@
       } else {
         el.innerHTML = `<div class="au-bellwrap"><button type="button" class="au-bell" data-bell aria-label="${T("নোটিফিকেশন", "Notifications")}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17h12l-1.5-2V11a4.500 4.500 0 0 0-9 0v4zM10 20a2 2 0 0 0 4 0"/></svg><i class="au-dot" ${notif.unread ? "" : "hidden"}>${notif.unread > 9 ? "9+" : notif.unread}</i></button></div><div class="au-menu"><button type="button" class="au-avb" aria-haspopup="menu" aria-expanded="false" aria-label="${T("অ্যাকাউন্ট মেনু", "Account menu")}">${avatar(user, "au-av")}</button>
           <div class="au-dd" role="menu" hidden><div class="au-who">${avatar(user, "au-av lg")}<div><b>${esc(nm)}</b><small>${esc(user.email)}</small></div></div>
-            ${linkHtml()}<button role="menuitem" type="button" data-act="signout">${T("লগআউট", "Log out")}</button></div></div>`;
+            ${linkHtml()}
+            <div class="au-pref"><button type="button" class="au-prefb" data-pref="theme"><span aria-hidden="true">🌓</span> ${T("ডার্ক / লাইট মোড", "Dark / light mode")}</button><button type="button" class="au-prefb" data-pref="lang"><span aria-hidden="true">🌐</span> ${T("ভাষা", "Language")}<em>${T("English", "বাংলা")}</em></button></div>
+            <button role="menuitem" type="button" data-act="signout">${T("লগআউট", "Log out")}</button></div></div>`;
       }
     });
   }

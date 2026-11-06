@@ -574,3 +574,12 @@ a.co-row:active { transform: scale(.995); }
 :root[data-theme="dark"] .np{background:rgba(232,49,47,.2);color:#ff9d9b}
 .co-miss{margin:8px 0;line-height:1.9}
 .msg.warn { background: #fff4df; color: #8a5200; }
+
+/* tab strips slide sideways with a finger; the edge fades show there is more */
+.co-tabs { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; touch-action: pan-x; scroll-snap-type: x proximity; }
+.co-tabs a { scroll-snap-align: center; }
+@media (max-width: 720px) {
+  .co-tabs { margin-left: -2px; margin-right: -2px; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 22px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 22px), transparent 100%); }
+  .co-tabs a { min-height: 38px; padding: 0 13px; font-size: .88rem; }
+  .seg { display: flex; width: 100%; } .seg button { flex: 1; white-space: nowrap; padding: 9px 10px; }
+}

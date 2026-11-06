@@ -162,7 +162,11 @@
 
     /* ---- profile ---- */
     async function loadProfile(force) {
-      try { st.prof = await A().profile(force); st.profErr = !st.prof; } catch (e) { st.profErr = true; }
+      try {
+        st.prof = await A().profile(force);
+        if (!st.prof) { await new Promise((r) => setTimeout(r, 1600)); st.prof = await A().profile(true); }   // slow network / token refreshing: one more go before showing an error
+        st.profErr = !st.prof;
+      } catch (e) { st.profErr = true; }
     }
     function profileView(el) {
       if (st.profErr) { el.innerHTML = `<div class="ac-card ac-center"><p>${T("প্রোফাইল লোড করা যায়নি।", "Could not load your profile.")}</p><button class="btn btn-outline ac-sm" data-act="retry-profile">${T("আবার চেষ্টা করুন", "Try again")}</button></div>`; return; }

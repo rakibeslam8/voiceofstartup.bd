@@ -54,11 +54,15 @@
   function card(c) {
     const loc = [c.district, c.division].filter(Boolean).join(", ");
     const kv = c.vosb_valuation ? `<span class="co-kv"><i>${T("VOSB ভ্যালুয়েশন", "VOSB valuation")}</i><b>${money(c.vosb_valuation)}</b></span>` : c.seeking_amount ? `<span class="co-kv"><i>${T("তহবিল চাইছে", "Seeking")}</i><b>${money(c.seeking_amount)}</b></span>` : "";
-    return `<a class="co-card${c.featured ? " feat" : ""}" href="/company/${esc(c.slug)}">${c.featured ? `<span class="co-feat">★ ${T("ফিচার্ড", "Featured")}</span>` : ""}
-      <div class="co-top">${logo(c, "co-logo")}<div class="co-nm"><h3>${esc(c.name)}</h3>${c.verified ? verified() : ""}</div></div>
-      <p class="co-tag">${esc(c.tagline || "")}</p>
-      <div class="co-tags">${c.category ? `<span>${esc(label(CO.industries, c.category))}</span>` : ""}${c.stage ? `<span>${esc(label(CO.stages, c.stage))}</span>` : ""}${loc ? `<span class="loc">📍 ${esc(loc)}</span>` : ""}</div>
-      <div class="co-foot">${rating(c)}${kv}</div></a>`;
+    const open = c.invest_open !== false;
+    return `<article class="co-card${c.featured ? " feat" : ""}">${c.featured ? `<span class="co-feat">★ ${T("ফিচার্ড", "Featured")}</span>` : ""}
+      <a class="co-main" href="/company/${esc(c.slug)}" aria-label="${esc(c.name)}">
+        <div class="co-top">${logo(c, "co-logo")}<div class="co-nm"><h3>${esc(c.name)}</h3>${c.verified ? verified() : ""}</div></div>
+        <p class="co-tag">${esc(c.tagline || "")}</p>
+        <div class="co-tags">${c.category ? `<span>${esc(label(CO.industries, c.category))}</span>` : ""}${c.stage ? `<span>${esc(label(CO.stages, c.stage))}</span>` : ""}${loc ? `<span class="loc">📍 ${esc(loc)}</span>` : ""}</div>
+        <div class="co-foot">${rating(c)}${kv}</div>
+      </a>
+      <div class="co-act"><a class="co-btn" href="/company/${esc(c.slug)}">${T("প্রোফাইল দেখুন", "View profile")}</a>${open ? `<a class="co-btn inv" href="/company/${esc(c.slug)}?invest=1">💼 ${T("বিনিয়োগ করুন", "Invest")}</a>` : `<span class="co-btn off" title="${T("কোম্পানিটি এখন বিনিয়োগ নিচ্ছে না", "Not seeking investment right now")}">${T("বিনিয়োগ বন্ধ", "Not seeking now")}</span>`}</div></article>`;
   }
   const skel = (n) => Array.from({ length: n }, () => '<div class="co-card sk" aria-hidden="true"><i></i><i></i><i></i></div>').join("");
   const emptyHtml = () => `<div class="co-empty"><div class="co-empty-ic" aria-hidden="true">🏢</div><h3>${T("এখনও কোনো কোম্পানি পাওয়া যায়নি", "No companies found yet")}</h3><p>${T("ফিল্টার বদলে দেখুন, অথবা আপনার কোম্পানি লিস্ট করে প্রথম হয়ে যান।", "Try different filters — or be the first to list your company.")}</p><p><a class="btn btn-green" href="/list-your-company">${T("কোম্পানি লিস্ট করুন", "List your company")}</a></p></div>`;
@@ -256,6 +260,8 @@
       try { await rpc("post_comment", { p_company: c.id, p_parent: f.dataset.parent || null, p_body: f.body.value }); replyTo = null; await loadCom(); } catch (er) { msg.textContent = errText(er); }
     });
 
+    /* /company/<slug>?invest=1 (the "Invest" button on a card) opens the interest form straight away */
+    if (/[?&]invest=1/.test(location.search) && $("#co-invest")) setTimeout(() => { try { history.replaceState(null, "", location.pathname + location.hash); } catch (e) {} invest(); }, 500);
     async function invest() {
       const u = await A().requireLogin("বিনিয়োগের আগ্রহ জানাতে লগইন করুন।", "Log in to show investor interest."); if (!u) return;
       const m = modal(`<button type="button" class="co-x" data-x aria-label="${T("বন্ধ করুন", "Close")}">✕</button><h2>💼 ${T("বিনিয়োগে আগ্রহ জানান", "Show investor interest")}</h2><p class="muted">${esc(c.name)}</p>

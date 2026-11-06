@@ -1915,6 +1915,7 @@ html[data-theme="dark"] main::after, html[data-theme="dark"] .site-footer::after
     font: 700 1rem var(--font-body); text-align: left; text-decoration: none; cursor: pointer; }
   .ab-row svg { width: 22px; height: 22px; flex: none; fill: none; stroke: var(--orange-dark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .ab-row span { flex: 1; }
+  .ab-row .ab-lg { flex: none; }
   .ab-row .ti-sun { display: none; }
   html[data-theme="dark"] .ab-row .ti-sun { display: block; }
   html[data-theme="dark"] .ab-row .ti-moon { display: none; }
@@ -2030,6 +2031,7 @@ html[data-theme="dark"] .au-note { background: #16283d; color: #a8cdf5; } html[d
 .st-page .ab-row:hover { border-color: var(--orange); }
 .st-page .ab-row svg { width: 22px; height: 22px; flex: none; fill: none; stroke: var(--orange-dark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .st-page .ab-row span { flex: 1; }
+.st-page .ab-row .ab-lg { flex: none; }
 .st-page .ab-row .ti-sun { display: none; } html[data-theme="dark"] .st-page .ab-row .ti-sun { display: block; } html[data-theme="dark"] .st-page .ab-row .ti-moon { display: none; }
 .st-page .ab-lg { display: inline-grid; place-items: center; min-width: 30px; height: 26px; padding: 0 6px; border-radius: 999px; background: linear-gradient(135deg, #ff7522, #e55f0f); color: #fff; font-size: .8rem; }
 .st-page .ab-row em { font-style: normal; color: var(--muted); font-weight: 600; font-size: .9rem; }
@@ -2150,3 +2152,13 @@ img.au-av { object-fit: cover; }
   .st-card .ab-tiles a, .st-card .ab-tiles button { padding: 9px 10px; font-size: .8rem; gap: 7px; border-radius: 12px; } .st-card .ab-tiles svg { width: 17px; height: 17px; }
   .st-card .ab-socs a { width: 38px; height: 38px; } .st-card .ab-legal a { font-size: .78rem; }
 }
+
+/* signed in: dark mode + language live inside the profile menu (phone: inside Settings) */
+html.has-user .header-actions > .theme-toggle, html.has-user .header-actions > .lang-toggle { display: none; }
+.au-pref { display: grid; gap: 2px; padding: 6px 0; margin: 6px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.au-prefb { display: flex; align-items: center; gap: 4px; width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px; border: 0; background: transparent; color: var(--text); font: 600 .94rem var(--font-body); cursor: pointer; }
+.au-prefb > span:first-child { display: inline-block; width: 1.4em; }
+.au-prefb em { margin-left: auto; font-style: normal; color: var(--muted); font-weight: 600; font-size: .85rem; }
+.au-prefb:hover { background: var(--orange-soft); color: var(--orange-dark); }
+.au-av-link { display: inline-flex; border-radius: 50%; }
+.au-av-link img.au-av { display: block; }

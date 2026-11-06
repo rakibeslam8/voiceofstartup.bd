@@ -136,16 +136,18 @@
   };
   /* login state is read from the saved session so the header never flashes the wrong button; js/auth.js takes over after it loads */
   function authStored() { try { const j = JSON.parse(localStorage.getItem("vosb-user-auth") || "null"); return j && j.user ? j.user : null; } catch (e) { return null; } }
+  function authAvatar(u) { try { const j = JSON.parse(localStorage.getItem("vosb-avatar") || "null"); return j && u && j.id === u.id && /^https:\/\//.test(j.url) ? j.url : ""; } catch (e) { return ""; } }
   function authInitial(kind) {
     const u = authStored();
+    document.documentElement.classList.toggle("has-user", !!u);
     if (kind === "sheet") {
-      if (!u) return `<button class="ab-login" type="button" data-act="auth"><span class="ab-login-ic">${abIc("user")}</span><span class="ab-login-tx"><b>${T("লগইন / সাইন আপ", "Login / Sign up")}</b><small>${T("রিভিউ, কমেন্ট ও কোম্পানি লিস্টিংয়ের জন্য", "To review, comment and list your company")}</small></span></button>`;
-      const m = u.user_metadata || {}, n = (m.full_name || m.name || u.email || "?").trim();
-      return `<a class="ab-login ab-in" href="/account"><span class="au-av">${esc(n[0].toUpperCase())}</span><span class="ab-login-tx"><b>${esc(n)}</b><small>${T("আমার অ্যাকাউন্ট", "My account")}</small></span></a>`;
+      if (!u) return `<button class="ab-login" type="button" data-act="auth"><span class="ab-login-ic">${abIc("user")}</span><span class="ab-login-tx"><b>${T("লগইন / সাইন আপ", "Login / Sign up")}</b><small>${T("রিভিউ, কমেন্ট ও কোম্পানি লিস্টিংয়ের জন্য", "For reviews, comments & company listing")}</small></span></button>`;
+      const m = u.user_metadata || {}, n = (m.full_name || m.name || u.email || "?").trim(), av = authAvatar(u);
+      return `<a class="ab-login ab-in" href="/account">${av ? `<img class="au-av" src="${esc(av)}" alt="" referrerpolicy="no-referrer">` : `<span class="au-av">${esc(n[0].toUpperCase())}</span>`}<span class="ab-login-tx"><b>${esc(n)}</b><small>${T("আমার অ্যাকাউন্ট", "My account")}</small></span></a>`;
     }
     if (!u) return `<button class="btn btn-green au-login" type="button" data-act="auth">${T("লগইন", "Login")}</button>`;
-    const m = u.user_metadata || {}, n = (m.full_name || m.name || u.email || "?").trim();
-    return `<a class="au-av" href="/account" aria-label="${T("আমার অ্যাকাউন্ট", "My account")}">${esc(n[0].toUpperCase())}</a>`;
+    const m = u.user_metadata || {}, n = (m.full_name || m.name || u.email || "?").trim(), av = authAvatar(u);
+    return `<a class="${av ? "au-av-link" : "au-av"}" href="/account" aria-label="${T("আমার অ্যাকাউন্ট", "My account")}">${av ? `<img class="au-av" src="${esc(av)}" alt="" referrerpolicy="no-referrer">` : esc(n[0].toUpperCase())}</a>`;
   }
   const abIc = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${AB_ICON[k]}"/></svg>`;
   function appBar(page) {
@@ -202,6 +204,15 @@
   }
   mount("st-root", settingsBody);
   const closeSheets = () => document.querySelectorAll(".ab-sheet.open").forEach((x) => x.classList.remove("open"));
+  /* dark mode + language buttons: ONE listener for every copy of them (header, nav, Settings page, profile menu).
+     They used to be wired one by one when the header was drawn, so a button drawn later (Settings, after the news loaded) did nothing. */
+  const prefHandlers = {};
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest('[data-act="theme"],[data-act="lang"],[data-pref]');
+    if (!b) return;
+    const f = prefHandlers[b.dataset.pref || b.dataset.act];
+    if (f) { e.preventDefault(); f(); }
+  });
   document.addEventListener("click", (e) => {
     const b = e.target.closest('[data-act="sheet"]');
     const fb = e.target.closest('[data-act="fs-"],[data-act="fs+"]');
@@ -266,14 +277,14 @@
         try { localStorage.setItem("vosb-theme", dark ? "dark" : "light"); } catch (e) {}
         const m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", dark ? "#0e0f11" : "#ff7522");
       };
-      document.querySelectorAll('[data-act="theme"]').forEach((b) => (b.onclick = toggleTheme));
+      prefHandlers.theme = toggleTheme;
       const toggleLang = () => {
         lang = lang === "bn" ? "en" : "bn";
         try { localStorage.setItem("vosb-lang", lang); } catch (e) {}
         if (EN_EDITION && lang === "bn") { location.href = location.pathname.replace(/^\/en/, ""); return; }
         renderAll();
       };
-      document.querySelectorAll('[data-act="lang"]').forEach((b) => (b.onclick = toggleLang));
+      prefHandlers.lang = toggleLang;
     }
     const bottom = $("#site-bottom");
     if (bottom) {
@@ -1161,6 +1172,7 @@
   /* re-render page content (not the header) */
   function refresh() {
     renderers.forEach((r) => r());
+    try { if (window.VOSB_AUTH) window.VOSB_AUTH.paint(); } catch (e) {}   // page content was redrawn: put the signed-in widgets back
     applyStatic();
     fillSlots();
     observeAds();
@@ -1188,11 +1200,11 @@
   window.VOSB_UI = { get lang() { return lang; }, T, esc, pick, safeHref, bnDigits, formatDate, formatDateTime, money, $, $$, onRender(fn) { renderers.push(fn); }, refresh };
   (function loadAuth() {
     const s = document.createElement("script");
-    s.src = "/js/auth.js?v=20261106a";
+    s.src = "/js/auth.js?v=20261107a";
     s.onload = () => {
       try { window.VOSB_AUTH && window.VOSB_AUTH.paint(); } catch (e) {}
       if (document.getElementById("article") || /^\/(en\/)?read\//.test(location.pathname)) {   // article pages: likes + comments
-        const t = document.createElement("script"); t.src = "/js/social.js?v=20261106a"; document.head.appendChild(t);
+        const t = document.createElement("script"); t.src = "/js/social.js?v=20261107a"; document.head.appendChild(t);
       }
     };
     document.head.appendChild(s);

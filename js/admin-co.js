@@ -925,5 +925,12 @@ window.VOSB_ADMIN_CO = function (X) {
     if (h === "trash") return viewTrash(view);
     if (h === "deletions") return viewDeletions(view);
   }
+  /* the tab strip slides sideways on a phone: every time it is drawn, bring the open tab into view (otherwise the tab you just
+     tapped can sit off-screen and the strip looks stuck) */
+  const centerTabs = () => document.querySelectorAll(".co-tabs").forEach((t) => {
+    if (t.dataset.centered === "1") return; t.dataset.centered = "1";
+    const a = t.querySelector("a.on"); if (a) t.scrollLeft = Math.max(0, a.offsetLeft - (t.clientWidth - a.offsetWidth) / 2);
+  });
+  try { new MutationObserver(() => centerTabs()).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
   return { handles, render, refreshBadges, counts, dashSection };
 };
