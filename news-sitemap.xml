@@ -7,7 +7,7 @@
         <news:name>Voice of Startup Bangladesh</news:name>
         <news:language>bn</news:language>
       </news:publication>
-      <news:publication_date>2026-11-06T06:47:00.000Z</news:publication_date>
+      <news:publication_date>2026-11-06T15:30:00.000Z</news:publication_date>
       <news:title>৮৭০+ বিনিয়োগকারী ও ২২টি শীর্ষ কোম্পানির আস্থা: আপনার ব্র্যান্ড পৌঁছে দিন গ্রাহক ও বিনিয়োগকারীদের কাছে</news:title>
     </news:news>
   </url>
@@ -18,8 +18,30 @@
         <news:name>Voice of Startup Bangladesh</news:name>
         <news:language>en</news:language>
       </news:publication>
-      <news:publication_date>2026-11-06T06:47:00.000Z</news:publication_date>
+      <news:publication_date>2026-11-06T15:30:00.000Z</news:publication_date>
       <news:title>Trusted by 870+ investors and 22 top companies: Get your brand across to customers and investors</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/brac-bank-cuts-export-document-processing-time-from-40-days-to-one</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-06T14:41:00.000Z</news:publication_date>
+      <news:title>ব্র্যাক ব্যাংক রপ্তানি নথি প্রক্রিয়াকরণের সময় ৪০ দিন থেকে কমিয়ে মাত্র এক দিনে করেছে</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/brac-bank-cuts-export-document-processing-time-from-40-days-to-one</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-06T14:41:00.000Z</news:publication_date>
+      <news:title>BRAC Bank cuts export document processing time from 40 days to one</news:title>
     </news:news>
   </url>
   <url>
@@ -42,28 +64,6 @@
       </news:publication>
       <news:publication_date>2026-11-05T09:59:00.000Z</news:publication_date>
       <news:title>Pet-parenting is now at your fingertips: Bangladesh&#39;s digital pet-care startup &#39;Petmamma&#39;</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/care-bangladesh-will-train-2-lakh-45-thousand-youth-for-skill-developm</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-04T13:32:00.000Z</news:publication_date>
-      <news:title>২ লাখ ৪৫ হাজার যুবকের দক্ষতা উন্নয়নে প্রশিক্ষণ দেবে কেয়ার বাংলাদেশ</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/care-bangladesh-will-train-2-lakh-45-thousand-youth-for-skill-developm</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-04T13:32:00.000Z</news:publication_date>
-      <news:title>CARE Bangladesh will train 2 lakh 45 thousand youth for skill development</news:title>
     </news:news>
   </url>
 </urlset>
