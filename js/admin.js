@@ -1129,7 +1129,7 @@
       ${kinds ? kindsCard(kinds) : ""}
       <div class="dash-cols" style="margin-top:16px">
         <div class="card"><h2>Most visited pages</h2>${barList(stats.top_pages, "views", (x) => pageLabel(x.path), "Page views appear after the first visits.")}</div>
-        <div class="card"><h2>Where visitors come from</h2>${barList(stats.referrers, "views", (x) => esc(x.source))}</div>
+        <div class="card"><h2>Where visits come from</h2><p class="muted" style="font-size:.78rem;margin:-6px 0 8px">Visits (sessions) by the source each one started from · total ${fmtN(R.sessions)} — same number as “Sessions” above.</p>${barList(stats.referrers, "sessions", (x) => esc(x.source))}</div>
       </div>
       <div class="dash-cols" style="margin-top:16px">
         <div class="card"><h2>Most read articles <span class="muted" style="font-size:.8rem;font-weight:500">(this period)</span></h2>${barList((stats.top_articles || []).map((a) => ({ k: a.title_bn || a.title_en || a.slug, v: a.reads })), "v", (x) => `📰 ${esc(String(x.k).slice(0, 80))}`, stats.legacy ? "Needs the update-4 SQL." : "Article reads in this period appear here.")}</div>

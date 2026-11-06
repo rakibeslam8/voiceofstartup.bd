@@ -2121,3 +2121,32 @@ img.au-av { object-fit: cover; }
 .fs-ctl button { appearance: none; border: 0; background: transparent; color: var(--text); font: 800 .9rem var(--font-body); padding: 5px 14px; min-width: 44px; cursor: pointer; }
 .fs-ctl button + button { border-left: 1.5px solid var(--line); }
 .fs-ctl button:hover, .fs-ctl button:active { background: var(--orange-soft); color: var(--orange-dark); }
+
+/* ---- sign-up: "I am a…" + profile photo ---- */
+.au-role { border: 0; margin: 2px 0 0; padding: 0; min-width: 0; }
+.au-role legend { font-weight: 700; font-size: .86rem; padding: 0; margin-bottom: 6px; }
+.au-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.au-chip { display: inline-flex !important; align-items: center; margin: 0 !important; cursor: pointer; }
+.au-chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.au-chip span { padding: 7px 13px; border: 1.5px solid var(--line); border-radius: 999px; font-weight: 700; font-size: .86rem; background: var(--bg); transition: border-color .15s, background .15s; }
+.au-chip input:checked + span { border-color: var(--orange-dark); background: var(--orange-soft, #fff1e6); color: var(--orange-dark); }
+.au-chip input:focus-visible + span { outline: 2px solid var(--orange-dark); outline-offset: 2px; }
+.au-photo { display: flex; align-items: center; gap: 12px; margin-top: 2px; }
+.au-pv { width: 48px; height: 48px; border-radius: 50%; border: 1.5px dashed var(--line); display: grid; place-items: center; font-size: 1.2rem; background: var(--bg) center / cover no-repeat; flex: none; }
+.au-pbtn { display: inline-flex !important; align-items: center; margin: 0 !important; padding: 8px 14px; border: 1.5px solid var(--line); border-radius: 999px; font-weight: 700 !important; font-size: .84rem !important; cursor: pointer; background: var(--card); }
+.au-pbtn:hover { border-color: var(--orange-dark); }
+.st-links a > span:first-child { font-size: 1.05rem; line-height: 1; }
+.au-dd a > span:first-child { display: inline-block; width: 1.4em; }
+
+/* ---------- settings page on phones: slim, like the news page ---------- */
+@media (max-width: 560px) {
+  .st-page .page-hero, body:has(#st-root) .page-hero { padding: 12px 0 10px; } body:has(#st-root) .page-hero h1 { font-size: 1.35rem; } body:has(#st-root) .page-hero .eyebrow { font-size: .74rem; margin: 0; }
+  body:has(#st-root) .section, body:has(#st-root) main > .container { padding-top: 10px; }
+  .st-wrap, .st-col { gap: 10px; } .st-card { padding: 12px; border-radius: 14px; } .st-card h2 { font-size: .72rem; letter-spacing: .06em; margin-bottom: 8px; }
+  .st-card .ab-row { padding: 9px 12px; font-size: .88rem; border-radius: 12px; min-height: 0; } .st-card .ab-lg { width: 30px; height: 30px; font-size: .78rem; }
+  .st-card .ab-login { padding: 9px 11px; border-radius: 13px; gap: 10px; } .st-card .ab-login .au-av { width: 34px; height: 34px; } .st-card .ab-login-tx b { font-size: .92rem; } .st-card .ab-login-tx small { font-size: .74rem; }
+  .st-card .ab-acct-row { margin-top: 6px; gap: 6px; } .st-card .ab-acct-row button, .st-card .ab-acct-row a { padding: 8px; font-size: .82rem; border-radius: 10px; }
+  .st-links { gap: 6px; margin-top: 6px; } .st-links a { padding: 9px 10px; font-size: .82rem; border-radius: 12px; gap: 7px; }
+  .st-card .ab-tiles a, .st-card .ab-tiles button { padding: 9px 10px; font-size: .8rem; gap: 7px; border-radius: 12px; } .st-card .ab-tiles svg { width: 17px; height: 17px; }
+  .st-card .ab-socs a { width: 38px; height: 38px; } .st-card .ab-legal a { font-size: .78rem; }
+}

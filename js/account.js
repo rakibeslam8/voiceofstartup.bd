@@ -120,6 +120,16 @@
     if (!root) return;
     const st = { tab: "profile", prof: null, profErr: false, cos: null, cosErr: "", ints: {}, ov: {}, val: {}, inv: null, invErr: "", rendered: "" };
     const TABS = [["profile", "👤", "প্রোফাইল", "Profile"], ["companies", "🏢", "আমার কোম্পানি", "My companies"], ["invest", "💼", "আমার বিনিয়োগ", "My investments"], ["security", "🔒", "নিরাপত্তা", "Security"]];
+    /* each person sees the tabs they need: founders → companies, investors → investments, readers → neither (unless they already have some) */
+    const tabsFor = () => {
+      const c = (A().ctx && A().ctx()) || null, type = (st.prof && st.prof.user_type) || (c && c.type) || "";
+      const known = !!(c || st.prof);
+      const founder = !known || type === "founder" || (c && c.co) || (st.cos && st.cos.length > 0);
+      const investor = !known || type === "investor" || (c && c.inv) || !!(st.inv && ((st.inv.interests || []).length || (st.inv.investments || []).length));
+      return TABS.filter((t) => (t[0] === "companies" ? founder : t[0] === "invest" ? investor : true));
+    };
+    const tabsHtml = () => tabsFor().map((t) => `<button type="button" role="tab" data-tab="${t[0]}" aria-selected="${st.tab === t[0]}"><span aria-hidden="true">${t[1]}</span> ${T(t[2], t[3])}</button>`).join("");
+    const refreshTabs = () => { const n = $(".ac-tabs", root); if (n) n.innerHTML = tabsHtml(); };
     const hashTab = () => { const h = (location.hash || "").slice(1); return TABS.some((t) => t[0] === h) ? h : "profile"; };
 
     function loginCard() {
@@ -135,8 +145,8 @@
       const avu = (p.avatar_url && /^https:\/\//.test(p.avatar_url) ? p.avatar_url : "") || u.avatar;
       const av = avu ? `<img class="ac-av lg" src="${esc(avu)}" alt="" referrerpolicy="no-referrer">` : `<span class="ac-av lg">${esc(initialOf(nm))}</span>`;
       root.innerHTML = `<div class="ac-me">${av}<div class="ac-me-tx"><h2>${esc(nm)}</h2><p class="muted">${esc(u.email)}</p></div>
-          <a class="btn btn-orange ac-sm" href="/list-your-company">＋ ${T("কোম্পানি লিস্ট করুন", "List a company")}</a></div>
-        <nav class="ac-tabs" role="tablist" aria-label="${T("অ্যাকাউন্ট", "Account")}">${TABS.map((t) => `<button type="button" role="tab" data-tab="${t[0]}" aria-selected="${st.tab === t[0]}"><span aria-hidden="true">${t[1]}</span> ${T(t[2], t[3])}</button>`).join("")}</nav>
+          ${tabsFor().some((t) => t[0] === "companies") ? `<a class="btn btn-orange ac-sm" href="/list-your-company">＋ ${T("কোম্পানি লিস্ট করুন", "List a company")}</a>` : `<a class="btn btn-outline ac-sm" href="/companies">${T("কোম্পানি দেখুন", "Browse companies")}</a>`}</div>
+        <nav class="ac-tabs" role="tablist" aria-label="${T("অ্যাকাউন্ট", "Account")}">${tabsHtml()}</nav>
         <div class="ac-panel" id="ac-panel"></div>`;
       panel();
     }
@@ -189,6 +199,7 @@
         try { const c = await sb(); await c.auth.updateUser({ data: { full_name: name } }); } catch (e) {}
         say(T("সংরক্ষণ হয়েছে ✓", "Saved ✓"), "ok"); toast(T("প্রোফাইল সংরক্ষণ হয়েছে", "Profile saved"), "ok");
         const h = $(".ac-me-tx h2"); if (h) h.textContent = name;
+        try { A().profile(true); } catch (e) {} refreshTabs();
       } catch (e) { say(friendly(e), "err"); }
       btn.disabled = false;
     }
@@ -457,7 +468,7 @@
       if (!A() || !A().isIn()) { loginCard(); return; }
       st.tab = hashTab();
       shell();
-      if (st.tab === "profile" && !st.prof) { await loadProfile(); panel(); }
+      if (st.tab === "profile" && !st.prof) { await loadProfile(); panel(); refreshTabs(); }
       if (st.tab === "invest" && !st.inv && !st.invErr) { await loadInv(); panel(); }
       if (full || st.tab === "companies") { if (st.cos === null && !st.cosErr) { await loadCompanies(); panel(); } }
     }

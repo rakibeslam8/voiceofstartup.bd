@@ -38,6 +38,55 @@
   if (user && avCached()) user.avatar = avCached();
   const isIn = () => !!user;
 
+  /* what this person needs in their menu: founders see their companies, investors see their investments, readers just browse */
+  const CTXK = "vosb-ctx";
+  let ctx = (() => { try { const j = JSON.parse(localStorage.getItem(CTXK) || "null"); return j && user && j.id === user.id ? j : null; } catch (e) { return null; } })();
+  function setCtx(d) {
+    ctx = d && user ? { id: user.id, type: d.user_type || "", co: +d.companies > 0, inv: +d.investing > 0 } : null;
+    try { if (ctx) localStorage.setItem(CTXK, JSON.stringify(ctx)); else localStorage.removeItem(CTXK); } catch (e) {}
+    paint();
+  }
+  function links() {
+    const L = [["/account", "👤", "আমার অ্যাকাউন্ট", "My account"]];
+    if (!ctx) { L.push(["/companies", "🔎", "কোম্পানি দেখুন", "Browse companies"], ["/list-your-company", "➕", "কোম্পানি লিস্ট করুন", "List your company"]); return L; }
+    const founder = ctx.type === "founder" || ctx.co, investor = ctx.type === "investor" || ctx.inv;
+    if (founder) L.push(["/account#companies", "🏢", "আমার কোম্পানি", "My companies"]);
+    if (investor) L.push(["/account#invest", "💼", "আমার বিনিয়োগ", "My investments"]);
+    if (founder) L.push(["/list-your-company", "➕", "কোম্পানি লিস্ট করুন", "List your company"]);
+    if (!founder || investor) L.push(["/companies", "🔎", "কোম্পানি দেখুন", "Browse companies"]);
+    return L;
+  }
+  const linkHtml = (cls) => links().map((l) => `<a ${cls ? `class="${cls}" ` : ""}role="menuitem" href="${l[0]}"><span aria-hidden="true">${l[1]}</span> ${T(l[2], l[3])}</a>`).join("");
+
+  /* a small, safe copy of a chosen photo (max 384px) */
+  function shrink(file, max) {
+    return new Promise((res, rej) => {
+      if (!file || !/^image\//.test(file.type)) return rej(new Error(T("ছবির ফাইল বেছে নিন।", "Please choose an image file.")));
+      if (file.size > 8 * 1024 * 1024) return rej(new Error(T("ছবিটি বড় (সর্বোচ্চ ৮ MB)।", "That photo is too big (max 8 MB).")));
+      const u = URL.createObjectURL(file), im = new Image();
+      im.onload = () => { URL.revokeObjectURL(u); const k = Math.min(1, max / Math.max(im.width, im.height)), w = Math.max(1, Math.round(im.width * k)), h = Math.max(1, Math.round(im.height * k)), cv = document.createElement("canvas"); cv.width = w; cv.height = h; cv.getContext("2d").drawImage(im, 0, 0, w, h); cv.toBlob((b) => (b ? res(b) : rej(new Error("image"))), "image/jpeg", 0.85); };
+      im.onerror = () => { URL.revokeObjectURL(u); rej(new Error(T("ছবিটি পড়া যায়নি।", "Could not read this image."))); };
+      im.src = u;
+    });
+  }
+  async function uploadAvatarBlob(blob) {
+    const c = await client(), path = `${user.id}/avatar-${Math.random().toString(36).slice(2, 10)}.jpg`;
+    const up = await c.storage.from("avatars").upload(path, blob, { contentType: "image/jpeg", upsert: false, cacheControl: "31536000" }); if (up.error) throw up.error;
+    const url = c.storage.from("avatars").getPublicUrl(path).data.publicUrl, r = await rpc("update_my_profile", { p: { avatar_url: url } }); if (r.error) throw r.error;
+    setAvatar(url);
+  }
+  /* sign-up photo/role chosen before the e-mail was confirmed are applied at the first login */
+  const PENDK = "vosb-signup";
+  async function applyPending() {
+    try {
+      const j = JSON.parse(localStorage.getItem(PENDK) || "null"); if (!j || !user || String(j.email).toLowerCase() !== String(user.email).toLowerCase()) return;
+      localStorage.removeItem(PENDK);
+      if (j.role) await rpc("update_my_profile", { p: { user_type: j.role } });
+      if (j.photo) { const b = await (await fetch(j.photo)).blob(); await uploadAvatarBlob(b); }
+      profileP = null; profile(true);
+    } catch (e) {}
+  }
+
   /* ---------- library + client ---------- */
   function loadLib() {
     if (window.supabase) return Promise.resolve();
@@ -70,7 +119,7 @@
   function profile(force) {
     if (!user) return Promise.resolve(null);
     if (profileP && !force) return profileP;
-    profileP = rpc("ensure_profile").then((r) => { profileRow = r.error ? null : r.data; if (profileRow) setAvatar(/^https:\/\//.test(profileRow.avatar_url || "") ? profileRow.avatar_url : ""); return profileRow; }).catch(() => null);
+    profileP = rpc("ensure_profile").then((r) => { profileRow = r.error ? null : r.data; if (profileRow) { rpc("my_context").then((x) => { if (!x.error && x.data) setCtx(x.data); }).catch(() => {}); applyPending(); } if (profileRow) setAvatar(/^https:\/\//.test(profileRow.avatar_url || "") ? profileRow.avatar_url : ""); return profileRow; }).catch(() => null);
     return profileP;
   }
 
@@ -134,6 +183,8 @@
       <div class="au-msg" id="au-msg" role="alert" aria-live="polite"></div>
       <form class="au-form" id="au-form" novalidate>
         ${mode === "signup" ? `<label>${T("আপনার নাম", "Your name")}<input name="name" autocomplete="name" maxlength="120" required></label>` : ""}
+        ${mode === "signup" ? `<fieldset class="au-role"><legend>${T("আপনি কে?", "I am a…")}</legend><div class="au-chips">${[["reader", "পাঠক", "Reader"], ["founder", "প্রতিষ্ঠাতা", "Founder"], ["investor", "বিনিয়োগকারী", "Investor"], ["other", "অন্যান্য", "Other"]].map((r, i) => `<label class="au-chip"><input type="radio" name="role" value="${r[0]}" ${i === 0 ? "checked" : ""}><span>${T(r[1], r[2])}</span></label>`).join("")}</div></fieldset>
+        <div class="au-photo"><span class="au-pv" id="au-pv" aria-hidden="true">📷</span><label class="au-pbtn"><span id="au-pt">${T("প্রোফাইল ছবি দিন (ঐচ্ছিক)", "Add a profile photo (optional)")}</span><input type="file" name="photo" accept="image/*" hidden></label></div>` : ""}
         ${mode !== "reset" ? `<label>${T("ইমেইল", "Email")}<input name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required></label>` : ""}
         ${mode !== "forgot" ? `<label>${mode === "reset" ? T("নতুন পাসওয়ার্ড", "New password") : T("পাসওয়ার্ড", "Password")}<span class="au-pw"><input name="pw" type="password" autocomplete="${mode === "login" ? "current-password" : "new-password"}" maxlength="72" minlength="8" required><button type="button" class="au-show" data-show>${EYE}</button></span></label>` : ""}
         <input type="text" name="website" class="au-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -156,6 +207,12 @@
       } catch (e) { g.disabled = false; setMsg(friendly(e), "err"); }
     });
     card.querySelector("#au-form").addEventListener("submit", (e) => { e.preventDefault(); submit(cfg, new FormData(e.target)); });
+    const ph = card.querySelector('input[name="photo"]');
+    if (ph) ph.addEventListener("change", async () => {
+      const pv = card.querySelector("#au-pv"), pt = card.querySelector("#au-pt");
+      try { const b = await shrink(ph.files[0], 96); pv.textContent = ""; pv.style.backgroundImage = `url(${URL.createObjectURL(b)})`; pt.textContent = T("ছবি বদলান", "Change photo"); setMsg(""); }
+      catch (e) { ph.value = ""; pv.style.backgroundImage = ""; pv.textContent = "📷"; setMsg(friendly(e), "err"); }
+    });
     const first = card.querySelector("input:not(.au-hp)"); if (first) first.focus();
   }
 
@@ -191,14 +248,21 @@
         if (error) throw error;
         toast(T("স্বাগতম!", "Welcome back!"), "ok");
       } else if (mode === "signup") {
-        const { data, error } = await c.auth.signUp({ email, password: pw, options: { data: { full_name: name }, emailRedirectTo: location.origin + "/account" } });
+        const role = ["reader", "founder", "investor", "other"].includes(f.get("role")) ? f.get("role") : "reader", photoFile = f.get("photo");
+        let small = null; if (photoFile && photoFile.size) { try { small = await shrink(photoFile, 384); } catch (e) { throw e; } }
+        const { data, error } = await c.auth.signUp({ email, password: pw, options: { data: { full_name: name, user_type: role }, emailRedirectTo: location.origin + "/account" } });
         if (error) throw error;
         if (!data.session) {   // e-mail confirmation is switched on in Supabase
+          try {
+            const photo = small && small.size < 400000 ? await new Promise((r) => { const fr = new FileReader(); fr.onload = () => r(String(fr.result)); fr.onerror = () => r(""); fr.readAsDataURL(small); }) : "";
+            localStorage.setItem(PENDK, JSON.stringify({ email, role, photo }));
+          } catch (e) {}
           if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) throw new Error("already registered");
           modal.querySelector(".au-card").innerHTML = `<button type="button" class="au-x" data-au-x aria-label="${T("বন্ধ করুন", "Close")}">✕</button><div class="au-done"><div class="au-ic">✉️</div><h2>${T("ইমেইল চেক করুন", "Check your email")}</h2><p>${T(`<b>${esc(email)}</b> ঠিকানায় একটি কনফার্মেশন লিংক পাঠানো হয়েছে। লিংকে ক্লিক করলেই অ্যাকাউন্ট চালু হবে।`, `We sent a confirmation link to <b>${esc(email)}</b>. Click it to activate your account.`)}</p></div>`;
           return;
         }
         toast(T("অ্যাকাউন্ট তৈরি হয়েছে। স্বাগতম!", "Account created. Welcome!"), "ok");
+        if (small) { setTimeout(() => { uploadAvatarBlob(small).catch(() => {}); }, 1200); }
       } else if (mode === "forgot") {
         const { error } = await c.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/account" });
         if (error) throw error;
@@ -217,9 +281,9 @@
   async function signOut() {
     try { const c = await client(); await Promise.race([c.auth.signOut({ scope: "local" }), new Promise((r) => setTimeout(r, 4000))]); } catch (e) { /* cleaned up below either way */ }
     /* belt and braces: whatever the library did, this device must forget the user right now */
-    try { localStorage.removeItem(KEY); localStorage.removeItem(AVK); sessionStorage.removeItem("vosb-prof"); } catch (e) {}
+    try { localStorage.removeItem(KEY); localStorage.removeItem(AVK); localStorage.removeItem(CTXK); sessionStorage.removeItem("vosb-prof"); } catch (e) {}
     if (user) {
-      user = null; profileRow = null; profileP = null; notif = { unread: 0, items: [], loaded: false };
+      user = null; ctx = null; profileRow = null; profileP = null; notif = { unread: 0, items: [], loaded: false };
       closeNotifs(); document.querySelectorAll(".ab-sheet.open").forEach((x) => x.classList.remove("open"));
       paint(); listeners.slice().forEach((f) => { try { f(user); } catch (e) {} }); document.dispatchEvent(new CustomEvent("vosb:auth", { detail: user }));
     }
@@ -270,12 +334,12 @@
       const nm = user.name || user.email;
       if (kind === "sheet") {
         el.innerHTML = `<a class="ab-login ab-in" href="/account">${avatar(user, "au-av")}<span class="ab-login-tx"><b>${esc(nm)}</b><small>${T("আমার অ্যাকাউন্ট", "My account")}</small></span></a>
-          <div class="ab-acct-row"><button type="button" data-act="notifs">🔔 ${T("নোটিফিকেশন", "Notifications")} <i class="au-dot" ${notif.unread ? "" : "hidden"}>${notif.unread > 9 ? "9+" : notif.unread}</i></button><a href="/account#companies">${T("আমার কোম্পানি", "My companies")}</a><button type="button" data-act="signout">${T("লগআউট", "Log out")}</button></div>`;
+          <div class="ab-acct-row"><button type="button" data-act="notifs">🔔 ${T("নোটিফিকেশন", "Notifications")} <i class="au-dot" ${notif.unread ? "" : "hidden"}>${notif.unread > 9 ? "9+" : notif.unread}</i></button><button type="button" data-act="signout">${T("লগআউট", "Log out")}</button></div>
+          <div class="st-links">${links().slice(1).map((l) => `<a href="${l[0]}"><span aria-hidden="true">${l[1]}</span><span>${T(l[2], l[3])}</span></a>`).join("")}</div>`;
       } else {
         el.innerHTML = `<div class="au-bellwrap"><button type="button" class="au-bell" data-bell aria-label="${T("নোটিফিকেশন", "Notifications")}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17h12l-1.5-2V11a4.500 4.500 0 0 0-9 0v4zM10 20a2 2 0 0 0 4 0"/></svg><i class="au-dot" ${notif.unread ? "" : "hidden"}>${notif.unread > 9 ? "9+" : notif.unread}</i></button></div><div class="au-menu"><button type="button" class="au-avb" aria-haspopup="menu" aria-expanded="false" aria-label="${T("অ্যাকাউন্ট মেনু", "Account menu")}">${avatar(user, "au-av")}</button>
           <div class="au-dd" role="menu" hidden><div class="au-who">${avatar(user, "au-av lg")}<div><b>${esc(nm)}</b><small>${esc(user.email)}</small></div></div>
-            <a role="menuitem" href="/account">${T("আমার অ্যাকাউন্ট", "My account")}</a><a role="menuitem" href="/account#companies">${T("আমার কোম্পানি", "My companies")}</a>
-            <a role="menuitem" href="/list-your-company">${T("কোম্পানি লিস্ট করুন", "List your company")}</a><button role="menuitem" type="button" data-act="signout">${T("লগআউট", "Log out")}</button></div></div>`;
+            ${linkHtml()}<button role="menuitem" type="button" data-act="signout">${T("লগআউট", "Log out")}</button></div></div>`;
       }
     });
   }
@@ -301,7 +365,7 @@
     setTimeout(() => { client().then((c) => c.auth.getSession()).catch(() => {}); }, 1500);
   }
 
-  window.VOSB_AUTH = { user: () => user, isIn, onChange, client, rpc, requireLogin, open, signOut, profile, paint, toast, setAvatar, loadNotifs, openNotifs, avatarHtml: (url, name, cls) => (url && /^https:\/\//.test(url) ? `<img class="${cls || "au-av"}" src="${esc(url)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="${cls || "au-av"}">${esc(((name || "?").trim()[0] || "?").toUpperCase())}</span>`) };
+  window.VOSB_AUTH = { ctx: () => ctx, links, linkHtml, user: () => user, isIn, onChange, client, rpc, requireLogin, open, signOut, profile, paint, toast, setAvatar, loadNotifs, openNotifs, avatarHtml: (url, name, cls) => (url && /^https:\/\//.test(url) ? `<img class="${cls || "au-av"}" src="${esc(url)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="${cls || "au-av"}">${esc(((name || "?").trim()[0] || "?").toUpperCase())}</span>`) };
   paint();
   if (user) { setTimeout(() => { loadNotifs(); try { if (!sessionStorage.getItem("vosb-prof")) { sessionStorage.setItem("vosb-prof", "1"); profile(); } } catch (e) { profile(); } }, 900); }
   onChange((u) => { if (u) { loadNotifs(); profile(true); } else { notif = { unread: 0, items: [], loaded: false }; try { localStorage.removeItem(AVK); sessionStorage.removeItem("vosb-prof"); } catch (e) {} } });

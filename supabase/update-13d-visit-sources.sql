@@ -1,0 +1,11 @@
+-- VOSB update 13d — "Where visitors come from" now counts VISITS (sessions), credited once to the
+-- source each visit started from, so it adds up to the Sessions number. Page views are shown beside it.
+-- Definitions used everywhere in the admin:  Visitor = one browser (unique) · Visit = one session · Page view = one page opened.
+-- Applied 2026-11-06. Aggregates only: raw rows in site_visits are never touched. Safe to re-run.
+-- NOTE: this release also replaced public.admin_site_stats_range(date, date); the full function lives in the database
+-- (Supabase → Database → Functions) and returns referrers as {source, sessions, views}.
+alter table public.stats_daily_dim add column if not exists sessions bigint not null default 0;
+-- stats_roll_day(p_day): the 'referrer' rows are now
+--   select p_day,'referrer',referrer,count(*),count(distinct visitor),count(*) filter (where rn=1)
+--   from (select referrer,visitor,row_number() over (partition by session_id order by visited_at) rn from site_visits where <that day>) s group by referrer
+-- and every day that still has raw rows was re-rolled once.

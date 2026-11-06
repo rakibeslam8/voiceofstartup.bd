@@ -568,3 +568,9 @@ a.co-row:active { transform: scale(.995); }
 .co-trow .meta { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: .84rem; color: var(--muted, #6b6258); }
 .co-trow .co-quote, .co-trow .co-sub { margin: 6px 0 0; }
 .co-trow .acts { display: flex; flex-wrap: wrap; gap: 8px; flex: 0 0 auto; }
+
+/* "Not provided" — what the owner left empty is shown as such, never filled in for them */
+.np{display:inline-block;padding:1px 8px;border-radius:999px;background:rgba(232,49,47,.1);color:#b3201d;font-size:.78rem;font-weight:700;white-space:nowrap}
+:root[data-theme="dark"] .np{background:rgba(232,49,47,.2);color:#ff9d9b}
+.co-miss{margin:8px 0;line-height:1.9}
+.msg.warn { background: #fff4df; color: #8a5200; }

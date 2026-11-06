@@ -172,7 +172,7 @@
       <div class="st-col">
         <section class="st-card"><h2>${T("অ্যাকাউন্ট", "Account")}</h2>
           <div class="ab-acct" data-auth-slot="sheet">${authInitial("sheet")}</div>
-          <div class="st-links"><a href="/account#companies">${abIc("company")}<span>${T("আমার কোম্পানি", "My companies")}</span></a><a href="/account#invest">${abIc("flame")}<span>${T("আমার বিনিয়োগ", "My investments")}</span></a><a href="/list-your-company">${abIc("plus")}<span>${T("কোম্পানি লিস্ট করুন", "List your company")}</span></a></div></section>
+</section>
         <section class="st-card"><h2>${T("পছন্দ", "Preferences")}</h2>
           <button class="ab-row" type="button" data-act="theme"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg><span>${T("ডার্ক মোড", "Dark mode")}</span><i class="ab-sw" aria-hidden="true"></i></button>
           <button class="ab-row" type="button" data-act="lang"><b class="ab-lg">${lang === "bn" ? "EN" : "বা"}</b><span>${T("ভাষা", "Language")}</span><em>${lang === "bn" ? "English" : "বাংলা"}</em></button>

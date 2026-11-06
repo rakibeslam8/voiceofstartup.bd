@@ -265,3 +265,23 @@ li.co-hasav.re .co-av { width: 30px; height: 30px; font-size: .8rem; }
 .co-lhero h1 { max-width: 24ch; text-wrap: balance; }
 @media (min-width: 641px) { .co-lhero h1 .g { white-space: nowrap; } }
 .co-lead { text-wrap: pretty; }
+
+/* ---------- phone: compact, like the news page (small type, slim bars, tighter cards) ---------- */
+@media (max-width: 560px) {
+  /* list-your-company */
+  .co-lhero { padding: 12px 0 18px; } .co-lhero h1 { font-size: 1.45rem; line-height: 1.25; text-wrap: balance; } .co-lead { font-size: .9rem; line-height: 1.55; margin-top: 6px; }
+  .co-lcta { display: flex; gap: 8px; flex-wrap: nowrap; margin-top: 12px; } .co-lcta .btn, .co-lcta .btn-lg { width: auto; flex: 1 1 0; min-width: 0; padding: 10px 10px; font-size: .88rem; min-height: 0; border-radius: 12px; white-space: normal; line-height: 1.25; text-align: center; box-shadow: none; }
+  .co-chips-row { gap: 6px; margin-top: 10px; } .co-chips-row li { font-size: .74rem; padding: 4px 9px; }
+  .co-hvis { min-height: 250px; } .co-pv { padding: 12px; } .co-pv h3, .co-pv b { font-size: .95rem; }
+  .co-who, .co-bens, .co-tl { gap: 8px; } .co-wcard, .co-ben, .co-vcard { padding: 12px 14px; } .co-wcard h3, .co-ben h3 { font-size: .98rem; } .co-wcard p, .co-ben p { font-size: .84rem; line-height: 1.5; }
+  .section-head h2, .co-valx h2 { font-size: 1.2rem; } .section { padding-top: 22px; padding-bottom: 22px; }
+  .co-fee-amt { font-size: 2rem; } .co-fee-btn { padding: 10px 16px; font-size: .92rem; }
+  /* companies directory */
+  .co-hero { padding: 10px 0 12px; } .co-hero h1 { font-size: 1.3rem; } .co-hero p { font-size: .84rem; }
+  .co-hero .btn, .co-cta .btn { padding: 9px 16px; font-size: .86rem; min-height: 0; box-shadow: none; }
+  .co-hero-side .co-search { padding: 4px 4px 4px 12px; } .co-search input { font-size: .9rem; } .co-search .btn { padding: 8px 14px; font-size: .86rem; min-height: 0; }
+  .co-stat { padding: 6px 8px; } .co-stat b { font-size: 1rem; } .co-stat span { font-size: .68rem; }
+  .co-chip, .co-cats a, .co-cats button { font-size: .78rem; padding: 6px 12px; }
+  .co-filters select, .co-filters input, select.co-sel { font-size: .85rem; padding: 8px 10px; min-height: 0; height: 38px; }
+  .co-card2 { padding: 12px; } .co-card2 h3 { font-size: 1rem; }
+}
