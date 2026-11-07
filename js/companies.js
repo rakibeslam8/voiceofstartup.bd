@@ -56,7 +56,7 @@
     const kv = c.vosb_valuation ? `<span class="co-kv"><i>${T("VOSB ভ্যালুয়েশন", "VOSB valuation")}</i><b>${money(c.vosb_valuation)}</b></span>` : c.seeking_amount ? `<span class="co-kv"><i>${T("তহবিল চাইছে", "Seeking")}</i><b>${money(c.seeking_amount)}</b></span>` : "";
     const open = c.invest_open !== false;
     return `<article class="co-card${c.featured ? " feat" : ""}">${c.featured ? `<span class="co-feat">★ ${T("ফিচার্ড", "Featured")}</span>` : ""}
-      <a class="co-main" href="/company/${esc(c.slug)}" aria-label="${esc(c.name)}">
+      <a class="co-cmain" href="/company/${esc(c.slug)}" aria-label="${esc(c.name)}">
         <div class="co-top">${logo(c, "co-logo")}<div class="co-nm"><h3>${esc(c.name)}</h3>${c.verified ? verified() : ""}</div></div>
         <p class="co-tag">${esc(c.tagline || "")}</p>
         <div class="co-tags">${c.category ? `<span>${esc(label(CO.industries, c.category))}</span>` : ""}${c.stage ? `<span>${esc(label(CO.stages, c.stage))}</span>` : ""}${loc ? `<span class="loc">📍 ${esc(loc)}</span>` : ""}</div>
@@ -231,8 +231,8 @@
         ${c.business_model ? `<section class="co-sec"><h2>${T("ব্যবসার মডেল", "Business model")}</h2>${paras(c.business_model)}</section>` : ""}
         ${c.highlights ? `<section class="co-sec"><h2>${T("বিশেষ অর্জন ও হাইলাইট", "Highlights")}</h2>${paras(c.highlights)}</section>` : ""}
         ${team.length ? `<section class="co-sec"><h2>${T("টিম", "Team")}</h2><ul class="co-team">${team.map((m) => `<li><span class="co-tav">${esc(initial(m.name))}</span><div><b>${esc(m.name)}</b><small>${esc(m.role || "")}</small></div></li>`).join("")}</ul></section>` : ""}
-        <section class="co-sec" id="co-rev-sec"><h2 id="co-rev-h">${T("রিভিউ ও রেটিং", "Reviews & ratings")}</h2><div id="co-rev"></div></section>
-        <section class="co-sec"><h2>${T("আলোচনা", "Discussion")}</h2><div id="co-com"></div></section>
+        <section class="co-sec co-late" id="co-rev-sec"><h2 id="co-rev-h">${T("রিভিউ ও রেটিং", "Reviews & ratings")}</h2><div id="co-rev"></div></section>
+        <section class="co-sec co-late"><h2>${T("আলোচনা", "Discussion")}</h2><div id="co-com"></div></section>
       </div><aside class="co-side">
         ${fr.length || c.use_of_funds ? `<section class="co-card2"><h2>${T("তহবিল ও ভ্যালুয়েশন", "Funding & valuation")}</h2><dl class="co-fund">${fr.map((r) => `<div class="${r[2] || ""}"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")}</dl>
           ${c.vosb_valuation && (c.valuation_date || c.valuation_note) ? `<p class="co-vnote">${c.valuation_date ? T("মূল্যায়নের তারিখ: ", "Assessed on ") + esc(U().formatDate(c.valuation_date)) + ". " : ""}${esc(c.valuation_note || "")}</p>` : ""}

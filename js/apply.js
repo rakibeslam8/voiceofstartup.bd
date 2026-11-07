@@ -20,6 +20,9 @@
   const nd = (n) => U().bnDigits(String(n));
   const money = (n) => "৳" + (U().lang === "bn" ? nd(Number(n).toLocaleString("en-IN")) : Number(n).toLocaleString("en-IN"));
   const rid = () => Math.random().toString(36).slice(2, 10);
+  /* Bangla digits (০-৯), commas, ৳ and the typographic minus are all accepted wherever a number is typed */
+  const en = (x) => String(x == null ? "" : x).replace(/[০-৯]/g, (d) => "০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/[−–—]/g, "-");
+  const pn = (x) => { const t = en(x).replace(/[,\s৳]/g, ""); return t === "" ? NaN : Number(t); };
   const MIN_DESC = 80;
 
   const st = { ready: false, id: null, co: null, priv: {}, fin: {}, finSaved: false, pays: [], docs: [], step: "info", vals: {}, social: {}, team: [{ name: "", role: "" }], dirty: false, saving: null, saveMsg: "", settings: null, pay: { screen: "A", method: "bkash", sender: "", trx: "", msg: "", busy: false, until: 0 }, subMsg: "", missing: [], err: "", done: false };
@@ -65,17 +68,17 @@
   function collect() {
     const f = $("#ap-form");
     if (f) {
-      for (const k of FIELDS) { const el = f.elements[k]; if (el) st.vals[k] = el.value; }
+      for (const k of FIELDS) { const el = f.elements[k]; if (el) st.vals[k] = el.hasAttribute("data-num") ? en(el.value).replace(/[,\s৳]/g, "") : el.value; }
       const t = f.elements.accepted_terms; if (t) st.vals.accepted_terms = t.checked;
       for (const [k] of SOC) { const el = f.elements["soc_" + k]; if (el) st.social[k] = el.value.trim(); }
       const rows = $$(".ap-trow", f); if (rows.length) st.team = rows.map((r) => ({ name: $("[name=tm_name]", r).value, role: $("[name=tm_role]", r).value }));
     }
   }
   function payload() {
-    const v = st.vals, num = (x) => (x === "" || x == null || isNaN(Number(x)) ? null : Number(x));
+    const v = st.vals, num = (x) => { const n = pn(x); return isFinite(n) ? n : null; };
     const p = { name: v.name, tagline: v.tagline, category: v.category, stage: v.stage, founded_year: num(v.founded_year), website: v.website, division: v.division, district: v.district, team_size: v.team_size, description: v.description, business_model: v.business_model, highlights: v.highlights,
       revenue_range: v.revenue_range, seeking_amount: num(v.seeking_amount), equity_offered: num(v.equity_offered), expected_valuation: num(v.expected_valuation), use_of_funds: v.use_of_funds, social: st.social, team: st.team.filter((m) => m.name.trim()) };
-    if (editable()) Object.assign(p, { legal_name: v.legal_name, reg_type: v.reg_type, reg_no: v.reg_no, tin: v.tin, bin: v.bin, contact_email: v.contact_email, contact_phone: v.contact_phone, address: v.address, accepted_terms: !!v.accepted_terms });
+    if (editable()) Object.assign(p, { legal_name: v.legal_name, reg_type: v.reg_type, reg_no: v.reg_no, tin: v.tin, bin: v.bin, contact_email: v.contact_email, contact_phone: en(v.contact_phone).replace(/[\s-]/g, ""), address: v.address, accepted_terms: !!v.accepted_terms });
     return p;
   }
   function saveNow(quiet) {
@@ -96,7 +99,7 @@
   function autosave() {
     st.dirty = true; st.saveMsg = ""; badge();
     clearTimeout(saveT);
-    saveT = setTimeout(() => { collect(); if (!st.id && String(st.vals.name || "").trim().length < 2) return; saveNow(true).catch(() => {}); }, 1800);
+    saveT = setTimeout(() => { collect(); if (!st.id && String(st.vals.name || "").trim().length < 2) return; saveNow(true).catch(() => {}); }, 4000);
   }
   function badge() { const el = $("#ap-saved"); if (el) el.textContent = st.saveMsg || (st.dirty ? T("অসংরক্ষিত পরিবর্তন", "Unsaved changes") : ""); }
 
@@ -109,8 +112,17 @@
     if (!v.reg_type) m.push("reg_type");
     if (!String(v.legal_name).trim() && v.reg_type !== "not_registered") m.push("legal_name");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(v.contact_email).trim())) m.push("contact_email");
-    if (!/^(\+?88)?01[3-9]\d{8}$/.test(String(v.contact_phone).replace(/[\s-]/g, ""))) m.push("contact_phone");
+    if (!/^(\+?88)?01[3-9]\d{8}$/.test(en(v.contact_phone).replace(/[\s-]/g, ""))) m.push("contact_phone");
     if (!v.accepted_terms) m.push("terms");
+    return m;
+  }
+  /* numbers that are typed but impossible (equity over 100 %, a year in the future …) — told to the founder instead of being silently clamped */
+  function infoBad() {
+    collect(); const v = st.vals, m = [], chk = (k, lo, hi, bn, en_) => { const n = pn(v[k]); if (String(v[k]).trim() !== "" && (!isFinite(n) || n < lo || n > hi)) m.push([k, T(bn, en_)]); };
+    chk("founded_year", 1900, new Date().getFullYear() + 1, "প্রতিষ্ঠার সাল ১৯০০ থেকে চলতি বছরের মধ্যে হতে হবে", "Year founded must be between 1900 and this year");
+    chk("equity_offered", 0, 100, "ইকুইটি ০–১০০% এর মধ্যে হতে হবে", "Equity must be between 0 and 100 %");
+    chk("seeking_amount", 0, 1e13, "তহবিলের পরিমাণ সঠিক সংখ্যায় লিখুন", "Enter the funding amount as a valid number");
+    chk("expected_valuation", 0, 1e13, "প্রত্যাশিত ভ্যালুয়েশন সঠিক সংখ্যায় লিখুন", "Enter the expected valuation as a valid number");
     return m;
   }
   const hasDoc = (t) => st.docs.some((d) => d.doc_type === t);
@@ -181,7 +193,7 @@
     let ctl;
     if (opt.sel) ctl = `<select id="${id}" name="${k}"${dis}><option value="">${T("বেছে নিন", "Choose")}</option>${opt.sel.map((o) => `<option value="${esc(o[0])}"${String(v) === String(o[0]) ? " selected" : ""}>${esc(o[1])}</option>`).join("")}</select>`;
     else if (opt.area) ctl = `<textarea id="${id}" name="${k}" rows="${opt.area}" maxlength="${opt.max || 1500}"${dis} placeholder="${esc(opt.ph || "")}">${esc(v)}</textarea>`;
-    else ctl = `<input id="${id}" name="${k}" type="${opt.type || "text"}" ${opt.min != null ? `min="${opt.min}"` : ""} ${opt.maxn != null ? `max="${opt.maxn}"` : ""} maxlength="${opt.max || 160}" value="${esc(v)}"${dis} placeholder="${esc(opt.ph || "")}" ${opt.inm ? `inputmode="${opt.inm}"` : ""} ${opt.ac ? `autocomplete="${opt.ac}"` : ""}>`;
+    else ctl = `<input id="${id}" name="${k}" type="${opt.type === "number" ? "text" : opt.type || "text"}" ${opt.type === "number" ? `data-num data-label="${esc(String(lbl).replace(/<[^>]*>/g, ""))}"` : ""} ${opt.min != null ? `data-min="${opt.min}"` : ""} ${opt.maxn != null ? `data-max="${opt.maxn}"` : ""} maxlength="${opt.max || 160}" value="${esc(v)}"${dis} placeholder="${esc(opt.ph || "")}" ${opt.inm ? `inputmode="${opt.inm}"` : ""} ${opt.ac ? `autocomplete="${opt.ac}"` : ""}>`;
     return `<div class="ac-fld${opt.span ? " ac-span" : ""}"><label for="${id}">${lbl}${opt.req ? ' <i class="req">*</i>' : ""}</label>${ctl}${opt.help ? `<small class="ac-help">${opt.help}</small>` : ""}<small class="ac-err" data-err="${k}"></small></div>`; };
   function imgField(kind, lbl, url, help) {
     const has = !!url;
@@ -248,6 +260,8 @@
       const first = $(`[name="${bad[0] === "terms" ? "accepted_terms" : bad[0]}"]`); if (first) first.focus();
       return;
     }
+    const nb = infoBad();
+    if (nb.length) { nb.forEach((x) => { const e = $(`[data-err="${x[0]}"]`); if (e) e.textContent = x[1]; }); msg.className = "ac-msg err"; msg.textContent = nb.map((x) => x[1]).join(" · "); const first = $(`[name="${nb[0][0]}"]`); if (first) first.focus(); return; }
     const btn = $("#ap-form [type=submit]"); btn.disabled = true;
     try { await saveNow(liveMode ? false : true); if (liveMode) { msg.className = "ac-msg ok"; msg.textContent = T("সংরক্ষণ হয়েছে ✓", "Saved ✓"); } else go("fin"); }
     catch (e) { msg.className = "ac-msg err"; msg.textContent = friendly(e); }
@@ -265,7 +279,7 @@
     return "";
   }
   const nf = (k, lbl, o) => { o = o || {}; const v = st.fin[k] == null ? "" : st.fin[k];
-    return `<div class="ac-fld"><label for="n-${k}">${lbl}</label><div class="ap-numwrap"><input id="n-${k}" name="${k}" type="number" step="any" ${o.min != null ? `min="${o.min}"` : ""} ${o.max != null ? `max="${o.max}"` : ""} inputmode="decimal" value="${esc(v)}" placeholder="${esc(o.ph || "0")}" data-hint="${o.pct || o.cnt ? "" : "1"}"><span class="ap-unit">${o.pct ? "%" : o.cnt ? "" : "৳"}</span></div><small class="ac-help" data-h="${k}">${o.pct || o.cnt ? "" : esc(lakh(v))}</small>${o.help ? `<small class="ac-help">${o.help}</small>` : ""}</div>`; };
+    return `<div class="ac-fld"><label for="n-${k}">${lbl}</label><div class="ap-numwrap"><input id="n-${k}" name="${k}" type="text" data-num data-label="${esc(String(lbl).replace(/<[^>]*>/g, ""))}" ${o.min != null ? `data-min="${o.min}"` : ""} ${o.max != null ? `data-max="${o.max}"` : ""} maxlength="20" autocomplete="off" inputmode="${o.min != null && o.min >= 0 ? "decimal" : "text"}" value="${esc(v)}" placeholder="${esc(o.ph || "0")}" data-hint="${o.pct || o.cnt ? "" : "1"}"><span class="ap-unit">${o.pct ? "%" : o.cnt ? "" : "৳"}</span></div><small class="ac-help" data-h="${k}">${o.pct || o.cnt ? "" : esc(lakh(pn(v)))}</small>${o.help ? `<small class="ac-help">${o.help}</small>` : ""}</div>`; };
   function finView(el) {
     if (!st.id) { el.innerHTML = `<div class="ac-card ac-center"><p>${T("আগে কোম্পানির তথ্য সংরক্ষণ করুন।", "Save your company details first.")}</p><button class="btn btn-orange" data-step="info">${T("তথ্য দিন", "Company info")}</button></div>`; return; }
     el.innerHTML = `<form id="fin-form" class="ac-card ac-form ap-form" novalidate>
@@ -290,7 +304,10 @@
   }
   async function finSubmit() {
     const f = $("#fin-form"), msg = $("#ap-msg"), p = {}; msg.className = "ac-msg"; msg.textContent = "";
-    for (const k of FIN_NUM) { const el = f.elements[k]; if (!el) continue; const v = el.value.trim(); p[k] = v === "" ? null : Number(v); if (v !== "" && !isFinite(p[k])) { msg.className = "ac-msg err"; msg.textContent = T("সংখ্যা ঠিকভাবে লিখুন।", "Please enter valid numbers."); return; } }
+    for (const k of FIN_NUM) { const el = f.elements[k]; if (!el) continue; const v = el.value.trim(); p[k] = v === "" ? null : pn(v);
+      if (v !== "" && !isFinite(p[k])) { msg.className = "ac-msg err"; msg.textContent = T("সংখ্যা ঠিকভাবে লিখুন: ", "Please enter a valid number: ") + el.dataset.label; el.focus(); return; }
+      const lo = el.dataset.min, hi = el.dataset.max;
+      if (p[k] != null && ((lo !== undefined && lo !== "" && p[k] < Number(lo)) || (hi !== undefined && hi !== "" && p[k] > Number(hi)))) { msg.className = "ac-msg err"; msg.textContent = el.dataset.label + ": " + T("মান অনুমোদিত সীমার বাইরে (", "value out of range (") + (lo !== undefined && lo !== "" ? lo : "−∞") + " … " + (hi !== undefined && hi !== "" ? hi : "∞") + ")"; el.focus(); return; } }
     p.traction = f.elements.traction.value; p.owner_note = f.elements.owner_note.value;
     const btn = $("[type=submit]", f); btn.disabled = true;
     try { await rpc("save_company_financials", { p_company: st.id, p }); st.fin = Object.assign({}, st.fin, p); st.finSaved = true; go("docs"); }
@@ -400,7 +417,7 @@
         <button class="btn btn-orange pay-go" type="button" data-pay="verify" ${P.busy ? "disabled" : ""}>${P.busy ? T("জমা হচ্ছে…", "Saving…") : T("পেমেন্ট নিশ্চিত করুন — এখনই এগিয়ে যান", "Confirm payment — continue now")}</button>
         <p class="pay-note">${T("TrxID দিলেই আপনি সাথে সাথে আবেদন জমা দিতে পারবেন — অপেক্ষার দরকার নেই। VOSB টিম পরে মিলিয়ে দেখবে; ভুল হলে আপনাকে জানানো হবে এবং ঠিক তথ্য দিতে হবে।", "Enter your TrxID and you can submit straight away — no waiting. The VOSB team checks it afterwards; if something is wrong we notify you so you can correct it.")}</p>
         <button class="btn btn-outline" type="button" data-pay="toB">← ${T("পেছনে", "Back")}</button></div>`;
-      clearInterval(tick); tick = setInterval(() => { const t = $("#pay-t"); if (!t) return clearInterval(tick); const s = Math.max(0, Math.round((P.until - Date.now()) / 1000)); t.textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); if (!s) { clearInterval(tick); P.until = 0; P.screen = "B"; P.msg = T("সময় শেষ হয়েছে — আবার শুরু করুন।", "Time is up — please start again."); payView($("#ap-body")); } }, 1000);
+      clearInterval(tick); tick = setInterval(() => { const t = $("#pay-t"); if (!t) return clearInterval(tick); const s = Math.max(0, Math.round((P.until - Date.now()) / 1000)); t.textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); if (!s) { clearInterval(tick); const m = $("#pay-msg"); if (m) { m.className = "ac-msg"; m.textContent = T("সময় শেষ হলেও সমস্যা নেই — টাকা পাঠানো হয়ে থাকলে TrxID দিয়ে নিশ্চিত করুন।", "The timer is only a guide — if you have already sent the money, enter your TrxID and confirm."); } } }, 1000);
     }
   }
   function sentView(el, pr) {
@@ -415,13 +432,13 @@
     const P = st.pay;
     if (a === "toA") { P.screen = "A"; P.msg = ""; return payView($("#ap-body")); }
     if (a === "toB") { if (P.screen === "A" && !methodInfo(P.method).enabled) return; P.screen = "B"; P.msg = ""; P.until = 0; clearInterval(tick); return payView($("#ap-body")); }
-    if (a === "toC") { const s = ($("#pay-snd").value || "").replace(/[\s-]/g, ""); P.sender = s;
+    if (a === "toC") { const s = en($("#pay-snd").value || "").replace(/[\s-]/g, ""); P.sender = s;
       if (!/^(\+?88)?01[3-9]\d{8}$/.test(s)) { P.msg = T("সঠিক মোবাইল নম্বর দিন (01XXXXXXXXX)।", "Enter a valid mobile number (01XXXXXXXXX)."); return payView($("#ap-body")); }
       P.msg = ""; P.screen = "C"; P.until = 0; return payView($("#ap-body")); }
     if (a === "copyamt") { const n = String(($("#pay-amt") || { dataset: {} }).dataset.v || ""); try { await navigator.clipboard.writeText(n); toast(T("পরিমাণ কপি হয়েছে ✓ (" + n + ")", "Amount copied ✓ (" + n + ")"), "ok"); } catch (e) { toast(n, ""); } return; }
     if (a === "copy") { const n = ($("#pay-num") || {}).textContent || ""; try { await navigator.clipboard.writeText(n); toast(T("নম্বর কপি হয়েছে ✓", "Number copied ✓"), "ok"); } catch (e) { toast(n, ""); } return; }
     if (a === "verify") {
-      P.trx = ($("#pay-trx").value || "").replace(/\s/g, "").toUpperCase();
+      P.trx = en($("#pay-trx").value || "").replace(/\s/g, "").toUpperCase();
       if (!/^[A-Z0-9]{8,14}$/.test(P.trx)) { P.msg = T("পেমেন্টের SMS-এ যেমন আছে হুবহু TrxID লিখুন (৮–১৪ অক্ষর, ইংরেজি অক্ষর ও সংখ্যা)।", "Enter the TrxID exactly as in your payment SMS (8–14 letters/numbers)."); return payView($("#ap-body")); }
       P.busy = true; P.msg = ""; payView($("#ap-body"));
       try { await rpc("submit_listing_payment", { p_company: st.id, p_method: P.method, p_sender: P.sender, p_trx: P.trx }); P.busy = false; P.trx = ""; P.until = 0; clearInterval(tick); await reloadParts(); toast(T("পেমেন্টের তথ্য জমা হয়েছে ✓", "Payment details saved ✓"), "ok"); payView($("#ap-body")); }
@@ -489,7 +506,7 @@
     if (el.name === "division") { collect(); st.vals.district = ""; infoView($("#ap-body"), live()); autosave(); return; }
     if (el.closest("#ap-form")) autosave();
   });
-  root.addEventListener("input", (e) => { const n = e.target; if (n.dataset && n.dataset.hint) { const h = $(`[data-h="${n.name}"]`); if (h) h.textContent = lakh(n.value); return; } if (e.target.closest("#ap-form") && !/^(SELECT)$/.test(e.target.tagName)) autosave(); });
+  root.addEventListener("input", (e) => { const n = e.target; if (n.dataset && n.dataset.hint) { const h = $(`[data-h="${n.name}"]`); if (h) h.textContent = lakh(pn(n.value)); return; } if (e.target.closest("#ap-form") && !/^(SELECT)$/.test(e.target.tagName)) autosave(); });
   root.addEventListener("submit", (e) => { const f = e.target.closest("#ap-form"); if (f) { e.preventDefault(); infoSubmit(live()); return; } if (e.target.closest("#fin-form")) { e.preventDefault(); finSubmit(); } });
   window.addEventListener("beforeunload", (e) => { if (st.dirty && editable()) { e.preventDefault(); e.returnValue = ""; } });
 

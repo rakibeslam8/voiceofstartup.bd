@@ -291,8 +291,8 @@ li.co-hasav.re .co-av { width: 30px; height: 30px; font-size: .8rem; }
 }
 
 /* card = one link (the info) + an action row (view / invest) */
-.co-main { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; color: inherit; }
-.co-main:hover { color: inherit; }
+.co-cmain { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; color: inherit; }
+.co-cmain:hover { color: inherit; }
 .co-act { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
 .co-btn { display: flex; align-items: center; justify-content: center; text-align: center; min-height: 40px; padding: 8px 10px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); color: var(--text); font: 700 .88rem var(--font-body); line-height: 1.2; transition: background .15s, border-color .15s, color .15s; }
 .co-btn:hover { border-color: var(--orange); color: var(--orange-dark); }
@@ -302,3 +302,6 @@ li.co-hasav.re .co-av { width: 30px; height: 30px; font-size: .8rem; }
 .co-btn.off:hover { border-color: var(--line); color: var(--muted); }
 .co-nm h3 { max-width: 100%; }
 @media (max-width: 640px) { .co-card { padding: 14px; } .co-top { padding-right: 0; } .co-card.feat .co-top { padding-top: 24px; } .co-card.feat .co-feat { top: 10px; right: 10px; } .co-logo { width: 48px; height: 48px; } .co-btn { min-height: 42px; font-size: .9rem; } }
+
+/* profile: on single-column layouts, reviews + discussion come last (after funding & details) */
+@media (max-width: 1024px) { .co-layout { display: flex; flex-direction: column; gap: 18px; } .co-layout > .co-main { display: contents; } .co-layout > .co-main > .co-sec { order: 0; } .co-layout > .co-side { order: 1; width: 100%; } .co-layout > .co-main > .co-late { order: 2; } }

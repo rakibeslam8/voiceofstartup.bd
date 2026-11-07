@@ -108,7 +108,7 @@
         if (nu) { const keep = (user && user.id === nu.id && user.avatar) || ""; user = nu; const c2 = avCached(); if (c2 || keep) user.avatar = c2 || keep; } else user = nu;
         if (ev === "PASSWORD_RECOVERY") { open("reset"); }
         if (changed) { profileRow = null; profileP = null; paint(); listeners.slice().forEach((f) => { try { f(user); } catch (e) {} }); document.dispatchEvent(new CustomEvent("vosb:auth", { detail: user })); }
-        if (changed && nu) { closeModal(); resolvePending(nu); }
+        if (changed && nu) { if (ev !== "PASSWORD_RECOVERY") closeModal(); resolvePending(nu); }
       });
       return sb;
     }).catch((e) => { sbP = null; throw e; });
@@ -251,7 +251,12 @@
     if (/not confirmed/i.test(m)) return T("আগে ইমেইলের লিংকে ক্লিক করে অ্যাকাউন্ট কনফার্ম করুন।", "Please confirm your email first (check your inbox).");
     if (/already registered|already been registered/i.test(m)) return T("এই ইমেইলে আগেই অ্যাকাউন্ট আছে — লগইন করুন।", "This email already has an account — please log in.");
     if (/signups? not allowed|signup.*disabled/i.test(m)) return T("নতুন অ্যাকাউন্ট খোলা সাময়িকভাবে বন্ধ আছে। একটু পরে আবার চেষ্টা করুন — অথবা editor@voiceofstartup.bd-এ জানান।", "New sign-ups are temporarily closed. Please try again shortly — or tell us at editor@voiceofstartup.bd.");
-    if (/rate limit|too many|over_email_send/i.test(m)) return T("অনেকবার চেষ্টা হয়েছে। একটু পরে আবার চেষ্টা করুন।", "Too many attempts. Please try again in a little while.");
+    const wait = m.match(/after (\d+) seconds?/i);
+    if (wait) return T(`নিরাপত্তার জন্য ${window.VOSB_UI && VOSB_UI.bnDigits ? VOSB_UI.bnDigits(wait[1]) : wait[1]} সেকেন্ড পরে আবার চেষ্টা করুন।`, `For security, please wait ${wait[1]} seconds and try again.`);
+    if (/rate limit|too many|over_email_send|over_request/i.test(m)) return T("অনেকবার চেষ্টা হয়েছে। একটু পরে আবার চেষ্টা করুন।", "Too many attempts. Please try again in a little while.");
+    if (/different from the old|same as the old/i.test(m)) return T("নতুন পাসওয়ার্ড আগেরটির থেকে আলাদা হতে হবে।", "The new password must be different from the old one.");
+    if (/invalid.*email|unable to validate email|email address.*invalid/i.test(m)) return T("সঠিক ইমেইল ঠিকানা দিন।", "Please enter a valid email address.");
+    if (/session.*(missing|expired)|jwt expired|refresh token/i.test(m)) return T("সেশনের মেয়াদ শেষ — আবার লগইন করুন।", "Your session has expired — please log in again.");
     if (/provider is not enabled|unsupported provider/i.test(m)) return T("Google লগইন এখনও চালু হয়নি।", "Google login is not switched on yet.");
     if (/weak|password should|at least/i.test(m)) return T("পাসওয়ার্ড আরও শক্ত করুন (কমপক্ষে ৮ অক্ষর)।", "Please use a stronger password (at least 8 characters).");
     if (/network|fetch|load/i.test(m)) return T("ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।", "Please check your connection and try again.");
