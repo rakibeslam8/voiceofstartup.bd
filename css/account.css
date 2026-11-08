@@ -205,3 +205,26 @@ html[data-theme="dark"] .pay-num { background: #2b0f1c; }
 }
 .ac-delreq { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 12px; background: var(--card); font-size: .88rem; }
 .ac-danger { color: #b3261e; border-color: currentColor; }
+
+/* ---------- /reset-password + /auth-confirm ---------- */
+.rs-wrap { max-width: 520px; }
+.rs-card { margin-inline: auto; }
+.rs-ic { font-size: 2.6rem; line-height: 1; margin-bottom: 6px; text-align: center; }
+.rs-card h2 { text-align: center; font-size: 1.35rem; margin-bottom: 6px; }
+.rs-card > .muted { text-align: center; margin-bottom: 14px; font-size: .94rem; }
+.rs-pw { position: relative; }
+.rs-pw input { padding-right: 46px; }
+.rs-eye { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border: 0; background: transparent; cursor: pointer; font-size: 1.05rem; opacity: .7; border-radius: 10px; }
+.rs-eye:hover { opacity: 1; background: var(--orange-soft); }
+.rs-rules { display: grid; gap: 4px; margin: 4px 0 10px; font-size: .86rem; color: var(--muted); }
+.rs-rules li::before { content: "○ "; }
+.rs-rules li.ok { color: var(--green); font-weight: 600; }
+.rs-rules li.ok::before { content: "✓ "; }
+.rs-go { width: 100%; margin-top: 6px; }
+.rs-code { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 12px; }
+.rs-code summary { cursor: pointer; font-weight: 700; font-size: .92rem; color: var(--orange-dark); }
+.rs-code form { margin-top: 12px; display: grid; gap: 10px; }
+.rs-hint { margin-top: 14px; font-size: .84rem; text-align: center; }
+.rs-ok .rs-ic { font-size: 3rem; }
+.rs-card .ac-center, .rs-card.ac-center { padding: 30px 20px; }
+@media (max-width: 560px) { .rs-card { padding: 18px 16px; } .rs-card h2 { font-size: 1.2rem; } }

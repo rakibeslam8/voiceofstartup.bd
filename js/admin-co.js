@@ -136,8 +136,11 @@ window.VOSB_ADMIN_CO = function (X) {
     view.innerHTML = `<div class="page-h"><h1>Companies</h1></div>${tabs(kind, cc)}${loadingCard()}`;
     let rows, c;
     try {
-      [rows, c] = await Promise.all([fetchAll(() => sb.from("companies").select(LIST_COLS).order("created_at", { ascending: false }).order("id")), counts(true)]);
+      let vs;
+      [rows, c, vs] = await Promise.all([fetchAll(() => sb.from("companies").select(LIST_COLS).order("created_at", { ascending: false }).order("id")), counts(true), sb.from("company_view_stats").select("company_id,views_total").limit(5000)]);
       rows = must(rows) || [];
+      const vm = {}; ((vs && vs.data) || []).forEach((x) => { vm[x.company_id] = x.views_total; });   // views are admin-only data: the public column is always 0
+      rows.forEach((r) => { r.views = vm[r.id] || 0; });
     } catch (e) { view.innerHTML = `<div class="page-h"><h1>Companies</h1></div>${errorCard(e)}`; return; }
     if (!view.isConnected) return;
     refreshBadges();
@@ -288,6 +291,7 @@ window.VOSB_ADMIN_CO = function (X) {
               : `<p style="margin-top:10px"><button type="button" class="b b-line b-sm co-trashbtn" data-a="trash">🗑 Move to trash</button></p>`}
             <p class="muted co-sub" style="margin-top:10px">“Request changes” and “Reject” need a note — the applicant sees it. Publishing makes the company page live.</p></div>
           <div class="card"><h2>Payment</h2>${payCard}</div>
+          <div class="card" id="co-viewcard"><h2>Profile views <span class="muted" style="font-weight:600;font-size:.8rem">admin only</span></h2><p class="muted">Loading…</p></div>
           <div class="card" id="co-valcard"><h2>Valuation</h2><p class="muted">Loading…</p></div>
           <div class="card" id="co-invcard"><h2>Investors &amp; fees</h2><p class="muted">Loading…</p></div>
           <div class="card"><h2>Your private fields</h2><div id="co-meta"><p class="muted">Loading…</p></div></div>
@@ -311,7 +315,7 @@ window.VOSB_ADMIN_CO = function (X) {
       <div class="card co-sec"><h2>Comments <span class="muted">(${fmtN(comments.length)})</span></h2>${comments.length ? comments.map((r) => commentItem(r)).join("") : `<p class="muted">No comments yet.</p>`}</div>
       <div class="card co-sec"><h2>Investor interest <span class="muted">(${fmtN(interests.length)})</span></h2>${interests.length ? interests.map((r) => interestItem(r)).join("") : `<p class="muted">No investor has shown interest yet.</p>`}</div>`;
 
-    companyMoney(view, c, pays); metaBox("company", c.id, $("#co-meta", view));
+    companyViews(view, c); companyMoney(view, c, pays); metaBox("company", c.id, $("#co-meta", view));
 
     /* ---- form state ---- */
     const form = $("#cof", view);
@@ -740,6 +744,19 @@ window.VOSB_ADMIN_CO = function (X) {
       must(await sb.from("admin_meta").upsert({ scope, ref_id: refId, data: out, note: $("#mf-note", host).value.trim() || null, updated_at: new Date().toISOString() }, { onConflict: "scope,ref_id" }));
       $("[data-mf-msg]", host).textContent = "Saved ✓";
     }));
+  }
+
+  /* company page: profile views (only the admin ever sees these numbers) */
+  async function companyViews(view, c) {
+    const box = $("#co-viewcard", view); if (!box) return;
+    let V;
+    try { V = must(await sb.rpc("admin_company_views", { p_company: c.id })); } catch (e) { box.innerHTML = `<h2>Profile views</h2><p class="msg err">${esc(e.message || e)}</p>`; return; }
+    if (!view.isConnected) return;
+    const series = (V && V.series) || [], max = Math.max(1, ...series.map((x) => Number(x.n) || 0));
+    box.innerHTML = `<h2>Profile views <span class="muted" style="font-weight:600;font-size:.8rem">admin only</span></h2>
+      <div class="co-vtiles"><div><b>${fmtN(V.total)}</b><small>Total</small></div><div><b>${fmtN(V.today)}</b><small>Today</small></div><div><b>${fmtN(V.d7)}</b><small>7 days</small></div><div><b>${fmtN(V.d30)}</b><small>30 days</small></div><div><b>${fmtN(V.visitors)}</b><small>Unique visitors</small></div></div>
+      <div class="co-vbars" role="img" aria-label="Views in the last 14 days">${series.map((x) => `<i title="${esc(x.d)}: ${Number(x.n) || 0}" style="height:${Math.max(4, Math.round(((Number(x.n) || 0) / max) * 100))}%"></i>`).join("")}</div>
+      <p class="muted co-sub">Last 14 days${V.last_view_at ? " · last view " + esc(fmtDT(V.last_view_at)) : ""}. Visitors and owners cannot see these numbers.</p>`;
   }
 
   /* company page: valuation + investment control cards */

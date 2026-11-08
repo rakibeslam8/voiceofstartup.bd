@@ -583,3 +583,11 @@ a.co-row:active { transform: scale(.995); }
   .co-tabs a { min-height: 38px; padding: 0 13px; font-size: .88rem; }
   .seg { display: flex; width: 100%; } .seg button { flex: 1; white-space: nowrap; padding: 9px 10px; }
 }
+
+/* company profile views (admin only) */
+.co-vtiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin: 6px 0 12px; }
+.co-vtiles > div { background: var(--bg, #faefe0); border: 1px solid var(--line, #e4d6c2); border-radius: 12px; padding: 8px 6px; text-align: center; }
+.co-vtiles b { display: block; font: 800 1.15rem var(--font-head, serif); } .co-vtiles small { color: var(--muted, #6b6258); font-size: .72rem; }
+.co-vbars { display: flex; align-items: flex-end; gap: 4px; height: 64px; padding: 4px 2px; border-bottom: 1px solid var(--line, #e4d6c2); }
+.co-vbars i { flex: 1; background: linear-gradient(180deg, #ff7522, #e55f0f); border-radius: 4px 4px 0 0; min-height: 4px; }
+@media (max-width: 520px) { .co-vtiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

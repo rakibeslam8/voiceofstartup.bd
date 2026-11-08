@@ -11,6 +11,7 @@
   "use strict";
   const C = window.VOSB || {}, S = C.supabase || {};
   const KEY = "vosb-user-auth";
+  const ON_RESET = /^\/(reset-password|auth-confirm)\/?$/.test(location.pathname);   // those pages (js/reset.js) read the e-mail link themselves
   const UI = () => window.VOSB_UI || {};
   const T = (bn, en) => (UI().T ? UI().T(bn, en) : bn);
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -106,7 +107,7 @@
         const nu = mapUser(sess && sess.user);
         const changed = (nu && nu.id) !== (user && user.id);
         if (nu) { const keep = (user && user.id === nu.id && user.avatar) || ""; user = nu; const c2 = avCached(); if (c2 || keep) user.avatar = c2 || keep; } else user = nu;
-        if (ev === "PASSWORD_RECOVERY") { open("reset"); }
+        if (ev === "PASSWORD_RECOVERY" && !ON_RESET) { open("reset"); }
         if (changed) { profileRow = null; profileP = null; paint(); listeners.slice().forEach((f) => { try { f(user); } catch (e) {} }); document.dispatchEvent(new CustomEvent("vosb:auth", { detail: user })); }
         if (changed && nu) { if (ev !== "PASSWORD_RECOVERY") closeModal(); resolvePending(nu); }
       });
@@ -297,7 +298,7 @@
         toast(T("অ্যাকাউন্ট তৈরি হয়েছে। স্বাগতম!", "Account created. Welcome!"), "ok");
         if (small) { setTimeout(() => { uploadAvatarBlob(small).catch(() => {}); }, 1200); }
       } else if (mode === "forgot") {
-        const { error } = await c.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/account" });
+        const { error } = await c.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/reset-password" });
         if (error) throw error;
         return setMsg(T("রিসেট লিংক পাঠানো হয়েছে — ইনবক্স চেক করুন।", "Reset link sent — please check your inbox."), "ok");
       } else if (mode === "reset") {
@@ -390,7 +391,9 @@
 
   /* ---------- start-up ---------- */
   const q = location.hash + location.search;
-  if (/[#&?](access_token|code|error_description)=/.test(q) || /type=recovery/.test(q)) {    // coming back from Google / an e-mail link
+  if (!ON_RESET && (/[#&?]type=recovery/.test(q) || /error_code=otp_expired/.test(q))) {    // a reset link that landed on the wrong page (Site URL setting): send it to the page that handles it, token intact
+    location.replace("/reset-password" + location.search + location.hash);
+  } else if (!ON_RESET && (/[#&?](access_token|code|error_description)=/.test(q) || /type=recovery/.test(q))) {    // coming back from Google / an e-mail link
     client().then(() => {
       if (/error_description=/.test(q)) toast(decodeURIComponent((q.match(/error_description=([^&]+)/) || [])[1] || "").replace(/\+/g, " "), "err");
       try { const back = sessionStorage.getItem("vosb-after-login"); if (back && user && back !== location.pathname + location.search) { sessionStorage.removeItem("vosb-after-login"); location.replace(back); } } catch (e) {}

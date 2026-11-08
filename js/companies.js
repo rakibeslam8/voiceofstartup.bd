@@ -17,7 +17,7 @@
   const nd = (n) => U().bnDigits(String(n));
   const pickL = (o) => (o ? (U().lang === "bn" ? o.bn : o.en) || o.en : "");
   const label = (list, id) => { const o = (list || []).find((x) => x.id === id); return o ? pickL(o) : id || ""; };
-  const LIST = "id,slug,name,tagline,category,stage,division,district,logo_url,verified,featured,rating_avg,rating_count,views,interest_count,vosb_valuation,seeking_amount,published_at,registered,invest_open";
+  const LIST = "id,slug,name,tagline,category,stage,division,district,logo_url,verified,featured,rating_avg,rating_count,interest_count,vosb_valuation,seeking_amount,published_at,registered,invest_open";
   const FULL = LIST + ",description,founded_year,website,social,team,cover_url,team_size,business_model,revenue_range,equity_offered,expected_valuation,use_of_funds,highlights,valuation_date,valuation_note,verified_at,registered,invest_open,vosb_val_low,vosb_val_high,vosb_confidence,raised_amount,investor_count";
   const H = { apikey: S.anonKey, Authorization: "Bearer " + S.anonKey };
   const DISCLAIMER = () => T("VOSB একটি মিডিয়া ও লিস্টিং প্ল্যাটফর্ম — ব্রোকার বা আর্থিক পরামর্শদাতা নয়। এখানে কোনো টাকা নেওয়া হয় না। ভ্যালুয়েশন শুধু ইঙ্গিতমূলক, বিনিয়োগ পরামর্শ নয়। বিনিয়োগে ঝুঁকি আছে — সিদ্ধান্তের আগে নিজে যাচাই করুন।",
@@ -71,8 +71,8 @@
   /* ================= DIRECTORY ================= */
   function directory() {
     const grid = $("#co-grid"), more = $("#co-more"), bar = $("#co-bar"), fbox = $("#co-filters"), form = $("#co-search"), qin = $("#co-q");
-    const P = 24, SORTS = { feat: "featured.desc,verified.desc,published_at.desc", rated: "rating_avg.desc,rating_count.desc,published_at.desc", new: "published_at.desc", views: "views.desc,published_at.desc", verified: "verified.desc,featured.desc,published_at.desc", valued: "vosb_valuation.desc.nullslast,published_at.desc" };
-    const SLAB = { feat: ["বাছাইকৃত", "Featured first"], rated: ["সর্বোচ্চ রেটিং", "Top rated"], new: ["নতুন", "Newest"], views: ["সর্বাধিক দেখা", "Most viewed"], verified: ["ভেরিফাইড আগে", "Verified first"], valued: ["VOSB ভ্যালুয়েশন", "VOSB-valued"] };
+    const P = 24, SORTS = { feat: "featured.desc,verified.desc,published_at.desc", rated: "rating_avg.desc,rating_count.desc,published_at.desc", new: "published_at.desc", verified: "verified.desc,featured.desc,published_at.desc", valued: "vosb_valuation.desc.nullslast,published_at.desc" };
+    const SLAB = { feat: ["বাছাইকৃত", "Featured first"], rated: ["সর্বোচ্চ রেটিং", "Top rated"], new: ["নতুন", "Newest"], verified: ["ভেরিফাইড আগে", "Verified first"], valued: ["VOSB ভ্যালুয়েশন", "VOSB-valued"] };
     const u = new URLSearchParams(location.search);
     const st = { q: (u.get("q") || "").slice(0, 60), cat: u.get("cat") || "", stage: u.get("stage") || "", div: u.get("div") || "", sort: SORTS[u.get("sort")] ? u.get("sort") : "feat", items: [], total: 0, state: "loading" };
     const clean = (s) => String(s).replace(/[,()*%\\"'`:;.<>&=#?]/g, " ").replace(/\s+/g, " ").trim();
@@ -237,7 +237,7 @@
         ${fr.length || c.use_of_funds ? `<section class="co-card2"><h2>${T("তহবিল ও ভ্যালুয়েশন", "Funding & valuation")}</h2><dl class="co-fund">${fr.map((r) => `<div class="${r[2] || ""}"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")}</dl>
           ${c.vosb_valuation && (c.valuation_date || c.valuation_note) ? `<p class="co-vnote">${c.valuation_date ? T("মূল্যায়নের তারিখ: ", "Assessed on ") + esc(U().formatDate(c.valuation_date)) + ". " : ""}${esc(c.valuation_note || "")}</p>` : ""}
           ${c.use_of_funds ? `<h3>${T("তহবিল কীভাবে ব্যবহার হবে", "Use of funds")}</h3>${paras(c.use_of_funds)}` : ""}</section>` : ""}
-        <section class="co-card2"><h2>${T("তথ্য", "Details")}</h2><dl class="co-facts">${facts()}</dl>${soc ? `<div class="co-soc">${soc}</div>` : ""}<p class="co-views">👁 ${nd(c.views || 0)} · 💼 ${nd(c.interest_count || 0)} ${T("বিনিয়োগ আগ্রহ", "investor interests")}</p></section>
+        <section class="co-card2"><h2>${T("তথ্য", "Details")}</h2><dl class="co-facts">${facts()}</dl>${soc ? `<div class="co-soc">${soc}</div>` : ""}<p class="co-views">💼 ${nd(c.interest_count || 0)} ${T("বিনিয়োগ আগ্রহ", "investor interests")}</p></section>
         <p class="co-disc">${DISCLAIMER()}</p></aside></div>`;
       drawRev(); drawCom();
     }

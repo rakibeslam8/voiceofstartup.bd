@@ -233,7 +233,7 @@
       try {
         const c = await sb(), uid = (A().user() || {}).id;
         const { data, error } = await c.from("companies")
-          .select("id,slug,status,name,tagline,logo_url,category,stage,created_at,updated_at,published_at,rating_avg,rating_count,views,interest_count,invest_open,registered,raised_amount,investor_count,vosb_valuation,vosb_val_low,vosb_val_high,vosb_confidence,valuation_date,company_private!inner(owner_id,review_note),listing_payments(id,status,invoice_no,trx_id,note,created_at),company_documents(id,doc_type,status)")
+          .select("id,slug,status,name,tagline,logo_url,category,stage,created_at,updated_at,published_at,rating_avg,rating_count,interest_count,invest_open,registered,raised_amount,investor_count,vosb_valuation,vosb_val_low,vosb_val_high,vosb_confidence,valuation_date,company_private!inner(owner_id,review_note),listing_payments(id,status,invoice_no,trx_id,note,created_at),company_documents(id,doc_type,status)")
           .eq("company_private.owner_id", uid).order("created_at", { ascending: false });
         if (error) throw error;
         st.cos = data || [];
@@ -258,7 +258,7 @@
       const edit = c.status === "draft" || c.status === "changes_requested";
       const note = priv.review_note && (c.status === "changes_requested" || c.status === "rejected" || c.status === "suspended") ? `<div class="ac-note ${c.status === "changes_requested" ? "warn" : "bad"}"><b>${T("VOSB-এর নোট", "Note from VOSB")}</b><p>${esc(priv.review_note)}</p></div>` : "";
       const ints = st.ints[c.id], vp = st.val[c.id];
-      const stats = c.status === "published" ? `<div class="ac-stats"><span>★ ${esc(Number(c.rating_avg || 0).toFixed(1))} <small>(${U().bnDigits(c.rating_count || 0)})</small></span><span>👁 ${U().bnDigits(c.views || 0)}</span><span>💼 ${U().bnDigits(c.interest_count || 0)} <small>${T("আগ্রহী", "interested")}</small></span><span>🤝 ${U().bnDigits(c.investor_count || 0)} <small>${T("বিনিয়োগকারী", "investors")}</small></span></div>
+      const stats = c.status === "published" ? `<div class="ac-stats"><span>★ ${esc(Number(c.rating_avg || 0).toFixed(1))} <small>(${U().bnDigits(c.rating_count || 0)})</small></span><span>💼 ${U().bnDigits(c.interest_count || 0)} <small>${T("আগ্রহী", "interested")}</small></span><span>🤝 ${U().bnDigits(c.investor_count || 0)} <small>${T("বিনিয়োগকারী", "investors")}</small></span></div>
         <label class="ac-switch"><input type="checkbox" data-invtog="${esc(c.id)}" ${c.invest_open ? "checked" : ""}><i aria-hidden="true"></i><span><b>${c.invest_open ? T("বিনিয়োগের জন্য খোলা", "Open for investment") : T("বিনিয়োগ আপাতত বন্ধ", "Investment paused")}</b><small>${T("বন্ধ করলে নতুন বিনিয়োগকারী আগ্রহ জানাতে পারবেন না।", "When off, new investors cannot show interest.")}</small></span></label>` : "";
       return `<article class="ac-co" data-co="${esc(c.id)}">
         <div class="ac-co-top">${logoBox(c.logo_url, c.name)}<div class="ac-co-tx"><h4>${esc(c.name || T("নামহীন ড্রাফট", "Untitled draft"))}</h4><p class="muted">${esc(c.tagline || label(CFG().industries, c.category) || "")}</p></div></div>
