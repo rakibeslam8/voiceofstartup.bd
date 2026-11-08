@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Sun, 08 Nov 2026 00:09:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 08 Nov 2026 13:02:00 GMT</lastBuildDate>
+    <item>
+      <title>দরকার ২০ লাখ, ব্যাংক দিতে চায় ৫ লাখ, চাহিদা অনুযায়ী ঋণ পাচ্ছেন না উদ্যোক্তারা</title>
+      <link>https://www.voiceofstartup.bd/read/need-20-lakhs-bank-wants-to-give-5-lakhs-entrepreneurs-are-not-getting</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/need-20-lakhs-bank-wants-to-give-5-lakhs-entrepreneurs-are-not-getting</guid>
+      <pubDate>Sun, 08 Nov 2026 13:02:00 GMT</pubDate>
+      <category>ব্যবসা, বিনিয়োগ ও নীতিমালা</category>
+      <description>স্যুভেনির তৈরির ক্ষুদ্র ও মাঝারি প্রতিষ্ঠান (এসএমই) হাতবাক্স বেসরকারি একটি ব্যাংকে ২০ লাখ টাকার সিসি ঋণের (ব্যবসা পরিচালনার ঋণ) আবেদন করে। কিন্তু ব্যাংকটি ৪–৫ লাখ টাকার বেশি ঋণ দিতে চায় না।</description>
+    </item>
     <item>
       <title>এআই-এর মহা সম্মেলন, শেষমেশ এপিআই-এর গোডাউন!</title>
       <link>https://www.voiceofstartup.bd/read/when-an-ai-summit-becomes-an-api-summit</link>
@@ -62,6 +70,14 @@
       <pubDate>Sat, 07 Nov 2026 13:59:00 GMT</pubDate>
       <category>ব্যবসা, বিনিয়োগ ও নীতিমালা</category>
       <description>কোনো ব্যাংক বা আর্থিক প্রতিষ্ঠানে থাকা ব্যক্তিগত ঋণ (পারসোনাল লোন) ও আবাসন ঋণ (হোম লোন) কম সুদে কেনার (টেকওভার) ঘোষণা দিয়েছে ব্র্যাক ব্যাংক। এই বিশেষ অফারের আওতায় প্রথম বছরে ৯ শতাংশ সুদ দিতে হবে গ্রাহকদের।</description>
+    </item>
+    <item>
+      <title>কেন থমকে গেল বাংলা কিউআরে লেনদেনের গতি</title>
+      <link>https://www.voiceofstartup.bd/read/why-did-the-speed-of-transactions-in-bangla-qr-stopped</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/why-did-the-speed-of-transactions-in-bangla-qr-stopped</guid>
+      <pubDate>Sat, 07 Nov 2026 13:05:00 GMT</pubDate>
+      <category>মার্কেট ইনসাইট</category>
+      <description>নগদ টাকার ব্যবহার কমিয়ে ডিজিটাল লেনদেন জনপ্রিয় করার লক্ষ্যে চালু হওয়া ‘বাংলা কিউআর’ উদ্যোগ অনেকটা থমকে গেছে। প্রথম দিকে লেনদেনের গতি আশাব্যঞ্জক হলেও সাম্প্রতিক সময়ে এতে ভাটা পড়েছে।</description>
     </item>
     <item>
       <title>ডেন্টাল হাইজিনিস্ট থেকে শিল্পী, ফ্লোরিডায় উদ্যোক্তা হিসেবে এগিয়ে চলেছেন সন্দ্বীপের জাহান রিমা</title>
@@ -230,22 +246,6 @@
       <pubDate>Tue, 03 Nov 2026 00:57:00 GMT</pubDate>
       <category>আন্তর্জাতিক স্টার্টআপ</category>
       <description>২০২৬ সাল বিশ্বের প্রযুক্তি খাতের ধনকুবেরদের জন্য বড় সাফল্যের বছর। পরিসংখ্যানও সে কথা বলছে।</description>
-    </item>
-    <item>
-      <title>ওপেনএআই ও অ্যানথ্রপিককে টেক্কা দিতে নতুন এআই মডেল আনল মেটা</title>
-      <link>https://www.voiceofstartup.bd/read/new-ai-model-unle-meta-to-rival-openai-and-anthropic</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/new-ai-model-unle-meta-to-rival-openai-and-anthropic</guid>
-      <pubDate>Mon, 02 Nov 2026 23:50:00 GMT</pubDate>
-      <category>আন্তর্জাতিক স্টার্টআপ</category>
-      <description>কৃত্রিম বুদ্ধিমত্তা (এআই) মডেল তৈরির প্রতিযোগিতায় ওপেনএআই ও অ্যানথ্রপিককে টেক্কা দিতে নতুন দুটি উন্নত এআই মডেল উন্মোচন করেছে মেটা।</description>
-    </item>
-    <item>
-      <title>মেটার নতুন এআই এজেন্টের মাধ্যমে ইন্টারনেট–দুনিয়ায় বিশৃঙ্খলার শঙ্কা</title>
-      <link>https://www.voiceofstartup.bd/read/threats-of-internet-world-chaos-with-meta-s-new-ai-agent</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/threats-of-internet-world-chaos-with-meta-s-new-ai-agent</guid>
-      <pubDate>Mon, 02 Nov 2026 22:54:00 GMT</pubDate>
-      <category>প্রযুক্তি ও এআই</category>
-      <description>প্রযুক্তি–দুনিয়ায় কৃত্রিম বুদ্ধিমত্তার নতুন যুগে ব্যবহারকারীদের দৈনন্দিন কাজ সহজ করতে সম্প্রতি ‘মিউজ’ নামের নতুন এআই এজেন্ট উন্মুক্ত করেছে মেটা।</description>
     </item>
   </channel>
 </rss>

@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/need-20-lakhs-bank-wants-to-give-5-lakhs-entrepreneurs-are-not-getting</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-08T13:02:00.000Z</news:publication_date>
+      <news:title>দরকার ২০ লাখ, ব্যাংক দিতে চায় ৫ লাখ, চাহিদা অনুযায়ী ঋণ পাচ্ছেন না উদ্যোক্তারা</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/need-20-lakhs-bank-wants-to-give-5-lakhs-entrepreneurs-are-not-getting</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-08T13:02:00.000Z</news:publication_date>
+      <news:title>Need 20 lakhs, bank wants to give 5 lakhs, entrepreneurs are not getting loans as per demand</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/when-an-ai-summit-becomes-an-api-summit</loc>
     <news:news>
       <news:publication>
@@ -155,6 +177,28 @@
     </news:news>
   </url>
   <url>
+    <loc>https://www.voiceofstartup.bd/read/why-did-the-speed-of-transactions-in-bangla-qr-stopped</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-07T13:05:00.000Z</news:publication_date>
+      <news:title>কেন থমকে গেল বাংলা কিউআরে লেনদেনের গতি</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/why-did-the-speed-of-transactions-in-bangla-qr-stopped</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-07T13:05:00.000Z</news:publication_date>
+      <news:title>Why did the speed of transactions in Bangla QR stopped?</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/dental-hygienist-turned-artist-florida-based-entrepreneur-jahan-rima-f</loc>
     <news:news>
       <news:publication>
@@ -196,28 +240,6 @@
       </news:publication>
       <news:publication_date>2026-11-06T15:30:00.000Z</news:publication_date>
       <news:title>Reach your brand to 870+ transparent investors and banks.</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/brac-bank-cuts-export-document-processing-time-from-40-days-to-one</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-06T14:41:00.000Z</news:publication_date>
-      <news:title>ব্র্যাক ব্যাংক রপ্তানি নথি প্রক্রিয়াকরণের সময় ৪০ দিন থেকে কমিয়ে মাত্র এক দিনে করেছে</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/brac-bank-cuts-export-document-processing-time-from-40-days-to-one</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-06T14:41:00.000Z</news:publication_date>
-      <news:title>BRAC Bank cuts export document processing time from 40 days to one</news:title>
     </news:news>
   </url>
 </urlset>
