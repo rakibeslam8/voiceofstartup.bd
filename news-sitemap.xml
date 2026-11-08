@@ -220,26 +220,4 @@
       <news:title>Dental hygienist-turned-artist, Florida-based entrepreneur Jahan Rima from Sandeep</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/trusted-by-870-investors-and-22-top-companies-get-your-brand-across-to</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-06T15:30:00.000Z</news:publication_date>
-      <news:title>৮৭০+ স্বচ্ছ বিনিয়োগকারী এবং ব্যাংকের কাছে আপনার ব্র্যান্ড পৌঁছে দিন।</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/trusted-by-870-investors-and-22-top-companies-get-your-brand-across-to</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-06T15:30:00.000Z</news:publication_date>
-      <news:title>Reach your brand to 870+ transparent investors and banks.</news:title>
-    </news:news>
-  </url>
 </urlset>
