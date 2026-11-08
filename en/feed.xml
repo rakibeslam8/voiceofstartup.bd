@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/en/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Verified Bangladesh startup, business and investment news</description>
     <language>en</language>
-    <lastBuildDate>Sat, 07 Nov 2026 14:53:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 08 Nov 2026 00:09:00 GMT</lastBuildDate>
+    <item>
+      <title>When an AI Summit Becomes an API Summit</title>
+      <link>https://www.voiceofstartup.bd/en/read/when-an-ai-summit-becomes-an-api-summit</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/en/read/when-an-ai-summit-becomes-an-api-summit</guid>
+      <pubDate>Sun, 08 Nov 2026 00:09:00 GMT</pubDate>
+      <category>Technology &amp; AI</category>
+      <description>Bangladesh&#39;s first national AI business summit, held in Dhaka on 5 November, was billed as a step towards a technology-driven economy.</description>
+    </item>
     <item>
       <title>90 thousand MSME entrepreneurs have received cyber security training</title>
       <link>https://www.voiceofstartup.bd/en/read/90-thousand-msme-entrepreneurs-have-received-cyber-security-training</link>
@@ -238,14 +246,6 @@
       <pubDate>Sun, 01 Nov 2026 07:48:00 GMT</pubDate>
       <category>Founder Stories</category>
       <description>A young man writing songs for a girl-band in his bedroom as a teenager. He used to save the lyrics of those songs with utmost care in the then floppy disk. Time has passed, almost 30 years have passed.</description>
-    </item>
-    <item>
-      <title>Rooftop gardening started as a hobby, now selling trees worth 2 lakh rupees a month</title>
-      <link>https://www.voiceofstartup.bd/en/read/rooftop-gardening-started-as-a-hobby-now-selling-trees-worth-2-lakh-ru</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/en/read/rooftop-gardening-started-as-a-hobby-now-selling-trees-worth-2-lakh-ru</guid>
-      <pubDate>Sun, 01 Nov 2026 03:41:00 GMT</pubDate>
-      <category>Founder Stories</category>
-      <description>The range includes purple delight, murasaki, hakuho, crassula, jade plant and other varieties of plants. The price of each tree is 100 to 30 thousand taka. For commercial tree production, he rented a roof for five thousand rupees a month.</description>
     </item>
   </channel>
 </rss>

@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/when-an-ai-summit-becomes-an-api-summit</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-08T00:09:00.000Z</news:publication_date>
+      <news:title>এআই-এর মহা সম্মেলন, শেষমেশ এপিআই-এর গোডাউন!</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/when-an-ai-summit-becomes-an-api-summit</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-08T00:09:00.000Z</news:publication_date>
+      <news:title>When an AI Summit Becomes an API Summit</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/90-thousand-msme-entrepreneurs-have-received-cyber-security-training</loc>
     <news:news>
       <news:publication>

@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Sat, 07 Nov 2026 14:53:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 08 Nov 2026 00:09:00 GMT</lastBuildDate>
+    <item>
+      <title>এআই-এর মহা সম্মেলন, শেষমেশ এপিআই-এর গোডাউন!</title>
+      <link>https://www.voiceofstartup.bd/read/when-an-ai-summit-becomes-an-api-summit</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/when-an-ai-summit-becomes-an-api-summit</guid>
+      <pubDate>Sun, 08 Nov 2026 00:09:00 GMT</pubDate>
+      <category>প্রযুক্তি ও এআই</category>
+      <description>5 নভেম্বর ঢাকায় অনুষ্ঠিত বাংলাদেশের প্রথম জাতীয় এআই বিজনেস সামিটকে প্রযুক্তি-চালিত অর্থনীতির দিকে একটি পদক্ষেপ হিসাবে বিল করা হয়েছিল।</description>
+    </item>
     <item>
       <title>সাইবার নিরাপত্তা প্রশিক্ষণ পেয়েছেন ৯০ হাজার এমএসএমই উদ্যোক্তা</title>
       <link>https://www.voiceofstartup.bd/read/90-thousand-msme-entrepreneurs-have-received-cyber-security-training</link>
@@ -238,14 +246,6 @@
       <pubDate>Sun, 01 Nov 2026 07:48:00 GMT</pubDate>
       <category>ফাউন্ডার স্টোরি</category>
       <description>কিশোর বয়সে নিজের বেডরুমে বসে গার্ল-ব্যান্ডের জন্য গান লিখতেন এক তরুণ। সেই গানের কথাগুলো পরম যত্নে সেভ করে রাখতেন তৎকালীন ফ্লপি ডিস্কে। সময় গড়িয়েছে, কেটে গেছে প্রায় ৩০ বছর।</description>
-    </item>
-    <item>
-      <title>শখে শুরু ছাদবাগান, এখন মাসে ২ লাখ টাকার গাছ বিক্রি</title>
-      <link>https://www.voiceofstartup.bd/read/rooftop-gardening-started-as-a-hobby-now-selling-trees-worth-2-lakh-ru</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/rooftop-gardening-started-as-a-hobby-now-selling-trees-worth-2-lakh-ru</guid>
-      <pubDate>Sun, 01 Nov 2026 03:41:00 GMT</pubDate>
-      <category>ফাউন্ডার স্টোরি</category>
-      <description>রাঙ্গুলিতে রয়েছে পার্পল ডিলাইট, মুরাসাকি, হাকুহো, ক্রাসুলা, জেড প্ল্যান্টসহ নানা জাতের গাছ। একেকটি গাছের দাম ১০০ থেকে ৩০ হাজার টাকা। বাণিজ্যিকভাবে গাছ উৎপাদনের জন্য মাসে পাঁচ হাজার টাকায় ছাদ ভাড়া নেন।</description>
     </item>
   </channel>
 </rss>
