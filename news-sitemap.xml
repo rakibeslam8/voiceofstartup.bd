@@ -1,6 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/the-story-of-an-engineer-becoming-a-businessman</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T15:24:00.000Z</news:publication_date>
+      <news:title>একজন প্রকৌশলীর ব্যবসায়ী হওয়ার গল্প</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/the-story-of-an-engineer-becoming-a-businessman</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T15:24:00.000Z</news:publication_date>
+      <news:title>The story of an engineer becoming a businessman</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/business-started-with-30-thousand-taka-now-export-is-28-crore-taka</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T15:02:00.000Z</news:publication_date>
+      <news:title>৩০ হাজার টাকায় ব্যবসা শুরু, এখন রপ্তানিই ২৮ কোটি টাকা</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/business-started-with-30-thousand-taka-now-export-is-28-crore-taka</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T15:02:00.000Z</news:publication_date>
+      <news:title>Business started with 30 thousand taka, now export is 28 crore taka</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/nvidia-ceo-admits-affair-with-chinese-spy-investigation-begins</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T12:31:00.000Z</news:publication_date>
+      <news:title>চীনা ‘গুপ্তচরের’ সঙ্গে পরকীয়ার কথা স্বীকার করলেন এনভিডিয়া সিইও, তদন্ত শুরু</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/nvidia-ceo-admits-affair-with-chinese-spy-investigation-begins</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T12:31:00.000Z</news:publication_date>
+      <news:title>Nvidia CEO admits affair with Chinese &#39;spy&#39;, investigation begins</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/dolly-is-a-successful-entrepreneur-who-quit-her-job-in-a-foreign-compa</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T06:57:00.000Z</news:publication_date>
+      <news:title>বিদেশি কোম্পানির চাকরি ছেড়ে সফল উদ্যোক্তা ডলি</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/dolly-is-a-successful-entrepreneur-who-quit-her-job-in-a-foreign-compa</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T06:57:00.000Z</news:publication_date>
+      <news:title>Dolly is a successful entrepreneur who quit her job in a foreign company</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins</loc>
     <news:news>
       <news:publication>
@@ -130,182 +218,6 @@
       </news:publication>
       <news:publication_date>2026-11-08T00:09:00.000Z</news:publication_date>
       <news:title>When an AI Summit Becomes an API Summit</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/90-thousand-msme-entrepreneurs-have-received-cyber-security-training</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T14:53:00.000Z</news:publication_date>
-      <news:title>সাইবার নিরাপত্তা প্রশিক্ষণ পেয়েছেন ৯০ হাজার এমএসএমই উদ্যোক্তা</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/90-thousand-msme-entrepreneurs-have-received-cyber-security-training</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T14:53:00.000Z</news:publication_date>
-      <news:title>90 thousand MSME entrepreneurs have received cyber security training</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/sawada-of-magura-made-and-exported-toys-made-of-felna</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T14:35:00.000Z</news:publication_date>
-      <news:title>ফেলনা জিনিসের খেলনা বানিয়ে রপ্তানি করেন মাগুরার সাউয়াদা</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/sawada-of-magura-made-and-exported-toys-made-of-felna</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T14:35:00.000Z</news:publication_date>
-      <news:title>Sawada of Magura made and exported toys made of felna</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/buy-a-flat-or-invest-elsewhere</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T14:31:00.000Z</news:publication_date>
-      <news:title>ফ্ল্যাট কিনবেন নাকি অন্য কোথাও বিনিয়োগ করবেন</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/buy-a-flat-or-invest-elsewhere</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T14:31:00.000Z</news:publication_date>
-      <news:title>Buy a flat or invest elsewhere</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/5-types-of-punishment-including-disconnection-of-gas-and-electricity-f</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T14:07:00.000Z</news:publication_date>
-      <news:title>আয়কর রিটার্ন না দিলে গ্যাস ও বিদ্যুৎ–সংযোগ বিচ্ছিন্ন করাসহ ৫ ধরনের শাস্তি</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/5-types-of-punishment-including-disconnection-of-gas-and-electricity-f</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T14:07:00.000Z</news:publication_date>
-      <news:title>5 types of punishment including disconnection of gas and electricity for non-payment of income tax return</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/household-expenses-are-increasing-how-to-save-savings</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T14:03:00.000Z</news:publication_date>
-      <news:title>সংসারের খরচ বাড়ছে, সঞ্চয় ধরে রাখবেন যেভাবে</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/household-expenses-are-increasing-how-to-save-savings</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T14:03:00.000Z</news:publication_date>
-      <news:title>Household expenses are increasing, how to save savings</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/loan-transfer-facility-at-brac-bank-at-9-percent-interest-no-additiona-jrp</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T13:59:00.000Z</news:publication_date>
-      <news:title>ব্র্যাক ব্যাংকে ৯ শতাংশ সুদে ঋণ স্থানান্তরের সুযোগ, বাড়তি খরচ নেই</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/loan-transfer-facility-at-brac-bank-at-9-percent-interest-no-additiona-jrp</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T13:59:00.000Z</news:publication_date>
-      <news:title>Loan transfer facility at BRAC Bank at 9 percent interest, no additional cost</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/why-did-the-speed-of-transactions-in-bangla-qr-stopped</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T13:05:00.000Z</news:publication_date>
-      <news:title>কেন থমকে গেল বাংলা কিউআরে লেনদেনের গতি</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/why-did-the-speed-of-transactions-in-bangla-qr-stopped</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T13:05:00.000Z</news:publication_date>
-      <news:title>Why did the speed of transactions in Bangla QR stopped?</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/dental-hygienist-turned-artist-florida-based-entrepreneur-jahan-rima-f</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T09:57:00.000Z</news:publication_date>
-      <news:title>ডেন্টাল হাইজিনিস্ট থেকে শিল্পী, ফ্লোরিডায় উদ্যোক্তা হিসেবে এগিয়ে চলেছেন সন্দ্বীপের জাহান রিমা</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/dental-hygienist-turned-artist-florida-based-entrepreneur-jahan-rima-f</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-07T09:57:00.000Z</news:publication_date>
-      <news:title>Dental hygienist-turned-artist, Florida-based entrepreneur Jahan Rima from Sandeep</news:title>
     </news:news>
   </url>
 </urlset>

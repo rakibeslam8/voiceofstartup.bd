@@ -71,7 +71,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/international-startups</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -125,6 +125,86 @@
     <loc>https://www.voiceofstartup.bd/editorial-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/the-story-of-an-engineer-becoming-a-businessman</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/the-story-of-an-engineer-becoming-a-businessman"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/the-story-of-an-engineer-becoming-a-businessman"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/the-story-of-an-engineer-becoming-a-businessman"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-03%2F50c05ac6-16cc-4dbd-a7d9-27fd1ef70162%2FKabir_Hossain__19.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/the-story-of-an-engineer-becoming-a-businessman</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/the-story-of-an-engineer-becoming-a-businessman"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/the-story-of-an-engineer-becoming-a-businessman"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/the-story-of-an-engineer-becoming-a-businessman"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-03%2F50c05ac6-16cc-4dbd-a7d9-27fd1ef70162%2FKabir_Hossain__19.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/business-started-with-30-thousand-taka-now-export-is-28-crore-taka</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/business-started-with-30-thousand-taka-now-export-is-28-crore-taka"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/business-started-with-30-thousand-taka-now-export-is-28-crore-taka"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/business-started-with-30-thousand-taka-now-export-is-28-crore-taka"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2022-05%2F07052bdc-a242-44a9-8044-854cd77efd79%2FUntitled_9.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/business-started-with-30-thousand-taka-now-export-is-28-crore-taka</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/business-started-with-30-thousand-taka-now-export-is-28-crore-taka"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/business-started-with-30-thousand-taka-now-export-is-28-crore-taka"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/business-started-with-30-thousand-taka-now-export-is-28-crore-taka"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2022-05%2F07052bdc-a242-44a9-8044-854cd77efd79%2FUntitled_9.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/nvidia-ceo-admits-affair-with-chinese-spy-investigation-begins</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/nvidia-ceo-admits-affair-with-chinese-spy-investigation-begins"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/nvidia-ceo-admits-affair-with-chinese-spy-investigation-begins"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/nvidia-ceo-admits-affair-with-chinese-spy-investigation-begins"/>
+    <image:image><image:loc>https://www.tbsnews.net/bangla/sites/default/files/styles/infograph/public/images/2026/11/09/jensen-alice.gif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/nvidia-ceo-admits-affair-with-chinese-spy-investigation-begins</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/nvidia-ceo-admits-affair-with-chinese-spy-investigation-begins"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/nvidia-ceo-admits-affair-with-chinese-spy-investigation-begins"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/nvidia-ceo-admits-affair-with-chinese-spy-investigation-begins"/>
+    <image:image><image:loc>https://www.tbsnews.net/bangla/sites/default/files/styles/infograph/public/images/2026/11/09/jensen-alice.gif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/dolly-is-a-successful-entrepreneur-who-quit-her-job-in-a-foreign-compa</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/dolly-is-a-successful-entrepreneur-who-quit-her-job-in-a-foreign-compa"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/dolly-is-a-successful-entrepreneur-who-quit-her-job-in-a-foreign-compa"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/dolly-is-a-successful-entrepreneur-who-quit-her-job-in-a-foreign-compa"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2024-11-10%2Frt3cvx84%2FBusiness-2.jpg?rect=0%2C0%2C1599%2C1066&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/dolly-is-a-successful-entrepreneur-who-quit-her-job-in-a-foreign-compa</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/dolly-is-a-successful-entrepreneur-who-quit-her-job-in-a-foreign-compa"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/dolly-is-a-successful-entrepreneur-who-quit-her-job-in-a-foreign-compa"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/dolly-is-a-successful-entrepreneur-who-quit-her-job-in-a-foreign-compa"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2024-11-10%2Frt3cvx84%2FBusiness-2.jpg?rect=0%2C0%2C1599%2C1066&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins</loc>
@@ -245,6 +325,26 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/when-an-ai-summit-becomes-an-api-summit"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/when-an-ai-summit-becomes-an-api-summit"/>
     <image:image><image:loc>https://cdn.bongowiki.com/uploads/2026-11/2f677444-5581-4482-b279-bc11bfb02106.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/bangladeshi-moin-s-successful-startup-dreams-in-canada</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/bangladeshi-moin-s-successful-startup-dreams-in-canada"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/bangladeshi-moin-s-successful-startup-dreams-in-canada"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/bangladeshi-moin-s-successful-startup-dreams-in-canada"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-03%2Ffe6020d6-6963-449a-a6c0-81ea2dc9f85f%2FMoin_HS_06.JPG?rect=0%2C58%2C2574%2C1716&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/bangladeshi-moin-s-successful-startup-dreams-in-canada</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/bangladeshi-moin-s-successful-startup-dreams-in-canada"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/bangladeshi-moin-s-successful-startup-dreams-in-canada"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/bangladeshi-moin-s-successful-startup-dreams-in-canada"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-03%2Ffe6020d6-6963-449a-a6c0-81ea2dc9f85f%2FMoin_HS_06.JPG?rect=0%2C58%2C2574%2C1716&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/90-thousand-msme-entrepreneurs-have-received-cyber-security-training</loc>
@@ -445,6 +545,26 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/brac-bank-cuts-export-document-processing-time-from-40-days-to-one"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/brac-bank-cuts-export-document-processing-time-from-40-days-to-one"/>
     <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw55a4g3x22k.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/from-grocery-store-worker-to-successful-entrepreneur</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/from-grocery-store-worker-to-successful-entrepreneur"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/from-grocery-store-worker-to-successful-entrepreneur"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/from-grocery-store-worker-to-successful-entrepreneur"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2022-10%2F03162f9a-d4e7-489e-a160-22bc95c25b3c%2F18fe115e_412898_P_6_mr.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/from-grocery-store-worker-to-successful-entrepreneur</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/from-grocery-store-worker-to-successful-entrepreneur"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/from-grocery-store-worker-to-successful-entrepreneur"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/from-grocery-store-worker-to-successful-entrepreneur"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2022-10%2F03162f9a-d4e7-489e-a160-22bc95c25b3c%2F18fe115e_412898_P_6_mr.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/pet-parenting-is-now-at-your-fingertips-bangladesh-s-digital-pet-care</loc>
@@ -2565,6 +2685,13 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/top-10-successful-bangladeshi-entrepreneurs"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/top-10-successful-bangladeshi-entrepreneurs"/>
     <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7s804hahbo.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/company/pp-scholars</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/d274b861-9979-4985-8e6d-e4c65f3d401b/89a1e559-e0ad-46ef-8054-0ce3138b6b68/logo-57s8zil5.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/company/ahatab-foundation</loc>
