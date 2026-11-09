@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.voiceofstartup.bd/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/news</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -24,13 +24,13 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/funding</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/founder-stories</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -48,7 +48,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/technology-ai</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -125,6 +125,86 @@
     <loc>https://www.voiceofstartup.bd/editorial-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-10-29%2Fvsqxjd6t%2Fbangladesh_government_logo.png?rect=0%2C0%2C1200%2C800&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-10-29%2Fvsqxjd6t%2Fbangladesh_government_logo.png?rect=0%2C0%2C1200%2C800&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-03-23%2F760elh4m%2FUntitled-10.jpg?rect=4%2C0%2C1200%2C800&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-03-23%2F760elh4m%2FUntitled-10.jpg?rect=4%2C0%2C1200%2C800&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/sahabuddin-an-engineer-in-the-sugarcane-business-left-his-job</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/sahabuddin-an-engineer-in-the-sugarcane-business-left-his-job"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/sahabuddin-an-engineer-in-the-sugarcane-business-left-his-job"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/sahabuddin-an-engineer-in-the-sugarcane-business-left-his-job"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-04-14%2F6xuvb6tg%2F65e33fb8-e414-4725-a85d-5a2d3761db84.jfif?rect=0%2C139%2C1200%2C800&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/sahabuddin-an-engineer-in-the-sugarcane-business-left-his-job</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/sahabuddin-an-engineer-in-the-sugarcane-business-left-his-job"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/sahabuddin-an-engineer-in-the-sugarcane-business-left-his-job"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/sahabuddin-an-engineer-in-the-sugarcane-business-left-his-job"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-04-14%2F6xuvb6tg%2F65e33fb8-e414-4725-a85d-5a2d3761db84.jfif?rect=0%2C139%2C1200%2C800&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/nazma-akhter-earns-lakhs-of-taka-per-month-by-making-fish-chips</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/nazma-akhter-earns-lakhs-of-taka-per-month-by-making-fish-chips"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/nazma-akhter-earns-lakhs-of-taka-per-month-by-making-fish-chips"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/nazma-akhter-earns-lakhs-of-taka-per-month-by-making-fish-chips"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-12-03%2F8v12k6oj%2F1e0237d0-c26e-4b3b-a107-e05cb7692d35.jpg?rect=0%2C27%2C1600%2C1067&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/nazma-akhter-earns-lakhs-of-taka-per-month-by-making-fish-chips</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/nazma-akhter-earns-lakhs-of-taka-per-month-by-making-fish-chips"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/nazma-akhter-earns-lakhs-of-taka-per-month-by-making-fish-chips"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/nazma-akhter-earns-lakhs-of-taka-per-month-by-making-fish-chips"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-12-03%2F8v12k6oj%2F1e0237d0-c26e-4b3b-a107-e05cb7692d35.jpg?rect=0%2C27%2C1600%2C1067&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/need-20-lakhs-bank-wants-to-give-5-lakhs-entrepreneurs-are-not-getting</loc>
@@ -387,6 +467,26 @@
     <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw3dpt91ibsh.webp</image:loc></image:image>
   </url>
   <url>
+    <loc>https://www.voiceofstartup.bd/read/zetmo-empowering-independent-professionals-through-a-modern-service-pl</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/zetmo-empowering-independent-professionals-through-a-modern-service-pl"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/zetmo-empowering-independent-professionals-through-a-modern-service-pl"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/zetmo-empowering-independent-professionals-through-a-modern-service-pl"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw8u4v3wgdd0.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/zetmo-empowering-independent-professionals-through-a-modern-service-pl</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/zetmo-empowering-independent-professionals-through-a-modern-service-pl"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/zetmo-empowering-independent-professionals-through-a-modern-service-pl"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/zetmo-empowering-independent-professionals-through-a-modern-service-pl"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw8u4v3wgdd0.webp</image:loc></image:image>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/care-bangladesh-will-train-2-lakh-45-thousand-youth-for-skill-developm</loc>
     <lastmod>2026-11-04</lastmod>
     <changefreq>weekly</changefreq>
@@ -405,6 +505,26 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/care-bangladesh-will-train-2-lakh-45-thousand-youth-for-skill-developm"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/care-bangladesh-will-train-2-lakh-45-thousand-youth-for-skill-developm"/>
     <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw25inypm6if.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/from-academician-to-entrepreneur-dr-naheem-mahtab-s-bold-vision-to-tra</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/from-academician-to-entrepreneur-dr-naheem-mahtab-s-bold-vision-to-tra"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/from-academician-to-entrepreneur-dr-naheem-mahtab-s-bold-vision-to-tra"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/from-academician-to-entrepreneur-dr-naheem-mahtab-s-bold-vision-to-tra"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw8v1e8que7b.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/from-academician-to-entrepreneur-dr-naheem-mahtab-s-bold-vision-to-tra</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/from-academician-to-entrepreneur-dr-naheem-mahtab-s-bold-vision-to-tra"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/from-academician-to-entrepreneur-dr-naheem-mahtab-s-bold-vision-to-tra"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/from-academician-to-entrepreneur-dr-naheem-mahtab-s-bold-vision-to-tra"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw8v1e8que7b.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/weaving-the-future-with-jute-chittagong-startup-jutopia-s-remarkable-j</loc>
@@ -705,6 +825,26 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/where-butter-shoes-can-be-bought-for-tk-600-all-year-round-1-lakh-pair"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/where-butter-shoes-can-be-bought-for-tk-600-all-year-round-1-lakh-pair"/>
     <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-11-02%2F857yufxy%2FWhatsApp-Image-2026-11-02-at-7.46.39-PM.jpeg?rect=247%2C0%2C1107%2C738&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/shopups-big-investments-boost-business-in-middle-east</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/shopups-big-investments-boost-business-in-middle-east"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/shopups-big-investments-boost-business-in-middle-east"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/shopups-big-investments-boost-business-in-middle-east"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-04-09%2F8mjtnkly%2FPR-KV-5.png?rect=1%2C0%2C2000%2C1333&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/shopups-big-investments-boost-business-in-middle-east</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/shopups-big-investments-boost-business-in-middle-east"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/shopups-big-investments-boost-business-in-middle-east"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/shopups-big-investments-boost-business-in-middle-east"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-04-09%2F8mjtnkly%2FPR-KV-5.png?rect=1%2C0%2C2000%2C1333&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/the-rise-of-ai-boosts-the-fortunes-of-tech-billionaires-a-record-845-b</loc>
@@ -2325,6 +2465,26 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/sabur-khan-told-the-story-of-building-daffodil-group-from-scratch"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/sabur-khan-told-the-story-of-building-daffodil-group-from-scratch"/>
     <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mvxa0zampfr7.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/official-opening-of-international-entrepreneurship-world-cup</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/official-opening-of-international-entrepreneurship-world-cup"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/official-opening-of-international-entrepreneurship-world-cup"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/official-opening-of-international-entrepreneurship-world-cup"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-04-28%2Fmgkt0iwc%2Fwc.JPG?rect=104%2C0%2C3297%2C2198&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/official-opening-of-international-entrepreneurship-world-cup</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/official-opening-of-international-entrepreneurship-world-cup"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/official-opening-of-international-entrepreneurship-world-cup"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/official-opening-of-international-entrepreneurship-world-cup"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-04-28%2Fmgkt0iwc%2Fwc.JPG?rect=104%2C0%2C3297%2C2198&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/pathao-has-received-an-investment-of-1-crore-2-million-dollars</loc>

@@ -1,6 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T03:01:00.000Z</news:publication_date>
+      <news:title>এআইয়ের বাংলা মডেল বানাতে চায় সরকার, আলোচনা চার প্রতিষ্ঠানের সঙ্গে</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T03:01:00.000Z</news:publication_date>
+      <news:title>The government wants to make a Bengali model of AI, talks with four institutions</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T02:43:00.000Z</news:publication_date>
+      <news:title>যুক্তরাষ্ট্রফেরত জাহিদুল এখন সফল কৃষি উদ্যোক্তা</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T02:43:00.000Z</news:publication_date>
+      <news:title>Zahidul returned to the United States and is now a successful agricultural entrepreneur</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/sahabuddin-an-engineer-in-the-sugarcane-business-left-his-job</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T02:38:00.000Z</news:publication_date>
+      <news:title>চাকরি ছেড়ে আখের ব্যবসায় প্রকৌশলী সাহাবুদ্দিন</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/sahabuddin-an-engineer-in-the-sugarcane-business-left-his-job</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T02:38:00.000Z</news:publication_date>
+      <news:title>Sahabuddin, an engineer in the sugarcane business, left his job</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/nazma-akhter-earns-lakhs-of-taka-per-month-by-making-fish-chips</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T02:29:00.000Z</news:publication_date>
+      <news:title>মাছের চিপস বানিয়ে মাসে লাখ টাকা মুনাফা নাজমা আক্তারের</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/nazma-akhter-earns-lakhs-of-taka-per-month-by-making-fish-chips</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-09T02:29:00.000Z</news:publication_date>
+      <news:title>Nazma Akhter earns lakhs of taka per month by making fish chips</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/need-20-lakhs-bank-wants-to-give-5-lakhs-entrepreneurs-are-not-getting</loc>
     <news:news>
       <news:publication>
