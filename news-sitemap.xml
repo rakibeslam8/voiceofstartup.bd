@@ -198,26 +198,4 @@
       <news:title>Need 20 lakhs, bank wants to give 5 lakhs, entrepreneurs are not getting loans as per demand</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/when-an-ai-summit-becomes-an-api-summit</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-08T00:09:00.000Z</news:publication_date>
-      <news:title>এআই-এর মহা সম্মেলন, শেষমেশ এপিআই-এর গোডাউন!</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/when-an-ai-summit-becomes-an-api-summit</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-08T00:09:00.000Z</news:publication_date>
-      <news:title>When an AI Summit Becomes an API Summit</news:title>
-    </news:news>
-  </url>
 </urlset>
