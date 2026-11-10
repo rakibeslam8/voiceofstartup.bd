@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/beco-wants-to-expand-business-in-bangladesh</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-10T09:25:00.000Z</news:publication_date>
+      <news:title>বাংলাদেশে ব্যবসা সম্প্রসারণ করতে চায় বেকো</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/beco-wants-to-expand-business-in-bangladesh</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-10T09:25:00.000Z</news:publication_date>
+      <news:title>Beco wants to expand business in Bangladesh</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/touhid-s-products-made-of-pineapple-banana-jute-yarn-are-going-to-39-c</loc>
     <news:news>
       <news:publication>
@@ -196,28 +218,6 @@
       </news:publication>
       <news:publication_date>2026-11-09T02:29:00.000Z</news:publication_date>
       <news:title>Nazma Akhter earns lakhs of taka per month by making fish chips</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/need-20-lakhs-bank-wants-to-give-5-lakhs-entrepreneurs-are-not-getting</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-08T13:02:00.000Z</news:publication_date>
-      <news:title>দরকার ২০ লাখ, ব্যাংক দিতে চায় ৫ লাখ, চাহিদা অনুযায়ী ঋণ পাচ্ছেন না উদ্যোক্তারা</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/need-20-lakhs-bank-wants-to-give-5-lakhs-entrepreneurs-are-not-getting</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-08T13:02:00.000Z</news:publication_date>
-      <news:title>Need 20 lakhs, bank wants to give 5 lakhs, entrepreneurs are not getting loans as per demand</news:title>
     </news:news>
   </url>
 </urlset>
