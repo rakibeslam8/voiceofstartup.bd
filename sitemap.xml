@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.voiceofstartup.bd/</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/news</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -30,7 +30,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/founder-stories</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-10</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -125,6 +125,26 @@
     <loc>https://www.voiceofstartup.bd/editorial-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/touhid-s-products-made-of-pineapple-banana-jute-yarn-are-going-to-39-c</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/touhid-s-products-made-of-pineapple-banana-jute-yarn-are-going-to-39-c"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/touhid-s-products-made-of-pineapple-banana-jute-yarn-are-going-to-39-c"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/touhid-s-products-made-of-pineapple-banana-jute-yarn-are-going-to-39-c"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-09%2F4636b79a-efc3-46c3-bb32-6465e6ee333e%2FMeet_CHP_2.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/touhid-s-products-made-of-pineapple-banana-jute-yarn-are-going-to-39-c</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/touhid-s-products-made-of-pineapple-banana-jute-yarn-are-going-to-39-c"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/touhid-s-products-made-of-pineapple-banana-jute-yarn-are-going-to-39-c"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/touhid-s-products-made-of-pineapple-banana-jute-yarn-are-going-to-39-c"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-09%2F4636b79a-efc3-46c3-bb32-6465e6ee333e%2FMeet_CHP_2.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/the-story-of-an-engineer-becoming-a-businessman</loc>
@@ -547,6 +567,26 @@
     <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw55a4g3x22k.webp</image:loc></image:image>
   </url>
   <url>
+    <loc>https://www.voiceofstartup.bd/read/cricketer-turned-successful-entrepreneur-ziaul-haque</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/cricketer-turned-successful-entrepreneur-ziaul-haque"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/cricketer-turned-successful-entrepreneur-ziaul-haque"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/cricketer-turned-successful-entrepreneur-ziaul-haque"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-08%2F735b4c85-dc81-40ec-a7a0-9d404a46f3cf%2FWhatsApp_Image_2023_08_21_at_11_22_20_AM.jpeg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/cricketer-turned-successful-entrepreneur-ziaul-haque</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/cricketer-turned-successful-entrepreneur-ziaul-haque"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/cricketer-turned-successful-entrepreneur-ziaul-haque"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/cricketer-turned-successful-entrepreneur-ziaul-haque"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-08%2F735b4c85-dc81-40ec-a7a0-9d404a46f3cf%2FWhatsApp_Image_2023_08_21_at_11_22_20_AM.jpeg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/from-grocery-store-worker-to-successful-entrepreneur</loc>
     <lastmod>2026-11-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -665,6 +705,26 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/weaving-the-future-with-jute-chittagong-startup-jutopia-s-remarkable-j"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/weaving-the-future-with-jute-chittagong-startup-jutopia-s-remarkable-j"/>
     <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw7e49jmrqpb.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/kantha-became-a-successful-entrepreneur-from-a-tailor</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/kantha-became-a-successful-entrepreneur-from-a-tailor"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/kantha-became-a-successful-entrepreneur-from-a-tailor"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/kantha-became-a-successful-entrepreneur-from-a-tailor"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-08%2F9bfb0ce9-84d4-475d-a89e-f847c2f28150%2Fbc9e8860_690b_4bc3_8af6_0243caaf5ff7.jpeg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/kantha-became-a-successful-entrepreneur-from-a-tailor</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/kantha-became-a-successful-entrepreneur-from-a-tailor"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/kantha-became-a-successful-entrepreneur-from-a-tailor"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/kantha-became-a-successful-entrepreneur-from-a-tailor"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-08%2F9bfb0ce9-84d4-475d-a89e-f847c2f28150%2Fbc9e8860_690b_4bc3_8af6_0243caaf5ff7.jpeg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/elon-musk-s-wealth-increased-by-61-billion-dollars-in-one-day-and-he-i</loc>
@@ -1027,6 +1087,26 @@
     <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2024-09-08%2F8ciq3p5m%2FAI.reuters.png?rect=8%2C0%2C540%2C360&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
+    <loc>https://www.voiceofstartup.bd/read/handmade-perfumed-soap-is-going-from-narsingdi-to-japan</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/handmade-perfumed-soap-is-going-from-narsingdi-to-japan"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/handmade-perfumed-soap-is-going-from-narsingdi-to-japan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/handmade-perfumed-soap-is-going-from-narsingdi-to-japan"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-06%2Fe4424efe-a82f-468a-9a70-e364745370ad%2Fec1643c6_ff84_43e0_b36e_6ecb351a0586.jfif?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/handmade-perfumed-soap-is-going-from-narsingdi-to-japan</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/handmade-perfumed-soap-is-going-from-narsingdi-to-japan"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/handmade-perfumed-soap-is-going-from-narsingdi-to-japan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/handmade-perfumed-soap-is-going-from-narsingdi-to-japan"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-06%2Fe4424efe-a82f-468a-9a70-e364745370ad%2Fec1643c6_ff84_43e0_b36e_6ecb351a0586.jfif?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/eco-friendly-e-bike-rental-service-ezigo-in-cox-s-bazar-a-story-of-new</loc>
     <lastmod>2026-11-01</lastmod>
     <changefreq>weekly</changefreq>
@@ -1065,6 +1145,26 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/from-floppy-disk-lyrics-to-youtube-sensation-with-2-5-million-subscrib"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/from-floppy-disk-lyrics-to-youtube-sensation-with-2-5-million-subscrib"/>
     <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw1tnbfi7e2h.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/it-started-with-a-capital-of-10-taka-now-the-monthly-income-is-lakhs-o</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/it-started-with-a-capital-of-10-taka-now-the-monthly-income-is-lakhs-o"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/it-started-with-a-capital-of-10-taka-now-the-monthly-income-is-lakhs-o"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/it-started-with-a-capital-of-10-taka-now-the-monthly-income-is-lakhs-o"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-04%2Fac43dec8-02ae-43ff-8c7e-da2aa8bd41e3%2F31_03_23_SHERPUR_IRIN_PARVEEN093150.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/it-started-with-a-capital-of-10-taka-now-the-monthly-income-is-lakhs-o</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/it-started-with-a-capital-of-10-taka-now-the-monthly-income-is-lakhs-o"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/it-started-with-a-capital-of-10-taka-now-the-monthly-income-is-lakhs-o"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/it-started-with-a-capital-of-10-taka-now-the-monthly-income-is-lakhs-o"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-04%2Fac43dec8-02ae-43ff-8c7e-da2aa8bd41e3%2F31_03_23_SHERPUR_IRIN_PARVEEN093150.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/rooftop-gardening-started-as-a-hobby-now-selling-trees-worth-2-lakh-ru</loc>
