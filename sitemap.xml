@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.voiceofstartup.bd/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/news</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -30,7 +30,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/founder-stories</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -54,7 +54,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/market-insights</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -125,6 +125,46 @@
     <loc>https://www.voiceofstartup.bd/editorial-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/two-friends-are-making-cars-after-leaving-their-jobs</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/two-friends-are-making-cars-after-leaving-their-jobs"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/two-friends-are-making-cars-after-leaving-their-jobs"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/two-friends-are-making-cars-after-leaving-their-jobs"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-12%2F2aeb00a2-0771-437b-bc1f-079a014bb61e%2F0e54aa73_455233_P_5_mr.jpg?rect=230%2C0%2C1395%2C930&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/two-friends-are-making-cars-after-leaving-their-jobs</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/two-friends-are-making-cars-after-leaving-their-jobs"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/two-friends-are-making-cars-after-leaving-their-jobs"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/two-friends-are-making-cars-after-leaving-their-jobs"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-12%2F2aeb00a2-0771-437b-bc1f-079a014bb61e%2F0e54aa73_455233_P_5_mr.jpg?rect=230%2C0%2C1395%2C930&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/9-industry-groups-in-the-billion-dollar-club-who-s-on-the-list</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/9-industry-groups-in-the-billion-dollar-club-who-s-on-the-list"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/9-industry-groups-in-the-billion-dollar-club-who-s-on-the-list"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/9-industry-groups-in-the-billion-dollar-club-who-s-on-the-list"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-11-09%2Fjaz10obg%2FWhatsApp-Image-2026-11-09-at-11.29.26-AM.jpeg?w=1200&amp;ar=16%3A9&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;overlay=https%3A%2F%2Fmedia.prothomalo.com%2Fprothomalo-bangla%2F2025-11-23%2F1558a7oz%2Fdefaultog.webp&amp;overlay_position=bottom&amp;overlay_width_pct=1</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/9-industry-groups-in-the-billion-dollar-club-who-s-on-the-list</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/9-industry-groups-in-the-billion-dollar-club-who-s-on-the-list"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/9-industry-groups-in-the-billion-dollar-club-who-s-on-the-list"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/9-industry-groups-in-the-billion-dollar-club-who-s-on-the-list"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-11-09%2Fjaz10obg%2FWhatsApp-Image-2026-11-09-at-11.29.26-AM.jpeg?w=1200&amp;ar=16%3A9&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;overlay=https%3A%2F%2Fmedia.prothomalo.com%2Fprothomalo-bangla%2F2025-11-23%2F1558a7oz%2Fdefaultog.webp&amp;overlay_position=bottom&amp;overlay_width_pct=1</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/beco-wants-to-expand-business-in-bangladesh</loc>
@@ -567,6 +607,26 @@
     <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-10-29%2Fzpm4do63%2FWhatsApp-Image-2026-10-29-at-11.37.37-PM.jpeg?rect=22%2C0%2C1259%2C839&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
+    <loc>https://www.voiceofstartup.bd/read/he-is-now-a-successful-entrepreneur-from-his-addiction-to-reading-book</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/he-is-now-a-successful-entrepreneur-from-his-addiction-to-reading-book"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/he-is-now-a-successful-entrepreneur-from-his-addiction-to-reading-book"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/he-is-now-a-successful-entrepreneur-from-his-addiction-to-reading-book"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2024-01%2F9552d0ad-e268-4791-8a28-b084b5cfca64%2F1_image_Template_Recovered.jpg?rect=94%2C0%2C1013%2C675&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/he-is-now-a-successful-entrepreneur-from-his-addiction-to-reading-book</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/he-is-now-a-successful-entrepreneur-from-his-addiction-to-reading-book"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/he-is-now-a-successful-entrepreneur-from-his-addiction-to-reading-book"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/he-is-now-a-successful-entrepreneur-from-his-addiction-to-reading-book"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2024-01%2F9552d0ad-e268-4791-8a28-b084b5cfca64%2F1_image_Template_Recovered.jpg?rect=94%2C0%2C1013%2C675&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/trusted-by-870-investors-and-22-top-companies-get-your-brand-across-to</loc>
     <lastmod>2026-11-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -605,6 +665,26 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/brac-bank-cuts-export-document-processing-time-from-40-days-to-one"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/brac-bank-cuts-export-document-processing-time-from-40-days-to-one"/>
     <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mw55a4g3x22k.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/how-shaheen-reza-changed-his-fortune-by-exporting-hair</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/how-shaheen-reza-changed-his-fortune-by-exporting-hair"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/how-shaheen-reza-changed-his-fortune-by-exporting-hair"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/how-shaheen-reza-changed-his-fortune-by-exporting-hair"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-11%2F435c05e4-b4a0-4964-a0a8-a235b204d7f9%2FWhatsApp_Image_2023_11_19_at_9_38.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/how-shaheen-reza-changed-his-fortune-by-exporting-hair</loc>
+    <lastmod>2026-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/how-shaheen-reza-changed-his-fortune-by-exporting-hair"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/how-shaheen-reza-changed-his-fortune-by-exporting-hair"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/how-shaheen-reza-changed-his-fortune-by-exporting-hair"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2023-11%2F435c05e4-b4a0-4964-a0a8-a235b204d7f9%2FWhatsApp_Image_2023_11_19_at_9_38.jpg?w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/cricketer-turned-successful-entrepreneur-ziaul-haque</loc>
