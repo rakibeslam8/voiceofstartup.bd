@@ -1,6 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/intensive-cultivation-of-venami-started-more-than-80-tons-of-shrimp-we</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-12T04:14:00.000Z</news:publication_date>
+      <news:title>ভেনামির অতি নিবিড় চাষ শুরু, হেক্টরে পাওয়া গেল ৮০ টনের বেশি চিংড়ি</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/intensive-cultivation-of-venami-started-more-than-80-tons-of-shrimp-we</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-12T04:14:00.000Z</news:publication_date>
+      <news:title>Intensive cultivation of Venami started, more than 80 tons of shrimp were found per hectare</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/masud-is-making-artificial-hands-and-feet-for-the-disabled</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-12T03:55:00.000Z</news:publication_date>
+      <news:title>প্রতিবন্ধীদের জন্য কৃত্রিম হাত-পা বানাচ্ছেন মাসুদ</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/masud-is-making-artificial-hands-and-feet-for-the-disabled</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-12T03:55:00.000Z</news:publication_date>
+      <news:title>Masud is making artificial hands and feet for the disabled</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/i-became-a-successful-entrepreneur-by-making-fertilizer-from-crab-shel</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-12T03:12:00.000Z</news:publication_date>
+      <news:title>কাঁকড়ার খোলস দিয়ে সার তৈরি করে সফল উদ্যোক্তা আসলাম</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/i-became-a-successful-entrepreneur-by-making-fertilizer-from-crab-shel</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-12T03:12:00.000Z</news:publication_date>
+      <news:title>I became a successful entrepreneur by making fertilizer from crab shells</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/two-friends-are-making-cars-after-leaving-their-jobs</loc>
     <news:news>
       <news:publication>
@@ -42,50 +108,6 @@
       </news:publication>
       <news:publication_date>2026-11-11T04:30:00.000Z</news:publication_date>
       <news:title>9 industry groups in the billion dollar club, who&#39;s on the list</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/beco-wants-to-expand-business-in-bangladesh</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-10T09:25:00.000Z</news:publication_date>
-      <news:title>বাংলাদেশে ব্যবসা সম্প্রসারণ করতে চায় বেকো</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/beco-wants-to-expand-business-in-bangladesh</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-10T09:25:00.000Z</news:publication_date>
-      <news:title>Beco wants to expand business in Bangladesh</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/touhid-s-products-made-of-pineapple-banana-jute-yarn-are-going-to-39-c</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-10T05:41:00.000Z</news:publication_date>
-      <news:title>আনারস, কলা, পাটের সুতায় তৈরি তৌহিদের পণ্য যাচ্ছে ৩৯ দেশে</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/touhid-s-products-made-of-pineapple-banana-jute-yarn-are-going-to-39-c</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-10T05:41:00.000Z</news:publication_date>
-      <news:title>Touhid&#39;s products made of pineapple, banana, jute yarn are going to 39 countries</news:title>
     </news:news>
   </url>
 </urlset>
