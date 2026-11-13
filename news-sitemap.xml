@@ -1,6 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-13T03:50:00.000Z</news:publication_date>
+      <news:title>ছোট উদ্যোক্তাদের ব্যাংক হিসাব খোলায় ভ্যাটের নিবন্ধনে অব্যাহতি চান ব্যাংকাররা</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-13T03:50:00.000Z</news:publication_date>
+      <news:title>Bankers want exemption from VAT registration for opening bank accounts of small entrepreneurs</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/starting-at-90-thousand-now-selling-crores-of-rupees</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-13T03:41:00.000Z</news:publication_date>
+      <news:title>৯০ হাজারে শুরু, এখন বিক্রি কোটি টাকার</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/starting-at-90-thousand-now-selling-crores-of-rupees</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-13T03:41:00.000Z</news:publication_date>
+      <news:title>Starting at 90 thousand, now selling crores of rupees</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-13T03:39:00.000Z</news:publication_date>
+      <news:title>ইলন মাস্কের সম্পদের পরিমাণ বাংলাদেশের বাজেটের কত গুণ জানেন</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-13T03:39:00.000Z</news:publication_date>
+      <news:title>Do you know how many times the wealth of Elon Musk is the budget of Bangladesh?</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/musk-will-hire-jensen-huang-says-it-s-an-honor-to-hire-him</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-13T03:36:00.000Z</news:publication_date>
+      <news:title>জেনসেন হুয়াংকে চাকরি দেবেন মাস্ক, বললেন তাঁকে কাজ দেওয়া সম্মানের</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/musk-will-hire-jensen-huang-says-it-s-an-honor-to-hire-him</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-13T03:36:00.000Z</news:publication_date>
+      <news:title>Musk will hire Jensen Huang, says it&#39;s an honor to hire him</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/intensive-cultivation-of-venami-started-more-than-80-tons-of-shrimp-we</loc>
     <news:news>
       <news:publication>
@@ -64,50 +152,6 @@
       </news:publication>
       <news:publication_date>2026-11-12T03:12:00.000Z</news:publication_date>
       <news:title>I became a successful entrepreneur by making fertilizer from crab shells</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/two-friends-are-making-cars-after-leaving-their-jobs</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-11T05:48:00.000Z</news:publication_date>
-      <news:title>চাকরি ছেড়ে গাড়ি বানাচ্ছেন দুই বন্ধু</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/two-friends-are-making-cars-after-leaving-their-jobs</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-11T05:48:00.000Z</news:publication_date>
-      <news:title>Two friends are making cars after leaving their jobs</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/9-industry-groups-in-the-billion-dollar-club-who-s-on-the-list</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-11T04:30:00.000Z</news:publication_date>
-      <news:title>বিলিয়ন ডলারের ক্লাবে ৯ শিল্প গ্রুপ, তালিকায় কারা</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/9-industry-groups-in-the-billion-dollar-club-who-s-on-the-list</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-11T04:30:00.000Z</news:publication_date>
-      <news:title>9 industry groups in the billion dollar club, who&#39;s on the list</news:title>
     </news:news>
   </url>
 </urlset>

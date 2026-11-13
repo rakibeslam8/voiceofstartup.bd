@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.voiceofstartup.bd/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/news</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -30,13 +30,13 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/founder-stories</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/business-policy</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -54,7 +54,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/market-insights</loc>
-    <lastmod>2026-11-11</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -71,7 +71,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/international-startups</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -125,6 +125,86 @@
     <loc>https://www.voiceofstartup.bd/editorial-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-11-23%2Fgs1cnihp%2FNewbuilding311.jpg?rect=0%2C16%2C400%2C267&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2025-11-23%2Fgs1cnihp%2FNewbuilding311.jpg?rect=0%2C16%2C400%2C267&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/starting-at-90-thousand-now-selling-crores-of-rupees</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/starting-at-90-thousand-now-selling-crores-of-rupees"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/starting-at-90-thousand-now-selling-crores-of-rupees"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/starting-at-90-thousand-now-selling-crores-of-rupees"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mwefokmjwqkc.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/starting-at-90-thousand-now-selling-crores-of-rupees</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/starting-at-90-thousand-now-selling-crores-of-rupees"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/starting-at-90-thousand-now-selling-crores-of-rupees"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/starting-at-90-thousand-now-selling-crores-of-rupees"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/11/mwefokmjwqkc.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-06-12%2Fzcyxw7wu%2FElon-mask.Reuters.png?rect=0%2C0%2C960%2C640&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-06-12%2Fzcyxw7wu%2FElon-mask.Reuters.png?rect=0%2C0%2C960%2C640&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/musk-will-hire-jensen-huang-says-it-s-an-honor-to-hire-him</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/musk-will-hire-jensen-huang-says-it-s-an-honor-to-hire-him"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/musk-will-hire-jensen-huang-says-it-s-an-honor-to-hire-him"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/musk-will-hire-jensen-huang-says-it-s-an-honor-to-hire-him"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-11-12%2Fjbdh1kfa%2FUV6519.jpg?rect=0%2C0%2C1310%2C873&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/musk-will-hire-jensen-huang-says-it-s-an-honor-to-hire-him</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/musk-will-hire-jensen-huang-says-it-s-an-honor-to-hire-him"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/musk-will-hire-jensen-huang-says-it-s-an-honor-to-hire-him"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/musk-will-hire-jensen-huang-says-it-s-an-honor-to-hire-him"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-11-12%2Fjbdh1kfa%2FUV6519.jpg?rect=0%2C0%2C1310%2C873&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/intensive-cultivation-of-venami-started-more-than-80-tons-of-shrimp-we</loc>
