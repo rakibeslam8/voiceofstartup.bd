@@ -17,8 +17,8 @@
   const nd = (n) => U().bnDigits(String(n));
   const pickL = (o) => (o ? (U().lang === "bn" ? o.bn : o.en) || o.en : "");
   const label = (list, id) => { const o = (list || []).find((x) => x.id === id); return o ? pickL(o) : id || ""; };
-  const LIST = "id,slug,name,tagline,category,stage,division,district,logo_url,verified,featured,rating_avg,rating_count,interest_count,vosb_valuation,seeking_amount,published_at,registered,invest_open";
-  const FULL = LIST + ",description,founded_year,website,social,team,cover_url,team_size,business_model,revenue_range,equity_offered,expected_valuation,use_of_funds,highlights,valuation_date,valuation_note,verified_at,registered,invest_open,vosb_val_low,vosb_val_high,vosb_confidence,raised_amount,investor_count";
+  const LIST = "id,slug,name,tagline,category,stage,division,district,logo_url,verified,featured,rating_avg,rating_count,interest_count,vosb_valuation,seeking_amount,published_at,registered,invest_open,name_bn,name_en,tagline_bn,tagline_en,i18n_extra";
+  const FULL = LIST + ",description,founded_year,website,social,team,cover_url,team_size,business_model,revenue_range,equity_offered,expected_valuation,use_of_funds,highlights,valuation_date,valuation_note,verified_at,registered,invest_open,vosb_val_low,vosb_val_high,vosb_confidence,raised_amount,investor_count,description_bn,description_en,business_model_bn,business_model_en,highlights_bn,highlights_en,use_of_funds_bn,use_of_funds_en";
   const H = { apikey: S.anonKey, Authorization: "Bearer " + S.anonKey };
   const DISCLAIMER = () => T("VOSB একটি মিডিয়া ও লিস্টিং প্ল্যাটফর্ম — ব্রোকার বা আর্থিক পরামর্শদাতা নয়। এখানে কোনো টাকা নেওয়া হয় না। ভ্যালুয়েশন শুধু ইঙ্গিতমূলক, বিনিয়োগ পরামর্শ নয়। বিনিয়োগে ঝুঁকি আছে — সিদ্ধান্তের আগে নিজে যাচাই করুন।",
     "VOSB is a media and listing platform — not a broker or financial adviser. No money is collected here. Valuations are indicative only and are not investment advice. Investing is risky — do your own due diligence.");
@@ -51,7 +51,17 @@
   const rating = (c) => c.rating_count > 0 ? `<span class="co-rate">${stars(c.rating_avg)}<b>${nd(Number(c.rating_avg).toFixed(1))}</b><em>(${nd(c.rating_count)})</em></span>` : `<span class="co-rate none">${T("এখনও রিভিউ নেই", "No reviews yet")}</span>`;
   const avImg = (name, url) => url ? `<img class="co-av" src="${esc(U().safeHref(url))}" alt="" width="36" height="36" loading="lazy" referrerpolicy="no-referrer">` : `<span class="co-av ph" aria-hidden="true">${esc(initial(name))}</span>`;
   const verified = () => `<span class="co-ver" title="${T("VOSB ডকুমেন্ট যাচাই করেছে", "Documents checked by VOSB")}">✔ ${T("VOSB ভেরিফাইড", "VOSB Verified")}</span>`;
+  /* a company is stored in both languages (the translator fills the missing one); show the one the reader chose, fall back to what the founder typed */
+  const teamSig = (t) => (Array.isArray(t) ? t : []).map((m) => ((m && m.name) || "") + "|" + ((m && m.role) || "")).join(";");
+  function loc(c) {
+    const bn = U().lang === "bn", pick = (k) => (bn ? c[k + "_bn"] : c[k + "_en"]) || c[k] || "";
+    const x = Object.assign({}, c, { name: pick("name"), tagline: pick("tagline"), description: pick("description"), business_model: pick("business_model"), highlights: pick("highlights"), use_of_funds: pick("use_of_funds") });
+    const ex = c.i18n_extra || {};
+    if (Array.isArray(c.team) && Array.isArray(ex.team) && ex.sig === teamSig(c.team)) x.team = c.team.map((m, i) => Object.assign({}, m, { role: (ex.team[i] && (bn ? ex.team[i].bn : ex.team[i].en)) || m.role }));
+    return x;
+  }
   function card(c) {
+    c = loc(c);
     const loc = [c.district, c.division].filter(Boolean).join(", ");
     const kv = c.vosb_valuation ? `<span class="co-kv"><i>${T("VOSB ভ্যালুয়েশন", "VOSB valuation")}</i><b>${money(c.vosb_valuation)}</b></span>` : c.seeking_amount ? `<span class="co-kv"><i>${T("তহবিল চাইছে", "Seeking")}</i><b>${money(c.seeking_amount)}</b></span>` : "";
     const open = c.invest_open !== false;
@@ -98,7 +108,7 @@
       if (st.cat) path += "&category=eq." + encodeURIComponent(st.cat);
       if (st.stage) path += "&stage=eq." + encodeURIComponent(st.stage);
       if (st.div) path += "&division=eq." + encodeURIComponent(st.div);
-      const q = clean(st.q); if (q) path += `&or=(name.ilike.*${encodeURIComponent(q)}*,tagline.ilike.*${encodeURIComponent(q)}*)`;
+      const q = clean(st.q); if (q) path += `&or=(name.ilike.*${encodeURIComponent(q)}*,name_bn.ilike.*${encodeURIComponent(q)}*,tagline.ilike.*${encodeURIComponent(q)}*,tagline_bn.ilike.*${encodeURIComponent(q)}*,tagline_en.ilike.*${encodeURIComponent(q)}*)`;
       try { const r = await rest(path, true); st.items = st.items.concat(r.rows); st.total = Math.max(r.total, st.items.length); st.state = "ready"; } catch (e) { st.state = "error"; }
       drawGrid();
     }
@@ -156,7 +166,8 @@
   const paras = (t) => String(t || "").split(/\n{2,}/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("");
   const SOC = { facebook: "Facebook", linkedin: "LinkedIn", x: "X", instagram: "Instagram", youtube: "YouTube" };
 
-  function setHead(c) {
+  function setHead(c0) {
+    const c = loc(c0);
     const url = (C.site && C.site.origin ? C.site.origin : location.origin) + "/company/" + c.slug;
     document.title = `${c.name} — ${T("কোম্পানি প্রোফাইল", "Company profile")} | Voice of Startup Bangladesh`;
     const desc = (c.tagline || "") + (c.description ? " — " + c.description.replace(/\s+/g, " ").slice(0, 140) : "");
@@ -219,24 +230,25 @@
     async function loadCom() { try { com = (await rpc("list_company_comments", { p_company: c.id })) || []; } catch (e) {} drawCom(); }
 
     function draw() {
+      const v = loc(c); setHead(c);
       const soc = Object.keys(c.social || {}).filter((k) => SOC[k] && c.social[k]).map((k) => `<a href="${esc(U().safeHref(c.social[k]))}" target="_blank" rel="noopener nofollow">${SOC[k]}</a>`).join("");
-      const fr = fundRows(), team = (c.team || []).filter((m) => m && m.name);
-      host.innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="/">${T("হোম", "Home")}</a><span aria-hidden="true">›</span><a href="/companies">${T("কোম্পানি", "Companies")}</a><span aria-hidden="true">›</span><span aria-current="page">${esc(c.name)}</span></nav>
+      const fr = fundRows(), team = (v.team || []).filter((m) => m && m.name);
+      host.innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="/">${T("হোম", "Home")}</a><span aria-hidden="true">›</span><a href="/companies">${T("কোম্পানি", "Companies")}</a><span aria-hidden="true">›</span><span aria-current="page">${esc(v.name)}</span></nav>
       <header class="co-head${c.cover_url ? " has-cover" : ""}">${c.cover_url ? `<div class="co-cover"><img src="${esc(U().safeHref(c.cover_url))}" alt="" width="1200" height="300" referrerpolicy="no-referrer"></div>` : ""}
-        <div class="co-hrow">${logo(c, "co-logo lg")}<div class="co-hmain"><h1>${esc(c.name)}</h1><div class="co-badges">${c.verified ? verified() : ""}${c.category ? `<span class="co-b">${esc(label(CO.industries, c.category))}</span>` : ""}${c.stage ? `<span class="co-b">${esc(label(CO.stages, c.stage))}</span>` : ""}${c.registered === false ? `<span class="co-b warn" title="${T("এখনও আইনগতভাবে নিবন্ধিত নয়", "Not yet legally registered")}">${T("নিবন্ধন হয়নি", "Not registered yet")}</span>` : ""}<span class="co-b ${c.invest_open === false ? "off" : "open"}">${c.invest_open === false ? T("এখন বিনিয়োগ নিচ্ছে না", "Not seeking investment now") : T("বিনিয়োগের জন্য উন্মুক্ত", "Open to investment")}</span></div>
-          <p class="co-ptag">${esc(c.tagline || "")}</p><div id="co-hrate">${rating(c)}</div></div></div>
+        <div class="co-hrow">${logo(c, "co-logo lg")}<div class="co-hmain"><h1>${esc(v.name)}</h1><div class="co-badges">${c.verified ? verified() : ""}${c.category ? `<span class="co-b">${esc(label(CO.industries, c.category))}</span>` : ""}${c.stage ? `<span class="co-b">${esc(label(CO.stages, c.stage))}</span>` : ""}${c.registered === false ? `<span class="co-b warn" title="${T("এখনও আইনগতভাবে নিবন্ধিত নয়", "Not yet legally registered")}">${T("নিবন্ধন হয়নি", "Not registered yet")}</span>` : ""}<span class="co-b ${c.invest_open === false ? "off" : "open"}">${c.invest_open === false ? T("এখন বিনিয়োগ নিচ্ছে না", "Not seeking investment now") : T("বিনিয়োগের জন্য উন্মুক্ত", "Open to investment")}</span></div>
+          <p class="co-ptag">${esc(v.tagline || "")}</p><div id="co-hrate">${rating(c)}</div></div></div>
         <div class="co-actions">${c.website ? `<a class="btn btn-outline" href="${esc(U().safeHref(c.website))}" target="_blank" rel="noopener nofollow">🌐 ${T("ওয়েবসাইট", "Website")}</a>` : ""}<a class="btn btn-orange" href="#co-rev-h">★ ${T("রিভিউ দিন", "Rate & review")}</a>${c.invest_open === false ? `<button class="btn btn-outline" type="button" disabled title="${T("কোম্পানিটি এখন বিনিয়োগ নিচ্ছে না", "This company is not seeking investment right now")}">💼 ${T("বিনিয়োগ বন্ধ আছে", "Investment closed")}</button>` : `<button class="btn btn-green" type="button" id="co-invest">💼 ${T("বিনিয়োগে আগ্রহ জানান", "Show investor interest")}</button>`}<button class="btn btn-outline" type="button" id="co-share">↗ ${T("শেয়ার", "Share")}</button></div></header>
       <div class="co-layout"><div class="co-main">
-        <section class="co-sec"><h2>${T("পরিচিতি", "About")}</h2>${paras(c.description) || `<p class="muted">—</p>`}</section>
-        ${c.business_model ? `<section class="co-sec"><h2>${T("ব্যবসার মডেল", "Business model")}</h2>${paras(c.business_model)}</section>` : ""}
-        ${c.highlights ? `<section class="co-sec"><h2>${T("বিশেষ অর্জন ও হাইলাইট", "Highlights")}</h2>${paras(c.highlights)}</section>` : ""}
+        <section class="co-sec"><h2>${T("পরিচিতি", "About")}</h2>${paras(v.description) || `<p class="muted">—</p>`}</section>
+        ${v.business_model ? `<section class="co-sec"><h2>${T("ব্যবসার মডেল", "Business model")}</h2>${paras(v.business_model)}</section>` : ""}
+        ${v.highlights ? `<section class="co-sec"><h2>${T("বিশেষ অর্জন ও হাইলাইট", "Highlights")}</h2>${paras(v.highlights)}</section>` : ""}
         ${team.length ? `<section class="co-sec"><h2>${T("টিম", "Team")}</h2><ul class="co-team">${team.map((m) => `<li><span class="co-tav">${esc(initial(m.name))}</span><div><b>${esc(m.name)}</b><small>${esc(m.role || "")}</small></div></li>`).join("")}</ul></section>` : ""}
         <section class="co-sec co-late" id="co-rev-sec"><h2 id="co-rev-h">${T("রিভিউ ও রেটিং", "Reviews & ratings")}</h2><div id="co-rev"></div></section>
         <section class="co-sec co-late"><h2>${T("আলোচনা", "Discussion")}</h2><div id="co-com"></div></section>
       </div><aside class="co-side">
-        ${fr.length || c.use_of_funds ? `<section class="co-card2"><h2>${T("তহবিল ও ভ্যালুয়েশন", "Funding & valuation")}</h2><dl class="co-fund">${fr.map((r) => `<div class="${r[2] || ""}"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")}</dl>
+        ${fr.length || v.use_of_funds ? `<section class="co-card2"><h2>${T("তহবিল ও ভ্যালুয়েশন", "Funding & valuation")}</h2><dl class="co-fund">${fr.map((r) => `<div class="${r[2] || ""}"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")}</dl>
           ${c.vosb_valuation && (c.valuation_date || c.valuation_note) ? `<p class="co-vnote">${c.valuation_date ? T("মূল্যায়নের তারিখ: ", "Assessed on ") + esc(U().formatDate(c.valuation_date)) + ". " : ""}${esc(c.valuation_note || "")}</p>` : ""}
-          ${c.use_of_funds ? `<h3>${T("তহবিল কীভাবে ব্যবহার হবে", "Use of funds")}</h3>${paras(c.use_of_funds)}` : ""}</section>` : ""}
+          ${v.use_of_funds ? `<h3>${T("তহবিল কীভাবে ব্যবহার হবে", "Use of funds")}</h3>${paras(v.use_of_funds)}` : ""}</section>` : ""}
         <section class="co-card2"><h2>${T("তথ্য", "Details")}</h2><dl class="co-facts">${facts()}</dl>${soc ? `<div class="co-soc">${soc}</div>` : ""}<p class="co-views">💼 ${nd(c.interest_count || 0)} ${T("বিনিয়োগ আগ্রহ", "investor interests")}</p></section>
         <p class="co-disc">${DISCLAIMER()}</p></aside></div>`;
       drawRev(); drawCom();
@@ -250,7 +262,7 @@
       if (e.target.closest("[data-rdel]")) { if (!confirm(T("আপনার রিভিউ মুছে ফেলবেন?", "Delete your review?"))) return; try { await rpc("delete_my_review", { p_company: c.id }); await loadRev(true); } catch (er) { toast(errText(er), "err"); } return; }
       const rp = e.target.closest("[data-reply]"); if (rp) { replyTo = replyTo === rp.dataset.reply ? null : rp.dataset.reply; drawCom(); const t = $(".co-cform textarea", $("#co-com").querySelector("li .co-cform") ? $("#co-com") : $("#co-com")); return; }
       const cd = e.target.closest("[data-cdel]"); if (cd) { if (!confirm(T("কমেন্টটি মুছে ফেলবেন?", "Delete this comment?"))) return; try { await rpc("delete_my_comment", { p_id: cd.dataset.cdel }); await loadCom(); } catch (er) { toast(errText(er), "err"); } return; }
-      if (e.target.closest("#co-share")) { const d = { title: c.name, text: c.tagline || c.name, url: location.origin + "/company/" + c.slug }; if (navigator.share) navigator.share(d).catch(() => {}); else if (navigator.clipboard) navigator.clipboard.writeText(d.url).then(() => toast(T("লিংক কপি হয়েছে ✓", "Link copied ✓"), "ok")).catch(() => {}); return; }
+      if (e.target.closest("#co-share")) { const d = { title: loc(c).name, text: loc(c).tagline || loc(c).name, url: location.origin + "/company/" + c.slug }; if (navigator.share) navigator.share(d).catch(() => {}); else if (navigator.clipboard) navigator.clipboard.writeText(d.url).then(() => toast(T("লিংক কপি হয়েছে ✓", "Link copied ✓"), "ok")).catch(() => {}); return; }
       if (e.target.closest("#co-invest")) invest();
     });
     host.addEventListener("submit", async (e) => {

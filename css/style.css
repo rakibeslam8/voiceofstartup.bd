@@ -2162,3 +2162,15 @@ html.has-user .header-actions > .theme-toggle, html.has-user .header-actions > .
 .au-prefb:hover { background: var(--orange-soft); color: var(--orange-dark); }
 .au-av-link { display: inline-flex; border-radius: 50%; }
 .au-av-link img.au-av { display: block; }
+
+/* ===== Bangla article text: Hind Siliguri, regular weight, native digits & conjuncts, generous leading (matches the reference sample).
+   Only the body text inside the article — titles/headings keep their own fonts. English articles keep Inter. ===== */
+html[lang="bn"] .prose, html[lang="bn"] .prose p, html[lang="bn"] .prose li, html[lang="bn"] .prose blockquote, html[lang="bn"] .prose td, html[lang="bn"] .prose th {
+  font-family: "Hind Siliguri", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 400; letter-spacing: 0; word-spacing: 0; font-feature-settings: normal; font-kerning: normal; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;
+}
+html[lang="bn"] .prose p, html[lang="bn"] .prose li, html[lang="bn"] .prose blockquote { font-size: 1.2rem; line-height: 1.95; color: #1d1a16; }
+html[lang="bn"] .prose p { margin-top: .85em; }
+html[lang="bn"] .prose strong, html[lang="bn"] .prose b { font-weight: 600; }
+html[data-theme="dark"][lang="bn"] .prose p, html[data-theme="dark"][lang="bn"] .prose li, html[data-theme="dark"][lang="bn"] .prose blockquote { color: #e4e4e4; }
+@media (max-width: 760px) { html[lang="bn"] .prose p, html[lang="bn"] .prose li, html[lang="bn"] .prose blockquote { font-size: 1.12rem; line-height: 1.9; } }
