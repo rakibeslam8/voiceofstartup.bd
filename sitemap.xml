@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.voiceofstartup.bd/</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/news</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -42,7 +42,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/opportunities</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-14</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -125,6 +125,26 @@
     <loc>https://www.voiceofstartup.bd/editorial-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/97-jobs-in-agriculture-marketing-department-pay-scale-starting-from-20</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/97-jobs-in-agriculture-marketing-department-pay-scale-starting-from-20"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/97-jobs-in-agriculture-marketing-department-pay-scale-starting-from-20"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/97-jobs-in-agriculture-marketing-department-pay-scale-starting-from-20"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-05-16%2Fyj3xmffv%2F%E0%A6%9A%E0%A6%BE%E0%A6%95%E0%A6%B0%E0%A6%BF-%E0%A6%9B%E0%A6%AC%E0%A6%BF-%E0%A7%A7.jpeg?rect=0%2C0%2C1103%2C735&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/97-jobs-in-agriculture-marketing-department-pay-scale-starting-from-20</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/97-jobs-in-agriculture-marketing-department-pay-scale-starting-from-20"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/97-jobs-in-agriculture-marketing-department-pay-scale-starting-from-20"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/97-jobs-in-agriculture-marketing-department-pay-scale-starting-from-20"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2026-05-16%2Fyj3xmffv%2F%E0%A6%9A%E0%A6%BE%E0%A6%95%E0%A6%B0%E0%A6%BF-%E0%A6%9B%E0%A6%AC%E0%A6%BF-%E0%A7%A7.jpeg?rect=0%2C0%2C1103%2C735&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts</loc>

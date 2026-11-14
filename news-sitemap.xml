@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/97-jobs-in-agriculture-marketing-department-pay-scale-starting-from-20</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-14T04:06:00.000Z</news:publication_date>
+      <news:title>কৃষি বিপণন অধিদপ্তরে ৯৭ জনের চাকরি, বেতন স্কেল ২০ হাজার থেকে শুরু</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/97-jobs-in-agriculture-marketing-department-pay-scale-starting-from-20</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-14T04:06:00.000Z</news:publication_date>
+      <news:title>97 jobs in Agriculture Marketing Department, pay scale starting from 20 thousand</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/bankers-want-exemption-from-vat-registration-for-opening-bank-accounts</loc>
     <news:news>
       <news:publication>
@@ -86,72 +108,6 @@
       </news:publication>
       <news:publication_date>2026-11-13T03:36:00.000Z</news:publication_date>
       <news:title>Musk will hire Jensen Huang, says it&#39;s an honor to hire him</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/intensive-cultivation-of-venami-started-more-than-80-tons-of-shrimp-we</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-12T04:14:00.000Z</news:publication_date>
-      <news:title>ভেনামির অতি নিবিড় চাষ শুরু, হেক্টরে পাওয়া গেল ৮০ টনের বেশি চিংড়ি</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/intensive-cultivation-of-venami-started-more-than-80-tons-of-shrimp-we</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-12T04:14:00.000Z</news:publication_date>
-      <news:title>Intensive cultivation of Venami started, more than 80 tons of shrimp were found per hectare</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/masud-is-making-artificial-hands-and-feet-for-the-disabled</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-12T03:55:00.000Z</news:publication_date>
-      <news:title>প্রতিবন্ধীদের জন্য কৃত্রিম হাত-পা বানাচ্ছেন মাসুদ</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/masud-is-making-artificial-hands-and-feet-for-the-disabled</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-12T03:55:00.000Z</news:publication_date>
-      <news:title>Masud is making artificial hands and feet for the disabled</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/i-became-a-successful-entrepreneur-by-making-fertilizer-from-crab-shel</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-12T03:12:00.000Z</news:publication_date>
-      <news:title>কাঁকড়ার খোলস দিয়ে সার তৈরি করে সফল উদ্যোক্তা আসলাম</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/i-became-a-successful-entrepreneur-by-making-fertilizer-from-crab-shel</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-12T03:12:00.000Z</news:publication_date>
-      <news:title>I became a successful entrepreneur by making fertilizer from crab shells</news:title>
     </news:news>
   </url>
 </urlset>
