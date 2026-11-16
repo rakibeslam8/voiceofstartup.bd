@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Sat, 14 Nov 2026 04:06:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 16 Nov 2026 13:42:00 GMT</lastBuildDate>
+    <item>
+      <title>খেলাপি ঋণ ৬ লাখ কোটি টাকা ছুঁইছুঁই: সংসদে অর্থমন্ত্রী</title>
+      <link>https://www.voiceofstartup.bd/read/npls-touching-tk-6-lakh-crore-finance-minister-in-parliament</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/npls-touching-tk-6-lakh-crore-finance-minister-in-parliament</guid>
+      <pubDate>Mon, 16 Nov 2026 13:42:00 GMT</pubDate>
+      <category>মার্কেট ইনসাইট</category>
+      <description>দেশের ব্যাংকিং খাতে খেলাপি ঋণের পরিমাণ বেড়ে ৫ লাখ ৯৭ হাজার ১৫৪ কোটি টাকা ছাড়িয়েছে, যা ব্যাংকগুলোর বিতরণ করা মোট ঋণের ৩২ দশমিক ১৭ শতাংশ।</description>
+    </item>
     <item>
       <title>কৃষি বিপণন অধিদপ্তরে ৯৭ জনের চাকরি, বেতন স্কেল ২০ হাজার থেকে শুরু</title>
       <link>https://www.voiceofstartup.bd/read/97-jobs-in-agriculture-marketing-department-pay-scale-starting-from-20</link>
@@ -238,14 +246,6 @@
       <pubDate>Sat, 07 Nov 2026 13:59:00 GMT</pubDate>
       <category>ব্যবসা, বিনিয়োগ ও নীতিমালা</category>
       <description>কোনো ব্যাংক বা আর্থিক প্রতিষ্ঠানে থাকা ব্যক্তিগত ঋণ (পারসোনাল লোন) ও আবাসন ঋণ (হোম লোন) কম সুদে কেনার (টেকওভার) ঘোষণা দিয়েছে ব্র্যাক ব্যাংক। এই বিশেষ অফারের আওতায় প্রথম বছরে ৯ শতাংশ সুদ দিতে হবে গ্রাহকদের।</description>
-    </item>
-    <item>
-      <title>কেন থমকে গেল বাংলা কিউআরে লেনদেনের গতি</title>
-      <link>https://www.voiceofstartup.bd/read/why-did-the-speed-of-transactions-in-bangla-qr-stopped</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/why-did-the-speed-of-transactions-in-bangla-qr-stopped</guid>
-      <pubDate>Sat, 07 Nov 2026 13:05:00 GMT</pubDate>
-      <category>মার্কেট ইনসাইট</category>
-      <description>নগদ টাকার ব্যবহার কমিয়ে ডিজিটাল লেনদেন জনপ্রিয় করার লক্ষ্যে চালু হওয়া ‘বাংলা কিউআর’ উদ্যোগ অনেকটা থমকে গেছে। প্রথম দিকে লেনদেনের গতি আশাব্যঞ্জক হলেও সাম্প্রতিক সময়ে এতে ভাটা পড়েছে।</description>
     </item>
   </channel>
 </rss>

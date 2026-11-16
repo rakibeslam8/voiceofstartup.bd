@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/npls-touching-tk-6-lakh-crore-finance-minister-in-parliament</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-16T13:42:00.000Z</news:publication_date>
+      <news:title>খেলাপি ঋণ ৬ লাখ কোটি টাকা ছুঁইছুঁই: সংসদে অর্থমন্ত্রী</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/npls-touching-tk-6-lakh-crore-finance-minister-in-parliament</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-16T13:42:00.000Z</news:publication_date>
+      <news:title>NPLs touching Tk 6 lakh crore: Finance Minister in Parliament</news:title>
+    </news:news>
+  </url>
 </urlset>
