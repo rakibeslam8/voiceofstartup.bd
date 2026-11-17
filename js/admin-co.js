@@ -120,8 +120,103 @@ window.VOSB_ADMIN_CO = function (X) {
   }
   function userTabs(active, c) {
     const d = Number(c && c.deletions) || 0, u = Number(c && c.users) || 0;
-    return `<div class="co-tabs" role="tablist" aria-label="Users"><a href="#/users" role="tab" class="${active === "users" ? "on" : ""}">People${u ? `<i class="soft">${fmtN(u)}</i>` : ""}</a><a href="#/deletions" role="tab" class="${active === "del" ? "on" : ""}">Deleted accounts${d ? `<i class="soft">${fmtN(d)}</i>` : ""}</a><a href="#/trash" role="tab">Trash &amp; suspended</a></div>`;
+    return `<div class="co-tabs" role="tablist" aria-label="Users"><a href="#/users" role="tab" class="${active === "users" ? "on" : ""}">People${u ? `<i class="soft">${fmtN(u)}</i>` : ""}</a><a href="#/active" role="tab" class="${active === "active" ? "on" : ""}">Daily active</a><a href="#/deletions" role="tab" class="${active === "del" ? "on" : ""}">Deleted accounts${d ? `<i class="soft">${fmtN(d)}</i>` : ""}</a><a href="#/trash" role="tab">Trash &amp; suspended</a></div>`;
   }
+
+  /* ---------------- CSV export of every contact list (e-mail / phone) — data comes from the admin-only function admin_export_contacts ---------------- */
+  const csvCell = (v) => { v = v === null || v === undefined ? "" : typeof v === "object" ? JSON.stringify(v) : String(v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
+  const downloadRows = (name, rows) => {
+    const cols = []; rows.forEach((r) => Object.keys(r).forEach((k) => { if (!cols.includes(k)) cols.push(k); }));
+    const head = cols.map((k) => k.replace(/_/g, " "));
+    const body = rows.map((r) => cols.map((k) => csvCell(r[k])).join(","));
+    const blob = new Blob(["﻿" + [head.map(csvCell).join(",")].concat(body).join("\r\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  };
+  const EXPL = { members: "Active members", subscribers: "Active subscribers", company_contacts: "Live applications", investors: "Open interests", payers: "Verified payers" };
+  const expBtns = (kind) => `<span class="exp-row"><button type="button" class="b b-line b-sm" data-exp="${kind}" data-act="1" title="Only people/records that are active right now (confirmed e-mail, not suspended, seen in the last 30 days)">⬇ ${EXPL[kind]} (CSV)</button><button type="button" class="b b-line b-sm" data-exp="${kind}" data-act="0">⬇ Everyone (CSV)</button></span>`;
+  document.addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-exp]"); if (!b || b.disabled) return;
+    e.preventDefault(); b.disabled = true; const old = b.textContent; b.textContent = "Preparing…";
+    try {
+      const rows = must(await sb.rpc("admin_export_contacts", { p_kind: b.dataset.exp, p_active_only: b.dataset.act === "1" })) || [];
+      if (!rows.length) toast("Nothing to export yet", "err");
+      else { downloadRows(`vosb-${b.dataset.exp}-${b.dataset.act === "1" ? "active" : "all"}-${new Date().toISOString().slice(0, 10)}.csv`, rows); toast(`${fmtN(rows.length)} rows exported`, "ok"); }
+    } catch (er) { toast(errMsg(er), "err"); }
+    b.disabled = false; b.textContent = old;
+  });
+
+  /* ---------------- Overall tiles for the dashboard (users, activity, revenue, companies, content) ---------------- */
+  async function overviewTiles() {
+    let T; try { T = must(await sb.rpc("admin_overview_totals")); } catch (e) { return ""; }
+    if (!T) return "";
+    const u = T.users || {}, r = T.revenue || {}, c = T.companies || {}, k = T.content || {}, a = T.audience || {}, ro = u.roles || {};
+    const tile = (cls, label, val, href) => href ? `<a class="tile ${cls}" href="${href}" style="text-decoration:none;color:inherit"><small>${label}</small><b>${val}</b></a>` : `<div class="tile ${cls}"><small>${label}</small><b>${val}</b></div>`;
+    return [
+      tile("g", "Total users", fmtN(u.total), "#/users"),
+      tile("", "Active today (members)", fmtN(u.dau), "#/active"),
+      tile("k", "Active · 7 days", fmtN(u.wau), "#/active"),
+      tile("r", "Active · 30 days", fmtN(u.mau), "#/active"),
+      tile("", "New users · 7 days", fmtN(u.new_7d), "#/users"),
+      tile("k", "Investors · Founders · Readers", `${fmtN(ro.investor || 0)} · ${fmtN(ro.founder || 0)} · ${fmtN(ro.reader || 0)}`, "#/users"),
+      tile("g", "Total revenue", esc(bdt(r.listing_verified)), "#/payments"),
+      tile("", "Revenue · 30 days", esc(bdt(r.listing_30d)), "#/payments"),
+      tile("r", "Payments pending", `${esc(bdt(r.listing_pending))} <small class="muted">(${fmtN(r.listing_pending_n)})</small>`, "#/payments"),
+      tile("k", "Investments verified", esc(bdt(r.invested_verified)), "#/deals"),
+      tile("g", "Listed companies", fmtN(c.published), "#/companies/all"),
+      tile("", "Applications waiting", fmtN(c.awaiting), "#/companies"),
+      tile("k", "Open for investment", fmtN(c.open_invest), "#/companies/all"),
+      tile("", "Investor interests", fmtN(c.interests), "#/interests"),
+      tile("r", "Company reviews", fmtN(c.reviews), "#/reviews"),
+      tile("", "Article comments", fmtN(k.comments)),
+      tile("g", "Visitors today", fmtN(a.visitors_today)),
+    ].join("");
+  }
+
+  /* ---------------- Daily active: members who used the site each day + site visitors, with the people behind each day ---------------- */
+  async function viewActive(view) {
+    bind(view);
+    const st = view._ast || (view._ast = { days: 30, day: "" });
+    const head = `<div class="page-h"><h1>People</h1></div>${userTabs("active", cc)}`;
+    view.innerHTML = head + loadingCard();
+    let T, D, M;
+    try {
+      [T, D] = await Promise.all([sb.rpc("admin_overview_totals"), sb.rpc("admin_daily_active", { p_days: st.days })]);
+      T = must(T) || {}; D = must(D) || [];
+      if (!st.day || !D.some((r) => r.day === st.day)) st.day = (D[0] && D[0].day) || "";
+      M = st.day ? (must(await sb.rpc("admin_active_members", { p_day: st.day })) || []) : [];
+    } catch (e) { view.innerHTML = head + errorCard(e); return; }
+    if (!view.isConnected) return;
+    const u = T.users || {}, dau = Number(u.dau) || 0, mau = Number(u.mau) || 0, wau = Number(u.wau) || 0;
+    const pct = (a, b) => (b ? Math.round((a / b) * 100) + "%" : "—");
+    const maxM = Math.max(1, ...D.map((r) => Number(r.members) || 0));
+    view.innerHTML = `<div class="page-h"><h1>People</h1><span class="exp-row"><button type="button" class="b b-line b-sm" data-a="dl_days">⬇ Daily table (CSV)</button></span></div>${userTabs("active", cc)}
+      <div class="tiles">
+        <div class="tile g"><small>Active today</small><b>${fmtN(dau)}</b></div>
+        <div class="tile k"><small>Active · 7 days</small><b>${fmtN(wau)}</b></div>
+        <div class="tile r"><small>Active · 30 days</small><b>${fmtN(mau)}</b></div>
+        <div class="tile"><small>Daily ÷ monthly (stickiness)</small><b>${pct(dau, mau)}</b></div>
+        <div class="tile"><small>New users today</small><b>${fmtN(u.new_today)}</b></div>
+        <div class="tile k"><small>New users · 7 days</small><b>${fmtN(u.new_7d)}</b></div>
+        <div class="tile"><small>Total users</small><b>${fmtN(u.total)}</b></div>
+        <div class="tile g"><small>Confirmed e-mails</small><b>${fmtN(u.confirmed)}</b></div>
+      </div>
+      <div class="card"><div class="co-filters" style="margin:0 0 10px"><h2 style="margin:0;flex:1">Day by day</h2>
+        <select class="sel" id="dd" aria-label="Days shown">${[14, 30, 90, 180].map((n) => `<option value="${n}"${n === st.days ? " selected" : ""}>Last ${n} days</option>`).join("")}</select></div>
+        <p class="muted" style="font-size:.86rem;margin:0 0 10px"><b>Active members</b> = signed-in people who opened the site that day. <b>Visitors</b> = every browser (signed in or not). Tap a day to see who was active.</p>
+        <div style="overflow-x:auto"><table class="t"><thead><tr><th>Date</th><th class="n">Active members</th><th class="n">New users</th><th class="n">Visitors</th><th class="n">Visits</th><th class="n">Page views</th></tr></thead><tbody>
+        ${D.map((r) => `<tr class="${r.day === st.day ? "on" : ""}" data-a="day" data-d="${esc(r.day)}" tabindex="0" style="cursor:pointer"><td>${esc(fmtD(r.day))}</td><td class="n"><b>${fmtN(r.members)}</b> <span class="bar" style="display:inline-block;height:6px;border-radius:4px;background:var(--orange);width:${Math.round(((Number(r.members) || 0) / maxM) * 60)}px;vertical-align:middle"></span></td><td class="n">${fmtN(r.new_members)}</td><td class="n">${fmtN(r.visitors)}</td><td class="n">${fmtN(r.sessions)}</td><td class="n">${fmtN(r.views)}</td></tr>`).join("")}</tbody></table></div></div>
+      <div class="card"><div class="co-filters" style="margin:0 0 10px"><h2 style="margin:0;flex:1">Who was active · ${esc(st.day ? fmtD(st.day) : "—")} <span class="muted" style="font-size:.9rem">(${fmtN(M.length)})</span></h2>${M.length ? `<button type="button" class="b b-line b-sm" data-a="dl_members">⬇ This day (CSV)</button>` : ""}</div>
+        ${M.length ? `<div style="overflow-x:auto"><table class="t"><thead><tr><th>Name</th><th>E-mail</th><th>Phone</th><th>Role</th><th>Device</th><th class="n">Opens</th><th>First</th><th>Last</th><th class="n">Active days (30)</th></tr></thead><tbody>
+        ${M.map((m) => `<tr><td>${esc(m.name || "—")}</td><td>${esc(m.email || "")}</td><td>${esc(m.phone || "—")}</td><td>${esc(m.role || "—")}</td><td>${esc(m.device || "—")}</td><td class="n">${fmtN(m.hits)}</td><td>${esc(m.first_at ? fmtDT(m.first_at) : "—")}</td><td>${esc(m.last_at ? fmtDT(m.last_at) : "—")}</td><td class="n">${fmtN(m.days_30)}</td></tr>`).join("")}</tbody></table></div>`
+        : `<div class="empty"><b>No signed-in activity recorded</b>Member activity is recorded from now on (each time a signed-in person opens the site).</div>`}</div>`;
+    const dd = view.querySelector("#dd"); if (dd) dd.onchange = () => { st.days = Number(dd.value) || 30; viewActive(view); };
+    view._h.day = (b) => { st.day = b.dataset.d; viewActive(view); };
+    view._h.dl_days = () => downloadRows(`vosb-daily-active-${new Date().toISOString().slice(0, 10)}.csv`, D.map((r) => ({ date: r.day, active_members: r.members, new_users: r.new_members, visitors: r.visitors, visits: r.sessions, page_views: r.views })));
+    view._h.dl_members = () => downloadRows(`vosb-active-members-${st.day}.csv`, M.map((m) => ({ name: m.name, email: m.email, phone: m.phone, role: m.role, device: m.device, opens: m.hits, first_at: m.first_at, last_at: m.last_at, active_days_30: m.days_30 })));
+    view.querySelectorAll("tr[data-a=day]").forEach((tr) => tr.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tr.click(); } }));
+  }
+
   const loadingCard = () => `<div class="card"><p class="muted">Loading…</p></div>`;
   const errorCard = (e) => `<div class="card"><div class="msg err">${esc(errMsg(e))}</div><p class="muted" style="font-size:.85rem">If this says "permission denied" or "relation does not exist", the Company Directory SQL (supabase/update-11-companies.sql) has not been applied to this project.</p></div>`;
   const kv = (pairs) => `<dl class="kv">${pairs.filter((p) => p).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v === null || v === undefined || v === "" ? "—" : v}</dd>`).join("")}</dl>`;
@@ -133,7 +228,7 @@ window.VOSB_ADMIN_CO = function (X) {
   const LIST_COLS = "id,slug,name,tagline,status,category,stage,division,district,logo_url,verified,featured,rating_avg,rating_count,views,interest_count,submitted_at,published_at,created_at,company_private(owner_name,owner_email),listing_payments(status,amount),company_documents(id)";
   async function viewList(view, kind) {
     bind(view);
-    view.innerHTML = `<div class="page-h"><h1>Companies</h1></div>${tabs(kind, cc)}${loadingCard()}`;
+    view.innerHTML = `<div class="page-h"><h1>Companies</h1>${expBtns("company_contacts")}</div>${tabs(kind, cc)}${loadingCard()}`;
     let rows, c;
     try {
       let vs;
@@ -481,7 +576,7 @@ window.VOSB_ADMIN_CO = function (X) {
     if (!view.isConnected) return;
     refreshBadges();
     const st = { q: "", s: "all" };
-    view.innerHTML = `<div class="page-h"><h1>Payments</h1></div>${tabs("pay", c)}
+    view.innerHTML = `<div class="page-h"><h1>Payments</h1>${expBtns("payers")}</div>${tabs("pay", c)}
       <div class="tiles co-tiles"><div class="tile r"><small>Waiting for verification</small><b>${fmtN(c ? c.payments_pending : 0)}</b></div><div class="tile g"><small>Verified payments</small><b>${fmtN(c ? c.payments_verified : 0)}</b></div><div class="tile k"><small>Verified revenue</small><b>${esc(bdt(c ? c.revenue_verified : 0))}</b></div></div>
       <div class="msg info">bKash “Send Money” cannot be confirmed automatically. Open your bKash app/SMS, find the TrxID shown below with the same amount, then press <b>Verify</b>. The applicant's screen unlocks by itself.</div>
       <div class="co-filters"><input class="inp" id="q" type="search" placeholder="Search TrxID, invoice, number, e-mail, company…" aria-label="Search" autocomplete="off">
@@ -562,7 +657,7 @@ window.VOSB_ADMIN_CO = function (X) {
     if (!view.isConnected) return;
     refreshBadges();
     const st = { s: "all", q: "" };
-    view.innerHTML = `<div class="page-h"><h1>Investor interest</h1></div>${tabs("int", c)}
+    view.innerHTML = `<div class="page-h"><h1>Investor interest</h1>${expBtns("investors")}</div>${tabs("int", c)}
       <div class="msg info">You always see the investor's contact details. The company owner only sees them when the investor ticked “share my contact”.</div>
       <div class="co-filters"><input class="inp" id="q" type="search" placeholder="Search investor, company, message…" aria-label="Search" autocomplete="off">
         <select class="sel" id="fs" aria-label="Status"><option value="all">All</option><option value="new">New</option><option value="contacted">Contacted</option><option value="closed">Closed</option></select></div>
@@ -792,7 +887,7 @@ window.VOSB_ADMIN_CO = function (X) {
   async function viewUsers(view) {
     bind(view);
     const st = view._ust || (view._ust = { q: "", page: 0, role: "", active: "", sort: "new" }); const PER = 40;
-    view.innerHTML = `<div class="page-h"><h1>People</h1></div>${userTabs("users", cc)}${loadingCard()}`;
+    view.innerHTML = `<div class="page-h"><h1>People</h1>${expBtns("members")}</div>${userTabs("users", cc)}${loadingCard()}`;
     let d, c, S;
     try {
       [d, c, S] = await Promise.all([sb.rpc("admin_list_users", { p_q: st.q || null, p_limit: PER, p_offset: st.page * PER, p_role: st.role || null, p_active: st.active || null, p_sort: st.sort }).then(must), counts(), sb.rpc("admin_user_stats").then(must)]);
@@ -801,7 +896,7 @@ window.VOSB_ADMIN_CO = function (X) {
     d = d || { total: 0, items: [] }; S = S || {};
     const total = Number(d.total) || 0, items = d.items || [], pages = Math.max(1, Math.ceil(total / PER)), R = S.roles || {};
     const chip = (k, label, n) => `<button type="button" class="co-chip${st.role === k ? " on" : ""}" data-a="role" data-v="${k}">${label}${n != null ? ` <i>${fmtN(n)}</i>` : ""}</button>`;
-    view.innerHTML = `<div class="page-h"><h1>People</h1></div>${userTabs("users", c)}
+    view.innerHTML = `<div class="page-h"><h1>People</h1>${expBtns("members")}</div>${userTabs("users", c)}
       <div class="tiles co-tiles"><div class="tile"><small>Registered</small><b>${fmtN(S.total)}</b></div><div class="tile g"><small>Active (30 days)</small><b>${fmtN(S.active)}</b></div><div class="tile"><small>Inactive</small><b>${fmtN(S.inactive)}</b></div><div class="tile k"><small>Invested (confirmed)</small><b>${esc(bdt(S.invested_total))}</b></div><div class="tile r"><small>Deals to verify</small><b>${fmtN(S.awaiting_verify)}</b></div><div class="tile"><small>Joined this week</small><b>${fmtN(S.new7)}</b></div></div>
       ${arr(S.top_investors).length ? `<div class="card"><h2>🏆 Top investors</h2><ol class="co-top">${S.top_investors.map((t, i) => `<li><span class="co-rank">${i + 1}</span><span class="co-av">${t.avatar_url && isUrl(t.avatar_url) ? `<img src="${esc(t.avatar_url)}" alt="" referrerpolicy="no-referrer">` : initial(t.name)}</span><span class="co-u-main"><b>${esc(t.name || "—")}</b><small>${fmtN(t.deals)} deal${t.deals == 1 ? "" : "s"} · ${fmtN(t.companies)} company</small></span><b>${esc(bdt(t.total))}</b></li>`).join("")}</ol></div>` : ""}
       <div class="co-chips">${chip("", "Everyone", S.total)}${chip("investor", "Investors", R.investor || 0)}${chip("founder", "Founders", R.founder || 0)}${chip("reader", "Readers", R.reader || 0)}${chip("other", "Others", R.other || 0)}</div>
@@ -925,7 +1020,7 @@ window.VOSB_ADMIN_CO = function (X) {
   /* ---------------- router entry ---------------- */
   const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   function handles(h) {
-    return ["companies", "companies/all", "payments", "reviews", "interests", "company-settings", "users", "deletions", "valuations", "deals", "trash"].includes(h) || (h.startsWith("companies/") && UUID.test(h.slice(10)));
+    return ["companies", "companies/all", "payments", "reviews", "interests", "company-settings", "users", "active", "deletions", "valuations", "deals", "trash"].includes(h) || (h.startsWith("companies/") && UUID.test(h.slice(10)));
   }
   async function render(h, view) {
     refreshBadges();
@@ -937,6 +1032,7 @@ window.VOSB_ADMIN_CO = function (X) {
     if (h === "interests") return viewInterests(view);
     if (h === "company-settings") return viewSettings(view);
     if (h === "users") return viewUsers(view);
+    if (h === "active") return viewActive(view);
     if (h === "valuations") return viewValuations(view);
     if (h === "deals") return viewDeals(view);
     if (h === "trash") return viewTrash(view);
@@ -949,5 +1045,5 @@ window.VOSB_ADMIN_CO = function (X) {
     const a = t.querySelector("a.on"); if (a) t.scrollLeft = Math.max(0, a.offsetLeft - (t.clientWidth - a.offsetWidth) / 2);
   });
   try { new MutationObserver(() => centerTabs()).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
-  return { handles, render, refreshBadges, counts, dashSection };
+  return { handles, render, refreshBadges, counts, dashSection, overviewTiles };
 };

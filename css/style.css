@@ -1764,7 +1764,7 @@ html[data-theme="dark"] .page-hero { background: var(--card); }
 :root {
   --font-body: "VOSB Digits", "Source Sans 3", "Hind Siliguri", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-.prose, .prose p, .prose li, .prose blockquote, .prose td, .prose th { font-family: "VOSB Digits", "Inter", "Hind Siliguri", system-ui, -apple-system, "Segoe UI", sans-serif; }
+.prose, .prose p, .prose li, .prose blockquote, .prose td, .prose th { font-family: "Inter", "Hind Siliguri", system-ui, -apple-system, "Segoe UI", sans-serif; }
 
 /* logo never gets squeezed or cropped */
 .brand { flex: none; }
@@ -2163,14 +2163,33 @@ html.has-user .header-actions > .theme-toggle, html.has-user .header-actions > .
 .au-av-link { display: inline-flex; border-radius: 50%; }
 .au-av-link img.au-av { display: block; }
 
-/* ===== Bangla article text: Hind Siliguri, regular weight, native digits & conjuncts, generous leading (matches the reference sample).
-   Only the body text inside the article — titles/headings keep their own fonts. English articles keep Inter. ===== */
+/* ===== Bangla article text: the reference sample is Apple's system Bangla font (Bangla Sangam MN) — thin/thick stroke contrast, tapered terminals.
+   It cannot be embedded, so it is listed FIRST: iPhone/iPad/Mac show exactly the sample; other devices use Hind Siliguri (closest web font, same line widths).
+   Native digits are kept (the digit patch font comes after the system font). Only the body text inside the article — titles keep their own fonts. ===== */
 html[lang="bn"] .prose, html[lang="bn"] .prose p, html[lang="bn"] .prose li, html[lang="bn"] .prose blockquote, html[lang="bn"] .prose td, html[lang="bn"] .prose th {
-  font-family: "Hind Siliguri", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: "Inter", "Bangla Sangam MN", "Bangla MN", "VOSB Digits", "Hind Siliguri", system-ui, -apple-system, "Segoe UI", sans-serif;
   font-weight: 400; letter-spacing: 0; word-spacing: 0; font-feature-settings: normal; font-kerning: normal; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;
 }
 html[lang="bn"] .prose p, html[lang="bn"] .prose li, html[lang="bn"] .prose blockquote { font-size: 1.2rem; line-height: 1.95; color: #1d1a16; }
 html[lang="bn"] .prose p { margin-top: .85em; }
-html[lang="bn"] .prose strong, html[lang="bn"] .prose b { font-weight: 600; }
+html[lang="bn"] .prose strong, html[lang="bn"] .prose b { font-weight: 700; }
 html[data-theme="dark"][lang="bn"] .prose p, html[data-theme="dark"][lang="bn"] .prose li, html[data-theme="dark"][lang="bn"] .prose blockquote { color: #e4e4e4; }
 @media (max-width: 760px) { html[lang="bn"] .prose p, html[lang="bn"] .prose li, html[lang="bn"] .prose blockquote { font-size: 1.12rem; line-height: 1.9; } }
+
+/* ===== phone: compact footer (the bottom bar + Settings page already carry the navigation) ===== */
+@media (max-width: 760px) {
+  .site-footer .footer-grid { gap: 18px; padding: 26px 0 14px; }
+  .site-footer .footer-grid > div:first-child img, .site-footer .footer-logo { max-width: 120px; }
+  .site-footer .footer-grid > div:first-child p { font-size: .9rem; max-width: none; }
+  .site-footer h4 { font-size: .95rem; margin-bottom: 8px; }
+  .site-footer .footer-grid ul { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
+  .site-footer .footer-grid li a { font-size: .86rem; line-height: 1.3; display: block; padding: 3px 0; }
+  .site-footer .fc-list { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .site-footer .fc { padding: 8px; gap: 8px; border-radius: 12px; }
+  .site-footer .fc-ic { width: 30px; height: 30px; border-radius: 9px; font-size: .9rem; }
+  .site-footer .fc-tx small, .site-footer .fc-tx span:first-child { font-size: .7rem; }
+  .site-footer .fc-tx b, .site-footer .fc-tx a { font-size: .74rem; overflow-wrap: anywhere; }
+  .site-footer .legal-links { gap: 4px 12px; padding: 10px 0; }
+  .site-footer .legal-links a { font-size: .78rem; }
+  .site-footer .footer-bottom { font-size: .76rem; padding-bottom: 76px; }
+}

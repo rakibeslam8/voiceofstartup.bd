@@ -91,7 +91,7 @@
   }
   async function sendLink(email) {
     const c = await client();
-    const { error } = await c.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/reset-password" });
+    const { error } = await c.auth.resetPasswordForEmail(email, { redirectTo: (/(^|\.)voiceofstartup\.bd$/i.test(location.hostname) ? "https://www.voiceofstartup.bd" : location.origin) + "/reset-password" });
     if (error) throw error;
   }
   async function onRequest(e) {

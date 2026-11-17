@@ -291,7 +291,7 @@
   function markNav(r) {
     const base = r.startsWith("edit") ? "edit/new" : r.startsWith("ads") ? "ads" : r.startsWith("newsletter") ? "subscribers"
       : (r === "companies" || r.startsWith("companies/") || ["payments", "reviews", "interests", "company-settings", "valuations", "deals", "trash"].includes(r)) ? "companies"
-      : (r === "users" || r === "deletions") ? "users" : r;
+      : (r === "users" || r === "deletions" || r === "active") ? "users" : r;
     $$("[data-r]").forEach((a) => a.classList.toggle("on", a.dataset.r === base || (base === "edit/new" && a.dataset.r === "edit/new")));
   }
 
@@ -442,7 +442,7 @@
 
   async function viewDashboard(view) {
     view.innerHTML = `<div class="page-h"><h1>Dashboard</h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div><div class="card"><p class="muted">Loading…</p></div>`;
-    let site = null, subs = null, subsNew = null, app = null, coHtml = "";
+    let site = null, subs = null, subsNew = null, app = null, coHtml = "", ovHtml = "";
     /* one exact server-side count (update-6 SQL); falls back to two plain counts if that update isn't installed yet */
     const loadSubs = async () => {
       try {
@@ -459,7 +459,8 @@
     await Promise.all([loadPosts(true), loadDaily(), loadSite(7).then((x) => { site = x; }).catch(() => {}),
       loadSubs().then((x) => { if (x) { subs = x.active; subsNew = x.new7; } }),
       sb.rpc("admin_app_stats").then((r) => { if (!r.error && r.data && !Array.isArray(r.data)) app = r.data; }).catch(() => {}),
-      (CO ? CO.counts(true).then((c) => { coHtml = CO.dashSection(c) || ""; }) : Promise.resolve()).catch(() => {})]);
+      (CO ? CO.counts(true).then((c) => { coHtml = CO.dashSection(c) || ""; }) : Promise.resolve()).catch(() => {}),
+      (CO && CO.overviewTiles ? CO.overviewTiles().then((h) => { ovHtml = h || ""; }) : Promise.resolve()).catch(() => {})]);
     if (!view.isConnected) return;   // user navigated away while loading
     const total = posts.reduce((a, p) => a + Number(p.views || 0), 0);
     const shares = posts.reduce((a, p) => a + Number(p.shares || 0), 0);
@@ -484,6 +485,7 @@
         <div class="tile g"><small>Live articles</small><b>${fmtN(live)}</b></div>
         ${subs !== null ? `<a class="tile k" href="#/subscribers" style="text-decoration:none;color:inherit"><small>Newsletter subscribers</small><b>${fmtN(subs)}</b></a>` : ""}
         <div class="tile r"><small>Scheduled · Drafts</small><b>${fmtN(sched)} · ${fmtN(drafts)}</b></div>
+        ${ovHtml}
       </div>
       <h2 class="sec-h">Recent activity <span>Bangladesh time</span></h2>
       <div class="tiles">
@@ -683,6 +685,7 @@
       ed = Object.assign(BLANK(), data, { publish_at: toLocalInput(data.publish_at), slugTouched: true, source_url: data.source_url || "", image_url: data.image_url || "" });
     }
     const original = JSON.stringify(pickFields(ed));
+    const savedF = Object.assign({}, pickFields(ed));   // what is stored right now — used to see what the editor changed (so the other language can be refreshed)
     try {
       const raw = localStorage.getItem(draftKey);
       if (raw) { const d = JSON.parse(raw); if (d && d.t && JSON.stringify(d.f) !== original) { Object.assign(ed, d.f); restored = true; } }
@@ -892,13 +895,22 @@
       const flagged = ed["auto_translated_" + tab] && !touched[tab];
       n.textContent = flagged ? `This ${LN[tab]} version was machine-translated — please check it.` : "";
     }
+    const chg = (k) => String(ed[k] || "").trim() !== String(savedF[k] || "").trim();      // changed since it was last saved
+    const needsTranslation = () => !(ed.title_bn.trim() && ed.title_en.trim() && ed.body_bn.trim() && ed.body_en.trim() && ed.excerpt_bn.trim() && ed.excerpt_en.trim())
+      || ["title", "excerpt", "body"].some((f) => chg(f + "_bn") || chg(f + "_en"));
     async function autoFill() {
       const out = { done: [], failed: false };
       const flags = { bn: !!ed.auto_translated_bn && !touched.bn, en: !!ed.auto_translated_en && !touched.en };
       for (const to of ["bn", "en"]) {
         const from = to === "bn" ? "en" : "bn";
-        const needT = !ed["title_" + to].trim() && ed["title_" + from].trim();
-        const needB = !ed["body_" + to].trim() && ed["body_" + from].trim();
+        /* translate a field when the other language is empty, OR when this language changed in this session while the other one is a
+           machine translation that nobody has edited (a hand-written version is never overwritten) */
+        const need = (f) => {
+          const src = ed[f + "_" + from].trim(); if (!src) return false;
+          if (!ed[f + "_" + to].trim()) return true;
+          return chg(f + "_" + from) && !chg(f + "_" + to) && !!flags[to];
+        };
+        const needT = need("title"), needB = need("body"), needE = need("excerpt");
         let gen = false;
         if ((needT || needB) && TR) {
           try {
@@ -908,10 +920,10 @@
           } catch (e) { out.failed = true; }
         }
         if (gen) flags[to] = true;
-        if (!ed["excerpt_" + to].trim()) {
+        if (needE || gen || !ed["excerpt_" + to].trim()) {
           const fromEx = ed["excerpt_" + from].trim();
-          if (gen && fromEx && TR) { try { ed["excerpt_" + to] = (await TR.title(fromEx, from, to)).slice(0, 300); } catch (e) {} }
-          if (!ed["excerpt_" + to].trim() && ed["body_" + to].trim()) ed["excerpt_" + to] = MD.excerptFrom(ed["body_" + to]);
+          if (fromEx && TR && (needE || gen)) { try { ed["excerpt_" + to] = (await TR.title(fromEx, from, to)).slice(0, 300); } catch (e) {} }
+          if ((gen && !fromEx || !ed["excerpt_" + to].trim()) && ed["body_" + to].trim()) ed["excerpt_" + to] = MD.excerptFrom(ed["body_" + to]);
         }
       }
       ed.auto_translated_bn = flags.bn; ed.auto_translated_en = flags.en;
@@ -947,8 +959,8 @@
       if (ed.source_url && !/^https?:\/\//i.test(ed.source_url)) return toast("Source link must start with https://", "err");
       saving = true; saveBar();
       let tr = { done: [], failed: false };
-      if (!(ed.title_bn.trim() && ed.title_en.trim() && ed.body_bn.trim() && ed.body_en.trim() && ed.excerpt_bn.trim() && ed.excerpt_en.trim())) {
-        toast("Creating the other language & summary…");
+      if (needsTranslation()) {
+        toast("Updating the other language & summary…");
         tr = await autoFill();
         fillLang();
       } else { ed.auto_translated_bn = ed.auto_translated_bn && !touched.bn; ed.auto_translated_en = ed.auto_translated_en && !touched.en; }
@@ -976,7 +988,7 @@
         const m = res.error.code === "23505" ? "That web address is already used by another article. Change the address below." : (res.error.message || String(res.error));
         saveBar(); return toast(m, "err");
       }
-      ed.id = res.data.id; ed.status = status; dirty = false; clearTimeout(persistTimer);
+      ed.id = res.data.id; ed.status = status; dirty = false; clearTimeout(persistTimer); Object.assign(savedF, pickFields(ed));
       try { localStorage.removeItem(draftKey); localStorage.removeItem("vosb-draft-new"); } catch (e) {}
       postsLoaded = false;
       if (tr.failed) toast("Saved, but automatic translation was unavailable — the article shows in the language you wrote. Use “Auto-translate” later.", "err");

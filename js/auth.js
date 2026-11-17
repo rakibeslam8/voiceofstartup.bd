@@ -118,6 +118,8 @@
   const rpc = async (name, args) => { const c = await client(); return c.rpc(name, args || {}); };
   /* the calls the page needs to draw a signed-in person (profile, menu, bell) must survive a slow network, an expired
      token that is still being refreshed, or the auth library's tab lock: retry a few times, refresh the session once */
+  /* links in e-mails always point at the real site address (never the bare domain, localhost or a preview address) */
+  const CANON = () => (/(^|\.)voiceofstartup\.bd$/i.test(location.hostname) ? "https://www.voiceofstartup.bd" : location.origin);
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   async function rpcR(name, args, tries) {
     let last = null; tries = tries || 3;
@@ -213,7 +215,10 @@
       <form class="au-form" id="au-form" novalidate>
         ${mode === "signup" ? `<label>${T("আপনার নাম", "Your name")}<input name="name" autocomplete="name" maxlength="120" required></label>` : ""}
         ${mode === "signup" ? `<fieldset class="au-role"><legend>${T("আপনি কে?", "I am a…")}</legend><div class="au-chips">${[["reader", "পাঠক", "Reader"], ["founder", "প্রতিষ্ঠাতা", "Founder"], ["investor", "বিনিয়োগকারী", "Investor"], ["other", "অন্যান্য", "Other"]].map((r, i) => `<label class="au-chip"><input type="radio" name="role" value="${r[0]}" ${i === 0 ? "checked" : ""}><span>${T(r[1], r[2])}</span></label>`).join("")}</div></fieldset>
-        <div class="au-photo"><span class="au-pv" id="au-pv" aria-hidden="true">📷</span><label class="au-pbtn"><span id="au-pt">${T("প্রোফাইল ছবি দিন (ঐচ্ছিক)", "Add a profile photo (optional)")}</span><input type="file" name="photo" accept="image/*" hidden></label></div>` : ""}
+        <div class="au-photo"><span class="au-pv" id="au-pv" aria-hidden="true">📷</span><label class="au-pbtn"><span id="au-pt">${T("প্রোফাইল ছবি দিন (ঐচ্ছিক)", "Add a profile photo (optional)")}</span><input type="file" name="photo" accept="image/*" hidden></label></div>
+        <label>${T("মোবাইল নম্বর (ঐচ্ছিক)", "Mobile number (optional)")}<input name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="01XXXXXXXXX"></label>
+        <label>${T("আমাদের খোঁজ কীভাবে পেলেন? (ঐচ্ছিক)", "How did you find us? (optional)")}<select name="heard_from"><option value="">${T("বেছে নিন", "Choose")}</option>${[["google","Google","Google"],["facebook","ফেসবুক","Facebook"],["linkedin","লিংকডইন","LinkedIn"],["youtube","ইউটিউব","YouTube"],["x","এক্স (টুইটার)","X (Twitter)"],["instagram","ইনস্টাগ্রাম","Instagram"],["whatsapp","হোয়াটসঅ্যাপ","WhatsApp"],["friend","বন্ধু/পরিচিতজন","Friend / colleague"],["news","সংবাদ/আর্টিকেল","News / article"],["event","ইভেন্ট","Event"],["other","অন্যান্য","Other"]].map((h) => `<option value="${h[0]}">${T(h[1], h[2])}</option>`).join("")}</select></label>
+        <label class="au-chk"><input type="checkbox" name="marketing_ok"><span>${T("আমি VOSB-এর নতুন সুযোগ ও আপডেট ইমেইলে পেতে চাই (ঐচ্ছিক)", "I'd like to get VOSB opportunities and updates by e-mail (optional)")}</span></label>` : ""}
         ${mode !== "reset" ? `<label>${T("ইমেইল", "Email")}<input name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required></label>` : ""}
         ${mode !== "forgot" ? `<label>${mode === "reset" ? T("নতুন পাসওয়ার্ড", "New password") : T("পাসওয়ার্ড", "Password")}<span class="au-pw"><input name="pw" type="password" autocomplete="${mode === "login" ? "current-password" : "new-password"}" maxlength="72" minlength="8" required><button type="button" class="au-show" data-show>${EYE}</button></span></label>` : ""}
         <input type="text" name="website" class="au-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -283,8 +288,9 @@
         toast(T("স্বাগতম!", "Welcome back!"), "ok");
       } else if (mode === "signup") {
         const role = ["reader", "founder", "investor", "other"].includes(f.get("role")) ? f.get("role") : "reader", photoFile = f.get("photo");
+        const ph = String(f.get("phone") || "").replace(/[\s-]/g, ""); if (ph && !/^(\+?88)?01[3-9]\d{8}$/.test(ph)) throw new Error(T("সঠিক মোবাইল নম্বর দিন (01XXXXXXXXX)।", "Enter a valid mobile number (01XXXXXXXXX)."));
         let small = null; if (photoFile && photoFile.size) { try { small = await shrink(photoFile, 384); } catch (e) { throw e; } }
-        const { data, error } = await c.auth.signUp({ email, password: pw, options: { data: { full_name: name, user_type: role }, emailRedirectTo: location.origin + "/account" } });
+        const { data, error } = await c.auth.signUp({ email, password: pw, options: { data: { full_name: name, user_type: role, phone: ph || undefined, heard_from: String(f.get("heard_from") || "") || undefined, marketing_ok: f.get("marketing_ok") ? "true" : "false" }, emailRedirectTo: CANON() + "/account" } });
         if (error) throw error;
         if (!data.session) {   // e-mail confirmation is switched on in Supabase
           try {
@@ -298,7 +304,7 @@
         toast(T("অ্যাকাউন্ট তৈরি হয়েছে। স্বাগতম!", "Account created. Welcome!"), "ok");
         if (small) { setTimeout(() => { uploadAvatarBlob(small).catch(() => {}); }, 1200); }
       } else if (mode === "forgot") {
-        const { error } = await c.auth.resetPasswordForEmail(email, { redirectTo: location.origin + "/reset-password" });
+        const { error } = await c.auth.resetPasswordForEmail(email, { redirectTo: CANON() + "/reset-password" });
         if (error) throw error;
         return setMsg(T("রিসেট লিংক পাঠানো হয়েছে — ইনবক্স চেক করুন।", "Reset link sent — please check your inbox."), "ok");
       } else if (mode === "reset") {
@@ -405,7 +411,15 @@
   }
 
   window.VOSB_AUTH = { ctx: () => ctx, links, linkHtml, user: () => user, isIn, onChange, client, rpc, requireLogin, open, signOut, profile, paint, toast, setAvatar, loadNotifs, openNotifs, avatarHtml: (url, name, cls) => (url && /^https:\/\//.test(url) ? `<img class="${cls || "au-av"}" src="${esc(url)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="${cls || "au-av"}">${esc(((name || "?").trim()[0] || "?").toUpperCase())}</span>`) };
+  /* daily-active tracking: the database keeps one row per member per day (Dhaka time); this ping is rate-limited to once per 5 minutes per browser */
+  function ping() {
+    if (!user) return;
+    try { const t = Number(localStorage.getItem("vosb-act") || 0); if (Date.now() - t < 5 * 60 * 1000) return; localStorage.setItem("vosb-act", String(Date.now())); } catch (e) {}
+    const ua = navigator.userAgent || "", dev = /iPad|Tablet/i.test(ua) ? "tablet" : /Mobi|Android|iPhone/i.test(ua) ? "mobile" : "desktop";
+    rpcR("touch_activity", { p_device: dev }, 2).catch(() => {});
+  }
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") ping(); });
   paint();
-  if (user) { setTimeout(() => { loadNotifs(); try { if (!sessionStorage.getItem("vosb-prof")) { sessionStorage.setItem("vosb-prof", "1"); profile(); } } catch (e) { profile(); } }, 900); }
-  onChange((u) => { if (u) { loadNotifs(); profile(true); } else { notif = { unread: 0, items: [], loaded: false }; try { localStorage.removeItem(AVK); sessionStorage.removeItem("vosb-prof"); } catch (e) {} } });
+  if (user) { setTimeout(() => { ping(); loadNotifs(); try { if (!sessionStorage.getItem("vosb-prof")) { sessionStorage.setItem("vosb-prof", "1"); profile(); } } catch (e) { profile(); } }, 900); }
+  onChange((u) => { if (u) { loadNotifs(); profile(true); ping(); } else { notif = { unread: 0, items: [], loaded: false }; try { localStorage.removeItem(AVK); sessionStorage.removeItem("vosb-prof"); } catch (e) {} } });
 })();

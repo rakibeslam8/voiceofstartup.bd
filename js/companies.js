@@ -62,14 +62,14 @@
   }
   function card(c) {
     c = loc(c);
-    const loc = [c.district, c.division].filter(Boolean).join(", ");
+    const place = [c.district, c.division].filter(Boolean).join(", ");
     const kv = c.vosb_valuation ? `<span class="co-kv"><i>${T("VOSB ভ্যালুয়েশন", "VOSB valuation")}</i><b>${money(c.vosb_valuation)}</b></span>` : c.seeking_amount ? `<span class="co-kv"><i>${T("তহবিল চাইছে", "Seeking")}</i><b>${money(c.seeking_amount)}</b></span>` : "";
     const open = c.invest_open !== false;
     return `<article class="co-card${c.featured ? " feat" : ""}">${c.featured ? `<span class="co-feat">★ ${T("ফিচার্ড", "Featured")}</span>` : ""}
       <a class="co-cmain" href="/company/${esc(c.slug)}" aria-label="${esc(c.name)}">
         <div class="co-top">${logo(c, "co-logo")}<div class="co-nm"><h3>${esc(c.name)}</h3>${c.verified ? verified() : ""}</div></div>
         <p class="co-tag">${esc(c.tagline || "")}</p>
-        <div class="co-tags">${c.category ? `<span>${esc(label(CO.industries, c.category))}</span>` : ""}${c.stage ? `<span>${esc(label(CO.stages, c.stage))}</span>` : ""}${loc ? `<span class="loc">📍 ${esc(loc)}</span>` : ""}</div>
+        <div class="co-tags">${c.category ? `<span>${esc(label(CO.industries, c.category))}</span>` : ""}${c.stage ? `<span>${esc(label(CO.stages, c.stage))}</span>` : ""}${place ? `<span class="loc">📍 ${esc(place)}</span>` : ""}</div>
         <div class="co-foot">${rating(c)}${kv}</div>
       </a>
       <div class="co-act"><a class="co-btn" href="/company/${esc(c.slug)}">${T("প্রোফাইল দেখুন", "View profile")}</a>${open ? `<a class="co-btn inv" href="/company/${esc(c.slug)}?invest=1">💼 ${T("বিনিয়োগ করুন", "Invest")}</a>` : `<span class="co-btn off" title="${T("কোম্পানিটি এখন বিনিয়োগ নিচ্ছে না", "Not seeking investment right now")}">${T("বিনিয়োগ বন্ধ", "Not seeking now")}</span>`}</div></article>`;
