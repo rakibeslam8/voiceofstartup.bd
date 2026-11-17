@@ -1,6 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/a-maximum-grant-of-rs-50-lakh-to-startups-will-be-available-in-three-p</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-17T04:53:00.000Z</news:publication_date>
+      <news:title>স্টার্টআপে সর্বোচ্চ ৫০লাখ টাকা অনুদান, পাওয়া যাবে তিন ধাপে</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/a-maximum-grant-of-rs-50-lakh-to-startups-will-be-available-in-three-p</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-17T04:53:00.000Z</news:publication_date>
+      <news:title>A maximum grant of Rs 50 lakh to startups will be available in three phases</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-17T03:25:00.000Z</news:publication_date>
+      <news:title>পাঁচ দিনে আড়াই লাখ কোটি টাকার সম্পদ খোয়ালেন জেনসেন হুয়াং</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-17T03:25:00.000Z</news:publication_date>
+      <news:title>Jensen Huang opened a wealth of two and a half million rupees in five days</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/npls-touching-tk-6-lakh-crore-finance-minister-in-parliament</loc>
     <news:news>
       <news:publication>

@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.voiceofstartup.bd/</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-17</lastmod>
     <changefreq>hourly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/news</loc>
-    <lastmod>2026-11-16</lastmod>
+    <lastmod>2026-11-17</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -36,7 +36,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/business-policy</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-17</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -71,7 +71,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/international-startups</loc>
-    <lastmod>2026-11-13</lastmod>
+    <lastmod>2026-11-17</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -125,6 +125,46 @@
     <loc>https://www.voiceofstartup.bd/editorial-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/a-maximum-grant-of-rs-50-lakh-to-startups-will-be-available-in-three-p</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/a-maximum-grant-of-rs-50-lakh-to-startups-will-be-available-in-three-p"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/a-maximum-grant-of-rs-50-lakh-to-startups-will-be-available-in-three-p"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/a-maximum-grant-of-rs-50-lakh-to-startups-will-be-available-in-three-p"/>
+    <image:image><image:loc>https://cdn.ittefaqbd.com/contents/cache/images/1100x618x1/uploads/media/2026/11/13/826e1d0dbc21376a49e1faf652847382-6af72fcc86739.jpg?jadewits_media_id=322620</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/a-maximum-grant-of-rs-50-lakh-to-startups-will-be-available-in-three-p</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/a-maximum-grant-of-rs-50-lakh-to-startups-will-be-available-in-three-p"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/a-maximum-grant-of-rs-50-lakh-to-startups-will-be-available-in-three-p"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/a-maximum-grant-of-rs-50-lakh-to-startups-will-be-available-in-three-p"/>
+    <image:image><image:loc>https://cdn.ittefaqbd.com/contents/cache/images/1100x618x1/uploads/media/2026/11/13/826e1d0dbc21376a49e1faf652847382-6af72fcc86739.jpg?jadewits_media_id=322620</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2024-11-22%2Feszuv18m%2F9.-Jensen-Huang.jpg?rect=0%2C139%2C6724%2C4483&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five"/>
+    <image:image><image:loc>https://media.prothomalo.com/prothomalo-bangla%2F2024-11-22%2Feszuv18m%2F9.-Jensen-Huang.jpg?rect=0%2C139%2C6724%2C4483&amp;w=622&amp;auto=format%2Ccompress&amp;fmt=avif</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/npls-touching-tk-6-lakh-crore-finance-minister-in-parliament</loc>
