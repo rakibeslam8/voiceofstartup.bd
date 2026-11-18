@@ -1,7 +1,7 @@
 // Voice of Startup Bangladesh — "Import from link" for the admin article editor.
 // The signed-in ADMIN pastes a web address; this function reads the page on the server (browsers cannot, because of CORS),
 // extracts title / summary / cover / article text / links / pictures + captions, copies the pictures into our own storage
-// (post-images bucket) and returns a draft in the editor's Markdown-lite format. Nothing is saved to the articles table here.
+// (post-images bucket — done by the admin's browser, which also compresses them) and returns a draft in the editor's Markdown-lite format. Nothing is saved to the articles table here.
 // Safety: admin only; http/https only; private & internal addresses are refused (also after redirects); size and time limits.
 import { extract, absUrl } from "./extract.ts";
 
@@ -9,7 +9,7 @@ const URL_ = Deno.env.get("SUPABASE_URL")!, KEY = Deno.env.get("SUPABASE_SERVICE
 const ADMIN_EMAIL = "rakib@voiceofstartup.bd", ADMIN_ID = "c9c7d62e-08ee-4b0b-a3d8-572b7ac66d38";
 const ORIGINS = ["https://www.voiceofstartup.bd", "https://voiceofstartup.bd"];
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
-const MAX_HTML = 3_000_000, MAX_IMG = 4_500_000, MAX_IMAGES = 14;
+const MAX_HTML = 3_000_000, MAX_IMG = 9_000_000, MAX_IMAGES = 14;
 
 const cors = (req: Request) => ({
   "Access-Control-Allow-Origin": ORIGINS.includes(req.headers.get("origin") || "") ? req.headers.get("origin")! : ORIGINS[0],
@@ -59,22 +59,15 @@ function decode(bytes: Uint8Array, contentType: string): string {
   try { return new TextDecoder((cs || "utf-8").toLowerCase()).decode(bytes); } catch { return new TextDecoder("utf-8").decode(bytes); }
 }
 
-/* ---------- copy a picture into our own storage ---------- */
-async function rehost(src: string, page: string): Promise<string | null> {
-  try {
-    const res = await safeFetch(src, { headers: { "User-Agent": UA, Accept: "image/avif,image/webp,image/png,image/jpeg,image/*;q=0.8", Referer: page } }, 10000);
-    if (!res.ok) return null;
-    const type = (res.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
-    const ext = ({ "image/jpeg": "jpg", "image/jpg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif" } as Record<string, string>)[type];
-    if (!ext) return null;
-    const bytes = await readCapped(res, MAX_IMG);
-    if (bytes.length < 1200) return null;
-    const d = new Date();
-    const path = `import/${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, "0")}/${Date.now().toString(36)}${crypto.randomUUID().slice(0, 6)}.${ext}`;
-    const up = await fetch(`${URL_}/storage/v1/object/post-images/${path}`, { method: "POST", headers: { apikey: KEY, Authorization: "Bearer " + KEY, "Content-Type": type, "cache-control": "31536000", "x-upsert": "false" }, body: new Blob([bytes as unknown as BlobPart], { type }), signal: AbortSignal.timeout(20000) });
-    if (!up.ok) return null;
-    return `${URL_}/storage/v1/object/public/post-images/${path}`;
-  } catch { return null; }
+/* ---------- one picture, relayed to the admin's browser (which compresses it and stores it in our own bucket) ---------- */
+async function relayImage(req: Request, src: string, page: string): Promise<Response> {
+  const res = await safeFetch(src, { headers: { "User-Agent": UA, Accept: "image/avif,image/webp,image/png,image/jpeg,image/*;q=0.8", ...(page ? { Referer: page } : {}) } }, 12000);
+  if (!res.ok) return json(req, { ok: false, error: `picture answered ${res.status}` });
+  const type = (res.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
+  if (type && !/^image\/(jpeg|jpg|png|webp|gif|avif)$/.test(type) && !/octet-stream/.test(type)) return json(req, { ok: false, error: "not a picture (" + type + ")" });
+  const bytes = await readCapped(res, MAX_IMG);
+  if (bytes.length < 1200) return json(req, { ok: false, error: "picture too small" });
+  return new Response(new Blob([bytes as unknown as BlobPart]), { headers: { ...cors(req), "Content-Type": "application/octet-stream", "Cache-Control": "no-store" } });
 }
 
 Deno.serve(async (req) => {
@@ -86,7 +79,12 @@ Deno.serve(async (req) => {
   if (tok) { try { const u = await fetch(`${URL_}/auth/v1/user`, { headers: { apikey: KEY, Authorization: "Bearer " + tok } }); if (u.ok) { const j = await u.json(); admin = String(j?.email || "").toLowerCase() === ADMIN_EMAIL && j?.id === ADMIN_ID; } } catch { /* */ } }
   if (!admin) return json(req, { ok: false, error: "Admin sign-in required." }, 401);
 
-  let link = ""; try { link = String((await req.json())?.url || "").trim(); } catch { /* */ }
+  let payload: any = {}; try { payload = await req.json(); } catch { /* */ }
+  if (payload && payload.image) {
+    try { return await relayImage(req, String(payload.image), String(payload.referer || "")); }
+    catch (e) { const m = (e as Error).message || ""; return json(req, { ok: false, error: m === "bad-url" ? "address not allowed" : m === "too-big" ? "picture too large" : /timed out|timeout|abort/i.test(m) ? "picture timed out" : m.slice(0, 100) }); }
+  }
+  let link = ""; link = String(payload?.url || "").trim();
   if (!/^https?:\/\//i.test(link)) link = link ? "https://" + link : "";
   let page: URL; try { page = new URL(link); } catch { return json(req, { ok: false, error: "That does not look like a web address. Paste the full link (https://…)." }); }
   try {
@@ -100,22 +98,11 @@ Deno.serve(async (req) => {
       if ((e as Error).message === "no-article") return json(req, { ok: false, error: "Could not find the article text on this page. It may load its text with JavaScript or be behind a sign-in. Open it, copy the text and paste it into the editor." });
       throw e;
     }
-    // copy pictures to our storage (cover first), 4 at a time
-    const list = ex.images.slice(0, MAX_IMAGES), map = new Map<string, string>();
-    for (let i = 0; i < list.length; i += 4) {
-      const part = list.slice(i, i + 4);
-      const got = await Promise.all(part.map((u) => rehost(u, page.href)));
-      part.forEach((u, k) => { if (got[k]) map.set(u, got[k]!); });
-    }
-    let md = ex.markdown;
-    // pictures we could not copy stay as plain addresses only for the first MAX_IMAGES; the rest and failures are removed so nothing hot-links other sites
-    md = md.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (m, alt, u) => (map.has(u) ? `![${alt}](${map.get(u)})` : ""));
-    md = md.replace(/\n{3,}/g, "\n\n").trim();
-    const cover = map.get(ex.cover) || "";
+    const images = ex.images.slice(0, MAX_IMAGES);
     return json(req, {
-      ok: true, lang: ex.lang, title: ex.title, excerpt: ex.excerpt, markdown: md, cover, coverAlt: ex.coverAlt, author: ex.author,
+      ok: true, lang: ex.lang, title: ex.title, excerpt: ex.excerpt, markdown: ex.markdown, cover: ex.cover, coverAlt: ex.coverAlt, author: ex.author,
       siteName: ex.siteName, sourceUrl: ex.canonical && absUrl(ex.canonical, page.href) ? absUrl(ex.canonical, page.href) : (res.url || page.href), publishedAt: ex.publishedAt,
-      imagesFound: ex.images.length, imagesSaved: map.size,
+      images, pageUrl: page.href,
     });
   } catch (e) {
     const m = (e as Error).message || "";

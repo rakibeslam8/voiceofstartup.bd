@@ -56,6 +56,13 @@ export function toMarkdown(root: any, base: string, imgs: string[]): string {
     flush(); imgs.push(u);
     blocks.push(`![${capOf(cap || img.getAttribute("alt") || img.getAttribute("title") || "")}](${u})`);
   };
+  const isCapEl = (n: any) => /caption|credit|photo-?by|image-?desc|img-?desc/i.test(String(n.getAttribute && n.getAttribute("class") || "") + " " + String(n.getAttribute && n.getAttribute("id") || ""));
+  const attachCap = (text: string): boolean => {
+    const last = blocks.length - 1; const m = last >= 0 && blocks[last].match(/^!\[([^\]]*)\]\((.+)\)$/);
+    const c = capOf(text);
+    if (!m || !c) return false;
+    blocks[last] = `![${m[1] ? m[1] + " " + c : c}](${m[2]})`; return true;
+  };
   const inlineText = (el: any): string => {
     let s = "";
     for (const n of Array.from(el.childNodes) as any[]) {
@@ -89,6 +96,7 @@ export function toMarkdown(root: any, base: string, imgs: string[]): string {
         continue;
       }
       if (/^h[1-6]$/.test(t)) { flush(); const x = clean(inlineText(n)).replace(/\*+/g, ""); if (x) blocks.push(`${t === "h1" || t === "h2" ? "##" : "###"} ${x}`); continue; }
+      if (t === "figcaption") { flush(); attachCap(n.textContent || ""); continue; }
       if (t === "figure") {
         const img = n.querySelector("img"); const cap = n.querySelector("figcaption");
         if (img) pushImg(img, cap ? cap.textContent : "");
@@ -112,12 +120,14 @@ export function toMarkdown(root: any, base: string, imgs: string[]): string {
       if (t === "p" || t === "pre") {
         flush();
         if (hasImg(n)) { walk(n); flush(); continue; }
-        const x = inlineText(n).replace(/[ \t]+\n/g, "\n").trim(); if (clean(x)) blocks.push(x.replace(/\n{2,}/g, "\n"));
+        const x = inlineText(n).replace(/[ \t]+\n/g, "\n").trim();
+        if (clean(x) && isCapEl(n) && attachCap(x)) continue;
+        if (clean(x)) blocks.push(x.replace(/\n{2,}/g, "\n"));
         continue;
       }
       if (t === "div" || t === "section" || t === "article" || t === "main" || t === "span" || t === "li" || t === "center" || t === "font") {
         if (hasBlockKids(n) || hasImg(n)) { flush(); walk(n); flush(); }
-        else { flush(); const x = inlineText(n).trim(); if (clean(x)) blocks.push(x.replace(/\n{2,}/g, "\n")); }
+        else { flush(); const x = inlineText(n).trim(); if (clean(x) && isCapEl(n) && attachCap(x)) continue; if (clean(x)) blocks.push(x.replace(/\n{2,}/g, "\n")); }
         continue;
       }
       // inline-ish leftovers (a, strong, em…): treat as text
@@ -125,6 +135,12 @@ export function toMarkdown(root: any, base: string, imgs: string[]): string {
     }
   }
   walk(root); flush();
+  // a short "Photo: …" / "ছবি: …" line right under a picture is that picture's caption
+  const CAPLINE = /(ছবি|ফটো|ছবিঃ|photo|image|picture|credit|photo credit|file photo|courtesy|সৌজন্যে|সূত্র)\s*[:：\-–]|সংগৃহীত\s*$/i;
+  for (let i = 1; i < blocks.length; i++) {
+    const m = blocks[i - 1].match(/^!\[([^\]]*)\]\((.+)\)$/);
+    if (m && blocks[i].length < 220 && !blocks[i].includes("\n") && CAPLINE.test(blocks[i])) { const c = capOf(blocks[i]); blocks[i - 1] = `![${m[1] ? m[1] + " " + c : c}](${m[2]})`; blocks.splice(i, 1); i--; }
+  }
   // never leave a paragraph that would be read as a list/heading/quote by mistake
   return blocks.map((b) => (/^(\*\*|\*)/.test(b) || /^(#{1,3} |> |- |\d+\. |!\[|\[|---)/.test(b) ? b : b.replace(/^([#>\-•])\s/, "$1\u200a"))).join("\n\n").slice(0, 80000);
 }
@@ -160,7 +176,7 @@ export function extract(html: string, pageUrl: string): Extracted {
   let contentRoot: any = null, rTitle = "", rByline = "";
   try {
     const { document: d2 } = parseHTML(html) as any;
-    const art = new Readability(d2 as any, { charThreshold: 200, keepClasses: false }).parse();
+    const art = new Readability(d2 as any, { charThreshold: 200, keepClasses: true }).parse();
     if (art && art.content && clean(art.textContent || "").length > 200) {
       const { document: cd } = parseHTML(`<div id="r">${art.content}</div>`) as any;
       contentRoot = cd.querySelector("#r"); rTitle = clean(art.title || ""); rByline = clean(art.byline || "");
@@ -176,19 +192,21 @@ export function extract(html: string, pageUrl: string): Extracted {
   title = clean(title.replace(new RegExp(`\\s*[|\\-–—•·:]\\s*${siteName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i"), ""));
   if (clean(md).length < 120) throw new Error("no-article");
 
-  // drop a leading repeat of the headline, then a leading copy of the cover image
+  // drop a leading repeat of the headline
   const heads = [title, rTitle, h1, ogTitle].map(clean).filter(Boolean);
   const lines = md.split("\n\n"); if (lines[0] && /^#{1,3} /.test(lines[0]) && heads.includes(clean(lines[0].replace(/^#+\s*/, "")))) md = lines.slice(1).join("\n\n");
-  const stem = (u: string) => (u.split("?")[0].split("/").pop() || "").replace(/[-_]?\d{2,4}x\d{2,4}(?=\.)/, "").toLowerCase();
-  let capFromBody = "";
-  const first = md.match(/^!\[[^\]]*\]\(([^)\s]+)\)\n\n/);
-  if (first && cover && (first[1] === cover || (stem(first[1]) && stem(first[1]) === stem(cover)))) { capFromBody = (first[0].match(/^!\[([^\]]*)\]/) || [])[1] || ""; md = md.slice(first[0].length); imgs.shift(); }
+  // the picture at the very top of the article IS the cover: it leaves the text and its caption goes to the "cover image description" field
+  let leadUrl = "", leadAlt = "";
+  const first = md.match(/^!\[([^\]]*)\]\(([^)\s]+)\)(\n\n|$)/);
+  if (first) { leadAlt = first[1]; leadUrl = first[2]; md = md.slice(first[0].length); imgs.shift(); }
+  const coverUrl = leadUrl || cover;
 
   const plain = md.replace(/!\[[^\]]*\]\([^)]*\)/g, " ").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#>*\-]/g, " ");
   const sample = title + " " + plain.slice(0, 1500);
   const bn = (sample.match(BN) || []).length, lat = (sample.match(/[A-Za-z]/g) || []).length;
   const lang: "bn" | "en" = bn > lat * 0.5 ? "bn" : "en";
   const excerpt = (desc || clean(plain).slice(0, 300)).slice(0, 300);
-  const imgsAll = Array.from(new Set([cover, ...imgs].filter(Boolean)));
-  return { title, excerpt, markdown: md, cover: cover || imgs[0] || "", coverAlt: coverAlt || capFromBody || "", author: clean(author || rByline).slice(0, 80), siteName: siteName.slice(0, 60), publishedAt, lang, images: imgsAll, canonical };
+  const cover2 = coverUrl || imgs[0] || "";
+  const imgsAll = Array.from(new Set([cover2, ...imgs].filter(Boolean)));
+  return { title, excerpt, markdown: md, cover: cover2, coverAlt: leadAlt || coverAlt || "", author: clean(author || rByline).slice(0, 80), siteName: siteName.slice(0, 60), publishedAt, lang, images: imgsAll, canonical };
 }

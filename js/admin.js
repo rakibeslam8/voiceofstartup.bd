@@ -999,13 +999,31 @@
         d = data; if (!d || !d.ok) throw new Error((d && d.error) || "Could not import this link.");
       } catch (e) { btn.disabled = false; btn.textContent = "Import article"; note.textContent = String(e.message || e); return toast(String(e.message || e).slice(0, 200), "err"); }
       const L = d.lang === "en" ? "en" : "bn", O = L === "bn" ? "en" : "bn";
+      /* copy every picture (cover + inside the article) into our own storage: the server relays it, this browser compresses it exactly like a normal upload */
+      const sniff = (h) => (h[0] === 0xff && h[1] === 0xd8 ? "image/jpeg" : h[0] === 0x89 && h[1] === 0x50 ? "image/png" : h[0] === 0x47 && h[1] === 0x49 ? "image/gif"
+        : h[0] === 0x52 && h[1] === 0x49 && h[8] === 0x57 ? "image/webp" : h[4] === 0x66 && h[5] === 0x74 && h[6] === 0x79 && h[7] === 0x70 ? "image/avif" : "");
+      const pics = Array.from(new Set(d.images || [])), got = new Map(), why = new Set(); let k = 0, finished = 0;
+      const grab = async (u) => {
+        try {
+          const r = await sb.functions.invoke("import-article", { body: { image: u, referer: d.pageUrl } });
+          if (r.error) { why.add("the import service did not answer"); return null; }
+          if (!(r.data instanceof Blob)) { why.add((r.data && r.data.error) || "the site refused the picture"); return null; }
+          const type = sniff(new Uint8Array(await r.data.slice(0, 16).arrayBuffer())); if (!type) { why.add("not a picture file"); return null; }
+          return await uploadImage(new File([r.data], "pic." + type.split("/")[1], { type }), "import");
+        } catch (e) { why.add(String((e && e.message) || "upload failed").slice(0, 60)); return null; }
+      };
+      const worker = async () => { while (k < pics.length) { const u = pics[k++]; const url = await grab(u); if (url) got.set(u, url); note.textContent = `Copying pictures ${++finished}/${pics.length}…`; } };
+      if (pics.length) { btn.textContent = "Copying pictures…"; note.textContent = `Copying pictures 0/${pics.length}…`; await Promise.all([worker(), worker(), worker()]); }
+      d.markdown = String(d.markdown || "").replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (m, alt, u) => (got.has(u) ? `![${alt}](${got.get(u)})` : "")).replace(/\n{3,}/g, "\n\n").trim();
+      d.cover = got.get(d.cover) || ""; d.imagesSaved = got.size; d.imagesFound = pics.length;
       Object.assign(ed, { ["title_" + L]: d.title || "", ["excerpt_" + L]: d.excerpt || "", ["body_" + L]: d.markdown || "", ["image_alt_" + L]: d.coverAlt || "",
         ["title_" + O]: "", ["excerpt_" + O]: "", ["body_" + O]: "", ["image_alt_" + O]: "",
         image_url: d.cover || "", source: d.siteName || ed.source, source_url: d.sourceUrl || "", author: (d.author || "").trim() || ed.author || "VOSB Desk",
         slug: "", slugTouched: false, auto_translated_bn: false, auto_translated_en: false });
       touched[L] = true; touched[O] = false; tab = L; dirty = true; persist();
       fillStatic(); fillLang(); cover(); counts(); renderPv(); slugUrl(); dateHint(); saveBar();
-      note.textContent = `Imported from ${d.siteName || "the website"}: ${d.imagesSaved || 0} picture${d.imagesSaved === 1 ? "" : "s"} copied. Translating to ${LN[O]}…`;
+      const missed = (d.imagesFound || 0) - (d.imagesSaved || 0);
+      note.textContent = `Imported from ${d.siteName || "the website"}: ${d.imagesSaved || 0} of ${d.imagesFound || 0} pictures copied${missed > 0 ? ` (${missed} could not be copied: ${[...why][0] || "unknown reason"} — add them with the Image button)` : ""}. Translating to ${LN[O]}…`;
       btn.textContent = "Translating…";
       try {
         if (!TR) throw new Error("no translator");
@@ -1014,7 +1032,7 @@
         ed["excerpt_" + O] = ed["excerpt_" + L].trim() ? (await TR.title(ed["excerpt_" + L], L, O)).slice(0, 300) : MD.excerptFrom(ed["body_" + O]);
         if (ed["image_alt_" + L].trim()) ed["image_alt_" + O] = (await TR.title(ed["image_alt_" + L], L, O)).slice(0, 160);
         ed["auto_translated_" + O] = true; ed.slug = slugify(ed.title_en) || ""; $f("f-slug").value = ed.slug; slugUrl();
-        note.textContent = `Done — ${LN[L]} and ${LN[O]} versions are ready. Please read both tabs, choose the date and publish.`;
+        note.textContent = `Done — ${d.imagesSaved || 0} of ${d.imagesFound || 0} pictures copied${missed > 0 ? ` (${missed} could not be copied: ${[...why][0] || "unknown reason"} — add them with the Image button)` : ""}; ${LN[L]} and ${LN[O]} versions are ready. Please read both tabs, choose the date and publish.`;
         toast("Imported & translated — check, then publish", "ok");
       } catch (e) {
         note.textContent = `Imported. The ${LN[O]} version will be created automatically when you publish.`;
