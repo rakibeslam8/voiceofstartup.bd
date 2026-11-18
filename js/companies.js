@@ -269,6 +269,12 @@
           ${v.use_of_funds ? `<h3>${T("তহবিল কীভাবে ব্যবহার হবে", "Use of funds")}</h3>${paras(v.use_of_funds)}` : ""}</section>
         <section class="co-card2 co-card-facts"><h2>${T("তথ্য", "Details")}</h2><dl class="co-facts">${facts()}</dl>${soc ? `<div class="co-soc">${soc}</div>` : ""}<p class="co-views">💼 ${nd(c.interest_count || 0)} ${T("বিনিয়োগ আগ্রহ", "investor interests")}</p></section>
         <p class="co-disc">${DISCLAIMER()}</p></aside></div>`;
+      // A cover that is a normal wide "share" picture (about 1.6:1 – 2.6:1, often with words in it) is shown whole on a soft blurred copy of itself instead of being cropped into a thin strip.
+      const cvImg = host.querySelector(".co-cover img");
+      if (cvImg) {
+        const fit = () => { const r = cvImg.naturalWidth / (cvImg.naturalHeight || 1); if (r >= 1.6 && r <= 2.6) { const p = cvImg.parentElement; p.classList.add("fit"); p.style.setProperty("--cv", 'url("' + (cvImg.currentSrc || cvImg.src).replace(/["\\]/g, "") + '")'); } };
+        if (cvImg.complete && cvImg.naturalWidth) fit(); else cvImg.addEventListener("load", fit, { once: true });
+      }
       drawRev(); drawCom();
     }
     draw(); U().onRender(() => { if (host.isConnected) draw(); });
