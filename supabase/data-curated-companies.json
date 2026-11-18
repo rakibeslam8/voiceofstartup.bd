@@ -47,7 +47,9 @@
     "bn": "২০২১ সালের নভেম্বরে সফটব্যাংক ভিশন ফান্ড টু-এর বিনিয়োগের সময় প্রকাশিত মূল্য (প্রায় ২০০ কোটি মার্কিন ডলার, “১৭,০০০ কোটি টাকার বেশি”) — দ্য বিজনেস স্ট্যান্ডার্ডের সূত্রে। এটি প্রকাশিত তথ্য, ভিএসওবি-র বর্তমান মূল্যায়ন নয়।",
     "en": "Valuation reported (about US$2 billion, “more than Tk 17,000 crore”) when SoftBank Vision Fund II invested in November 2021, per The Business Standard. It is a reported figure, not a current VOSB valuation."
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/bkash-logo.webp",
+  "cover_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/bkash-cover.jpg"
  },
  {
   "name": "Nagad",
@@ -91,7 +93,9 @@
     "bn": "মালিকানা নিয়ে প্রকাশ্য বিতর্ক আছে; নির্ভরযোগ্য কোনো মূল্য প্রকাশিত হয়নি।",
     "en": "Ownership is publicly disputed and no reliable valuation has been published."
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/nagad-logo.png",
+  "cover_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/nagad-cover.png"
  },
  {
   "name": "Chaldal",
@@ -153,7 +157,8 @@
     "bn": null,
     "en": null
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/chaldal-logo.png"
  },
  {
   "name": "Pathao",
@@ -193,7 +198,9 @@
     "bn": "বর্তমান কোনো মূল্য প্রকাশিত হয়নি; ২০১৮ সালের এপ্রিলে প্রতিষ্ঠানটি জানিয়েছিল মূল্য ১০ কোটি ডলার ছাড়িয়েছে।",
     "en": "No current valuation has been published; an older company statement (April 2018) said the valuation exceeded US$100 million."
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/pathao-logo.png",
+  "cover_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/pathao-cover.webp"
  },
  {
   "name": "Shohoz",
@@ -239,7 +246,8 @@
     "bn": null,
     "en": null
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/shohoz-logo.png"
  },
  {
   "name": "Shikho",
@@ -297,7 +305,9 @@
     "bn": null,
     "en": null
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/shikho-logo.png",
+  "cover_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/shikho-cover.jpg"
  },
  {
   "name": "Sheba.xyz",
@@ -343,7 +353,8 @@
     "bn": null,
     "en": null
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/sheba-xyz-logo.png"
  },
  {
   "name": "Brain Station 23",
@@ -389,7 +400,8 @@
     "bn": null,
     "en": null
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/brain-station-23-logo.png"
  },
  {
   "name": "SSLCOMMERZ",
@@ -422,7 +434,8 @@
     "url": "https://www.thedailystar.net/business/news/sslcommerz-gets-payment-system-operator-licence-3195211"
    }
   ],
-  "i18n_extra": {}
+  "i18n_extra": {},
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/sslcommerz-logo.png"
  },
  {
   "name": "Paperfly",
@@ -496,7 +509,8 @@
     "bn": null,
     "en": null
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/paperfly-logo.png"
  },
  {
   "name": "Foodpanda Bangladesh",
@@ -525,7 +539,8 @@
     "url": "https://en.wikipedia.org/wiki/Foodpanda"
    }
   ],
-  "i18n_extra": {}
+  "i18n_extra": {},
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/foodpanda-bangladesh-logo.png"
  },
  {
   "name": "10 Minute School",
@@ -571,7 +586,9 @@
     "bn": null,
     "en": null
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/10-minute-school-logo.webp",
+  "cover_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/10-minute-school-cover.png"
  },
  {
   "name": "Riseup Labs",
@@ -617,7 +634,9 @@
     "bn": null,
     "en": null
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/riseup-labs-logo.webp",
+  "cover_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/riseup-labs-cover.webp"
  },
  {
   "name": "Square Group",
@@ -667,7 +686,8 @@
     "bn": "গ্রুপটি সামগ্রিকভাবে বেসরকারি, তাই এর কোনো প্রকাশিত মূল্য নেই। তথ্যের জন্য: তালিকাভুক্ত ফ্ল্যাগশিপ স্কয়ার ফার্মাসিউটিক্যালসের বাজারমূল্য ২০২৬ সালের ২ সেপ্টেম্বর প্রায় ১৯২.৩৬ বিলিয়ন টাকা (স্টকঅ্যানালাইসিস)।",
     "en": "The group as a whole is private and has no published valuation. For reference, its listed flagship Square Pharmaceuticals had a market capitalisation of about ৳192.36 billion on 2 September 2026 (StockAnalysis)."
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/square-group-logo.png"
  },
  {
   "name": "Bashundhara Group",
@@ -713,7 +733,9 @@
     "bn": null,
     "en": null
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/bashundhara-group-logo.webp",
+  "cover_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/bashundhara-group-cover.jpg"
  },
  {
   "name": "PRAN-RFL Group",
@@ -759,7 +781,8 @@
     "bn": null,
     "en": null
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/pran-rfl-group-logo.jpg"
  },
  {
   "name": "Akij Group",
@@ -805,7 +828,8 @@
     "bn": null,
     "en": null
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/akij-group-logo.png"
  },
  {
   "name": "ACI Limited",
@@ -845,7 +869,8 @@
     "bn": "ঢাকা স্টক এক্সচেঞ্জে তালিকাভুক্ত শেয়ারের বাজারমূল্য (১৫ সেপ্টেম্বর ২০২৬, স্টকঅ্যানালাইসিস)। এটি প্রতিদিন বদলায়; ভিএসওবি-র মূল্যায়ন নয়।",
     "en": "Stock-market capitalisation as listed on the Dhaka Stock Exchange (15 September 2026, StockAnalysis). It changes daily and is not a VOSB assessment."
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/aci-limited-logo.png"
  },
  {
   "name": "Walton Group",
@@ -895,7 +920,9 @@
     "bn": "গ্রুপটি একক তালিকাভুক্ত কোম্পানি নয়, তাই গ্রুপের মূল্য দেখানো হয়নি। এর তালিকাভুক্ত অংশ ওয়ালটন হাই-টেক ইন্ডাস্ট্রিজের বাজারমূল্য ২০২৬ সালের ২৫ আগস্ট প্রায় ১২৭.৯৬ বিলিয়ন টাকা (স্টকঅ্যানালাইসিস)।",
     "en": "The group is not a single listed company, so no group valuation is shown. Its listed arm Walton Hi-Tech Industries had a market capitalisation of about ৳127.96 billion on 25 August 2026 (StockAnalysis)."
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/walton-group-logo.png",
+  "cover_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/walton-group-cover.jpg"
  },
  {
   "name": "Grameenphone",
@@ -935,7 +962,8 @@
     "bn": "ঢাকা স্টক এক্সচেঞ্জে তালিকাভুক্ত শেয়ারের বাজারমূল্য (২০ আগস্ট ২০২৬, স্টকঅ্যানালাইসিস)। এটি প্রতিদিন বদলায়; ভিএসওবি-র মূল্যায়ন নয়।",
     "en": "Stock-market capitalisation as listed on the Dhaka Stock Exchange (20 August 2026, StockAnalysis). It changes daily and is not a VOSB assessment."
    }
-  }
+  },
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/grameenphone-logo.png"
  },
  {
   "name": "Banglalink",
@@ -964,6 +992,8 @@
     "url": "https://en.wikipedia.org/wiki/Banglalink"
    }
   ],
-  "i18n_extra": {}
+  "i18n_extra": {},
+  "logo_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/banglalink-logo.webp",
+  "cover_url": "https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/curated/banglalink-cover.jpg"
  }
 ]
