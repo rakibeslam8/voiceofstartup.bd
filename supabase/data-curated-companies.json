@@ -1,0 +1,969 @@
+[
+ {
+  "name": "bKash",
+  "name_bn": "বিকাশ",
+  "tagline": "Mobile financial service used by over 82 million verified users in Bangladesh",
+  "tagline_bn": "বাংলাদেশের মোবাইল ফিন্যান্সিয়াল সার্ভিস — ৮ কোটি ২০ লাখের বেশি যাচাইকৃত ব্যবহারকারী",
+  "description": "bKash is a mobile financial service launched on 21 July 2011 as a joint venture between BRAC Bank and Money in Motion LLC; it is now a subsidiary of BRAC Bank PLC and works under Bangladesh Bank's authority. Customers can cash in and cash out through agents, send money, recharge mobile balance, pay bills, receive remittances and take loans, using USSD (*247#) or the bKash app.",
+  "description_bn": "বিকাশ একটি মোবাইল ফিন্যান্সিয়াল সার্ভিস, যা ২০১১ সালের ২১ জুলাই ব্র্যাক ব্যাংক ও মানি ইন মোশন এলএলসি-র যৌথ উদ্যোগে চালু হয়। বর্তমানে এটি ব্র্যাক ব্যাংক পিএলসি-র সাবসিডিয়ারি এবং বাংলাদেশ ব্যাংকের অনুমোদনে পরিচালিত। গ্রাহকেরা এজেন্টের মাধ্যমে ক্যাশ-ইন ও ক্যাশ-আউট, টাকা পাঠানো, মোবাইল রিচার্জ, বিল পরিশোধ, রেমিট্যান্স গ্রহণ ও ঋণ নিতে পারেন — USSD (*২৪৭#) বা বিকাশ অ্যাপের মাধ্যমে।",
+  "business_model": "Provides mobile financial services — cash-in and cash-out through agents, send money, mobile recharge, bill payment, remittances and loans — via USSD and an app.",
+  "business_model_bn": "এজেন্ট নেটওয়ার্ক, USSD ও অ্যাপের মাধ্যমে মোবাইল আর্থিক সেবা — ক্যাশ-ইন/ক্যাশ-আউট, সেন্ড মানি, রিচার্জ, বিল পেমেন্ট, রেমিট্যান্স ও ঋণ।",
+  "highlights": "• 2011 — Launched on 21 July with Cash In, Cash Out and Send Money.\n• 2013 — International Finance Corporation (IFC) became an equity partner.\n• 2014 — The Bill & Melinda Gates Foundation became an investor.\n• 2018 — Ant Financial became an equity partner (reported as a 20% stake).\n• 2021 — SoftBank Vision Fund II invested US$250 million; valuation reported at about US$2 billion, making bKash Bangladesh's first unicorn.\n• More than 82 million verified users (figure as given by Wikipedia, undated).",
+  "highlights_bn": "• ২০১১ — ২১ জুলাই ক্যাশ ইন, ক্যাশ আউট ও সেন্ড মানি সেবা নিয়ে যাত্রা শুরু।\n• ২০১৩ — ইন্টারন্যাশনাল ফাইন্যান্স কর্পোরেশন (আইএফসি) ইকুইটি অংশীদার হয়।\n• ২০১৪ — বিল ও মেলিন্ডা গেটস ফাউন্ডেশন বিনিয়োগকারী হিসেবে যুক্ত হয়।\n• ২০১৮ — অ্যান্ট ফিন্যান্সিয়াল ইকুইটি অংশীদার হয় (প্রতিবেদনে ২০% শেয়ার)।\n• ২০২১ — সফটব্যাংক ভিশন ফান্ড টু ২৫ কোটি মার্কিন ডলার বিনিয়োগ করে; মূল্য প্রায় ২০০ কোটি ডলার ধরা হয় — বাংলাদেশের প্রথম ইউনিকর্ন।\n• ৮ কোটি ২০ লাখের বেশি যাচাইকৃত ব্যবহারকারী (উইকিপিডিয়ার তথ্য, তারিখ উল্লেখ নেই)।",
+  "category": "fintech",
+  "stage": "established",
+  "founded_year": 2011,
+  "website": "https://www.bkash.com",
+  "team_size": "200+",
+  "vosb_valuation": 170000000000,
+  "valuation_date": "2021-11-14",
+  "valuation_note": "Valuation reported (about US$2 billion, “more than Tk 17,000 crore”) when SoftBank Vision Fund II invested in November 2021, per The Business Standard. It is a reported figure, not a current VOSB valuation.",
+  "ticker": null,
+  "team": [
+   {
+    "name": "Kamal Quadir",
+    "role": "Founder"
+   }
+  ],
+  "sources": [
+   {
+    "title": "bKash — Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/BKash"
+   },
+   {
+    "title": "SoftBank investment to raise bKash's valuation to $2bn — The Business Standard",
+    "url": "https://www.tbsnews.net/economy/softbank-investment-raise-bkashs-valuation-2bn-329299"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Kamal Quadir|Founder",
+   "team": [
+    {
+     "bn": "প্রতিষ্ঠাতা",
+     "en": "Founder"
+    }
+   ],
+   "vnote": {
+    "bn": "২০২১ সালের নভেম্বরে সফটব্যাংক ভিশন ফান্ড টু-এর বিনিয়োগের সময় প্রকাশিত মূল্য (প্রায় ২০০ কোটি মার্কিন ডলার, “১৭,০০০ কোটি টাকার বেশি”) — দ্য বিজনেস স্ট্যান্ডার্ডের সূত্রে। এটি প্রকাশিত তথ্য, ভিএসওবি-র বর্তমান মূল্যায়ন নয়।",
+    "en": "Valuation reported (about US$2 billion, “more than Tk 17,000 crore”) when SoftBank Vision Fund II invested in November 2021, per The Business Standard. It is a reported figure, not a current VOSB valuation."
+   }
+  }
+ },
+ {
+  "name": "Nagad",
+  "name_bn": "নগদ",
+  "tagline": "Mobile financial service that began as the Bangladesh Post Office's digital financial service",
+  "tagline_bn": "বাংলাদেশ ডাক বিভাগের ডিজিটাল আর্থিক সেবা হিসেবে যাত্রা শুরু করা মোবাইল ফিন্যান্সিয়াল সার্ভিস",
+  "description": "Nagad is a mobile financial service that began in March 2019 as the digital financial service of the Bangladesh Post Office. From the start it was run by Third Wave Technologies Ltd (renamed Nagad Ltd in February 2021) under a revenue-sharing arrangement with the Post Office. Its ownership and licensing have been publicly debated: it has operated on interim approvals from Bangladesh Bank, and in August 2025 the Bangladesh Bank governor said the government plans to privatise it.",
+  "description_bn": "নগদ একটি মোবাইল ফিন্যান্সিয়াল সার্ভিস, যা ২০১৯ সালের মার্চে বাংলাদেশ ডাক বিভাগের ডিজিটাল আর্থিক সেবা হিসেবে যাত্রা শুরু করে। শুরু থেকে এটি ডাক বিভাগের সঙ্গে রাজস্ব-ভাগাভাগির ভিত্তিতে থার্ড ওয়েভ টেকনোলজিস লিমিটেড (২০২১ সালের ফেব্রুয়ারিতে নাম বদলে নগদ লিমিটেড) পরিচালনা করে। এর মালিকানা ও লাইসেন্স নিয়ে প্রকাশ্যে আলোচনা হয়েছে; এটি বাংলাদেশ ব্যাংকের অন্তর্বর্তী অনুমোদনে চলেছে এবং ২০২৫ সালের আগস্টে বাংলাদেশ ব্যাংকের গভর্নর জানান, সরকার এটি বেসরকারিকরণ করতে চায়।",
+  "business_model": "Provides mobile financial services to customers across Bangladesh; operated with the Bangladesh Post Office under a revenue-sharing model.",
+  "business_model_bn": "সারা দেশের গ্রাহকদের মোবাইল আর্থিক সেবা; ডাক বিভাগের সঙ্গে রাজস্ব-ভাগাভাগি মডেলে পরিচালিত।",
+  "highlights": "• March 2019 — Began as the Bangladesh Post Office's mobile financial service.\n• March 2020 — Bangladesh Bank gave its first interim approval for operations.\n• June 2021 — About 5.2 crore customers reported by The Daily Star.\n• August 2025 — Governor of Bangladesh Bank announced a plan to privatise Nagad and bring in a technology company as main shareholder.",
+  "highlights_bn": "• ২০১৯ মার্চ — বাংলাদেশ ডাক বিভাগের মোবাইল আর্থিক সেবা হিসেবে যাত্রা।\n• ২০২০ মার্চ — বাংলাদেশ ব্যাংক পরিচালনার জন্য প্রথম অন্তর্বর্তী অনুমোদন দেয়।\n• ২০২১ জুন — দ্য ডেইলি স্টারের প্রতিবেদনে প্রায় ৫ কোটি ২০ লাখ গ্রাহক।\n• ২০২৫ আগস্ট — বাংলাদেশ ব্যাংকের গভর্নর নগদ বেসরকারিকরণ ও একটি প্রযুক্তি প্রতিষ্ঠানকে প্রধান শেয়ারহোল্ডার করার পরিকল্পনা জানান।",
+  "category": "fintech",
+  "stage": "established",
+  "founded_year": 2019,
+  "website": "https://nagad.com.bd",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": "Ownership is publicly disputed and no reliable valuation has been published.",
+  "ticker": null,
+  "team": [],
+  "sources": [
+   {
+    "title": "Who owns Nagad? — The Daily Star",
+    "url": "https://www.thedailystar.net/business/economy/banks/news/who-owns-nagad-2120921"
+   },
+   {
+    "title": "Govt takes over Nagad — The Daily Star",
+    "url": "https://online91.thedailystar.net/business/economy/news/govt-takes-over-nagad-3684351"
+   },
+   {
+    "title": "Nagad to be privatised — The Daily Ittefaq (updated 27 Aug 2025)",
+    "url": "https://en.ittefaq.com.bd/13199/nagad-to-be-privatised-to-boost-mfs-competition"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "",
+   "team": [],
+   "vnote": {
+    "bn": "মালিকানা নিয়ে প্রকাশ্য বিতর্ক আছে; নির্ভরযোগ্য কোনো মূল্য প্রকাশিত হয়নি।",
+    "en": "Ownership is publicly disputed and no reliable valuation has been published."
+   }
+  }
+ },
+ {
+  "name": "Chaldal",
+  "name_bn": "চালডাল",
+  "tagline": "Online grocery delivery across Dhaka and other major cities",
+  "tagline_bn": "ঢাকা ও অন্যান্য প্রধান শহরে অনলাইন গ্রোসারি ডেলিভারি",
+  "description": "Chaldal is a Bangladeshi online grocery platform founded in September 2013. Customers order through its website and Android and iOS apps, or by phone, and choose a delivery time slot. It serves Dhaka, Chattogram, Narayanganj, Jashore, Khulna, Sylhet, Rajshahi and Gazipur.",
+  "description_bn": "চালডাল ২০১৩ সালের সেপ্টেম্বরে প্রতিষ্ঠিত একটি বাংলাদেশি অনলাইন গ্রোসারি প্ল্যাটফর্ম। গ্রাহকেরা ওয়েবসাইট, অ্যান্ড্রয়েড ও আইওএস অ্যাপ বা ফোনের মাধ্যমে অর্ডার করে ডেলিভারির সময় বেছে নিতে পারেন। ঢাকা, চট্টগ্রাম, নারায়ণগঞ্জ, যশোর, খুলনা, সিলেট, রাজশাহী ও গাজীপুরে সেবা দেয়।",
+  "business_model": "Sells groceries online and delivers them from its own warehouses in chosen time slots.",
+  "business_model_bn": "নিজস্ব ওয়্যারহাউস থেকে অনলাইনে মুদি পণ্য বিক্রি ও নির্ধারিত সময়ে ডেলিভারি।",
+  "highlights": "• September 2013 — Founded by Waseem Alim, Zia Ashraf and Tejas Viswanath.\n• 2017 — Financing from the IFC and the World Bank (amount not stated).\n• September 2021 — US$10 million Series C led by Taavet Hinrikus, Xploration Capital and others.\n• August 2022 — Investment from Startup Bangladesh (amount undisclosed).\n• June 2024 — US$170,000 from Bangladesh Venture Capital.\n• 28 active warehouses (February 2022) and 2,300+ employees (2023).",
+  "highlights_bn": "• ২০১৩ সেপ্টেম্বর — ওয়াসিম আলীম, জিয়া আশরাফ ও তেজস বিশ্বনাথের হাত ধরে প্রতিষ্ঠা।\n• ২০১৭ — আইএফসি ও বিশ্বব্যাংকের অর্থায়ন (পরিমাণ উল্লেখ নেই)।\n• ২০২১ সেপ্টেম্বর — তাভেত হিনরিকাস, এক্সপ্লোরেশন ক্যাপিটালসহ বিনিয়োগকারীদের নেতৃত্বে ১ কোটি মার্কিন ডলারের সিরিজ সি।\n• ২০২২ আগস্ট — স্টার্টআপ বাংলাদেশের বিনিয়োগ (পরিমাণ অপ্রকাশিত)।\n• ২০২৪ জুন — বাংলাদেশ ভেঞ্চার ক্যাপিটাল থেকে ১.৭ লাখ মার্কিন ডলার।\n• ২৮টি সক্রিয় ওয়্যারহাউস (২০২২ ফেব্রুয়ারি) ও ২,৩০০+ কর্মী (২০২৩)।",
+  "category": "ecommerce",
+  "stage": "scale",
+  "founded_year": 2013,
+  "website": "https://chaldal.com",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [
+   {
+    "name": "Waseem Alim",
+    "role": "Co-founder & CEO"
+   },
+   {
+    "name": "Zia Ashraf",
+    "role": "Co-founder & COO"
+   },
+   {
+    "name": "Tejas Viswanath",
+    "role": "Co-founder & CTO"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Chaldal — Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Chaldal"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Waseem Alim|Co-founder & CEO;Zia Ashraf|Co-founder & COO;Tejas Viswanath|Co-founder & CTO",
+   "team": [
+    {
+     "bn": "সহ-প্রতিষ্ঠাতা ও সিইও",
+     "en": "Co-founder & CEO"
+    },
+    {
+     "bn": "সহ-প্রতিষ্ঠাতা ও সিওও",
+     "en": "Co-founder & COO"
+    },
+    {
+     "bn": "সহ-প্রতিষ্ঠাতা ও সিটিও",
+     "en": "Co-founder & CTO"
+    }
+   ],
+   "vnote": {
+    "bn": null,
+    "en": null
+   }
+  }
+ },
+ {
+  "name": "Pathao",
+  "name_bn": "পাঠাও",
+  "tagline": "Ride-sharing, courier, food delivery and digital payments app",
+  "tagline_bn": "রাইড-শেয়ারিং, কুরিয়ার, ফুড ডেলিভারি ও ডিজিটাল পেমেন্টের অ্যাপ",
+  "description": "Pathao started in 2015 as a courier service and grew into an on-demand platform for motorbike and car rides, smart logistics, food delivery and financial services such as Pathao Pay (digital wallet) and Pay Later (buy-now-pay-later). By September 2024 it said it had served more than one crore customers since inception.",
+  "description_bn": "পাঠাও ২০১৫ সালে কুরিয়ার সার্ভিস হিসেবে শুরু করে এবং ক্রমে মোটরসাইকেল ও গাড়ির রাইড, স্মার্ট লজিস্টিকস, ফুড ডেলিভারি এবং পাঠাও পে (ডিজিটাল ওয়ালেট) ও পে লেটার (বাই-নাউ-পে-লেটার)-এর মতো আর্থিক সেবার প্ল্যাটফর্মে পরিণত হয়েছে। ২০২৪ সালের সেপ্টেম্বরে প্রতিষ্ঠানটি জানায়, শুরু থেকে ১ কোটির বেশি গ্রাহককে সেবা দিয়েছে।",
+  "business_model": "On-demand rides, courier and logistics, food delivery and fintech services (Pathao Pay, Pay Later) through one app.",
+  "business_model_bn": "একটি অ্যাপে অন-ডিমান্ড রাইড, কুরিয়ার ও লজিস্টিকস, ফুড ডেলিভারি এবং ফিনটেক সেবা (পাঠাও পে, পে লেটার)।",
+  "highlights": "• 2015 — Began as a courier service.\n• 2017 — Added car rides.\n• April 2018 — Pre-Series B round led by Go-Jek (reported at more than US$10 million); the company said its valuation then exceeded US$100 million.\n• 2018 — Launched food delivery.\n• September 2024 — US$12 million pre-Series B led by VentureSouq, bringing total funds raised to US$50 million.\n• Over one crore customers served since 2015 (company figure, September 2024).",
+  "highlights_bn": "• ২০১৫ — কুরিয়ার সার্ভিস হিসেবে যাত্রা।\n• ২০১৭ — গাড়ির রাইড যুক্ত হয়।\n• ২০১৮ এপ্রিল — গো-জেকের নেতৃত্বে প্রি-সিরিজ বি রাউন্ড (প্রতিবেদনে ১ কোটি ডলারের বেশি); তখন প্রতিষ্ঠানটি জানায় এর মূল্য ১০ কোটি ডলার ছাড়িয়েছে।\n• ২০১৮ — ফুড ডেলিভারি চালু।\n• ২০২৪ সেপ্টেম্বর — ভেঞ্চারসুক-এর নেতৃত্বে ১.২ কোটি ডলারের প্রি-সিরিজ বি; মোট সংগৃহীত ৫ কোটি ডলার।\n• ২০১৫ থেকে ১ কোটির বেশি গ্রাহককে সেবা (প্রতিষ্ঠানের তথ্য, ২০২৪ সেপ্টেম্বর)।",
+  "category": "logistics",
+  "stage": "scale",
+  "founded_year": 2015,
+  "website": "https://pathao.com",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": "No current valuation has been published; an older company statement (April 2018) said the valuation exceeded US$100 million.",
+  "ticker": null,
+  "team": [],
+  "sources": [
+   {
+    "title": "Bangladesh's version of Go-Jek raises over $10M — TechCrunch (27 Apr 2018)",
+    "url": "https://techcrunch.com/2018/04/27/bangladeshs-version-of-go-jek-raises-over-10m-in-a-round-led-by-go-jek"
+   },
+   {
+    "title": "Pathao secures $12m from foreign investors — The Business Standard",
+    "url": "https://www.tbsnews.net/node/941086"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "",
+   "team": [],
+   "vnote": {
+    "bn": "বর্তমান কোনো মূল্য প্রকাশিত হয়নি; ২০১৮ সালের এপ্রিলে প্রতিষ্ঠানটি জানিয়েছিল মূল্য ১০ কোটি ডলার ছাড়িয়েছে।",
+    "en": "No current valuation has been published; an older company statement (April 2018) said the valuation exceeded US$100 million."
+   }
+  }
+ },
+ {
+  "name": "Shohoz",
+  "name_bn": "শহজ",
+  "tagline": "Online bus ticketing, ride-hailing and on-demand services",
+  "tagline_bn": "অনলাইন বাস টিকিট, রাইড-হেইলিং ও অন-ডিমান্ড সেবা",
+  "description": "Shohoz started in 2014 by selling bus tickets online and later added other tickets such as ferries, motorbike rides (January 2018) and a ride-hailing app. In 2018 it raised US$15 million led by Golden Gate Ventures.",
+  "description_bn": "শহজ ২০১৪ সালে অনলাইনে বাস টিকিট বিক্রি দিয়ে যাত্রা শুরু করে; পরে ফেরিসহ অন্যান্য টিকিট, মোটরসাইকেল রাইড (২০১৮ জানুয়ারি) ও রাইড-হেইলিং অ্যাপ যুক্ত করে। ২০১৮ সালে গোল্ডেন গেট ভেঞ্চার্সের নেতৃত্বে ১.৫ কোটি মার্কিন ডলার সংগ্রহ করে।",
+  "business_model": "Online ticketing (bus, ferry and others) plus ride-hailing and on-demand services through its app.",
+  "business_model_bn": "অ্যাপের মাধ্যমে অনলাইন টিকিটিং (বাস, ফেরি ইত্যাদি) এবং রাইড-হেইলিং ও অন-ডিমান্ড সেবা।",
+  "highlights": "• 2014 — Founded; started with online bus tickets.\n• January 2018 — Added motorbike rides and launched its ride-hailing app.\n• September 2018 — US$15 million round led by Golden Gate Ventures with Linear VC, 500 Startups and angel investor Koh Boon Hwee.",
+  "highlights_bn": "• ২০১৪ — প্রতিষ্ঠা; অনলাইন বাস টিকিট দিয়ে শুরু।\n• ২০১৮ জানুয়ারি — মোটরসাইকেল রাইড যুক্ত এবং রাইড-হেইলিং অ্যাপ চালু।\n• ২০১৮ সেপ্টেম্বর — গোল্ডেন গেট ভেঞ্চার্সের নেতৃত্বে ১.৫ কোটি ডলারের রাউন্ড; সঙ্গে লিনিয়ার ভিসি, ৫০০ স্টার্টআপস ও এঞ্জেল বিনিয়োগকারী কো বুন হুই।",
+  "category": "travel",
+  "stage": "scale",
+  "founded_year": 2014,
+  "website": "https://shohoz.com",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [
+   {
+    "name": "Maliha Quadir",
+    "role": "Chief Executive (as reported in 2018)"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Ride-hailing startup Shohoz raises $15M — TechCrunch (Sep 2018)",
+    "url": "https://techcrunch.com/?p=1718439"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Maliha Quadir|Chief Executive (as reported in 2018)",
+   "team": [
+    {
+     "bn": "প্রধান নির্বাহী (২০১৮ সালের প্রতিবেদন অনুযায়ী)",
+     "en": "Chief Executive (as reported in 2018)"
+    }
+   ],
+   "vnote": {
+    "bn": null,
+    "en": null
+   }
+  }
+ },
+ {
+  "name": "Shikho",
+  "name_bn": "শিখো",
+  "tagline": "Bangla-language learning app for school and college students",
+  "tagline_bn": "স্কুল ও কলেজ শিক্ষার্থীদের জন্য বাংলা ভাষার লার্নিং অ্যাপ",
+  "description": "Shikho is a Bangladeshi edtech company founded in April 2019 by Shahir Chowdhury and Zeeshan Zakaria. Its learning app offers video lessons and practice for students and is free for a trial period before a paid subscription.",
+  "description_bn": "শিখো ২০১৯ সালের এপ্রিলে শাহির চৌধুরী ও জিশান জাকারিয়ার প্রতিষ্ঠিত একটি বাংলাদেশি এডটেক প্রতিষ্ঠান। এর লার্নিং অ্যাপে শিক্ষার্থীদের জন্য ভিডিও পাঠ ও অনুশীলন আছে; ট্রায়াল সময় বিনামূল্যে, এরপর পেইড সাবস্ক্রিপশন।",
+  "business_model": "Subscription-based learning app; users get a short free trial, then pay to continue.",
+  "business_model_bn": "সাবস্ক্রিপশনভিত্তিক লার্নিং অ্যাপ; অল্প সময় বিনামূল্যে ট্রায়াল, এরপর টাকা দিয়ে চালিয়ে যেতে হয়।",
+  "highlights": "• April 2019 — Founded.\n• 2020 — US$275,000 pre-seed from LearnStart and strategic angel investors.\n• July 2021 — US$1.3 million seed led by LearnStart (Learn Capital) and Anchorless Bangladesh, with Wavemaker Partners and Teachable founder Ankur Nagpal.",
+  "highlights_bn": "• ২০১৯ এপ্রিল — প্রতিষ্ঠা।\n• ২০২০ — লার্নস্টার্ট ও কৌশলগত এঞ্জেল বিনিয়োগকারীদের কাছ থেকে ২.৭৫ লাখ ডলার প্রি-সিড।\n• ২০২১ জুলাই — লার্নস্টার্ট (লার্ন ক্যাপিটাল) ও অ্যাংকরলেস বাংলাদেশের নেতৃত্বে ১৩ লাখ ডলারের সিড; সঙ্গে ওয়েভমেকার পার্টনার্স ও টিচেবলের প্রতিষ্ঠাতা অঙ্কুর নাগপাল।",
+  "category": "edtech",
+  "stage": "growth",
+  "founded_year": 2019,
+  "website": "https://shikho.com",
+  "team_size": "51-200",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [
+   {
+    "name": "Shahir Chowdhury",
+    "role": "Co-founder & CEO"
+   },
+   {
+    "name": "Zeeshan Zakaria",
+    "role": "Co-founder & COO"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Shikho raises $1.3m seed money — The Daily Star",
+    "url": "https://www.thedailystar.net/business/economy/news/shikho-raises-13m-seed-money-2139551"
+   },
+   {
+    "title": "TechCrunch — Shikho seed round (27 Jul 2021)",
+    "url": "https://techcrunch.com/?p=2182387"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Shahir Chowdhury|Co-founder & CEO;Zeeshan Zakaria|Co-founder & COO",
+   "team": [
+    {
+     "bn": "সহ-প্রতিষ্ঠাতা ও সিইও",
+     "en": "Co-founder & CEO"
+    },
+    {
+     "bn": "সহ-প্রতিষ্ঠাতা ও সিওও",
+     "en": "Co-founder & COO"
+    }
+   ],
+   "vnote": {
+    "bn": null,
+    "en": null
+   }
+  }
+ },
+ {
+  "name": "Sheba.xyz",
+  "name_bn": "শেবা ডটএক্সওয়াইজেড",
+  "tagline": "Online marketplace connecting households with service providers",
+  "tagline_bn": "গৃহস্থালি সেবাদাতাদের সঙ্গে গ্রাহকদের যুক্ত করা অনলাইন মার্কেটপ্লেস",
+  "description": "Sheba.xyz is an online platform that connects households with service providers for cleaning, plumbing and other home services, and is described as Bangladesh's largest digital marketplace for household services. Founded in 2016 by Adnan Imtiaz Halim, it also runs Sheba Manager (a business app launched in 2019) and Sheba Pay.",
+  "description_bn": "শেবা ডটএক্সওয়াইজেড একটি অনলাইন প্ল্যাটফর্ম, যা ক্লিনিং, প্লাম্বিংসহ গৃহস্থালি সেবায় সেবাদাতাদের সঙ্গে গ্রাহকদের যুক্ত করে; বাংলাদেশে গৃহস্থালি সেবার বৃহত্তম ডিজিটাল মার্কেটপ্লেস হিসেবে বর্ণিত। ২০১৬ সালে আদনান ইমতিয়াজ হালিমের প্রতিষ্ঠিত প্রতিষ্ঠানটি শেবা ম্যানেজার (২০১৯ সালে চালু ব্যবসায়িক অ্যাপ) ও শেবা পে-ও পরিচালনা করে।",
+  "business_model": "Marketplace for home and business services, plus a business-management app (Sheba Manager) and a payment service (Sheba Pay).",
+  "business_model_bn": "গৃহস্থালি ও ব্যবসায়িক সেবার মার্কেটপ্লেস; সঙ্গে ব্যবসা ব্যবস্থাপনার অ্যাপ (শেবা ম্যানেজার) ও পেমেন্ট সেবা (শেবা পে)।",
+  "highlights": "• 2016 — Launched with about 50 employees in a small house in Mirpur DOHS, Dhaka.\n• 2019 — Launched Sheba Manager (about one million users as of December 2023).\n• May 2022 — Downsized after a planned foreign investment round fell through.\n• 2022–2023 — Raised about Tk 102 crore from local investors in total, including a Series A with BSRM Group and Startup Bangladesh Limited.\n• August 2023 — Received a Payment Service Provider licence from the central bank for Sheba Pay.",
+  "highlights_bn": "• ২০১৬ — ঢাকার মিরপুর ডিওএইচএস-এর একটি ছোট বাড়িতে প্রায় ৫০ কর্মী নিয়ে যাত্রা।\n• ২০১৯ — শেবা ম্যানেজার চালু (২০২৩ ডিসেম্বরে প্রায় ১০ লাখ ব্যবহারকারী)।\n• ২০২২ মে — প্রত্যাশিত বিদেশি বিনিয়োগ না আসায় প্রতিষ্ঠান ছোট করা হয়।\n• ২০২২–২০২৩ — স্থানীয় বিনিয়োগকারীদের কাছ থেকে মোট প্রায় ১০২ কোটি টাকা সংগ্রহ; এর মধ্যে বিএসআরএম গ্রুপ ও স্টার্টআপ বাংলাদেশ লিমিটেডের সিরিজ এ।\n• ২০২৩ আগস্ট — শেবা পে-র জন্য কেন্দ্রীয় ব্যাংক থেকে পেমেন্ট সার্ভিস প্রোভাইডার লাইসেন্স।",
+  "category": "services",
+  "stage": "growth",
+  "founded_year": 2016,
+  "website": "https://sheba.xyz",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [
+   {
+    "name": "Adnan Imtiaz Halim",
+    "role": "Founder & CEO"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Sheba's comeback story — The Daily Star (14 Dec 2023)",
+    "url": "https://www.thedailystar.net/business/news/shebas-comeback-story-demonstration-resilience-3493811"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Adnan Imtiaz Halim|Founder & CEO",
+   "team": [
+    {
+     "bn": "প্রতিষ্ঠাতা ও সিইও",
+     "en": "Founder & CEO"
+    }
+   ],
+   "vnote": {
+    "bn": null,
+    "en": null
+   }
+  }
+ },
+ {
+  "name": "Brain Station 23",
+  "name_bn": "ব্রেইন স্টেশন ২৩",
+  "tagline": "Bangladeshi software and technology services company serving local and global clients",
+  "tagline_bn": "দেশি ও আন্তর্জাতিক গ্রাহকদের সেবা দেওয়া বাংলাদেশি সফটওয়্যার ও প্রযুক্তি সেবা প্রতিষ্ঠান",
+  "description": "Brain Station 23 is a Bangladeshi software and IT services company founded in 2006 by Raisul Kabir, then a fresh BUET graduate. By mid-2022 it had more than 650 IT experts and had delivered over 2,000 national and international projects across sectors such as e-commerce, healthcare, banking and fintech, with clients including Telenor, British Telecom, Axiata and MetLife.",
+  "description_bn": "ব্রেইন স্টেশন ২৩ একটি বাংলাদেশি সফটওয়্যার ও আইটি সেবা প্রতিষ্ঠান, যা ২০০৬ সালে বুয়েটের সদ্য স্নাতক রাইসুল কবির প্রতিষ্ঠা করেন। ২০২২ সালের মাঝামাঝি সময়ে এখানে ৬৫০-এর বেশি আইটি বিশেষজ্ঞ কাজ করতেন এবং ই-কমার্স, স্বাস্থ্য, ব্যাংকিং ও ফিনটেকসহ নানা খাতে ২,০০০-এর বেশি দেশি-বিদেশি প্রকল্প করেছে; গ্রাহকদের মধ্যে আছে টেলিনর, ব্রিটিশ টেলিকম, অ্যাক্সিয়াটা ও মেটলাইফ।",
+  "business_model": "Builds custom software, mobile apps and digital solutions for businesses; revenue is not publicly stated.",
+  "business_model_bn": "ব্যবসার জন্য কাস্টম সফটওয়্যার, মোবাইল অ্যাপ ও ডিজিটাল সমাধান তৈরি; আয়ের তথ্য প্রকাশিত নয়।",
+  "highlights": "• 2006 — Founded to solve a software problem for a Dhaka architecture firm.\n• More than 650 IT experts and 2,000+ projects (The Business Standard, July 2022).\n• Branched out to Germany and the Netherlands, aiming to operate in 15 countries by 2030.\n• Employee-ownership model developed with Ernst & Young: the best 80 employees receive a small share.\n• Named best outsourcing organisation by BASIS for seven consecutive years.",
+  "highlights_bn": "• ২০০৬ — ঢাকার একটি স্থাপত্য প্রতিষ্ঠানের সফটওয়্যার সমস্যা সমাধানের মাধ্যমে প্রতিষ্ঠা।\n• ৬৫০-এর বেশি আইটি বিশেষজ্ঞ ও ২,০০০+ প্রকল্প (দ্য বিজনেস স্ট্যান্ডার্ড, ২০২২ জুলাই)।\n• জার্মানি ও নেদারল্যান্ডসে শাখা; ২০৩০ সালের মধ্যে ১৫টি দেশে কাজের লক্ষ্য।\n• আর্নস্ট অ্যান্ড ইয়াং-এর সঙ্গে গড়া কর্মী-মালিকানা মডেল: সেরা ৮০ জন কর্মী অল্প শেয়ার পান।\n• টানা সাত বছর বেসিস থেকে সেরা আউটসোর্সিং প্রতিষ্ঠানের স্বীকৃতি।",
+  "category": "services",
+  "stage": "established",
+  "founded_year": 2006,
+  "website": "https://brainstation-23.com",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [
+   {
+    "name": "Raisul Kabir",
+    "role": "Founder & CEO"
+   }
+  ],
+  "sources": [
+   {
+    "title": "The secret to Brain Station 23's success — The Business Standard",
+    "url": "https://www.tbsnews.net/node/459494"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Raisul Kabir|Founder & CEO",
+   "team": [
+    {
+     "bn": "প্রতিষ্ঠাতা ও সিইও",
+     "en": "Founder & CEO"
+    }
+   ],
+   "vnote": {
+    "bn": null,
+    "en": null
+   }
+  }
+ },
+ {
+  "name": "SSLCOMMERZ",
+  "name_bn": "এসএসএলকমার্জ",
+  "tagline": "Online payment gateway and digital payment solutions for Bangladeshi businesses",
+  "tagline_bn": "বাংলাদেশি ব্যবসার জন্য অনলাইন পেমেন্ট গেটওয়ে ও ডিজিটাল পেমেন্ট সমাধান",
+  "description": "SSLCOMMERZ is a Bangladeshi fintech company that describes itself as a payment pioneer since 2010. It offers a payment gateway, payment invoices, payment links, EMI and Bangla QR for websites and mobile apps, and says it serves more than 18,000 businesses. It has received a payment system operator licence, as reported by The Daily Star.",
+  "description_bn": "এসএসএলকমার্জ একটি বাংলাদেশি ফিনটেক প্রতিষ্ঠান, যা নিজেকে ২০১০ সাল থেকে পেমেন্ট খাতের অগ্রদূত হিসেবে বর্ণনা করে। ওয়েবসাইট ও মোবাইল অ্যাপের জন্য এটি পেমেন্ট গেটওয়ে, পেমেন্ট ইনভয়েস, পেমেন্ট লিংক, ইএমআই ও বাংলা কিউআর দেয় এবং ১৮ হাজারের বেশি ব্যবসাকে সেবা দেওয়ার কথা জানায়। দ্য ডেইলি স্টারের প্রতিবেদন অনুযায়ী এটি পেমেন্ট সিস্টেম অপারেটর লাইসেন্স পেয়েছে।",
+  "business_model": "Payment gateway and related payment tools (invoices, links, EMI, QR) for online and mobile businesses.",
+  "business_model_bn": "অনলাইন ও মোবাইল ব্যবসার জন্য পেমেন্ট গেটওয়ে ও সংশ্লিষ্ট টুল (ইনভয়েস, লিংক, ইএমআই, কিউআর)।",
+  "highlights": "• Active in digital payments since 2010 (company statement).\n• Serves 18,223 businesses (figure shown on the company website; undated).\n• Products: Payment Gateway, Payment Invoices, Payment Links, EMI and Bangla QR.\n• Received a payment system operator licence (reported by The Daily Star).",
+  "highlights_bn": "• ২০১০ সাল থেকে ডিজিটাল পেমেন্টে সক্রিয় (প্রতিষ্ঠানের বক্তব্য)।\n• ১৮,২২৩টি ব্যবসাকে সেবা (প্রতিষ্ঠানের ওয়েবসাইটের তথ্য; তারিখ নেই)।\n• পণ্য: পেমেন্ট গেটওয়ে, পেমেন্ট ইনভয়েস, পেমেন্ট লিংক, ইএমআই ও বাংলা কিউআর।\n• পেমেন্ট সিস্টেম অপারেটর লাইসেন্স পেয়েছে (দ্য ডেইলি স্টারের প্রতিবেদন)।",
+  "category": "fintech",
+  "stage": "established",
+  "founded_year": 2010,
+  "website": "https://sslcommerz.com",
+  "team_size": "51-200",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [],
+  "sources": [
+   {
+    "title": "About SSLCOMMERZ — company website",
+    "url": "https://sslcommerz.com/about-company/"
+   },
+   {
+    "title": "SSLCOMMERZ gets payment system operator licence — The Daily Star",
+    "url": "https://www.thedailystar.net/business/news/sslcommerz-gets-payment-system-operator-licence-3195211"
+   }
+  ],
+  "i18n_extra": {}
+ },
+ {
+  "name": "Paperfly",
+  "name_bn": "পেপারফ্লাই",
+  "tagline": "Technology-enabled home delivery and logistics service provider",
+  "tagline_bn": "প্রযুক্তিনির্ভর হোম ডেলিভারি ও লজিস্টিকস সেবাদাতা",
+  "description": "Paperfly is a home-delivery and logistics company founded in 2016 that calls itself Bangladesh's first homegrown, technology-enabled logistics service provider. It serves e-commerce sellers and traditional businesses. In January 2021 India's Ecom Express acquired a majority stake valued at around Tk 100 crore.",
+  "description_bn": "পেপারফ্লাই ২০১৬ সালে প্রতিষ্ঠিত হোম-ডেলিভারি ও লজিস্টিকস প্রতিষ্ঠান, যা নিজেকে বাংলাদেশের প্রথম দেশীয় প্রযুক্তিনির্ভর লজিস্টিকস সেবাদাতা বলে দাবি করে। ই-কমার্স বিক্রেতা ও প্রচলিত ব্যবসাকে সেবা দেয়। ২০২১ সালের জানুয়ারিতে ভারতের ইকম এক্সপ্রেস প্রায় ১০০ কোটি টাকা মূল্যের সংখ্যাগরিষ্ঠ শেয়ার অধিগ্রহণ করে।",
+  "business_model": "Collects and delivers parcels for e-commerce and other businesses through its own delivery network.",
+  "business_model_bn": "নিজস্ব ডেলিভারি নেটওয়ার্কের মাধ্যমে ই-কমার্স ও অন্যান্য ব্যবসার পার্সেল সংগ্রহ ও পৌঁছে দেওয়া।",
+  "highlights": "• 2016 — Founded.\n• January 2021 — Ecom Express (India) acquired a majority stake valued at around Tk 100 crore (exact percentage not stated).\n• January 2021 — 1,000+ employees and 100 delivery points, with a plan to reach 350.\n• April 2022 — Further Tk 102 crore investment from Ecom Express (as reported by The Daily Star).",
+  "highlights_bn": "• ২০১৬ — প্রতিষ্ঠা।\n• ২০২১ জানুয়ারি — ভারতের ইকম এক্সপ্রেস প্রায় ১০০ কোটি টাকা মূল্যের সংখ্যাগরিষ্ঠ শেয়ার অধিগ্রহণ করে (সঠিক শতাংশ উল্লেখ নেই)।\n• ২০২১ জানুয়ারি — ১,০০০+ কর্মী ও ১০০টি ডেলিভারি পয়েন্ট; লক্ষ্য ৩৫০টি।\n• ২০২২ এপ্রিল — ইকম এক্সপ্রেস থেকে আরও ১০২ কোটি টাকার বিনিয়োগ (দ্য ডেইলি স্টারের প্রতিবেদন)।",
+  "category": "logistics",
+  "stage": "scale",
+  "founded_year": 2016,
+  "website": "https://paperfly.com.bd",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [
+   {
+    "name": "Shahriar Hasan",
+    "role": "Founder & CEO"
+   },
+   {
+    "name": "Razibul Islam",
+    "role": "Co-founder & COO"
+   },
+   {
+    "name": "Rahath Ahmed",
+    "role": "Co-founder & CMO"
+   },
+   {
+    "name": "Shamsuddin Ahmed",
+    "role": "Co-founder & CTO"
+   }
+  ],
+  "sources": [
+   {
+    "title": "India's Ecom Express acquires majority stake in Paperfly — The Daily Star (Jan 2021)",
+    "url": "https://www.thedailystar.net/business/news/indias-ecom-express-acquires-majority-stake-paperfly-2026869"
+   },
+   {
+    "title": "Paperfly secures Tk 102cr from Indian firm — The Daily Star",
+    "url": "https://www.thedailystar.net/node/2998941"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Shahriar Hasan|Founder & CEO;Razibul Islam|Co-founder & COO;Rahath Ahmed|Co-founder & CMO;Shamsuddin Ahmed|Co-founder & CTO",
+   "team": [
+    {
+     "bn": "প্রতিষ্ঠাতা ও সিইও",
+     "en": "Founder & CEO"
+    },
+    {
+     "bn": "সহ-প্রতিষ্ঠাতা ও সিওও",
+     "en": "Co-founder & COO"
+    },
+    {
+     "bn": "সহ-প্রতিষ্ঠাতা ও সিএমও",
+     "en": "Co-founder & CMO"
+    },
+    {
+     "bn": "সহ-প্রতিষ্ঠাতা ও সিটিও",
+     "en": "Co-founder & CTO"
+    }
+   ],
+   "vnote": {
+    "bn": null,
+    "en": null
+   }
+  }
+ },
+ {
+  "name": "Foodpanda Bangladesh",
+  "name_bn": "ফুডপান্ডা বাংলাদেশ",
+  "tagline": "Online food and grocery delivery platform operating in Bangladesh",
+  "tagline_bn": "বাংলাদেশে চালু অনলাইন খাবার ও মুদি ডেলিভারি প্ল্যাটফর্ম",
+  "description": "Foodpanda launched in Bangladesh in 2013, a year after it was founded in Singapore in 2012. The group is owned by Delivery Hero, which acquired Foodpanda in full in December 2016. By 2021 it was reported to be the largest food delivery service in Bangladesh.",
+  "description_bn": "ফুডপান্ডা ২০১২ সালে সিঙ্গাপুরে প্রতিষ্ঠার এক বছর পর ২০১৩ সালে বাংলাদেশে চালু হয়। গ্রুপটির মালিক ডেলিভারি হিরো, যারা ২০১৬ সালের ডিসেম্বরে ফুডপান্ডাকে সম্পূর্ণ অধিগ্রহণ করে। ২০২১ সালে এটি বাংলাদেশের বৃহত্তম ফুড ডেলিভারি সেবা বলে প্রতিবেদনে উল্লেখ করা হয়।",
+  "business_model": "Connects restaurants and shops with customers through an app and delivers orders by riders.",
+  "business_model_bn": "অ্যাপের মাধ্যমে রেস্টুরেন্ট ও দোকানকে গ্রাহকের সঙ্গে যুক্ত করে রাইডারের মাধ্যমে অর্ডার পৌঁছে দেয়।",
+  "highlights": "• 2012 — Foodpanda founded in Singapore.\n• 2013 — Launched in Bangladesh.\n• December 2016 — Delivery Hero acquired Foodpanda in full.\n• 2021 — Reported as the largest food delivery service in Bangladesh.",
+  "highlights_bn": "• ২০১২ — সিঙ্গাপুরে ফুডপান্ডা প্রতিষ্ঠিত।\n• ২০১৩ — বাংলাদেশে যাত্রা।\n• ২০১৬ ডিসেম্বর — ডেলিভারি হিরো ফুডপান্ডাকে সম্পূর্ণ অধিগ্রহণ করে।\n• ২০২১ — বাংলাদেশের বৃহত্তম ফুড ডেলিভারি সেবা বলে প্রতিবেদনে উল্লেখ।",
+  "category": "food",
+  "stage": "scale",
+  "founded_year": 2013,
+  "website": "https://www.foodpanda.com.bd",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [],
+  "sources": [
+   {
+    "title": "Foodpanda — Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Foodpanda"
+   }
+  ],
+  "i18n_extra": {}
+ },
+ {
+  "name": "10 Minute School",
+  "name_bn": "টেন মিনিট স্কুল",
+  "tagline": "Bangladesh's online learning platform with courses and a mobile app",
+  "tagline_bn": "কোর্স ও মোবাইল অ্যাপসহ অনলাইন লার্নিং প্ল্যাটফর্ম",
+  "description": "10 Minute School is an online education platform founded by Ayman Sadiq; its website launched on 17 May 2015. It offers online courses through its website and Android and iOS apps. In 2022 it raised seed funding from international investors including Sequoia Capital (amount not stated).",
+  "description_bn": "টেন মিনিট স্কুল আইমান সাদিকের প্রতিষ্ঠিত অনলাইন শিক্ষা প্ল্যাটফর্ম; এর ওয়েবসাইট ২০১৫ সালের ১৭ মে চালু হয়। ওয়েবসাইট এবং অ্যান্ড্রয়েড ও আইওএস অ্যাপের মাধ্যমে অনলাইন কোর্স দেয়। ২০২২ সালে সিকোয়া ক্যাপিটালসহ আন্তর্জাতিক বিনিয়োগকারীদের কাছ থেকে সিড তহবিল পায় (পরিমাণ উল্লেখ নেই)।",
+  "business_model": "Sells online courses and learning content through a website and mobile apps.",
+  "business_model_bn": "ওয়েবসাইট ও মোবাইল অ্যাপের মাধ্যমে অনলাইন কোর্স ও শেখার কনটেন্ট বিক্রি।",
+  "highlights": "• 17 May 2015 — Website launched.\n• 2022 — Seed funding from international investors including Sequoia Capital (amount not stated).",
+  "highlights_bn": "• ২০১৫ সালের ১৭ মে — ওয়েবসাইট চালু।\n• ২০২২ — সিকোয়া ক্যাপিটালসহ আন্তর্জাতিক বিনিয়োগকারীদের সিড তহবিল (পরিমাণ উল্লেখ নেই)।",
+  "category": "edtech",
+  "stage": "growth",
+  "founded_year": 2015,
+  "website": "https://10minuteschool.com",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [
+   {
+    "name": "Ayman Sadiq",
+    "role": "Founder"
+   }
+  ],
+  "sources": [
+   {
+    "title": "10 Minute School — Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/10_Minute_School"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Ayman Sadiq|Founder",
+   "team": [
+    {
+     "bn": "প্রতিষ্ঠাতা",
+     "en": "Founder"
+    }
+   ],
+   "vnote": {
+    "bn": null,
+    "en": null
+   }
+  }
+ },
+ {
+  "name": "Riseup Labs",
+  "name_bn": "রাইজআপ ল্যাবস",
+  "tagline": "Software, AI and IT services company with offices in Dhaka, New York, London and Dubai",
+  "tagline_bn": "ঢাকা, নিউ ইয়র্ক, লন্ডন ও দুবাইয়ে অফিসসহ সফটওয়্যার, এআই ও আইটি সেবা প্রতিষ্ঠান",
+  "description": "Riseup Labs is a Bangladesh-based technology company that says it has served clients since 2009. It offers AI solutions, custom software, mobile apps, UI/UX design, cloud and DevOps, cybersecurity, IT staff augmentation, BPO and game development. It reports 700+ professionals and more than 700 projects for over 300 clients in 30+ countries.",
+  "description_bn": "রাইজআপ ল্যাবস বাংলাদেশভিত্তিক একটি প্রযুক্তি প্রতিষ্ঠান, যারা ২০০৯ সাল থেকে গ্রাহকদের সেবা দেওয়ার কথা জানায়। এখানে এআই সমাধান, কাস্টম সফটওয়্যার, মোবাইল অ্যাপ, ইউআই/ইউএক্স ডিজাইন, ক্লাউড ও ডেভঅপস, সাইবার নিরাপত্তা, আইটি স্টাফ অগমেন্টেশন, বিপিও ও গেম ডেভেলপমেন্ট সেবা পাওয়া যায়। প্রতিষ্ঠানটি ৭০০+ পেশাজীবী এবং ৩০+ দেশের ৩০০-এর বেশি গ্রাহকের জন্য ৭০০-র বেশি প্রকল্পের কথা জানায়।",
+  "business_model": "Provides technology services — AI, custom software, apps, design, cloud, cybersecurity and staff augmentation — to clients worldwide.",
+  "business_model_bn": "বিশ্বজুড়ে গ্রাহকদের প্রযুক্তি সেবা — এআই, কাস্টম সফটওয়্যার, অ্যাপ, ডিজাইন, ক্লাউড, সাইবার নিরাপত্তা ও স্টাফ অগমেন্টেশন।",
+  "highlights": "• Serving clients since 2009 (company statement).\n• 700+ professionals; 700+ projects for 300+ clients in 30+ countries (company figures).\n• Offices in Dhaka (Uttara), New York, London and Dubai.\n• Certifications listed by the company: ISO 9001, ISO 27001, SOC 2 Type II, PCI DSS, GDPR.\n• Awards listed by the company: Digital Bangladesh Award 2022, Clutch Global Award 2023, ASOCIO DX Award 2024.",
+  "highlights_bn": "• ২০০৯ সাল থেকে গ্রাহকসেবা (প্রতিষ্ঠানের বক্তব্য)।\n• ৭০০+ পেশাজীবী; ৩০+ দেশের ৩০০+ গ্রাহকের জন্য ৭০০+ প্রকল্প (প্রতিষ্ঠানের তথ্য)।\n• ঢাকা (উত্তরা), নিউ ইয়র্ক, লন্ডন ও দুবাইয়ে অফিস।\n• প্রতিষ্ঠানের তালিকাভুক্ত সনদ: ISO 9001, ISO 27001, SOC 2 Type II, PCI DSS, GDPR।\n• প্রতিষ্ঠানের তালিকাভুক্ত পুরস্কার: ডিজিটাল বাংলাদেশ অ্যাওয়ার্ড ২০২২, ক্লাচ গ্লোবাল অ্যাওয়ার্ড ২০২৩, এএসওসিআইও ডিএক্স অ্যাওয়ার্ড ২০২৪।",
+  "category": "services",
+  "stage": "established",
+  "founded_year": 2009,
+  "website": "https://riseuplabs.com",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [
+   {
+    "name": "Ershadul Hoque",
+    "role": "CEO"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Riseup Labs — company website",
+    "url": "https://riseuplabs.com/tech-company-in-bangladesh/"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Ershadul Hoque|CEO",
+   "team": [
+    {
+     "bn": "সিইও",
+     "en": "CEO"
+    }
+   ],
+   "vnote": {
+    "bn": null,
+    "en": null
+   }
+  }
+ },
+ {
+  "name": "Square Group",
+  "name_bn": "স্কয়ার গ্রুপ",
+  "tagline": "Pharmaceuticals-led conglomerate with businesses in toiletries, textiles, IT, hospitals and more",
+  "tagline_bn": "ওষুধ খাতভিত্তিক শিল্পগোষ্ঠী — টয়লেট্রিজ, টেক্সটাইল, আইটি, হাসপাতালসহ বিভিন্ন ব্যবসা",
+  "description": "Square Group began in 1958 as a pharmaceutical company in Pabna, started by four friends led by Samson H. Chowdhury. It has since grown into a group with businesses in pharmaceuticals and active ingredients, toiletries, textiles, IT (InformatiX), consumer products, fashions and hospitals. The Business Standard reports about 33,000 employees and annual turnover above Tk 6,000 crore, with exports to more than 40 countries.",
+  "description_bn": "স্কয়ার গ্রুপ ১৯৫৮ সালে পাবনায় একটি ওষুধ কোম্পানি হিসেবে যাত্রা শুরু করে, যার প্রতিষ্ঠাতা সামসন এইচ. চৌধুরীর নেতৃত্বে চার বন্ধু। পরে এটি ওষুধ ও এপিআই, টয়লেট্রিজ, টেক্সটাইল, আইটি (ইনফরম্যাটিক্স), কনজ্যুমার পণ্য, ফ্যাশনস ও হাসপাতালসহ নানা ব্যবসার গ্রুপে পরিণত হয়েছে। দ্য বিজনেস স্ট্যান্ডার্ডের তথ্য অনুযায়ী প্রায় ৩৩ হাজার কর্মী, বার্ষিক টার্নওভার ৬,০০০ কোটি টাকার বেশি এবং ৪০টির বেশি দেশে রপ্তানি।",
+  "business_model": "A multi-sector group: medicines and active pharmaceutical ingredients, toiletries, textiles, IT, consumer products, garments and hospitals.",
+  "business_model_bn": "বহুখাতভিত্তিক গ্রুপ: ওষুধ ও সক্রিয় ওষুধ উপাদান, টয়লেট্রিজ, টেক্সটাইল, আইটি, কনজ্যুমার পণ্য, পোশাক ও হাসপাতাল।",
+  "highlights": "• 1958 — Founded in Pabna by four friends led by Samson H. Chowdhury.\n• 1974 — Technical collaboration with Janssen Pharmaceutica.\n• 1985 — Became Bangladesh's market leader in pharmaceuticals.\n• 1987 — First Bangladeshi-made medicine exported.\n• 1994 — Square Pharmaceuticals went public.\n• 2006 — Square Hospitals opened in Dhaka.\n• About 17% of the local pharmaceutical market (The Business Standard).\n• Square Pharmaceuticals (DSE: SQURPHARMA), the group's listed flagship, had a market capitalisation of about ৳192.36 billion on 2 September 2026 (StockAnalysis).",
+  "highlights_bn": "• ১৯৫৮ — সামসন এইচ. চৌধুরীর নেতৃত্বে চার বন্ধু পাবনায় প্রতিষ্ঠা করেন।\n• ১৯৭৪ — জ্যানসেন ফার্মাসিউটিকার সঙ্গে প্রযুক্তিগত সহযোগিতা।\n• ১৯৮৫ — দেশের ওষুধ বাজারে শীর্ষস্থান অর্জন।\n• ১৯৮৭ — বাংলাদেশে তৈরি প্রথম ওষুধ রপ্তানি।\n• ১৯৯৪ — স্কয়ার ফার্মাসিউটিক্যালস শেয়ারবাজারে তালিকাভুক্ত।\n• ২০০৬ — ঢাকায় স্কয়ার হাসপাতাল চালু।\n• দেশীয় ওষুধ বাজারের প্রায় ১৭% (দ্য বিজনেস স্ট্যান্ডার্ড)।\n• গ্রুপের তালিকাভুক্ত ফ্ল্যাগশিপ স্কয়ার ফার্মাসিউটিক্যালস (ডিএসই: SQURPHARMA)-এর বাজারমূল্য ২০২৬ সালের ২ সেপ্টেম্বর প্রায় ১৯২.৩৬ বিলিয়ন টাকা (স্টকঅ্যানালাইসিস)।",
+  "category": "manufacturing",
+  "stage": "established",
+  "founded_year": 1958,
+  "website": "https://www.squaregroup.com",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": "2026-09-02",
+  "valuation_note": "The group as a whole is private and has no published valuation. For reference, its listed flagship Square Pharmaceuticals had a market capitalisation of about ৳192.36 billion on 2 September 2026 (StockAnalysis).",
+  "ticker": "DSE: SQURPHARMA (Square Pharmaceuticals)",
+  "team": [
+   {
+    "name": "Samson H. Chowdhury",
+    "role": "Founder (died 2012)"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Square Group: A global conglomerate from humble beginnings — The Business Standard",
+    "url": "https://www.tbsnews.net/supplement/square-group-global-conglomerate-humble-beginnings-1481106"
+   },
+   {
+    "title": "Square Pharmaceuticals market cap — StockAnalysis",
+    "url": "https://stockanalysis.com/quote/dse/SQURPHARMA/market-cap/"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Samson H. Chowdhury|Founder (died 2012)",
+   "team": [
+    {
+     "bn": "প্রতিষ্ঠাতা (মৃত্যু ২০১২)",
+     "en": "Founder (died 2012)"
+    }
+   ],
+   "vnote": {
+    "bn": "গ্রুপটি সামগ্রিকভাবে বেসরকারি, তাই এর কোনো প্রকাশিত মূল্য নেই। তথ্যের জন্য: তালিকাভুক্ত ফ্ল্যাগশিপ স্কয়ার ফার্মাসিউটিক্যালসের বাজারমূল্য ২০২৬ সালের ২ সেপ্টেম্বর প্রায় ১৯২.৩৬ বিলিয়ন টাকা (স্টকঅ্যানালাইসিস)।",
+    "en": "The group as a whole is private and has no published valuation. For reference, its listed flagship Square Pharmaceuticals had a market capitalisation of about ৳192.36 billion on 2 September 2026 (StockAnalysis)."
+   }
+  }
+ },
+ {
+  "name": "Bashundhara Group",
+  "name_bn": "বসুন্ধরা গ্রুপ",
+  "tagline": "Real estate, manufacturing, media and trading group founded by Ahmed Akbar Sobhan",
+  "tagline_bn": "আহমেদ আকবর সোবহান প্রতিষ্ঠিত রিয়েল এস্টেট, ম্যানুফ্যাকচারিং, মিডিয়া ও ট্রেডিং গ্রুপ",
+  "description": "Bashundhara Group began in 1987 as the real estate company East West Property Development Ltd and expanded in the early 1990s into cement, paper, tissue, steel and LP gas. It now runs more than 50 companies across real estate, manufacturing, media, food and beverage, shipping and sports, including Bashundhara City shopping mall (opened 2004) and East West Media Group (launched 2009). The group is privately owned.",
+  "description_bn": "বসুন্ধরা গ্রুপ ১৯৮৭ সালে ইস্ট ওয়েস্ট প্রপার্টি ডেভেলপমেন্ট লিমিটেড নামের রিয়েল এস্টেট কোম্পানি হিসেবে যাত্রা শুরু করে এবং ১৯৯০-এর দশকের শুরুতে সিমেন্ট, কাগজ, টিস্যু, ইস্পাত ও এলপি গ্যাসে প্রসারিত হয়। বর্তমানে রিয়েল এস্টেট, ম্যানুফ্যাকচারিং, মিডিয়া, খাদ্য ও পানীয়, শিপিং ও ক্রীড়াসহ ৫০টির বেশি কোম্পানি পরিচালনা করছে — এর মধ্যে আছে বসুন্ধরা সিটি শপিং মল (২০০৪) ও ইস্ট ওয়েস্ট মিডিয়া গ্রুপ (২০০৯)। গ্রুপটি ব্যক্তিমালিকানাধীন।",
+  "business_model": "Diversified private group: residential and commercial real estate, cement, paper and tissue, steel, LP gas, food and beverage, shipping, media and sports.",
+  "business_model_bn": "বহুমুখী ব্যক্তিমালিকানাধীন গ্রুপ: আবাসিক ও বাণিজ্যিক রিয়েল এস্টেট, সিমেন্ট, কাগজ ও টিস্যু, ইস্পাত, এলপি গ্যাস, খাদ্য ও পানীয়, শিপিং, মিডিয়া ও ক্রীড়া।",
+  "highlights": "• 1987 — Founded as East West Property Development Ltd (real estate).\n• Early 1990s — Expanded into cement, paper, tissue, steel and LP gas.\n• 6 August 2004 — Bashundhara City shopping mall opened to the public.\n• 2009 — East West Media Group launched.\n• 2013 — US$181 million invested in the food sector (as reported by Wikipedia).\n• 2021 — US$909 million reported invested in an oil refinery in Sitakunda, Chattogram.",
+  "highlights_bn": "• ১৯৮৭ — ইস্ট ওয়েস্ট প্রপার্টি ডেভেলপমেন্ট লিমিটেড (রিয়েল এস্টেট) হিসেবে প্রতিষ্ঠা।\n• ১৯৯০-এর দশকের শুরু — সিমেন্ট, কাগজ, টিস্যু, ইস্পাত ও এলপি গ্যাসে সম্প্রসারণ।\n• ২০০৪ সালের ৬ আগস্ট — বসুন্ধরা সিটি শপিং মল সবার জন্য খুলে দেওয়া হয়।\n• ২০০৯ — ইস্ট ওয়েস্ট মিডিয়া গ্রুপ যাত্রা শুরু করে।\n• ২০১৩ — খাদ্য খাতে ১৮.১ কোটি মার্কিন ডলার বিনিয়োগ (উইকিপিডিয়ার তথ্য)।\n• ২০২১ — চট্টগ্রামের সীতাকুণ্ডে তেল শোধনাগারে ৯০.৯ কোটি মার্কিন ডলার বিনিয়োগের তথ্য।",
+  "category": "realestate",
+  "stage": "established",
+  "founded_year": 1987,
+  "website": "https://www.bashundharagroup.com",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [
+   {
+    "name": "Ahmed Akbar Sobhan",
+    "role": "Founder & Chairman"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Bashundhara Group — Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Bashundhara_Group"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Ahmed Akbar Sobhan|Founder & Chairman",
+   "team": [
+    {
+     "bn": "প্রতিষ্ঠাতা ও চেয়ারম্যান",
+     "en": "Founder & Chairman"
+    }
+   ],
+   "vnote": {
+    "bn": null,
+    "en": null
+   }
+  }
+ },
+ {
+  "name": "PRAN-RFL Group",
+  "name_bn": "প্রাণ-আরএফএল গ্রুপ",
+  "tagline": "Food, beverage, plastics and consumer products group exporting to over 118 countries",
+  "tagline_bn": "খাদ্য, পানীয়, প্লাস্টিক ও কনজ্যুমার পণ্যের গ্রুপ — ১১৮টির বেশি দেশে রপ্তানি",
+  "description": "PRAN-RFL Group was founded by Amjad Khan Chowdhury in 1981. Its flagship Pran Foods makes foods, condiments, ice cream and drinks; RFL Plastics makes plastic and steel products, and the group also includes Pran-RFL Healthcare, Vision Electronics, Duranta Bicycles, the e-commerce site Othoba and Proton Mobile. According to Wikipedia, its products reach more than 118 countries.",
+  "description_bn": "প্রাণ-আরএফএল গ্রুপ ১৯৮১ সালে আমজাদ খান চৌধুরীর হাতে প্রতিষ্ঠিত। এর ফ্ল্যাগশিপ প্রাণ ফুডস খাদ্যপণ্য, মসলা, আইসক্রিম ও পানীয় তৈরি করে; আরএফএল প্লাস্টিকস প্লাস্টিক ও স্টিল পণ্য তৈরি করে। এছাড়া গ্রুপে আছে প্রাণ-আরএফএল হেলথকেয়ার, ভিশন ইলেকট্রনিক্স, দুরন্ত সাইকেল, ই-কমার্স সাইট অথবা ও প্রোটন মোবাইল। উইকিপিডিয়া অনুযায়ী এর পণ্য ১১৮টির বেশি দেশে পৌঁছায়।",
+  "business_model": "Manufactures and sells foods, beverages, plastic and steel products, appliances and other consumer goods in Bangladesh and abroad.",
+  "business_model_bn": "দেশে-বিদেশে খাদ্য, পানীয়, প্লাস্টিক ও স্টিল পণ্য, ইলেকট্রনিক্স ও অন্যান্য ভোগ্যপণ্য তৈরি ও বিক্রি।",
+  "highlights": "• 1 January 1981 — Founded by Amjad Khan Chowdhury.\n• Products include foods, condiments, ice cream, energy drinks, tea, bottled water, plastic home products, bicycles and phones.\n• Companies include Pran Foods, RFL Plastics, Pran-RFL Healthcare, Vision Electronics, Duranta Bicycles, Othoba and Proton Mobile.\n• Exports to more than 118 countries (Wikipedia).",
+  "highlights_bn": "• ১৯৮১ সালের ১ জানুয়ারি — আমজাদ খান চৌধুরীর হাতে প্রতিষ্ঠা।\n• পণ্যের মধ্যে আছে খাদ্য, মসলা, আইসক্রিম, এনার্জি ড্রিংক, চা, বোতলজাত পানি, প্লাস্টিকের গৃহস্থালি পণ্য, সাইকেল ও ফোন।\n• কোম্পানির মধ্যে আছে প্রাণ ফুডস, আরএফএল প্লাস্টিকস, প্রাণ-আরএফএল হেলথকেয়ার, ভিশন ইলেকট্রনিক্স, দুরন্ত সাইকেল, অথবা ও প্রোটন মোবাইল।\n• ১১৮টির বেশি দেশে রপ্তানি (উইকিপিডিয়া)।",
+  "category": "food",
+  "stage": "established",
+  "founded_year": 1981,
+  "website": "https://www.pranrflgroup.com",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [
+   {
+    "name": "Amjad Khan Chowdhury",
+    "role": "Founder"
+   }
+  ],
+  "sources": [
+   {
+    "title": "PRAN-RFL Group — Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/PRAN-RFL_Group"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Amjad Khan Chowdhury|Founder",
+   "team": [
+    {
+     "bn": "প্রতিষ্ঠাতা",
+     "en": "Founder"
+    }
+   ],
+   "vnote": {
+    "bn": null,
+    "en": null
+   }
+  }
+ },
+ {
+  "name": "Akij Group",
+  "name_bn": "আকিজ গ্রুপ",
+  "tagline": "Diversified industrial group in cement, ceramics, jute, food and beverage, pharmaceuticals and more",
+  "tagline_bn": "সিমেন্ট, সিরামিক, পাট, খাদ্য ও পানীয়, ওষুধসহ বহুমুখী শিল্পগোষ্ঠী",
+  "description": "Akij Group, founded by Sheikh Akijuddin, is a diversified Bangladeshi industrial group with businesses in cement, ceramics, jute, pharmaceuticals, textiles, food and beverage (including the Mojo, Speed and Frutika brands), printing and packaging, and consumer products. In 2018 it sold its tobacco business to Japan Tobacco International for about US$1.5 billion — described as the largest single foreign direct investment in Bangladesh.",
+  "description_bn": "আকিজ গ্রুপ শেখ আকিজউদ্দিনের প্রতিষ্ঠিত বহুমুখী বাংলাদেশি শিল্পগোষ্ঠী; ব্যবসার মধ্যে আছে সিমেন্ট, সিরামিক, পাট, ওষুধ, টেক্সটাইল, খাদ্য ও পানীয় (মোজো, স্পিড, ফ্রুটিকা ব্র্যান্ডসহ), প্রিন্টিং ও প্যাকেজিং এবং ভোগ্যপণ্য। ২০১৮ সালে তারা জাপান টোব্যাকো ইন্টারন্যাশনালের কাছে প্রায় ১৫০ কোটি মার্কিন ডলারে তামাক ব্যবসা বিক্রি করে — যা বাংলাদেশের বৃহত্তম একক সরাসরি বিদেশি বিনিয়োগ হিসেবে বর্ণিত।",
+  "business_model": "Manufacturing and trading across cement, ceramics, jute, textiles, pharmaceuticals, food and beverage, packaging and consumer goods.",
+  "business_model_bn": "সিমেন্ট, সিরামিক, পাট, টেক্সটাইল, ওষুধ, খাদ্য ও পানীয়, প্যাকেজিং ও ভোগ্যপণ্যের উৎপাদন ও ব্যবসা।",
+  "highlights": "• Founded by Sheikh Akijuddin (Wikipedia gives 1940; the article text places its start in the 1950s as a cigarette maker).\n• 2009 — Paid about 390 million euros in taxes, the largest local taxpayer at that time.\n• 2017 — Revenue of about US$1.5 billion (Wikipedia).\n• 2018 — Sold its tobacco business to Japan Tobacco International for about US$1.47–1.5 billion (sources differ).\n• Businesses include Akij Cement, Akij Ceramics, Akij Jute Mills, Akij Food & Beverage, Ad-din Pharmaceuticals and others.",
+  "highlights_bn": "• প্রতিষ্ঠাতা শেখ আকিজউদ্দিন (উইকিপিডিয়ায় ১৯৪০ সাল; লেখায় ১৯৫০-এর দশকে সিগারেট নির্মাতা হিসেবে শুরুর কথা আছে)।\n• ২০০৯ — প্রায় ৩৯ কোটি ইউরো কর পরিশোধ; তখন দেশের বৃহত্তম করদাতা।\n• ২০১৭ — আয় প্রায় ১৫০ কোটি মার্কিন ডলার (উইকিপিডিয়া)।\n• ২০১৮ — জাপান টোব্যাকো ইন্টারন্যাশনালের কাছে প্রায় ১৪৭–১৫০ কোটি মার্কিন ডলারে তামাক ব্যবসা বিক্রি (সূত্রভেদে ভিন্ন)।\n• ব্যবসার মধ্যে আছে আকিজ সিমেন্ট, আকিজ সিরামিক, আকিজ জুট মিলস, আকিজ ফুড অ্যান্ড বেভারেজ, আদ-দ্বীন ফার্মাসিউটিক্যালস ও আরও অনেক।",
+  "category": "manufacturing",
+  "stage": "established",
+  "founded_year": 1940,
+  "website": null,
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [
+   {
+    "name": "Sheikh Akijuddin",
+    "role": "Founder"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Akij Group — Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Akij_Group"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "Sheikh Akijuddin|Founder",
+   "team": [
+    {
+     "bn": "প্রতিষ্ঠাতা",
+     "en": "Founder"
+    }
+   ],
+   "vnote": {
+    "bn": null,
+    "en": null
+   }
+  }
+ },
+ {
+  "name": "ACI Limited",
+  "name_bn": "এসিআই লিমিটেড",
+  "tagline": "Listed Bangladeshi conglomerate in pharmaceuticals, consumer brands, agribusiness and logistics",
+  "tagline_bn": "ওষুধ, কনজ্যুমার ব্র্যান্ড, কৃষি ব্যবসা ও লজিস্টিকসে কাজ করা তালিকাভুক্ত বাংলাদেশি প্রতিষ্ঠান",
+  "description": "ACI Limited was incorporated on 24 January 1973 as ICI Bangladesh Manufacturers Limited; ICI divested its Bangladesh investment to local management in 1992. Today it operates four major units — ACI Pharmaceuticals, ACI Consumer Brands, ACI Agribusinesses and ACI Logistics — and is listed on the Dhaka and Chittagong stock exchanges under the code ACI.",
+  "description_bn": "এসিআই লিমিটেড ১৯৭৩ সালের ২৪ জানুয়ারি আইসিআই বাংলাদেশ ম্যানুফ্যাকচারার্স লিমিটেড নামে নিবন্ধিত হয়; ১৯৯২ সালে আইসিআই বাংলাদেশে তাদের বিনিয়োগ স্থানীয় ব্যবস্থাপনার কাছে হস্তান্তর করে। বর্তমানে চারটি প্রধান ইউনিট — এসিআই ফার্মাসিউটিক্যালস, এসিআই কনজ্যুমার ব্র্যান্ডস, এসিআই অ্যাগ্রিবিজনেস ও এসিআই লজিস্টিকস — পরিচালনা করছে এবং ঢাকা ও চট্টগ্রাম স্টক এক্সচেঞ্জে ‘ACI’ কোডে তালিকাভুক্ত।",
+  "business_model": "Makes and distributes medicines, consumer brands and agricultural products, and provides logistics services.",
+  "business_model_bn": "ওষুধ, কনজ্যুমার ব্র্যান্ড ও কৃষিপণ্য তৈরি ও বিতরণ এবং লজিস্টিকস সেবা।",
+  "highlights": "• 24 January 1973 — Incorporated as ICI Bangladesh Manufacturers Limited.\n• 1992 — ICI divested its Bangladesh investment to management.\n• Listed on the Dhaka Stock Exchange and Chittagong Stock Exchange (code: ACI).\n• Revenue of ৳69.475 billion (about US$570 million) in 2020 (Wikipedia).\n• 10,233 employees in 2023 (Wikipedia).\n• Market capitalisation of about ৳15.83 billion on 15 September 2026 (StockAnalysis).",
+  "highlights_bn": "• ১৯৭৩ সালের ২৪ জানুয়ারি — আইসিআই বাংলাদেশ ম্যানুফ্যাকচারার্স লিমিটেড নামে নিবন্ধিত।\n• ১৯৯২ — আইসিআই বাংলাদেশে তাদের বিনিয়োগ ব্যবস্থাপনার কাছে হস্তান্তর করে।\n• ঢাকা ও চট্টগ্রাম স্টক এক্সচেঞ্জে তালিকাভুক্ত (কোড: ACI)।\n• ২০২০ সালে আয় ৬৯.৪৭৫ বিলিয়ন টাকা (প্রায় ৫৭ কোটি মার্কিন ডলার) — উইকিপিডিয়া।\n• ২০২৩ সালে কর্মী ১০,২৩৩ জন (উইকিপিডিয়া)।\n• ২০২৬ সালের ১৫ সেপ্টেম্বর বাজারমূল্য প্রায় ১৫.৮৩ বিলিয়ন টাকা (স্টকঅ্যানালাইসিস)।",
+  "category": "manufacturing",
+  "stage": "established",
+  "founded_year": 1973,
+  "website": "https://www.aci-bd.com",
+  "team_size": "200+",
+  "vosb_valuation": 15830000000,
+  "valuation_date": "2026-09-15",
+  "valuation_note": "Stock-market capitalisation as listed on the Dhaka Stock Exchange (15 September 2026, StockAnalysis). It changes daily and is not a VOSB assessment.",
+  "ticker": "DSE / CSE: ACI",
+  "team": [],
+  "sources": [
+   {
+    "title": "ACI Limited — Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/ACI_Limited"
+   },
+   {
+    "title": "ACI market cap — StockAnalysis",
+    "url": "https://stockanalysis.com/quote/dse/ACI/market-cap/"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "",
+   "team": [],
+   "vnote": {
+    "bn": "ঢাকা স্টক এক্সচেঞ্জে তালিকাভুক্ত শেয়ারের বাজারমূল্য (১৫ সেপ্টেম্বর ২০২৬, স্টকঅ্যানালাইসিস)। এটি প্রতিদিন বদলায়; ভিএসওবি-র মূল্যায়ন নয়।",
+    "en": "Stock-market capitalisation as listed on the Dhaka Stock Exchange (15 September 2026, StockAnalysis). It changes daily and is not a VOSB assessment."
+   }
+  }
+ },
+ {
+  "name": "Walton Group",
+  "name_bn": "ওয়ালটন গ্রুপ",
+  "tagline": "Bangladeshi electronics and home-appliance manufacturer",
+  "tagline_bn": "বাংলাদেশি ইলেকট্রনিক্স ও হোম অ্যাপ্লায়েন্স নির্মাতা",
+  "description": "Walton Group, founded in 1977 by S.M. Nazrul Islam, manufactures refrigerators and freezers, televisions, smartphones, air conditioners, washing machines, kitchen and electrical appliances, compressors and more. Its flagship Walton Hi-Tech Industries PLC is listed on the Dhaka and Chittagong stock exchanges (WALTONHIL). Wikipedia reports 30,000+ employees and revenue of ৳81.68 billion (about US$670 million) for FY 2022.",
+  "description_bn": "ওয়ালটন গ্রুপ ১৯৭৭ সালে এস.এম. নজরুল ইসলামের হাতে প্রতিষ্ঠিত; এটি ফ্রিজ ও ফ্রিজার, টেলিভিশন, স্মার্টফোন, এয়ার কন্ডিশনার, ওয়াশিং মেশিন, রান্নাঘর ও বৈদ্যুতিক সামগ্রী, কম্প্রেসরসহ বিভিন্ন পণ্য তৈরি করে। ফ্ল্যাগশিপ ওয়ালটন হাই-টেক ইন্ডাস্ট্রিজ পিএলসি ঢাকা ও চট্টগ্রাম স্টক এক্সচেঞ্জে (WALTONHIL) তালিকাভুক্ত। উইকিপিডিয়া অনুযায়ী ৩০ হাজারের বেশি কর্মী এবং ২০২২ অর্থবছরে আয় ৮১.৬৮ বিলিয়ন টাকা (প্রায় ৬৭ কোটি মার্কিন ডলার)।",
+  "business_model": "Manufactures and sells electronics and home appliances (refrigerators, TVs, phones, air conditioners and more).",
+  "business_model_bn": "ইলেকট্রনিক্স ও হোম অ্যাপ্লায়েন্স (ফ্রিজ, টিভি, ফোন, এয়ার কন্ডিশনারসহ) তৈরি ও বিক্রি।",
+  "highlights": "• 1977 — Group origins under S.M. Nazrul Islam; the Walton brand debuted as Walton Group in 2008.\n• Products include refrigerators, TVs, smartphones, air conditioners, washing machines, elevators and generators.\n• Walton Hi-Tech Industries PLC trades on the Dhaka and Chittagong stock exchanges as WALTONHIL.\n• Revenue of ৳81.68 billion (about US$670 million) in FY 2022 (Wikipedia).\n• Walton Hi-Tech's market capitalisation was about ৳127.96 billion on 25 August 2026 (StockAnalysis).",
+  "highlights_bn": "• ১৯৭৭ — এস.এম. নজরুল ইসলামের নেতৃত্বে গ্রুপের সূচনা; ২০০৮ সালে ওয়ালটন গ্রুপ নামে ব্র্যান্ডের যাত্রা।\n• পণ্যের মধ্যে আছে ফ্রিজ, টিভি, স্মার্টফোন, এয়ার কন্ডিশনার, ওয়াশিং মেশিন, লিফট ও জেনারেটর।\n• ওয়ালটন হাই-টেক ইন্ডাস্ট্রিজ পিএলসি ঢাকা ও চট্টগ্রাম স্টক এক্সচেঞ্জে WALTONHIL কোডে লেনদেন হয়।\n• ২০২২ অর্থবছরে আয় ৮১.৬৮ বিলিয়ন টাকা (প্রায় ৬৭ কোটি মার্কিন ডলার) — উইকিপিডিয়া।\n• ২০২৬ সালের ২৫ আগস্ট ওয়ালটন হাই-টেকের বাজারমূল্য প্রায় ১২৭.৯৬ বিলিয়ন টাকা (স্টকঅ্যানালাইসিস)।",
+  "category": "manufacturing",
+  "stage": "established",
+  "founded_year": 1977,
+  "website": "https://www.waltonbd.com",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": "2026-08-25",
+  "valuation_note": "The group is not a single listed company, so no group valuation is shown. Its listed arm Walton Hi-Tech Industries had a market capitalisation of about ৳127.96 billion on 25 August 2026 (StockAnalysis).",
+  "ticker": "DSE / CSE: WALTONHIL (Walton Hi-Tech)",
+  "team": [
+   {
+    "name": "S.M. Nazrul Islam",
+    "role": "Founder"
+   }
+  ],
+  "sources": [
+   {
+    "title": "Walton Group — Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Walton_Group"
+   },
+   {
+    "title": "Walton Hi-Tech market cap — StockAnalysis",
+    "url": "https://stockanalysis.com/quote/dse/WALTONHIL/market-cap/"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "S.M. Nazrul Islam|Founder",
+   "team": [
+    {
+     "bn": "প্রতিষ্ঠাতা",
+     "en": "Founder"
+    }
+   ],
+   "vnote": {
+    "bn": "গ্রুপটি একক তালিকাভুক্ত কোম্পানি নয়, তাই গ্রুপের মূল্য দেখানো হয়নি। এর তালিকাভুক্ত অংশ ওয়ালটন হাই-টেক ইন্ডাস্ট্রিজের বাজারমূল্য ২০২৬ সালের ২৫ আগস্ট প্রায় ১২৭.৯৬ বিলিয়ন টাকা (স্টকঅ্যানালাইসিস)।",
+    "en": "The group is not a single listed company, so no group valuation is shown. Its listed arm Walton Hi-Tech Industries had a market capitalisation of about ৳127.96 billion on 25 August 2026 (StockAnalysis)."
+   }
+  }
+ },
+ {
+  "name": "Grameenphone",
+  "name_bn": "গ্রামীণফোন",
+  "tagline": "Bangladesh's listed mobile operator, owned by Telenor and Grameen Telecom",
+  "tagline_bn": "টেলিনর ও গ্রামীণ টেলিকমের মালিকানাধীন তালিকাভুক্ত মোবাইল অপারেটর",
+  "description": "Grameenphone was founded on 26 March 1997 in Dhaka and is a mobile network operator listed on the Dhaka and Chittagong stock exchanges (GP). Telenor holds 55.8%, Grameen Telecom 34.2% and the remaining 10% is held by the public. Wikipedia reports more than 84 million subscribers and revenue of ৳150.4 billion (about US$1.2 billion) in FY 2022.",
+  "description_bn": "গ্রামীণফোন ১৯৯৭ সালের ২৬ মার্চ ঢাকায় প্রতিষ্ঠিত একটি মোবাইল নেটওয়ার্ক অপারেটর, যা ঢাকা ও চট্টগ্রাম স্টক এক্সচেঞ্জে (GP) তালিকাভুক্ত। টেলিনরের শেয়ার ৫৫.৮%, গ্রামীণ টেলিকমের ৩৪.২% এবং বাকি ১০% সাধারণ বিনিয়োগকারীদের হাতে। উইকিপিডিয়া অনুযায়ী গ্রাহক ৮ কোটি ৪০ লাখের বেশি এবং ২০২২ অর্থবছরে আয় ১৫০.৪ বিলিয়ন টাকা (প্রায় ১২০ কোটি মার্কিন ডলার)।",
+  "business_model": "Provides mobile voice, data and digital services to subscribers across Bangladesh.",
+  "business_model_bn": "সারা দেশের গ্রাহকদের মোবাইল ভয়েস, ডেটা ও ডিজিটাল সেবা।",
+  "highlights": "• 26 March 1997 — Founded in Dhaka.\n• Ownership: Telenor 55.8%, Grameen Telecom 34.2%, public 10% (Wikipedia).\n• Listed on the Dhaka and Chittagong stock exchanges (code: GP).\n• More than 84 million subscribers (Wikipedia, 2026).\n• Revenue of ৳150.4 billion (about US$1.2 billion) in FY 2022.\n• Market capitalisation of about ৳334.20 billion on 20 August 2026 (StockAnalysis).",
+  "highlights_bn": "• ১৯৯৭ সালের ২৬ মার্চ — ঢাকায় প্রতিষ্ঠা।\n• মালিকানা: টেলিনর ৫৫.৮%, গ্রামীণ টেলিকম ৩৪.২%, সাধারণ বিনিয়োগকারী ১০% (উইকিপিডিয়া)।\n• ঢাকা ও চট্টগ্রাম স্টক এক্সচেঞ্জে তালিকাভুক্ত (কোড: GP)।\n• ৮ কোটি ৪০ লাখের বেশি গ্রাহক (উইকিপিডিয়া, ২০২৬)।\n• ২০২২ অর্থবছরে আয় ১৫০.৪ বিলিয়ন টাকা (প্রায় ১২০ কোটি মার্কিন ডলার)।\n• ২০২৬ সালের ২০ আগস্ট বাজারমূল্য প্রায় ৩৩৪.২০ বিলিয়ন টাকা (স্টকঅ্যানালাইসিস)।",
+  "category": "other",
+  "stage": "established",
+  "founded_year": 1997,
+  "website": "https://www.grameenphone.com",
+  "team_size": "200+",
+  "vosb_valuation": 334200000000,
+  "valuation_date": "2026-08-20",
+  "valuation_note": "Stock-market capitalisation as listed on the Dhaka Stock Exchange (20 August 2026, StockAnalysis). It changes daily and is not a VOSB assessment.",
+  "ticker": "DSE / CSE: GP",
+  "team": [],
+  "sources": [
+   {
+    "title": "Grameenphone — Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Grameenphone"
+   },
+   {
+    "title": "Grameenphone market cap — StockAnalysis",
+    "url": "https://stockanalysis.com/quote/dse/GP/market-cap/"
+   }
+  ],
+  "i18n_extra": {
+   "sig": "",
+   "team": [],
+   "vnote": {
+    "bn": "ঢাকা স্টক এক্সচেঞ্জে তালিকাভুক্ত শেয়ারের বাজারমূল্য (২০ আগস্ট ২০২৬, স্টকঅ্যানালাইসিস)। এটি প্রতিদিন বদলায়; ভিএসওবি-র মূল্যায়ন নয়।",
+    "en": "Stock-market capitalisation as listed on the Dhaka Stock Exchange (20 August 2026, StockAnalysis). It changes daily and is not a VOSB assessment."
+   }
+  }
+ },
+ {
+  "name": "Banglalink",
+  "name_bn": "বাংলালিংক",
+  "tagline": "Mobile operator and part of the VEON group",
+  "tagline_bn": "ভিয়ন গ্রুপের অংশ — মোবাইল অপারেটর",
+  "description": "Banglalink launched as a brand on 10 February 2005. Its predecessor Sheba Telecom was licensed in 1989 and began GSM service in 1998; Orascom Telecom bought it in 2004 for US$60 million, and it was renamed Banglalink Digital Communications Ltd in 2013. Wikipedia describes it as part of the VEON group and reports about 43.48 million subscribers in 2023 and revenue of BDT 61.489 billion in FY 2023.",
+  "description_bn": "বাংলালিংক ২০০৫ সালের ১০ ফেব্রুয়ারি ব্র্যান্ড হিসেবে যাত্রা শুরু করে। এর পূর্বসূরি শেবা টেলিকম ১৯৮৯ সালে লাইসেন্স পায় এবং ১৯৯৮ সালে জিএসএম সেবা শুরু করে; ২০০৪ সালে ওরাসকম টেলিকম ৬ কোটি মার্কিন ডলারে এটি কিনে নেয় এবং ২০১৩ সালে নাম হয় বাংলালিংক ডিজিটাল কমিউনিকেশনস লিমিটেড। উইকিপিডিয়ায় এটি ভিয়ন গ্রুপের অংশ হিসেবে বর্ণিত এবং ২০২৩ সালে প্রায় ৪ কোটি ৩৪ লাখ ৮০ হাজার গ্রাহক ও ২০২৩ অর্থবছরে আয় ৬১.৪৮৯ বিলিয়ন টাকা।",
+  "business_model": "Provides mobile voice, data and digital services to subscribers across Bangladesh.",
+  "business_model_bn": "সারা দেশের গ্রাহকদের মোবাইল ভয়েস, ডেটা ও ডিজিটাল সেবা।",
+  "highlights": "• 1989 — Sheba Telecom granted a licence; GSM service began in 1998.\n• 2004 — Orascom Telecom bought Sheba Telecom for US$60 million.\n• 10 February 2005 — Banglalink brand launched.\n• 20 August 2008 — Reached 10 million subscribers.\n• 2013 — Renamed Banglalink Digital Communications Ltd.\n• About 43.48 million subscribers in 2023 and revenue of BDT 61.489 billion in FY 2023 (Wikipedia).",
+  "highlights_bn": "• ১৯৮৯ — শেবা টেলিকম লাইসেন্স পায়; ১৯৯৮ সালে জিএসএম সেবা শুরু।\n• ২০০৪ — ওরাসকম টেলিকম ৬ কোটি মার্কিন ডলারে শেবা টেলিকম কেনে।\n• ২০০৫ সালের ১০ ফেব্রুয়ারি — বাংলালিংক ব্র্যান্ডের যাত্রা।\n• ২০০৮ সালের ২০ আগস্ট — ১ কোটি গ্রাহক ছাড়ায়।\n• ২০১৩ — নাম হয় বাংলালিংক ডিজিটাল কমিউনিকেশনস লিমিটেড।\n• ২০২৩ সালে প্রায় ৪ কোটি ৩৪ লাখ ৮০ হাজার গ্রাহক ও ২০২৩ অর্থবছরে আয় ৬১.৪৮৯ বিলিয়ন টাকা (উইকিপিডিয়া)।",
+  "category": "other",
+  "stage": "established",
+  "founded_year": 2005,
+  "website": "https://www.banglalink.net",
+  "team_size": "200+",
+  "vosb_valuation": null,
+  "valuation_date": null,
+  "valuation_note": null,
+  "ticker": null,
+  "team": [],
+  "sources": [
+   {
+    "title": "Banglalink — Wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Banglalink"
+   }
+  ],
+  "i18n_extra": {}
+ }
+]

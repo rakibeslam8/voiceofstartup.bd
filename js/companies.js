@@ -17,8 +17,8 @@
   const nd = (n) => U().bnDigits(String(n));
   const pickL = (o) => (o ? (U().lang === "bn" ? o.bn : o.en) || o.en : "");
   const label = (list, id) => { const o = (list || []).find((x) => x.id === id); return o ? pickL(o) : id || ""; };
-  const LIST = "id,slug,name,tagline,category,stage,division,district,logo_url,verified,featured,rating_avg,rating_count,interest_count,vosb_valuation,seeking_amount,published_at,registered,invest_open,name_bn,name_en,tagline_bn,tagline_en,i18n_extra";
-  const FULL = LIST + ",description,founded_year,website,social,team,cover_url,team_size,business_model,revenue_range,equity_offered,expected_valuation,use_of_funds,highlights,valuation_date,valuation_note,verified_at,registered,invest_open,vosb_val_low,vosb_val_high,vosb_confidence,raised_amount,investor_count,description_bn,description_en,business_model_bn,business_model_en,highlights_bn,highlights_en,use_of_funds_bn,use_of_funds_en";
+  const LIST = "id,slug,name,tagline,category,stage,division,district,logo_url,verified,featured,rating_avg,rating_count,interest_count,vosb_valuation,seeking_amount,published_at,registered,invest_open,curated,name_bn,name_en,tagline_bn,tagline_en,i18n_extra";
+  const FULL = LIST + ",description,founded_year,website,social,team,cover_url,team_size,business_model,revenue_range,equity_offered,expected_valuation,use_of_funds,highlights,valuation_date,valuation_note,verified_at,registered,invest_open,vosb_val_low,vosb_val_high,vosb_confidence,raised_amount,investor_count,description_bn,description_en,business_model_bn,business_model_en,highlights_bn,highlights_en,use_of_funds_bn,use_of_funds_en,sources,info_as_of,ticker";
   const H = { apikey: S.anonKey, Authorization: "Bearer " + S.anonKey };
   const DISCLAIMER = () => T("VOSB একটি মিডিয়া ও লিস্টিং প্ল্যাটফর্ম — ব্রোকার বা আর্থিক পরামর্শদাতা নয়। এখানে কোনো টাকা নেওয়া হয় না। ভ্যালুয়েশন শুধু ইঙ্গিতমূলক, বিনিয়োগ পরামর্শ নয়। বিনিয়োগে ঝুঁকি আছে — সিদ্ধান্তের আগে নিজে যাচাই করুন।",
     "VOSB is a media and listing platform — not a broker or financial adviser. No money is collected here. Valuations are indicative only and are not investment advice. Investing is risky — do your own due diligence.");
@@ -63,7 +63,7 @@
   function card(c) {
     c = loc(c);
     const place = [c.district, c.division].filter(Boolean).join(", ");
-    const kv = c.vosb_valuation ? `<span class="co-kv"><i>${T("VOSB ভ্যালুয়েশন", "VOSB valuation")}</i><b>${money(c.vosb_valuation)}</b></span>` : c.seeking_amount ? `<span class="co-kv"><i>${T("তহবিল চাইছে", "Seeking")}</i><b>${money(c.seeking_amount)}</b></span>` : "";
+    const kv = c.vosb_valuation ? `<span class="co-kv"><i>${c.curated ? T("প্রকাশিত মূল্য", "Reported value") : T("VOSB ভ্যালুয়েশন", "VOSB valuation")}</i><b>${money(c.vosb_valuation)}</b></span>` : c.seeking_amount ? `<span class="co-kv"><i>${T("তহবিল চাইছে", "Seeking")}</i><b>${money(c.seeking_amount)}</b></span>` : "";
     const open = c.invest_open !== false;
     return `<article class="co-card${c.featured ? " feat" : ""}">${c.featured ? `<span class="co-feat">★ ${T("ফিচার্ড", "Featured")}</span>` : ""}
       <a class="co-cmain" href="/company/${esc(c.slug)}" aria-label="${esc(c.name)}">
@@ -190,12 +190,16 @@
     try { if (!sessionStorage.getItem("vosb-cv-" + c.slug)) { sessionStorage.setItem("vosb-cv-" + c.slug, "1"); rpc("increment_company_view", { p_slug: c.slug }).catch(() => {}); } } catch (e) {}
 
     const facts = () => [[T("ইন্ডাস্ট্রি", "Industry"), label(CO.industries, c.category)], [T("ধাপ", "Stage"), label(CO.stages, c.stage)], [T("প্রতিষ্ঠা", "Founded"), c.founded_year ? nd(c.founded_year) : ""],
-      [T("অবস্থান", "Location"), [c.district, c.division].filter(Boolean).join(", ")], [T("টিম সাইজ", "Team size"), c.team_size ? nd(c.team_size) : ""], [T("মাসিক আয়", "Monthly revenue"), label(CO.revenueRanges, c.revenue_range)]]
+      [T("অবস্থান", "Location"), [c.district, c.division].filter(Boolean).join(", ")], [T("টিম সাইজ", "Team size"), c.team_size ? nd(c.team_size) : ""], [T("মাসিক আয়", "Monthly revenue"), label(CO.revenueRanges, c.revenue_range)], [T("স্টক এক্সচেঞ্জ", "Stock exchange"), c.ticker || ""]]
       .filter((r) => r[1]).map((r) => `<div><dt>${r[0]}</dt><dd>${esc(r[1])}</dd></div>`).join("");
     const fundRows = () => {
       const NA = `<span class="co-na">${T("প্রকাশ করা হয়নি", "Not disclosed")}</span>`;
       const vl = T("VOSB মূল্যায়ন (ইঙ্গিতমূলক)", "VOSB assessed valuation (indicative)");
       const rows = [];
+      if (c.curated) {   /* compiled from public sources: only a published figure is shown, never an estimate; investment rows do not apply */
+        rows.push([T("প্রকাশিত মূল্য / ভ্যালুয়েশন", "Reported value / valuation"), c.vosb_valuation ? money(c.vosb_valuation) : `<span class="co-na">${T("প্রকাশ করা হয়নি", "Not publicly disclosed")}</span>`, c.vosb_valuation ? "vosb" : ""]);
+        return rows;
+      }
       if (c.vosb_val_low && c.vosb_val_high) rows.push([T("VOSB মূল্যায়ন (ইঙ্গিতমূলক সীমা)", "VOSB assessed range (indicative)"), money(c.vosb_val_low) + " – " + money(c.vosb_val_high) + (c.vosb_confidence ? ` <small class="co-conf">${T("নির্ভরযোগ্যতা", "confidence")} ${nd(c.vosb_confidence)}%</small>` : ""), "vosb"]);
       else if (c.vosb_valuation) rows.push([vl, money(c.vosb_valuation), "vosb"]);
       else rows.push([vl, `<span class="co-na">${T("VOSB রিভিউয়ের অপেক্ষায়", "Awaiting VOSB review")}</span>`, "vosb pend"]);
@@ -242,16 +246,18 @@
     function draw() {
       const v = loc(c); setHead(c);
       const soc = Object.keys(c.social || {}).filter((k) => SOC[k] && c.social[k]).map((k) => `<a href="${esc(U().safeHref(c.social[k]))}" target="_blank" rel="noopener nofollow">${SOC[k]}</a>`).join("");
-      const fr = fundRows(), team = (v.team || []).filter((m) => m && m.name);
+      const fr = fundRows(), team = (v.team || []).filter((m) => m && m.name), srcList = (Array.isArray(c.sources) ? c.sources : []).filter((x) => x && x.url && /^https?:/i.test(x.url));
       host.innerHTML = `<nav class="crumbs" aria-label="Breadcrumb"><a href="/">${T("হোম", "Home")}</a><span aria-hidden="true">›</span><a href="/companies">${T("কোম্পানি", "Companies")}</a><span aria-hidden="true">›</span><span aria-current="page">${esc(v.name)}</span></nav>
       <header class="co-head${c.cover_url ? " has-cover" : ""}">${c.cover_url ? `<div class="co-cover"><img src="${esc(U().safeHref(c.cover_url))}" alt="" width="1200" height="300" referrerpolicy="no-referrer"></div>` : ""}
-        <div class="co-hrow">${logo(c, "co-logo lg")}<div class="co-hmain"><h1>${esc(v.name)}</h1><div class="co-badges">${c.verified ? verified() : ""}${c.category ? `<span class="co-b">${esc(label(CO.industries, c.category))}</span>` : ""}${c.stage ? `<span class="co-b">${esc(label(CO.stages, c.stage))}</span>` : ""}${c.registered === false ? `<span class="co-b warn" title="${T("এখনও আইনগতভাবে নিবন্ধিত নয়", "Not yet legally registered")}">${T("নিবন্ধন হয়নি", "Not registered yet")}</span>` : ""}<span class="co-b ${c.invest_open === false ? "off" : "open"}">${c.invest_open === false ? T("এখন বিনিয়োগ নিচ্ছে না", "Not seeking investment now") : T("বিনিয়োগের জন্য উন্মুক্ত", "Open to investment")}</span></div>
+        <div class="co-hrow">${logo(c, "co-logo lg")}<div class="co-hmain"><h1>${esc(v.name)}</h1><div class="co-badges">${c.verified ? verified() : ""}${c.category ? `<span class="co-b">${esc(label(CO.industries, c.category))}</span>` : ""}${c.stage ? `<span class="co-b">${esc(label(CO.stages, c.stage))}</span>` : ""}${c.curated ? "" : c.registered === false ? `<span class="co-b warn" title="${T("এখনও আইনগতভাবে নিবন্ধিত নয়", "Not yet legally registered")}">${T("নিবন্ধন হয়নি", "Not registered yet")}</span>` : ""}<span class="co-b ${c.invest_open === false ? "off" : "open"}">${c.invest_open === false ? T("এখন বিনিয়োগ নিচ্ছে না", "Not seeking investment now") : T("বিনিয়োগের জন্য উন্মুক্ত", "Open to investment")}</span></div>
           <p class="co-ptag">${esc(v.tagline || "")}</p><div id="co-hrate">${rating(c)}</div></div></div>
+        ${c.curated ? `<p class="co-cur" role="note"><b>ℹ️ ${T("ভিএসওবি-র সংকলিত প্রোফাইল", "Compiled by VOSB from public sources")}</b> — ${T("এই প্রোফাইল প্রকাশ্য সূত্র থেকে তৈরি; কোম্পানি এটি নিজে দাবি বা সম্পাদনা করেনি।", "this profile was written from publicly available information and has not been claimed or edited by the company.")}${c.info_as_of ? ` ${T("তথ্য হালনাগাদ: ", "Information as of ")}${esc(U().formatDate(c.info_as_of))}.` : ""} <a href="/contact">${T("আপনি কি এই কোম্পানির প্রতিনিধি? যোগাযোগ করুন।", "Represent this company? Contact us.")}</a></p>` : ""}
         <div class="co-actions">${c.website ? `<a class="btn btn-outline" href="${esc(U().safeHref(c.website))}" target="_blank" rel="noopener nofollow">🌐 ${T("ওয়েবসাইট", "Website")}</a>` : ""}<a class="btn btn-orange" href="#co-rev-h">★ ${T("রিভিউ দিন", "Rate & review")}</a>${c.invest_open === false ? `<button class="btn co-btn-off" type="button" disabled title="${T("কোম্পানিটি এখন বিনিয়োগ নিচ্ছে না", "This company is not seeking investment right now")}">💼 ${T("বিনিয়োগ বন্ধ", "Not seeking")}</button>` : `<button class="btn btn-green" type="button" id="co-invest">💼 ${T("বিনিয়োগে আগ্রহ জানান", "Show investor interest")}</button>`}<button class="btn btn-outline" type="button" id="co-share">↗ ${T("শেয়ার", "Share")}</button></div></header>
       <div class="co-layout"><div class="co-main">
         <section class="co-sec"><h2>${T("পরিচিতি", "About")}</h2>${paras(v.description) || `<p class="muted">—</p>`}</section>
         ${v.business_model ? `<section class="co-sec"><h2>${T("ব্যবসার মডেল", "Business model")}</h2>${paras(v.business_model)}</section>` : ""}
         ${v.highlights ? `<section class="co-sec"><h2>${T("বিশেষ অর্জন ও হাইলাইট", "Highlights")}</h2>${paras(v.highlights)}</section>` : ""}
+        ${srcList.length ? `<section class="co-sec co-src"><h2>${T("তথ্যসূত্র", "Sources")}</h2><ol>${srcList.map((x) => `<li><a href="${esc(U().safeHref(x.url))}" target="_blank" rel="noopener nofollow">${esc(x.title || x.url)}</a></li>`).join("")}</ol></section>` : ""}
         ${team.length ? `<section class="co-sec"><h2>${T("টিম", "Team")}</h2><ul class="co-team">${team.map((m) => `<li><span class="co-tav">${esc(initial(m.name))}</span><div><b>${esc(m.name)}</b><small>${esc(m.role || "")}</small></div></li>`).join("")}</ul></section>` : ""}
         <section class="co-sec co-late" id="co-rev-sec"><h2 id="co-rev-h">${T("রিভিউ ও রেটিং", "Reviews & ratings")}</h2><div id="co-rev"></div></section>
         <section class="co-sec co-late"><h2>${T("আলোচনা", "Discussion")}</h2><div id="co-com"></div></section>
@@ -259,7 +265,7 @@
         <section class="co-card2 co-card-fund"><h2>${T("তহবিল ও ভ্যালুয়েশন", "Funding & valuation")}</h2>
           <p class="co-state ${c.invest_open === false ? "off" : "open"}">${c.invest_open === false ? T("এখন বিনিয়োগ নিচ্ছে না", "Not seeking investment right now") : T("বিনিয়োগের জন্য উন্মুক্ত", "Open to investment")}</p>
           <dl class="co-fund">${fr.map((r) => `<div class="${r[2] || ""}"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")}</dl>
-          ${c.vosb_valuation && (c.valuation_date || c.valuation_note) ? `<p class="co-vnote">${c.valuation_date ? T("মূল্যায়নের তারিখ: ", "Assessed on ") + esc(U().formatDate(c.valuation_date)) + ". " : ""}${esc(c.valuation_note || "")}</p>` : ""}
+          ${(c.vosb_valuation || c.curated) && (c.valuation_date || c.valuation_note) ? `<p class="co-vnote">${c.valuation_date ? (c.curated ? T("তথ্যের তারিখ: ", "Figure dated ") : T("মূল্যায়নের তারিখ: ", "Assessed on "))  + esc(U().formatDate(c.valuation_date)) + ". " : ""}${esc((c.curated && c.i18n_extra && c.i18n_extra.vnote && c.i18n_extra.vnote[U().lang === "bn" ? "bn" : "en"]) || c.valuation_note || "")}</p>` : ""}
           ${v.use_of_funds ? `<h3>${T("তহবিল কীভাবে ব্যবহার হবে", "Use of funds")}</h3>${paras(v.use_of_funds)}` : ""}</section>
         <section class="co-card2 co-card-facts"><h2>${T("তথ্য", "Details")}</h2><dl class="co-facts">${facts()}</dl>${soc ? `<div class="co-soc">${soc}</div>` : ""}<p class="co-views">💼 ${nd(c.interest_count || 0)} ${T("বিনিয়োগ আগ্রহ", "investor interests")}</p></section>
         <p class="co-disc">${DISCLAIMER()}</p></aside></div>`;

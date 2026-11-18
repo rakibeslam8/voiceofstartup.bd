@@ -370,3 +370,10 @@ li.co-hasav.re .co-av { width: 30px; height: 30px; font-size: .8rem; }
 /* empty error/notice lines inside forms must not leave a blank gap (they stay in the page for screen readers) */
 .co-rform .co-msg:empty, .co-cform .co-msg:empty { min-height: 0; height: 0; margin: -10px 0 0; padding: 0; overflow: hidden; }
 @media (max-width: 640px) { .co-rform .co-msg:empty, .co-cform .co-msg:empty { margin-top: -8px; } .co-rsum:only-child { margin-bottom: 0; } }
+
+/* compiled-from-public-sources notice + sources list */
+.co-cur { margin: 12px 0 0; font-size: .86rem; line-height: 1.55; color: var(--muted); background: color-mix(in srgb, var(--green) 8%, var(--card)); border: 1px solid color-mix(in srgb, var(--green) 28%, transparent); border-radius: 12px; padding: 10px 14px; }
+.co-cur b { color: var(--text, inherit); }
+.co-cur a { color: var(--orange-dark, var(--orange)); font-weight: 600; }
+.co-src ol { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; font-size: .9rem; }
+.co-src a { overflow-wrap: anywhere; }
