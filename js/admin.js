@@ -732,6 +732,12 @@
       <div id="restore"></div>
       <div class="ed-grid">
         <div class="grid">
+          <div class="card imp">
+            <h2>🔗 Import from a link</h2>
+            <p class="muted" style="margin:-4px 0 10px;font-size:.88rem">Paste the web address of an article from any website. We collect the title, summary, cover image, text, links and pictures (with their captions) and fill this page — then just check, choose the date and publish. The other language is translated automatically.</p>
+            <div class="imp-row"><input class="inp" id="imp-url" type="url" inputmode="url" placeholder="https://…" aria-label="Article link" autocomplete="off" autocapitalize="off"><button type="button" class="b b-orange" id="imp-go">Import article</button></div>
+            <p class="muted" id="imp-note" style="margin:8px 0 0;font-size:.82rem">Only import content you have the right to publish. The original link is saved as the Source link.</p>
+          </div>
           <div class="card">
             <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
               <div class="seg" id="lt" role="tablist" aria-label="Language"><button data-l="bn" role="tab">বাংলা</button><button data-l="en" role="tab">English</button></div>
@@ -978,6 +984,44 @@
         fillLang(); saveBar(); autoNote(); toast("Translated — please read it once", "ok");
       } catch (e) { toast("Translation service is unavailable right now. Try again in a minute.", "err"); }
       btn.disabled = false; btn.textContent = "🌐 Auto-translate this tab";
+    };
+
+    /* import from a link */
+    $f("imp-go").onclick = async () => {
+      const url = $f("imp-url").value.trim(); const note = $f("imp-note"), btn = $f("imp-go");
+      if (!url) return toast("Paste an article link first", "err");
+      if ((ed.title_bn.trim() || ed.title_en.trim() || ed.body_bn.trim() || ed.body_en.trim()) && !(await modal({ title: "Replace this article's text?", body: "The title, summary, content and cover image on this page will be replaced by the imported article (both languages). Nothing is saved until you press Publish or Save draft.", ok: "Import & replace" }))) return;
+      btn.disabled = true; btn.textContent = "Reading the page…"; note.textContent = "Reading the page and copying its pictures — this can take up to a minute.";
+      let d;
+      try {
+        const { data, error } = await sb.functions.invoke("import-article", { body: { url } });
+        if (error) { let m = ""; try { m = (await error.context.json()).error; } catch (e) {} throw new Error(m || "The import service did not answer. Try again."); }
+        d = data; if (!d || !d.ok) throw new Error((d && d.error) || "Could not import this link.");
+      } catch (e) { btn.disabled = false; btn.textContent = "Import article"; note.textContent = String(e.message || e); return toast(String(e.message || e).slice(0, 200), "err"); }
+      const L = d.lang === "en" ? "en" : "bn", O = L === "bn" ? "en" : "bn";
+      Object.assign(ed, { ["title_" + L]: d.title || "", ["excerpt_" + L]: d.excerpt || "", ["body_" + L]: d.markdown || "", ["image_alt_" + L]: d.coverAlt || "",
+        ["title_" + O]: "", ["excerpt_" + O]: "", ["body_" + O]: "", ["image_alt_" + O]: "",
+        image_url: d.cover || "", source: d.siteName || ed.source, source_url: d.sourceUrl || "", author: (d.author || "").trim() || ed.author || "VOSB Desk",
+        slug: "", slugTouched: false, auto_translated_bn: false, auto_translated_en: false });
+      touched[L] = true; touched[O] = false; tab = L; dirty = true; persist();
+      fillStatic(); fillLang(); cover(); counts(); renderPv(); slugUrl(); dateHint(); saveBar();
+      note.textContent = `Imported from ${d.siteName || "the website"}: ${d.imagesSaved || 0} picture${d.imagesSaved === 1 ? "" : "s"} copied. Translating to ${LN[O]}…`;
+      btn.textContent = "Translating…";
+      try {
+        if (!TR) throw new Error("no translator");
+        ed["title_" + O] = await TR.title(ed["title_" + L], L, O);
+        ed["body_" + O] = await TR.markdown(ed["body_" + L], L, O);
+        ed["excerpt_" + O] = ed["excerpt_" + L].trim() ? (await TR.title(ed["excerpt_" + L], L, O)).slice(0, 300) : MD.excerptFrom(ed["body_" + O]);
+        if (ed["image_alt_" + L].trim()) ed["image_alt_" + O] = (await TR.title(ed["image_alt_" + L], L, O)).slice(0, 160);
+        ed["auto_translated_" + O] = true; ed.slug = slugify(ed.title_en) || ""; $f("f-slug").value = ed.slug; slugUrl();
+        note.textContent = `Done — ${LN[L]} and ${LN[O]} versions are ready. Please read both tabs, choose the date and publish.`;
+        toast("Imported & translated — check, then publish", "ok");
+      } catch (e) {
+        note.textContent = `Imported. The ${LN[O]} version will be created automatically when you publish.`;
+        toast("Imported. The other language is created when you publish.", "ok");
+      }
+      dirty = true; persist(); fillLang(); fillLangTabsOnly(); saveBar(); counts(); renderPv();
+      btn.disabled = false; btn.textContent = "Import article"; $f("imp-url").value = "";
     };
 
     /* save */

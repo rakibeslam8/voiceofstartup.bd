@@ -607,3 +607,9 @@ table.t tr[data-a] { transition: background .15s; } table.t tr[data-a]:hover td 
   .page-h .b, .page-h .btn { padding: 8px 14px; font-size: .88rem; }
   .page-h > .b-orange, .page-h > .btn-orange { margin-left: auto; }
 }
+
+/* import from a link */
+.imp .imp-row { display: flex; gap: 8px; align-items: stretch; }
+.imp .imp-row .inp { flex: 1; min-width: 0; }
+.imp .imp-row .b { flex: none; white-space: nowrap; }
+@media (max-width: 560px) { .imp .imp-row { flex-direction: column; } .imp .imp-row .b { width: 100%; } }
