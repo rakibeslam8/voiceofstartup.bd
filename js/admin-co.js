@@ -154,22 +154,10 @@ window.VOSB_ADMIN_CO = function (X) {
     const tile = (cls, label, val, href) => href ? `<a class="tile ${cls}" href="${href}" style="text-decoration:none;color:inherit"><small>${label}</small><b>${val}</b></a>` : `<div class="tile ${cls}"><small>${label}</small><b>${val}</b></div>`;
     return [
       tile("g", "Total users", fmtN(u.total), "#/users"),
-      tile("", "Active today (members)", fmtN(u.dau), "#/active"),
-      tile("k", "Active · 7 days", fmtN(u.wau), "#/active"),
-      tile("r", "Active · 30 days", fmtN(u.mau), "#/active"),
-      tile("", "New users · 7 days", fmtN(u.new_7d), "#/users"),
       tile("k", "Investors · Founders · Readers", `${fmtN(ro.investor || 0)} · ${fmtN(ro.founder || 0)} · ${fmtN(ro.reader || 0)}`, "#/users"),
       tile("g", "Total revenue", esc(bdt(r.listing_verified)), "#/payments"),
       tile("", "Revenue · 30 days", esc(bdt(r.listing_30d)), "#/payments"),
-      tile("r", "Payments pending", `${esc(bdt(r.listing_pending))} <small class="muted">(${fmtN(r.listing_pending_n)})</small>`, "#/payments"),
-      tile("k", "Investments verified", esc(bdt(r.invested_verified)), "#/deals"),
       tile("g", "Listed companies", fmtN(c.published), "#/companies/all"),
-      tile("", "Applications waiting", fmtN(c.awaiting), "#/companies"),
-      tile("k", "Open for investment", fmtN(c.open_invest), "#/companies/all"),
-      tile("", "Investor interests", fmtN(c.interests), "#/interests"),
-      tile("r", "Company reviews", fmtN(c.reviews), "#/reviews"),
-      tile("", "Article comments", fmtN(k.comments)),
-      tile("g", "Visitors today", fmtN(a.visitors_today)),
     ].join("");
   }
 
