@@ -970,7 +970,8 @@ window.VOSB_ADMIN_CO = function (X) {
     catch (e) { view.innerHTML = `<div class="page-h"><h1>Users</h1></div>${errorCard(e)}`; return; }
     if (!view.isConnected) return;
     const by = {}; rows.forEach((r) => (by[r.reason] = (by[r.reason] || 0) + 1));
-    view.innerHTML = `<div class="page-h"><h1>Deleted accounts</h1></div>${userTabs("del", c)}
+    view._h.dl_del = () => downloadRows(`vosb-deleted-accounts-${new Date().toISOString().slice(0, 10)}.csv`, rows.map((r) => ({ name: r.full_name, email: r.email, phone: r.phone, provider: r.provider, reason: lab(CFG.deletionReasons, r.reason), detail: r.reason_detail, joined: r.joined_at, deleted: r.deleted_at })));
+    view.innerHTML = `<div class="page-h"><h1>Deleted accounts</h1>${rows.length ? `<span class="exp-row"><button type="button" class="b b-line b-sm" data-a="dl_del">⬇ Export (CSV)</button></span>` : ""}</div>${userTabs("del", c)}
       <div class="msg info">When someone deletes their account they must give a reason. A copy of their details is kept here for you. Their reviews and comments stay as “Deleted user”.</div>
       ${rows.length ? `<div class="card"><h2>Why people leave</h2><div class="bl">${Object.keys(by).sort((a, b) => by[b] - by[a]).map((k) => `<div class="bl-r"><div class="bl-t"><span class="bl-l">${esc(lab(CFG.deletionReasons, k))}</span><b>${fmtN(by[k])}</b></div><div class="bl-b"><i style="width:${Math.round((by[k] / rows.length) * 100)}%"></i></div></div>`).join("")}</div></div>` : ""}
       <div class="co-list" style="margin-top:14px">${rows.length ? rows.map((r) => {

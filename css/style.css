@@ -2193,3 +2193,13 @@ html[data-theme="dark"][lang="bn"] .prose p, html[data-theme="dark"][lang="bn"] 
   .site-footer .legal-links a { font-size: .78rem; }
   .site-footer .footer-bottom { font-size: .76rem; padding-bottom: 76px; }
 }
+
+/* ===== sign-up / login modal: selects + consent checkbox match the other fields ===== */
+.au-form select { appearance: none; -webkit-appearance: none; width: 100%; padding: 11px 38px 11px 13px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23846a55' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 13px center; color: var(--text); font: 500 .98rem var(--font-body); cursor: pointer; }
+.au-form select:focus { outline: 0; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255, 117, 34, .18); }
+html[data-theme="dark"] .au-form select { background-color: var(--bg); color: var(--text); }
+.au-form label.au-chk { display: flex; align-items: flex-start; gap: 10px; font-weight: 500; font-size: .86rem; line-height: 1.45; color: var(--text); cursor: pointer; padding: 2px 0; }
+.au-form label.au-chk input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--orange); }
+
+/* dark mode: the logo has black letters — keep it on its cream tile everywhere it sits on a dark surface */
+html[data-theme="dark"] .au-logo { background: #faefe0; border-radius: 12px; padding: 5px 10px; height: 54px; box-sizing: border-box; }

@@ -192,9 +192,19 @@
     const facts = () => [[T("ইন্ডাস্ট্রি", "Industry"), label(CO.industries, c.category)], [T("ধাপ", "Stage"), label(CO.stages, c.stage)], [T("প্রতিষ্ঠা", "Founded"), c.founded_year ? nd(c.founded_year) : ""],
       [T("অবস্থান", "Location"), [c.district, c.division].filter(Boolean).join(", ")], [T("টিম সাইজ", "Team size"), c.team_size ? nd(c.team_size) : ""], [T("মাসিক আয়", "Monthly revenue"), label(CO.revenueRanges, c.revenue_range)]]
       .filter((r) => r[1]).map((r) => `<div><dt>${r[0]}</dt><dd>${esc(r[1])}</dd></div>`).join("");
-    const fundRows = () => [c.vosb_val_low && c.vosb_val_high ? [T("VOSB মূল্যায়ন (ইঙ্গিতমূলক সীমা)", "VOSB assessed range (indicative)"), money(c.vosb_val_low) + " – " + money(c.vosb_val_high) + (c.vosb_confidence ? ` <small class="co-conf">${T("নির্ভরযোগ্যতা", "confidence")} ${nd(c.vosb_confidence)}%</small>` : ""), "vosb"] : c.vosb_valuation ? [T("VOSB মূল্যায়ন (ইঙ্গিতমূলক)", "VOSB assessed valuation (indicative)"), money(c.vosb_valuation), "vosb"] : null,
-      Number(c.raised_amount) > 0 ? [T("VOSB-এ নিশ্চিত বিনিয়োগ", "Confirmed investment via VOSB"), money(c.raised_amount) + (c.investor_count ? ` <small class="co-conf">${nd(c.investor_count)} ${T("জন বিনিয়োগকারী", "investors")}</small>` : "")] : null, c.expected_valuation ? [T("প্রতিষ্ঠাতার প্রত্যাশিত ভ্যালুয়েশন", "Founder's expected valuation"), money(c.expected_valuation)] : null,
-      c.seeking_amount ? [T("তহবিল চাইছে", "Seeking"), money(c.seeking_amount)] : null, c.equity_offered != null ? [T("অফার করা ইকুইটি", "Equity offered"), nd(c.equity_offered) + "%"] : null].filter(Boolean);
+    const fundRows = () => {
+      const NA = `<span class="co-na">${T("প্রকাশ করা হয়নি", "Not disclosed")}</span>`;
+      const vl = T("VOSB মূল্যায়ন (ইঙ্গিতমূলক)", "VOSB assessed valuation (indicative)");
+      const rows = [];
+      if (c.vosb_val_low && c.vosb_val_high) rows.push([T("VOSB মূল্যায়ন (ইঙ্গিতমূলক সীমা)", "VOSB assessed range (indicative)"), money(c.vosb_val_low) + " – " + money(c.vosb_val_high) + (c.vosb_confidence ? ` <small class="co-conf">${T("নির্ভরযোগ্যতা", "confidence")} ${nd(c.vosb_confidence)}%</small>` : ""), "vosb"]);
+      else if (c.vosb_valuation) rows.push([vl, money(c.vosb_valuation), "vosb"]);
+      else rows.push([vl, `<span class="co-na">${T("VOSB রিভিউয়ের অপেক্ষায়", "Awaiting VOSB review")}</span>`, "vosb pend"]);
+      rows.push([T("তহবিল চাইছে", "Seeking"), c.seeking_amount ? money(c.seeking_amount) : NA]);
+      rows.push([T("অফার করা ইকুইটি", "Equity offered"), c.equity_offered != null ? nd(c.equity_offered) + "%" : NA]);
+      if (c.expected_valuation) rows.push([T("প্রতিষ্ঠাতার প্রত্যাশিত ভ্যালুয়েশন", "Founder's expected valuation"), money(c.expected_valuation)]);
+      rows.push([T("VOSB-এ নিশ্চিত বিনিয়োগ", "Confirmed investment via VOSB"), Number(c.raised_amount) > 0 ? money(c.raised_amount) + (c.investor_count ? ` <small class="co-conf">${nd(c.investor_count)} ${T("জন বিনিয়োগকারী", "investors")}</small>` : "") : `<span class="co-na">${T("এখনও নেই", "None yet")}</span>`]);
+      return rows;
+    };
 
     function drawRev() {
       const el = $("#co-rev"); if (!el) return;
@@ -206,7 +216,7 @@
         <textarea name="body" rows="4" maxlength="1500" placeholder="${T("আপনার অভিজ্ঞতা লিখুন…", "Share your experience…")}">${mine ? esc(mine.body || "") : ""}</textarea>
         <div class="co-msg" id="co-rmsg" role="alert"></div><div class="co-acts"><button class="btn btn-orange" type="submit">${T("রিভিউ জমা দিন", "Submit review")}</button>${editRev ? `<button class="btn btn-outline" type="button" data-rcancel>${T("বাতিল", "Cancel")}</button>` : ""}</div></form>`
         : `<div class="co-mine"><b>${T("আপনার রিভিউ", "Your review")}</b>${stars(mine.rating)}<div class="co-acts"><button class="co-link" type="button" data-redit>${T("বদলান", "Edit")}</button><button class="co-link bad" type="button" data-rdel>${T("মুছুন", "Delete")}</button></div></div>`;
-      el.innerHTML = `<div class="co-rsum"><div class="co-big"><b>${n ? nd(Number(rev.avg).toFixed(1)) : "—"}</b>${stars(rev.avg)}<small>${T(`${nd(n)}টি রিভিউ`, `${n} review${n === 1 ? "" : "s"}`)}</small></div><div class="co-dists">${dist}</div></div>${form}
+      el.innerHTML = `${n ? `<div class="co-rsum"><div class="co-big"><b>${n ? nd(Number(rev.avg).toFixed(1)) : "—"}</b>${stars(rev.avg)}<small>${T(`${nd(n)}টি রিভিউ`, `${n} review${n === 1 ? "" : "s"}`)}</small></div><div class="co-dists">${dist}</div></div>` : ""}${form}
         <ul class="co-rlist">${rev.items.map((r) => `<li class="co-hasav">${avImg(r.author_name, r.avatar_url)}<div class="co-avb"><div class="co-rh"><b>${esc(r.author_name)}</b>${stars(r.rating)}<time>${esc(U().formatDate(r.created_at))}</time></div>${r.title ? `<h4>${esc(r.title)}</h4>` : ""}${r.body ? `<p>${esc(r.body)}</p>` : ""}</div></li>`).join("") || `<li class="muted">${T("এখনও কোনো রিভিউ নেই — প্রথম রিভিউ আপনিই দিন।", "No reviews yet — be the first.")}</li>`}</ul>`;
       const f = $("#co-rform");
       if (f) { let val = mine ? mine.rating : 0; const paint = () => $$("[data-star]", f).forEach((b) => { const on = +b.dataset.star <= val; b.classList.toggle("on", on); b.setAttribute("aria-checked", String(+b.dataset.star === val)); }); paint();
@@ -237,7 +247,7 @@
       <header class="co-head${c.cover_url ? " has-cover" : ""}">${c.cover_url ? `<div class="co-cover"><img src="${esc(U().safeHref(c.cover_url))}" alt="" width="1200" height="300" referrerpolicy="no-referrer"></div>` : ""}
         <div class="co-hrow">${logo(c, "co-logo lg")}<div class="co-hmain"><h1>${esc(v.name)}</h1><div class="co-badges">${c.verified ? verified() : ""}${c.category ? `<span class="co-b">${esc(label(CO.industries, c.category))}</span>` : ""}${c.stage ? `<span class="co-b">${esc(label(CO.stages, c.stage))}</span>` : ""}${c.registered === false ? `<span class="co-b warn" title="${T("এখনও আইনগতভাবে নিবন্ধিত নয়", "Not yet legally registered")}">${T("নিবন্ধন হয়নি", "Not registered yet")}</span>` : ""}<span class="co-b ${c.invest_open === false ? "off" : "open"}">${c.invest_open === false ? T("এখন বিনিয়োগ নিচ্ছে না", "Not seeking investment now") : T("বিনিয়োগের জন্য উন্মুক্ত", "Open to investment")}</span></div>
           <p class="co-ptag">${esc(v.tagline || "")}</p><div id="co-hrate">${rating(c)}</div></div></div>
-        <div class="co-actions">${c.website ? `<a class="btn btn-outline" href="${esc(U().safeHref(c.website))}" target="_blank" rel="noopener nofollow">🌐 ${T("ওয়েবসাইট", "Website")}</a>` : ""}<a class="btn btn-orange" href="#co-rev-h">★ ${T("রিভিউ দিন", "Rate & review")}</a>${c.invest_open === false ? `<button class="btn btn-outline" type="button" disabled title="${T("কোম্পানিটি এখন বিনিয়োগ নিচ্ছে না", "This company is not seeking investment right now")}">💼 ${T("বিনিয়োগ বন্ধ আছে", "Investment closed")}</button>` : `<button class="btn btn-green" type="button" id="co-invest">💼 ${T("বিনিয়োগে আগ্রহ জানান", "Show investor interest")}</button>`}<button class="btn btn-outline" type="button" id="co-share">↗ ${T("শেয়ার", "Share")}</button></div></header>
+        <div class="co-actions">${c.website ? `<a class="btn btn-outline" href="${esc(U().safeHref(c.website))}" target="_blank" rel="noopener nofollow">🌐 ${T("ওয়েবসাইট", "Website")}</a>` : ""}<a class="btn btn-orange" href="#co-rev-h">★ ${T("রিভিউ দিন", "Rate & review")}</a>${c.invest_open === false ? `<button class="btn co-btn-off" type="button" disabled title="${T("কোম্পানিটি এখন বিনিয়োগ নিচ্ছে না", "This company is not seeking investment right now")}">💼 ${T("বিনিয়োগ বন্ধ", "Not seeking")}</button>` : `<button class="btn btn-green" type="button" id="co-invest">💼 ${T("বিনিয়োগে আগ্রহ জানান", "Show investor interest")}</button>`}<button class="btn btn-outline" type="button" id="co-share">↗ ${T("শেয়ার", "Share")}</button></div></header>
       <div class="co-layout"><div class="co-main">
         <section class="co-sec"><h2>${T("পরিচিতি", "About")}</h2>${paras(v.description) || `<p class="muted">—</p>`}</section>
         ${v.business_model ? `<section class="co-sec"><h2>${T("ব্যবসার মডেল", "Business model")}</h2>${paras(v.business_model)}</section>` : ""}
@@ -246,10 +256,12 @@
         <section class="co-sec co-late" id="co-rev-sec"><h2 id="co-rev-h">${T("রিভিউ ও রেটিং", "Reviews & ratings")}</h2><div id="co-rev"></div></section>
         <section class="co-sec co-late"><h2>${T("আলোচনা", "Discussion")}</h2><div id="co-com"></div></section>
       </div><aside class="co-side">
-        ${fr.length || v.use_of_funds ? `<section class="co-card2"><h2>${T("তহবিল ও ভ্যালুয়েশন", "Funding & valuation")}</h2><dl class="co-fund">${fr.map((r) => `<div class="${r[2] || ""}"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")}</dl>
+        <section class="co-card2 co-card-fund"><h2>${T("তহবিল ও ভ্যালুয়েশন", "Funding & valuation")}</h2>
+          <p class="co-state ${c.invest_open === false ? "off" : "open"}">${c.invest_open === false ? T("এখন বিনিয়োগ নিচ্ছে না", "Not seeking investment right now") : T("বিনিয়োগের জন্য উন্মুক্ত", "Open to investment")}</p>
+          <dl class="co-fund">${fr.map((r) => `<div class="${r[2] || ""}"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")}</dl>
           ${c.vosb_valuation && (c.valuation_date || c.valuation_note) ? `<p class="co-vnote">${c.valuation_date ? T("মূল্যায়নের তারিখ: ", "Assessed on ") + esc(U().formatDate(c.valuation_date)) + ". " : ""}${esc(c.valuation_note || "")}</p>` : ""}
-          ${v.use_of_funds ? `<h3>${T("তহবিল কীভাবে ব্যবহার হবে", "Use of funds")}</h3>${paras(v.use_of_funds)}` : ""}</section>` : ""}
-        <section class="co-card2"><h2>${T("তথ্য", "Details")}</h2><dl class="co-facts">${facts()}</dl>${soc ? `<div class="co-soc">${soc}</div>` : ""}<p class="co-views">💼 ${nd(c.interest_count || 0)} ${T("বিনিয়োগ আগ্রহ", "investor interests")}</p></section>
+          ${v.use_of_funds ? `<h3>${T("তহবিল কীভাবে ব্যবহার হবে", "Use of funds")}</h3>${paras(v.use_of_funds)}` : ""}</section>
+        <section class="co-card2 co-card-facts"><h2>${T("তথ্য", "Details")}</h2><dl class="co-facts">${facts()}</dl>${soc ? `<div class="co-soc">${soc}</div>` : ""}<p class="co-views">💼 ${nd(c.interest_count || 0)} ${T("বিনিয়োগ আগ্রহ", "investor interests")}</p></section>
         <p class="co-disc">${DISCLAIMER()}</p></aside></div>`;
       drawRev(); drawCom();
     }

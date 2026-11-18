@@ -247,7 +247,7 @@
     if (top) {
       top.innerHTML = `
       <div class="topbar"><div class="container">
-        <span class="date">${bnDigits(new Date().toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", { timeZone: "Asia/Dhaka", weekday: "long", year: "numeric", month: "long", day: "numeric" }))}</span>
+        <span class="date">${bnDigits(new Date().toLocaleDateString(lang === "bn" ? "bn-BD" : "en-GB", lang !== "bn" && window.matchMedia && window.matchMedia("(max-width: 760px)").matches ? { timeZone: "Asia/Dhaka", weekday: "short", year: "numeric", month: "short", day: "numeric" } : { timeZone: "Asia/Dhaka", weekday: "long", year: "numeric", month: "long", day: "numeric" }))}</span>
         <a class="tb-brand" href="/" aria-label="Voice of Startup Bangladesh">Voice of Startup Bangladesh</a>
         <span class="tb-soc">${installBtn()}${Object.keys(C.social).map((k) => `<a data-s="${k}" href="${C.social[k]}" target="_blank" rel="noopener" aria-label="${LABEL[k]}">${ICON[k].replace(/fill="[^"]*"/g, "").replace(/<defs>.*<\/defs>/, "")}</a>`).join("")}</span>
       </div></div>
@@ -1200,11 +1200,11 @@
   window.VOSB_UI = { get lang() { return lang; }, T, esc, pick, safeHref, bnDigits, formatDate, formatDateTime, money, $, $$, onRender(fn) { renderers.push(fn); }, refresh };
   (function loadAuth() {
     const s = document.createElement("script");
-    s.src = "/js/auth.js?v=20261117a";
+    s.src = "/js/auth.js?v=20261118a";
     s.onload = () => {
       try { window.VOSB_AUTH && window.VOSB_AUTH.paint(); } catch (e) {}
       if (document.getElementById("article") || /^\/(en\/)?read\//.test(location.pathname)) {   // article pages: likes + comments
-        const t = document.createElement("script"); t.src = "/js/social.js?v=20261117a"; document.head.appendChild(t);
+        const t = document.createElement("script"); t.src = "/js/social.js?v=20261118a"; document.head.appendChild(t);
       }
     };
     document.head.appendChild(s);

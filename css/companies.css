@@ -305,3 +305,68 @@ li.co-hasav.re .co-av { width: 30px; height: 30px; font-size: .8rem; }
 
 /* profile: on single-column layouts, reviews + discussion come last (after funding & details) */
 @media (max-width: 1024px) { .co-layout { display: flex; flex-direction: column; gap: 18px; } .co-layout > .co-main { display: contents; } .co-layout > .co-main > .co-sec { order: 0; } .co-layout > .co-side { order: 1; width: 100%; } .co-layout > .co-main > .co-late { order: 2; } }
+
+/* ===================== company profile v3 (phone/tablet): order = header → Details → Funding & valuation → About … → Reviews → Discussion ===================== */
+.co-na { color: var(--muted); font-weight: 500; font-style: italic; font-size: .86rem; }
+.co-state { display: inline-block; font: 700 .76rem var(--font-body); padding: 3px 11px; border-radius: 999px; margin-bottom: 8px; }
+.co-state.open { background: rgba(11, 138, 75, .12); color: var(--green); } .co-state.off { background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+.co-fund .vosb.pend { background: var(--bg); border: 1px dashed var(--line); } .co-fund .vosb.pend dd { color: var(--muted); font-size: .9rem; font-weight: 600; }
+.co-btn-off { background: transparent; border: 1.5px dashed var(--line); color: var(--muted); cursor: default; }
+@media (max-width: 1024px) {
+  .co-layout { align-items: stretch; }
+  .co-layout > .co-main, .co-layout > .co-side { display: contents; }
+  .co-layout > .co-main > *, .co-layout > .co-side > * { width: 100%; box-sizing: border-box; min-width: 0; }
+  .co-layout > .co-side { position: static; }
+  .co-card-facts { order: 0; } .co-card-fund { order: 1; }
+  .co-layout > .co-main > .co-sec { order: 2; }
+  .co-layout > .co-side > .co-disc { order: 3; }
+  .co-layout > .co-main > .co-late { order: 4; }
+}
+@media (max-width: 640px) {
+  /* header */
+  .co-head { padding: 14px; border-radius: 18px; margin-bottom: 12px; }
+  .co-head.has-cover { padding-top: 0; }
+  .co-head .co-cover { margin: 0 -14px; max-height: 132px; border-radius: 18px 18px 0 0; } .co-head .co-cover img { height: 132px; }
+  .co-head.has-cover .co-hrow { margin-top: -28px; position: relative; }
+  .co-hrow { gap: 12px; align-items: flex-end; }
+  .co-logo.lg { width: 62px; height: 62px; border-radius: 16px; border: 3px solid var(--card); background: #fff; box-shadow: 0 4px 14px rgba(0, 0, 0, .12); flex: none; }
+  .co-hmain { flex: 1; } .co-hmain h1 { font-size: 1.28rem; line-height: 1.22; }
+  .co-badges { gap: 6px; margin: 8px 0 4px; } .co-b, .co-head .co-ver { font-size: .7rem; padding: 2px 9px; line-height: 1.5; }
+  .co-badges .co-b.open, .co-badges .co-b.off { display: none; }
+  .co-ptag { font-size: .94rem; line-height: 1.5; margin: 2px 0 4px; }
+  .co-head .co-rate { font-size: .82rem; }
+  .co-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .co-actions .btn, .co-actions .btn-green { flex: none; width: 100%; box-sizing: border-box; min-height: 44px; padding: 8px 10px; font-size: .88rem; line-height: 1.2; display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 14px; }
+  /* sections */
+  .co-layout { gap: 12px; }
+  .co-sec, .co-card2 { padding: 14px; border-radius: 16px; } .co-sec h2, .co-card2 h2 { font-size: 1.08rem; margin-bottom: 8px; }
+  .co-fund > div, .co-facts > div { padding: 8px 0; gap: 10px; } .co-fund dt, .co-facts dt { font-size: .85rem; } .co-fund dd, .co-facts dd { font-size: .92rem; }
+  .co-fund .vosb { padding: 10px; } .co-fund .vosb dd { font-size: 1.05rem; }
+  .co-soc { margin-top: 10px; } .co-views { margin-top: 8px; font-size: .84rem; } .co-disc { font-size: .76rem; padding: 9px 11px; }
+  .co-team li { padding: 8px; }
+  /* reviews + discussion: flat forms, no nested boxes, no wasted space */
+  .co-rsum { flex-wrap: nowrap; gap: 14px; margin-bottom: 8px; align-items: center; }
+  .co-big { min-width: 78px; } .co-big b { font-size: 1.9rem; } .co-big small { font-size: .76rem; }
+  .co-dists { min-width: 0; gap: 3px; } .co-dist { grid-template-columns: 26px 1fr 22px; font-size: .78rem; }
+  .co-rform, .co-cform { background: transparent; border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: 12px 0 0; margin: 8px 0 8px; gap: 8px; }
+  .co-cform { border-top: 0; padding-top: 0; }
+  .co-rform h3 { font-size: .98rem; } .co-pick button { font-size: 1.6rem; }
+  .co-rform textarea, .co-cform textarea { height: 84px; min-height: 0; resize: none; } .co-rform input, .co-rform textarea, .co-cform textarea { padding: 9px 11px; font-size: .95rem; }
+  .co-rform .btn, .co-cform .btn { min-height: 40px; padding: 8px 20px; font-size: .9rem; }
+  .co-mine { padding: 10px 12px; margin-bottom: 8px; }
+  .co-rlist > li, .co-clist > li { padding: 10px 0; } .co-rlist > li.muted, .co-clist > li.muted { padding: 4px 0 0; font-size: .88rem; }
+}
+
+/* phone header v4: logo overlaps the cover bottom-left, name sits beside it; no logo → plain row */
+@media (max-width: 640px) {
+  .co-hrow { align-items: flex-start; }
+  .co-head.has-cover .co-hrow { margin-top: -30px; }
+  .co-head.has-cover .co-hmain { padding-top: 32px; }
+  .co-head:not(.has-cover) .co-hmain { padding-top: 2px; }
+  .co-hmain h1 { overflow-wrap: anywhere; }
+  .co-actions { margin-top: 14px; }
+}
+
+/* empty error/notice lines inside forms must not leave a blank gap (they stay in the page for screen readers) */
+.co-rform .co-msg:empty, .co-cform .co-msg:empty { min-height: 0; height: 0; margin: -10px 0 0; padding: 0; overflow: hidden; }
+@media (max-width: 640px) { .co-rform .co-msg:empty, .co-cform .co-msg:empty { margin-top: -8px; } .co-rsum:only-child { margin-bottom: 0; } }
