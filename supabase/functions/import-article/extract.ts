@@ -157,6 +157,76 @@ function fallbackRoot(doc: any): any {
   return best;
 }
 
+/* ---------- news sites that load their pictures with JavaScript (Quintype: Prothom Alo and others) ----------
+   The page HTML has empty picture frames; the real article (text blocks, pictures, captions, hero picture) sits in a JSON block. */
+const capClean = (s: string) => clean(s).replace(/[\[\]()]/g, "").slice(0, 320);
+function findStory(doc: any): { story: any; cdn: string } | null {
+  for (const sc of Array.from(doc.querySelectorAll('script[type="application/json"], script#static-page')) as any[]) {
+    const txt = String(sc.textContent || "");
+    if (txt.length < 800 || !txt.includes("story-elements")) continue;
+    let j: any; try { j = JSON.parse(txt); } catch { continue; }
+    let found: any = null;
+    const walk = (o: any, d: number) => {
+      if (found || d > 9 || !o || typeof o !== "object") return;
+      if (Array.isArray(o.cards) && o.cards.some((c: any) => c && Array.isArray(c["story-elements"]))) { found = o; return; }
+      for (const k of Object.keys(o)) walk(o[k], d + 1);
+    };
+    walk(j, 0);
+    if (found) {
+      const cfg = (j && j.qt && j.qt.config) || {};
+      const cdn = String(cfg["cdn-image"] || cfg.cdn_image || "").replace(/^https?:\/\//i, "").replace(/\/+$/, "");
+      return { story: found, cdn };
+    }
+  }
+  return null;
+}
+function fromStory(doc: any, base: string, pageUrl: string, ogTitle: string, siteName: string, desc: string): Extracted | null {
+  const f = findStory(doc); if (!f) return null;
+  const { story, cdn } = f;
+  const pic = (key: string) => key && cdn ? `https://${cdn}/${String(key).replace(/^\/+/, "")}?w=1600` : "";
+  const cap = (title: string, attr: string, alt: string) => {
+    const t = capClean(title || alt || ""); const a = capClean(attr || "");
+    return FILEY.test(t) ? a : (a && !t.includes(a) ? `${t} ${a}`.trim() : t);
+  };
+  const blocks: string[] = []; const images: string[] = [];
+  for (const card of story.cards || []) {
+    for (const el of (card && card["story-elements"]) || []) {
+      if (!el || typeof el !== "object") continue;
+      if (el.type === "text" && typeof el.text === "string") {
+        const { document: d } = parseHTML(`<div id="r">${el.text}</div>`) as any; const root = d.querySelector("#r");
+        if (el.subtype === "blockquote") {
+          const q = root.querySelector("blockquote"); const at = root.querySelector(".attribution");
+          const qt = clean(q ? q.textContent : root.textContent), a = clean(at ? at.textContent : "");
+          if (qt) blocks.push("> " + qt.replace(/[\[\]]/g, "") + (a ? " — " + a.replace(/[\[\]]/g, "") : ""));
+        } else { const m = toMarkdown(root, base, []); if (m) blocks.push(m); }
+      } else if (el.type === "title" && clean(el.text || el.title || "")) {
+        blocks.push("## " + clean(el.text || el.title).replace(/\*+/g, ""));
+      } else if (el.type === "image" && el["image-s3-key"]) {
+        const u = pic(el["image-s3-key"]); if (!u) continue;
+        images.push(u); blocks.push(`![${cap(el.title, el["image-attribution"], el["alt-text"])}](${u})`);
+      } else if (el.type === "youtube-video" && /^https?:/i.test(String(el.url || ""))) {
+        blocks.push(`[Watch the video on YouTube](${el.url})`);
+      }
+    }
+  }
+  const md = blocks.join("\n\n").slice(0, 80000);
+  if (clean(md.replace(/!\[[^\]]*\]\([^)]*\)/g, "")).length < 120) return null;
+  const title = clean(story.headline || ogTitle || "");
+  const cover = pic(story["hero-image-s3-key"]) || "";
+  const coverAlt = cap(story["hero-image-caption"], story["hero-image-attribution"], story["hero-image-alt-text"]);
+  const plain = md.replace(/!\[[^\]]*\]\([^)]*\)/g, " ").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#>*\-]/g, " ");
+  const sample = title + " " + plain.slice(0, 1500);
+  const bn = (sample.match(BN) || []).length, lat = (sample.match(/[A-Za-z]/g) || []).length;
+  const when = Number(story["first-published-at"] || story["published-at"] || 0);
+  const authorName = clean(String(story["author-name"] || (Array.isArray(story.authors) && story.authors[0] && story.authors[0].name) || ""));
+  return {
+    title, excerpt: (clean(typeof story.subheadline === "string" ? story.subheadline : "") || desc || clean(plain)).slice(0, 300),
+    markdown: md, cover, coverAlt, author: authorName.slice(0, 80), siteName: siteName.slice(0, 60),
+    publishedAt: when > 1e9 ? new Date(when).toISOString() : "", lang: bn > lat * 0.5 ? "bn" : "en",
+    images: Array.from(new Set([cover, ...images].filter(Boolean))), canonical: absUrl(story.url, pageUrl) || "",
+  };
+}
+
 export function extract(html: string, pageUrl: string): Extracted {
   const { document: doc } = parseHTML(html) as any;
   const base = absUrl((doc.querySelector("base[href]") || { getAttribute: () => "" }).getAttribute("href"), pageUrl) || pageUrl;
@@ -171,6 +241,9 @@ export function extract(html: string, pageUrl: string): Extracted {
   const cover = absUrl(metaOf(doc, "og:image", "twitter:image", "twitter:image:src"), base);
   const coverAlt = clean(metaOf(doc, "og:image:alt", "twitter:image:alt"));
   const desc = metaOf(doc, "og:description", "twitter:description", "description");
+
+  // 0) pages whose pictures and captions are only in an embedded JSON block
+  try { const st = fromStory(doc, base, pageUrl, ogTitle, siteName, desc); if (st) return st; } catch { /* fall back to the normal reader */ }
 
   // 1) the article text — Readability first, simple fallbacks second
   let contentRoot: any = null, rTitle = "", rByline = "";

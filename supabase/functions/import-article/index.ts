@@ -61,7 +61,10 @@ function decode(bytes: Uint8Array, contentType: string): string {
 
 /* ---------- one picture, relayed to the admin's browser (which compresses it and stores it in our own bucket) ---------- */
 async function relayImage(req: Request, src: string, page: string): Promise<Response> {
-  const res = await safeFetch(src, { headers: { "User-Agent": UA, Accept: "image/avif,image/webp,image/png,image/jpeg,image/*;q=0.8", ...(page ? { Referer: page } : {}) } }, 12000);
+  const hdr = { headers: { "User-Agent": UA, Accept: "image/avif,image/webp,image/png,image/jpeg,image/*;q=0.8", ...(page ? { Referer: page } : {}) } };
+  let res = await safeFetch(src, hdr, 12000);
+  // a resize hint (?w=1600) that a site does not understand: ask for the original picture instead
+  if (!res.ok && /\?w=1600$/.test(src)) res = await safeFetch(src.replace(/\?w=1600$/, ""), hdr, 12000);
   if (!res.ok) return json(req, { ok: false, error: `picture answered ${res.status}` });
   const type = (res.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
   if (type && !/^image\/(jpeg|jpg|png|webp|gif|avif)$/.test(type) && !/octet-stream/.test(type)) return json(req, { ok: false, error: "not a picture (" + type + ")" });
