@@ -637,7 +637,7 @@
     if (!view.isConnected) return;
     const f = { q: "", st: "all", cat: "all", sort: "new" };
     view.innerHTML = `
-      <div class="page-h"><h1>Articles <span class="muted" style="font-size:1rem">(${posts.length})</span></h1><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></div>
+      <div class="page-h"><h1>Articles <span class="muted" style="font-size:1rem">(${posts.length})</span></h1><span style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="b b-line" id="fixtr" title="Translate picture captions and cover descriptions that were left in the other language in older articles">🌐 Repair translations</button><a class="b b-orange" href="#/edit/new">✍️ Write new article</a></span></div>
       <div class="filters">
         <input class="inp" id="q" type="search" placeholder="Search title…" aria-label="Search">
         <select class="sel" id="st" aria-label="Status"><option value="all">All status</option><option value="live">Live</option><option value="sched">Scheduled</option><option value="draft">Drafts</option></select>
@@ -658,6 +658,36 @@
     $("#st").onchange = (e) => { f.st = e.target.value; draw(); };
     $("#ct").onchange = (e) => { f.cat = e.target.value; draw(); };
     $("#so").onchange = (e) => { f.sort = e.target.value; draw(); };
+    $("#fixtr").onclick = async () => {
+      const TR = window.VOSB_TR; if (!TR) return toast("Translator not loaded", "err");
+      if (!(await modal({ title: "Repair translations of all articles?", body: "Looks at every article and translates only what was left in the wrong language: picture captions inside the text and the cover image description. Nothing else is changed and nothing is deleted. This can take a few minutes — keep this page open.", ok: "Start repair" }))) return;
+      const btn = $("#fixtr"); btn.disabled = true;
+      let fixed = 0, failed = 0, done = 0;
+      try {
+        const { data, error } = await sb.from("posts").select("id,body_bn,body_en,image_alt,image_alt_bn,image_alt_en").order("publish_at", { ascending: false });
+        if (error) throw error;
+        for (const r of data) {
+          btn.textContent = `Repairing… ${++done}/${data.length}`;
+          const upd = {};
+          try {
+            const en = await TR.altsOnly(r.body_en, "bn", "en"); if (en.changed) upd.body_en = en.text;
+            const bn = await TR.altsOnly(r.body_bn, "en", "bn"); if (bn.changed) upd.body_bn = bn.text;
+            let aBn = (r.image_alt_bn || "").trim(), aEn = (r.image_alt_en || "").trim();
+            const legacy = (r.image_alt || "").trim(), isBn = (t) => /[ঀ-৿]/.test(t);
+            if (!aBn && legacy && isBn(legacy)) aBn = legacy;
+            if (!aEn && legacy && !isBn(legacy)) aEn = legacy;
+            if (aBn && !aEn) aEn = (await TR.title(aBn, "bn", "en")).slice(0, 160);
+            else if (aEn && !aBn) aBn = (await TR.title(aEn, "en", "bn")).slice(0, 160);
+            if (aBn !== (r.image_alt_bn || "").trim()) upd.image_alt_bn = aBn;
+            if (aEn !== (r.image_alt_en || "").trim()) upd.image_alt_en = aEn;
+          } catch (e) { failed++; continue; }
+          if (Object.keys(upd).length) { const { error: e2 } = await sb.from("posts").update(upd).eq("id", r.id); if (e2) failed++; else fixed++; }
+        }
+        postsLoaded = false;
+        toast(`Repair finished: ${fixed} article${fixed === 1 ? "" : "s"} updated${failed ? `, ${failed} could not be translated (run again later)` : ""}. Live pages refresh within 15 minutes.`, failed ? "err" : "ok");
+      } catch (e) { toast("Repair stopped: " + (e.message || e), "err"); }
+      btn.disabled = false; btn.textContent = "🌐 Repair translations";
+    };
     draw();
     wireRows($("#rows"));
   }
@@ -666,10 +696,10 @@
   const BLANK = () => ({
     id: null, slug: "", slugTouched: false, category: "funding", status: "draft", publish_at: nowLocalInput(), featured: false,
     title_bn: "", title_en: "", excerpt_bn: "", excerpt_en: "", body_bn: "", body_en: "",
-    source: "VOSB", source_url: "", author: "VOSB Desk", image_url: "", image_alt: "",
+    source: "VOSB", source_url: "", author: "VOSB Desk", image_url: "", image_alt: "", image_alt_bn: "", image_alt_en: "",
     auto_translated_bn: false, auto_translated_en: false,
   });
-  const FIELDS = ["category", "publish_at", "featured", "title_bn", "title_en", "excerpt_bn", "excerpt_en", "body_bn", "body_en", "source", "source_url", "author", "image_url", "image_alt", "slug"];
+  const FIELDS = ["category", "publish_at", "featured", "title_bn", "title_en", "excerpt_bn", "excerpt_en", "body_bn", "body_en", "source", "source_url", "author", "image_url", "image_alt_bn", "image_alt_en", "slug"];
 
   async function viewEditor(view, idOrNew) {
     let ed = BLANK();
@@ -730,7 +760,7 @@
           <div class="card">
             <h2>Cover image</h2>
             <div class="cover-box" id="cover"></div>
-            <div class="fld" style="margin-top:12px;margin-bottom:0"><label for="f-alt">Image description <span class="hint">(for accessibility & SEO)</span></label><input class="inp" id="f-alt" maxlength="160"></div>
+            <div class="fld" style="margin-top:12px;margin-bottom:0"><label for="f-alt">Image description <span class="hint">(shown under the cover &amp; for SEO — the other language is translated automatically)</span></label><input class="inp" id="f-alt" maxlength="160"></div>
           </div>
           <div class="card">
             <h2>Details</h2>
@@ -760,11 +790,11 @@
     function fillStatic() {
       if (ed.source && !SOURCES.includes(ed.source)) $f("f-src").insertAdjacentHTML("beforeend", `<option>${esc(ed.source)}</option>`);
       $f("f-cat").value = ed.category; $f("f-date").value = ed.publish_at; $f("f-src").value = ed.source || "VOSB";
-      $f("f-srcu").value = ed.source_url; $f("f-au").value = ed.author; $f("f-feat").checked = ed.featured; $f("f-alt").value = ed.image_alt; $f("f-slug").value = ed.slug;
+      $f("f-srcu").value = ed.source_url; $f("f-au").value = ed.author; $f("f-feat").checked = ed.featured; $f("f-slug").value = ed.slug;
     }
     function fillLang() {
       $$("#lt button").forEach((b) => { b.classList.toggle("on", b.dataset.l === tab); b.classList.toggle("has", !!(ed["title_" + b.dataset.l] || ed["body_" + b.dataset.l])); b.setAttribute("aria-selected", b.dataset.l === tab); });
-      $f("f-title").value = ed["title_" + tab]; $f("f-ex").value = ed["excerpt_" + tab]; $f("f-body").value = ed["body_" + tab];
+      $f("f-alt").value = ed["image_alt_" + tab]; $f("f-title").value = ed["title_" + tab]; $f("f-ex").value = ed["excerpt_" + tab]; $f("f-body").value = ed["body_" + tab];
       $f("title-l").textContent = tab === "bn" ? "(বাংলা)" : "(English)";
       autoNote();
       $f("f-title").placeholder = tab === "bn" ? "আর্টিকেলের শিরোনাম" : "Article headline";
@@ -824,7 +854,7 @@
     $f("f-srcu").oninput = (e) => set("source_url", e.target.value.trim());
     $f("f-au").oninput = (e) => set("author", e.target.value);
     $f("f-feat").onchange = (e) => set("featured", e.target.checked);
-    $f("f-alt").oninput = (e) => set("image_alt", e.target.value);
+    $f("f-alt").oninput = (e) => { set("image_alt_" + tab, e.target.value); touched[tab] = true; };
     $f("f-slug").oninput = (e) => { ed.slugTouched = true; set("slug", e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-{2,}/g, "-")); slugUrl(); };
     $f("f-slug").onblur = () => { ed.slug = ed.slug.replace(/^-+|-+$/g, ""); $f("f-slug").value = ed.slug; slugUrl(); };
     $("#md-m").onclick = (e) => {
@@ -896,35 +926,39 @@
       n.textContent = flagged ? `This ${LN[tab]} version was machine-translated — please check it.` : "";
     }
     const chg = (k) => String(ed[k] || "").trim() !== String(savedF[k] || "").trim();      // changed since it was last saved
-    const needsTranslation = () => !(ed.title_bn.trim() && ed.title_en.trim() && ed.body_bn.trim() && ed.body_en.trim() && ed.excerpt_bn.trim() && ed.excerpt_en.trim())
-      || ["title", "excerpt", "body"].some((f) => chg(f + "_bn") || chg(f + "_en"));
+    const TF = ["title", "excerpt", "body", "image_alt"];
+    const needsTranslation = () => TF.some((f) => ["bn", "en"].some((l) => { const o = l === "bn" ? "en" : "bn"; return String(ed[f + "_" + o] || "").trim() && (!String(ed[f + "_" + l] || "").trim() || (chg(f + "_" + o) && !chg(f + "_" + l))); }))
+      || !ed.excerpt_bn.trim() || !ed.excerpt_en.trim();
+    /* Keep both languages in step. For every field (title, summary, content incl. links & picture descriptions, cover description):
+       - the other language is empty                 -> translate it
+       - this language was changed in this session and the other one was NOT edited here -> translate it again
+         (only the changed paragraphs of the content are translated; untouched paragraphs of the other language stay as they are)
+       - both languages were edited here             -> nothing is overwritten (you wrote both) */
     async function autoFill() {
-      const out = { done: [], failed: false };
+      const out = { done: [], failed: false, failedFields: [] };
       const flags = { bn: !!ed.auto_translated_bn && !touched.bn, en: !!ed.auto_translated_en && !touched.en };
+      const plan = {};   // decided up-front from what the editor changed, so a freshly translated field is never translated back
+      for (const to of ["bn", "en"]) {
+        const from = to === "bn" ? "en" : "bn"; plan[to] = {};
+        TF.forEach((f) => {
+          const src = String(ed[f + "_" + from] || "").trim();
+          plan[to][f] = !!src && (!String(ed[f + "_" + to] || "").trim() || (chg(f + "_" + from) && !chg(f + "_" + to)));
+        });
+      }
       for (const to of ["bn", "en"]) {
         const from = to === "bn" ? "en" : "bn";
-        /* translate a field when the other language is empty, OR when this language changed in this session while the other one is a
-           machine translation that nobody has edited (a hand-written version is never overwritten) */
-        const need = (f) => {
-          const src = ed[f + "_" + from].trim(); if (!src) return false;
-          if (!ed[f + "_" + to].trim()) return true;
-          return chg(f + "_" + from) && !chg(f + "_" + to) && !!flags[to];
-        };
-        const needT = need("title"), needB = need("body"), needE = need("excerpt");
+        const need = (f) => plan[to][f];
         let gen = false;
-        if ((needT || needB) && TR) {
-          try {
-            if (needT) ed["title_" + to] = await TR.title(ed["title_" + from], from, to);
-            if (needB) ed["body_" + to] = await TR.markdown(ed["body_" + from], from, to);
-            gen = true; out.done.push(to);
-          } catch (e) { out.failed = true; }
-        }
-        if (gen) flags[to] = true;
-        if (needE || gen || !ed["excerpt_" + to].trim()) {
+        const run = async (f, fn) => { try { await fn(); gen = true; } catch (e) { out.failed = true; out.failedFields.push(f + "_" + from); } };
+        if (TR) {
+          if (need("title")) await run("title", async () => { ed["title_" + to] = await TR.title(ed["title_" + from], from, to); });
+          if (need("body")) await run("body", async () => { ed["body_" + to] = await TR.sync(savedF["body_" + from], ed["body_" + from], ed["body_" + to], from, to); });
+          if (need("image_alt")) await run("image_alt", async () => { ed["image_alt_" + to] = (await TR.title(ed["image_alt_" + from], from, to)).slice(0, 160); });
           const fromEx = ed["excerpt_" + from].trim();
-          if (fromEx && TR && (needE || gen)) { try { ed["excerpt_" + to] = (await TR.title(fromEx, from, to)).slice(0, 300); } catch (e) {} }
-          if ((gen && !fromEx || !ed["excerpt_" + to].trim()) && ed["body_" + to].trim()) ed["excerpt_" + to] = MD.excerptFrom(ed["body_" + to]);
+          if (fromEx && need("excerpt")) await run("excerpt", async () => { ed["excerpt_" + to] = (await TR.title(fromEx, from, to)).slice(0, 300); });
         }
+        if (!ed["excerpt_" + to].trim() && ed["body_" + to].trim()) ed["excerpt_" + to] = MD.excerptFrom(ed["body_" + to]);
+        if (gen) { flags[to] = true; out.done.push(to); }
       }
       ed.auto_translated_bn = flags.bn; ed.auto_translated_en = flags.en;
       return out;
@@ -939,6 +973,7 @@
         if (ed["title_" + from].trim()) ed["title_" + tab] = await TR.title(ed["title_" + from], from, tab);
         if (ed["body_" + from].trim()) ed["body_" + tab] = await TR.markdown(ed["body_" + from], from, tab);
         ed["excerpt_" + tab] = ed["excerpt_" + from].trim() ? (await TR.title(ed["excerpt_" + from], from, tab)).slice(0, 400) : MD.excerptFrom(ed["body_" + tab]);
+        if (ed["image_alt_" + from].trim()) ed["image_alt_" + tab] = (await TR.title(ed["image_alt_" + from], from, tab)).slice(0, 160);
         ed["auto_translated_" + tab] = true; touched[tab] = false; dirty = true; persist();
         fillLang(); saveBar(); autoNote(); toast("Translated — please read it once", "ok");
       } catch (e) { toast("Translation service is unavailable right now. Try again in a minute.", "err"); }
@@ -975,7 +1010,7 @@
         title_bn: ed.title_bn.trim(), title_en: ed.title_en.trim(), excerpt_bn: ed.excerpt_bn.trim(), excerpt_en: ed.excerpt_en.trim(),
         body_bn: ed.body_bn, body_en: ed.body_en,
         source: ed.source === "Other" ? "Other" : ed.source, source_url: ed.source_url || null, author: ed.author.trim() || "VOSB Desk",
-        image_url: ed.image_url || null, image_alt: ed.image_alt.trim(),
+        image_url: ed.image_url || null, image_alt_bn: ed.image_alt_bn.trim(), image_alt_en: ed.image_alt_en.trim(), image_alt: (ed.image_alt_bn || ed.image_alt_en).trim(),
         auto_translated_bn: !!ed.auto_translated_bn, auto_translated_en: !!ed.auto_translated_en,
       };
       let res;
@@ -988,7 +1023,9 @@
         const m = res.error.code === "23505" ? "That web address is already used by another article. Change the address below." : (res.error.message || String(res.error));
         saveBar(); return toast(m, "err");
       }
+      const prevF = Object.assign({}, savedF);
       ed.id = res.data.id; ed.status = status; dirty = false; clearTimeout(persistTimer); Object.assign(savedF, pickFields(ed));
+      (tr.failedFields || []).forEach((k) => { savedF[k] = prevF[k]; });   // translation failed for this field: keep it "changed" so the next save tries again
       try { localStorage.removeItem(draftKey); localStorage.removeItem("vosb-draft-new"); } catch (e) {}
       postsLoaded = false;
       if (tr.failed) toast("Saved, but automatic translation was unavailable — the article shows in the language you wrote. Use “Auto-translate” later.", "err");

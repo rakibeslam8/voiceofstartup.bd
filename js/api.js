@@ -12,7 +12,7 @@
   const headers = (extra) => Object.assign({ apikey: S.anonKey, Authorization: "Bearer " + S.anonKey }, extra || {});
   const rest = (path, init) => fetch(base + "/rest/v1/" + path, Object.assign({ headers: headers() }, init || {}));
 
-  const LIST_COLS = "id,slug,category,publish_at,updated_at,featured,views,title_bn,title_en,excerpt_bn,excerpt_en,source,source_url,author,image_url,image_alt,auto_translated_bn,auto_translated_en";
+  const LIST_COLS = "id,slug,category,publish_at,updated_at,featured,views,title_bn,title_en,excerpt_bn,excerpt_en,source,source_url,author,image_url,image_alt,image_alt_bn,image_alt_en,auto_translated_bn,auto_translated_en";
 
   /* DB row -> object the site renders */
   function normalize(r) {
@@ -34,7 +34,7 @@
       sourceUrl: r.source_url || "",
       author: r.author || "VOSB Desk",
       image: r.image_url || "",
-      imageAlt: r.image_alt || "",
+      imageAlt: { bn: r.image_alt_bn || (/[ঀ-৿]/.test(r.image_alt || "") ? r.image_alt : "") || "", en: r.image_alt_en || (r.image_alt && !/[ঀ-৿]/.test(r.image_alt) ? r.image_alt : "") || "" },
       title: { bn: titleBn, en: titleEn },
       excerpt: { bn: exBn || exEn, en: exEn || exBn },
       bodyMd: { bn: bodyBn || bodyEn, en: bodyEn || bodyBn },

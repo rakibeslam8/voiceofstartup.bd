@@ -54,11 +54,12 @@
   }
 
   /* ---- Markdown-aware translation ---- */
+  const FILELIKE = /^(image|img|photo|picture)?[\s_-]*\d*(\.(png|jpe?g|webp|gif))?$|\.(png|jpe?g|webp|gif)$/i;   // same test the page uses to hide "captions" that are only a file name
   function protect(md) {
     const urls = [], imgs = [];
     let s = String(md || "").replace(/\r\n?/g, "\n");
-    // whole-line images -> placeholder line
-    s = s.replace(/^[ \t]*!\[[^\]]*\]\([^)\s]+\)[ \t]*$/gm, (m) => { imgs.push(m.trim()); return `QQIMG${imgs.length}QQ`; });
+    // pictures (own line or inline) -> placeholder; the description (alt/caption) is translated separately, the address is kept
+    s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (m, alt, u) => { imgs.push({ alt, url: u }); return `QQIMG${imgs.length}QQ`; });
     // links: remember URL, keep [text]
     s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, t, u) => { urls.push(u); return `[${t}]`; });
     return { text: s, urls, imgs };
@@ -71,7 +72,7 @@
     s = s.replace(/^(\s*)(#{2,3})(?=\S)/gm, "$1$2 ").replace(/^(\s*)([-*•])(?=[^\s*-])/gm, "$1$2 ").replace(/^(\s*>)(?=\S)/gm, "$1 ");
     let k = 0;
     s = s.replace(/\[([^\]]+)\](?!\()/g, (m, t) => (k < p.urls.length ? `[${t}](${p.urls[k++]})` : m));
-    s = s.replace(/QQ\s*IMG\s*(\d+)\s*QQ/gi, (m, n) => p.imgs[+n - 1] || "");
+    s = s.replace(/QQ\s*IMG\s*(\d+)\s*QQ/gi, (m, n) => { const i = p.imgs[+n - 1]; return i ? `![${(i.alt2 != null ? i.alt2 : i.alt).replace(/[\]\[()]/g, "")}](${i.url})` : ""; });
     return s.replace(/(\S) {2,}/g, "$1 ");
   }
   function chunks(text) {
@@ -88,20 +89,81 @@
     if (cur) out.push(cur);
     return out;
   }
+  const nLinks = (t) => (t.match(/\[[^\]]+\](?!\()/g) || []).length;
+
+  /* a short text (title, summary, picture description) */
+  async function title(t, from, to, opts) {
+    const r = await plain(String(t || "").trim(), from, to, opts);
+    return r.replace(/\s+/g, " ").trim().replace(/^["“]|["”]$/g, "");
+  }
+  /* a list of short texts in one request (falls back to one by one if the lines do not come back 1:1) */
+  async function list(items, from, to, opts) {
+    const idx = [], txt = [];
+    items.forEach((t, i) => { t = String(t || "").replace(/\s+/g, " ").trim(); if (t && !FILELIKE.test(t)) { idx.push(i); txt.push(t); } });
+    const out = items.slice();
+    if (!txt.length) return out;
+    let res;
+    try { const r = (await plain(txt.join("\n"), from, to, opts)).split("\n").map((x) => x.replace(/\s+/g, " ").trim()); if (r.length === txt.length && r.every(Boolean)) res = r; } catch (e) {}
+    if (!res) { res = []; for (const t of txt) res.push(await title(t, from, to, opts)); }
+    idx.forEach((i, k) => (out[i] = res[k].replace(/^["“]|["”]$/g, "")));
+    return out;
+  }
+  /* a paragraph whose links got lost in translation: translate the text between/inside the links on its own, keep every address */
+  async function viaSegments(part, from, to, opts) {
+    const segs = part.split(/(\[[^\]]+\](?!\())/);
+    const out = [];
+    for (const sg of segs) {
+      if (/^\[[^\]]+\]$/.test(sg)) out.push("[" + (await title(sg.slice(1, -1), from, to, opts)) + "]");
+      else if (/\S/.test(sg) && !/^\s*QQIMG\d+QQ\s*$/.test(sg)) { const lead = sg.match(/^\s*/)[0], tail = sg.match(/\s*$/)[0]; out.push(lead + (await plain(sg.trim(), from, to, opts)) + tail); }
+      else out.push(sg);
+    }
+    return out.join("");
+  }
 
   async function markdown(md, from, to, opts) {
     const src = String(md || "");
     if (!src.trim()) return "";
     const p = protect(src);
+    // picture descriptions / captions (these are shown under the pictures)
+    if (p.imgs.length) { const alts = await list(p.imgs.map((i) => i.alt), from, to, opts); p.imgs.forEach((i, k) => (i.alt2 = alts[k])); }
     const parts = chunks(p.text);
     const done = [];
-    for (const part of parts) done.push(/\S/.test(part) && !/^QQIMG\d+QQ$/.test(part.trim()) ? await plain(part, from, to, opts) : part);
+    for (const part of parts) {
+      if (!/\S/.test(part) || /^(\s*QQIMG\d+QQ\s*)+$/.test(part)) { done.push(part); continue; }
+      let t = await plain(part, from, to, opts);
+      if (nLinks(t) !== nLinks(part)) t = await viaSegments(part, from, to, opts);   // keep every link working
+      done.push(t);
+    }
     return restore(done.join("\n\n"), p).trim();
   }
-  async function title(t, from, to, opts) {
-    const r = await plain(String(t || "").trim(), from, to, opts);
-    return r.replace(/\s+/g, " ").trim().replace(/^["“]|["”]$/g, "");
+
+  /* update the other language after an edit: only the changed paragraphs are translated again, every untouched
+     paragraph of the other language stays exactly as it is. Falls back to translating everything when the two
+     versions no longer line up paragraph by paragraph. */
+  const blocks = (t) => String(t || "").replace(/\r\n?/g, "\n").trim().split(/\n{2,}/).map((x) => x.trim()).filter(Boolean);
+  async function sync(oldSrc, newSrc, oldTgt, from, to, opts) {
+    const oS = blocks(oldSrc), nS = blocks(newSrc), oT = blocks(oldTgt);
+    if (!nS.length) return String(oldTgt || "");
+    if (!oS.length || !oT.length || oT.length !== oS.length) return markdown(newSrc, from, to, opts);
+    let pre = 0; while (pre < oS.length && pre < nS.length && oS[pre] === nS[pre]) pre++;
+    let suf = 0; while (suf < oS.length - pre && suf < nS.length - pre && oS[oS.length - 1 - suf] === nS[nS.length - 1 - suf]) suf++;
+    const mid = nS.slice(pre, nS.length - suf);
+    const head = oT.slice(0, pre), tail = suf ? oT.slice(oT.length - suf) : [];
+    const mt = mid.length ? await markdown(mid.join("\n\n"), from, to, opts) : "";
+    return [...head, ...(mt ? [mt] : []), ...tail].join("\n\n");
+  }
+  /* translate only the picture descriptions inside a text (used to repair older articles) */
+  async function altsOnly(md, from, to, opts) {
+    const src = String(md || "");
+    const wrong = (alt) => { alt = alt.trim(); if (!alt || FILELIKE.test(alt)) return false; const bn = /[ঀ-৿]/.test(alt); return to === "en" ? bn : !bn && /[A-Za-z]{3}/.test(alt); };
+    const alts = []; src.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (m, alt) => (alts.push(alt), m));
+    const todo = alts.filter(wrong);
+    if (!todo.length) return { text: src, changed: 0 };
+    const tr = await list(todo, from, to, opts), map = new Map(todo.map((a, i) => [a, tr[i]]));
+    let n = 0;
+    const text = src.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, (m, alt, u) => { const t = map.get(alt); if (t && t !== alt) { n++; return `![${t.replace(/[\]\[()]/g, "")}](${u})`; } return m; });
+    return { text, changed: n };
   }
 
-  return { plain, markdown, title, protect, restore, chunks, engines: { google, myMemory } };
+  return { plain, markdown, title, list, sync, altsOnly, protect, restore, chunks, engines: { google, myMemory } };
 });

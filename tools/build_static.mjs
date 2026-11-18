@@ -142,6 +142,8 @@ function articlePage(r, lang, all) {
   const srcLine = r.source === "VOSB"
     ? T(actualLang, "মূল প্রতিবেদন: Voice of Startup Bangladesh", "Original reporting: Voice of Startup Bangladesh")
     : `${T(actualLang, "তথ্যসূত্র", "Source")}: ${r.source_url ? `<a href="${esc(/^https?:\/\//i.test(String(r.source_url).trim()) ? String(r.source_url).trim() : "#")}" target="_blank" rel="noopener noreferrer nofollow">${esc(r.source)} ↗</a>` : esc(r.source)}`;
+  const legacyAlt = r.image_alt || "", isBn = (t) => /[ঀ-৿]/.test(t);
+  const altL = (actualLang === "bn" ? r.image_alt_bn : r.image_alt_en) || (legacyAlt && (actualLang === "bn") === isBn(legacyAlt) ? legacyAlt : "");   // cover description in the page's own language only
   const auto = actualLang === "en" ? r.auto_translated_en : r.auto_translated_bn;
   const noteHtml = auto ? `<p class="tr-note">🌐 ${actualLang === "bn" ? "এই বাংলা সংস্করণটি স্বয়ংক্রিয়ভাবে অনুবাদ করা হয়েছে।" : "This English version was automatically translated from the original Bangla."}</p>` : "";
   const bodyHtml = `
@@ -149,7 +151,7 @@ function articlePage(r, lang, all) {
       <div class="post-meta"><span class="badge">${c.icon} ${esc(actualLang === "bn" ? c.bn : c.en)}</span><span class="badge verified">✔ ${esc(r.source)}</span></div>
       <h1>${esc(v.title)}</h1>
       <div class="byline"><span>${T(actualLang, "লেখক", "By")} <b>${esc(r.author || "VOSB Desk")}</b></span><span>${esc(dateFmt(r.publish_at, actualLang))}</span><span>${esc(minsOf(v.body, actualLang))}</span></div>
-      ${r.image_url ? `<figure class="cover"><div class="cv"><img class="cv-bg" src="${esc(r.image_url)}" alt="" aria-hidden="true" decoding="async"><img src="${esc(r.image_url)}" alt="${esc(r.image_alt || v.title)}" width="1200" height="675" decoding="async" fetchpriority="high"></div>${r.image_alt ? `<figcaption>${esc(r.image_alt)}</figcaption>` : ""}</figure>` : ""}
+      ${r.image_url ? `<figure class="cover"><div class="cv"><img class="cv-bg" src="${esc(r.image_url)}" alt="" aria-hidden="true" decoding="async"><img src="${esc(r.image_url)}" alt="${esc(altL || v.title)}" width="1200" height="675" decoding="async" fetchpriority="high"></div>${altL ? `<figcaption>${esc(altL)}</figcaption>` : ""}</figure>` : ""}
       <div class="prose">${MD.render(v.body)}</div>
       ${noteHtml}
       <div class="src">${srcLine}</div>
@@ -159,7 +161,7 @@ function articlePage(r, lang, all) {
   const embed = JSON.stringify({
     id: r.id, slug: r.slug, category: r.category, publish_at: r.publish_at, updated_at: r.updated_at, featured: r.featured,
     title_bn: r.title_bn, title_en: r.title_en, excerpt_bn: r.excerpt_bn, excerpt_en: r.excerpt_en, body_bn: r.body_bn, body_en: r.body_en,
-    source: r.source, source_url: r.source_url, author: r.author, image_url: r.image_url, image_alt: r.image_alt,
+    source: r.source, source_url: r.source_url, author: r.author, image_url: r.image_url, image_alt: r.image_alt, image_alt_bn: r.image_alt_bn, image_alt_en: r.image_alt_en,
     views: r.views, shares: r.shares, auto_translated_bn: r.auto_translated_bn, auto_translated_en: r.auto_translated_en,
   }).replace(/</g, "\\u003c");
   return `<!doctype html>
@@ -194,7 +196,7 @@ function articlePage(r, lang, all) {
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="alternate" type="application/rss+xml" title="Voice of Startup Bangladesh" href="/feed.xml">
-  <script src="/js/splash.js?v=20261118b"></script>
+  <script src="/js/splash.js?v=20261118c"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@600;700;800&family=Noto+Serif+Bengali:wght@600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">

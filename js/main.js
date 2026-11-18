@@ -15,6 +15,7 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const pick = (o) => (o && typeof o === "object" ? o[lang] || o.bn : o);
+  const altOf = (p) => (p && p.imageAlt && typeof p.imageAlt === "object" ? p.imageAlt[lang] || "" : "");   // cover description in the reader's language only
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   // links coming from the database may only be http(s), mailto or site-relative (blocks javascript:/data: links)
   const safeHref = (u) => { u = String(u == null ? "" : u).trim(); return /^(https?:\/\/|mailto:|\/(?!\/))/i.test(u) ? u : "#"; };
@@ -347,7 +348,7 @@
 
   const readUrl = (p) => `/read/${p.slug}`;
   const thumb = (p, c) => p.image
-    ? `<div class="post-thumb has-img"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" loading="lazy" decoding="async" width="640" height="360"></div>`
+    ? `<div class="post-thumb has-img"><img src="${esc(p.image)}" alt="${esc(altOf(p) || pick(p.title))}" loading="lazy" decoding="async" width="640" height="360"></div>`
     : `<div class="post-thumb ${esc(p.cat)}" aria-hidden="true">${ci(c)}</div>`;
 
   function postCard(p) {
@@ -365,7 +366,7 @@
   function featuredCard(p, label) {
     const c = catOf(p.cat) || C.categories[0];
     return `<a class="featured-card" href="${readUrl(p)}">
-      ${p.image ? `<div class="fc-img"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" decoding="async" width="800" height="450"></div>` : `<div class="fc-img ${esc(p.cat)}" aria-hidden="true"><span>${c.icon}</span></div>`}
+      ${p.image ? `<div class="fc-img"><img src="${esc(p.image)}" alt="${esc(altOf(p) || pick(p.title))}" decoding="async" width="800" height="450"></div>` : `<div class="fc-img ${esc(p.cat)}" aria-hidden="true"><span>${c.icon}</span></div>`}
       <div class="fc-body">
         <div class="post-meta"><span class="badge top">★ ${label || T("প্রধান খবর", "Top story")}</span><span class="badge">${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
         <h3>${esc(pick(p.title))}</h3>
@@ -436,7 +437,7 @@
     const feed = rest.slice(4, 12);
     return { hero, feed, seen: new Set(hero.concat(feed).map((p) => p.slug)) };
   };
-  const coverImg = (p, eager) => `<img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
+  const coverImg = (p, eager) => `<img src="${esc(p.image)}" alt="${esc(altOf(p) || pick(p.title))}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
   const coverBox = (p, cls) => {
     const c = catOf(p.cat) || C.categories[0];
     return `<div class="${cls} ${p.image ? "has-img" : esc(p.cat)}" aria-hidden="${p.image ? "false" : "true"}">${p.image ? "" : `<span class="tile-ic">${ci(c)}</span>`}</div>`;
@@ -859,7 +860,7 @@
       <div class="post-meta"><span class="badge">${ci(c)} ${esc(pick(c))}</span><span class="badge verified">✔ ${esc(p.source)}</span></div>
       <h1>${esc(pick(p.title))}</h1>
       <div class="byline"><span>${T("লেখক", "By")} <b>${esc(p.author)}</b></span><span>${formatDateTime(p.date)}</span><span>${T(`${minsTxt} মিনিটে পড়া`, `${minsTxt} min read`)}</span><span class="fs-ctl" role="group" aria-label="${T("লেখার আকার", "Text size")}"><button type="button" data-act="fs-" aria-label="${T("লেখা ছোট করুন", "Smaller text")}">A−</button><button type="button" data-act="fs+" aria-label="${T("লেখা বড় করুন", "Larger text")}">A+</button></span></div>
-      ${p.image ? `<figure class="cover"><div class="cv"><img class="cv-bg" src="${esc(p.image)}" alt="" aria-hidden="true" decoding="async"><img src="${esc(p.image)}" alt="${esc(p.imageAlt || pick(p.title))}" width="1200" height="675" decoding="async" fetchpriority="high"></div>${p.imageAlt ? `<figcaption>${esc(p.imageAlt)}</figcaption>` : ""}</figure>` : ""}
+      ${p.image ? `<figure class="cover"><div class="cv"><img class="cv-bg" src="${esc(p.image)}" alt="" aria-hidden="true" decoding="async"><img src="${esc(p.image)}" alt="${esc(altOf(p) || pick(p.title))}" width="1200" height="675" decoding="async" fetchpriority="high"></div>${altOf(p) ? `<figcaption>${esc(altOf(p))}</figcaption>` : ""}</figure>` : ""}
       <div class="prose">${withArticleAds(MD.render(bodyMd))}</div>
       ${(lang === "bn" ? p.autoBn : p.autoEn) ? `<p class="tr-note">🌐 ${T("এই বাংলা সংস্করণটি স্বয়ংক্রিয়ভাবে অনুবাদ করা হয়েছে। কোনো ভুল চোখে পড়লে editor@voiceofstartup.bd-এ জানান।", "This English version was automatically translated from the original Bangla. If you spot a mistake, tell editor@voiceofstartup.bd.")}</p>` : ""}
       <div class="src">${src}</div>
@@ -1200,11 +1201,11 @@
   window.VOSB_UI = { get lang() { return lang; }, T, esc, pick, safeHref, bnDigits, formatDate, formatDateTime, money, $, $$, onRender(fn) { renderers.push(fn); }, refresh };
   (function loadAuth() {
     const s = document.createElement("script");
-    s.src = "/js/auth.js?v=20261118b";
+    s.src = "/js/auth.js?v=20261118c";
     s.onload = () => {
       try { window.VOSB_AUTH && window.VOSB_AUTH.paint(); } catch (e) {}
       if (document.getElementById("article") || /^\/(en\/)?read\//.test(location.pathname)) {   // article pages: likes + comments
-        const t = document.createElement("script"); t.src = "/js/social.js?v=20261118b"; document.head.appendChild(t);
+        const t = document.createElement("script"); t.src = "/js/social.js?v=20261118c"; document.head.appendChild(t);
       }
     };
     document.head.appendChild(s);
