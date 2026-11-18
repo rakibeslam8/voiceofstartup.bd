@@ -638,7 +638,7 @@
   "vosb_valuation": null,
   "valuation_date": "2026-09-02",
   "valuation_note": "The group as a whole is private and has no published valuation. For reference, its listed flagship Square Pharmaceuticals had a market capitalisation of about ৳192.36 billion on 2 September 2026 (StockAnalysis).",
-  "ticker": "DSE: SQURPHARMA (Square Pharmaceuticals)",
+  "ticker": "SQURPHARMA (DSE)",
   "team": [
    {
     "name": "Samson H. Chowdhury",
@@ -826,7 +826,7 @@
   "vosb_valuation": 15830000000,
   "valuation_date": "2026-09-15",
   "valuation_note": "Stock-market capitalisation as listed on the Dhaka Stock Exchange (15 September 2026, StockAnalysis). It changes daily and is not a VOSB assessment.",
-  "ticker": "DSE / CSE: ACI",
+  "ticker": "ACI (DSE/CSE)",
   "team": [],
   "sources": [
    {
@@ -866,7 +866,7 @@
   "vosb_valuation": null,
   "valuation_date": "2026-08-25",
   "valuation_note": "The group is not a single listed company, so no group valuation is shown. Its listed arm Walton Hi-Tech Industries had a market capitalisation of about ৳127.96 billion on 25 August 2026 (StockAnalysis).",
-  "ticker": "DSE / CSE: WALTONHIL (Walton Hi-Tech)",
+  "ticker": "WALTONHIL (DSE/CSE)",
   "team": [
    {
     "name": "S.M. Nazrul Islam",
@@ -916,7 +916,7 @@
   "vosb_valuation": 334200000000,
   "valuation_date": "2026-08-20",
   "valuation_note": "Stock-market capitalisation as listed on the Dhaka Stock Exchange (20 August 2026, StockAnalysis). It changes daily and is not a VOSB assessment.",
-  "ticker": "DSE / CSE: GP",
+  "ticker": "GP (DSE/CSE)",
   "team": [],
   "sources": [
    {
