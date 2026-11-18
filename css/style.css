@@ -2163,16 +2163,17 @@ html.has-user .header-actions > .theme-toggle, html.has-user .header-actions > .
 .au-av-link { display: inline-flex; border-radius: 50%; }
 .au-av-link img.au-av { display: block; }
 
-/* ===== Bangla article text: the reference sample is Apple's system Bangla font (Bangla Sangam MN) — thin/thick stroke contrast, tapered terminals.
-   It cannot be embedded, so it is listed FIRST: iPhone/iPad/Mac show exactly the sample; other devices use Hind Siliguri (closest web font, same line widths).
-   Native digits are kept (the digit patch font comes after the system font). Only the body text inside the article — titles keep their own fonts. ===== */
+/* ===== Bangla article text: light Hind Siliguri (owner's reference: thin, even strokes, narrow letters, native Bangla digits).
+   Self-hosted (weight 300) so every device shows the same. Only the body text inside the article — titles and other pages keep their fonts. ===== */
+@font-face { font-family: "VOSB Light"; font-weight: 300; font-style: normal; font-display: swap; src: url("/assets/fonts/hind-bn-300.woff2") format("woff2"); unicode-range: U+0951-0952,U+0964-0965,U+0980-09FE,U+200C-200D,U+20B9,U+25CC; }
+@font-face { font-family: "VOSB Light"; font-weight: 300; font-style: normal; font-display: swap; src: url("/assets/fonts/hind-latin-300.woff2") format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212; }
 html[lang="bn"] .prose, html[lang="bn"] .prose p, html[lang="bn"] .prose li, html[lang="bn"] .prose blockquote, html[lang="bn"] .prose td, html[lang="bn"] .prose th {
-  font-family: "Inter", "Bangla Sangam MN", "Bangla MN", "VOSB Digits", "Hind Siliguri", system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-weight: 400; letter-spacing: 0; word-spacing: 0; font-feature-settings: normal; font-kerning: normal; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;
+  font-family: "VOSB Light", "Hind Siliguri", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 300; letter-spacing: 0; word-spacing: 0; font-feature-settings: normal; font-kerning: normal; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;
 }
 html[lang="bn"] .prose p, html[lang="bn"] .prose li, html[lang="bn"] .prose blockquote { font-size: 1.2rem; line-height: 1.95; color: #1d1a16; }
 html[lang="bn"] .prose p { margin-top: .85em; }
-html[lang="bn"] .prose strong, html[lang="bn"] .prose b { font-weight: 700; }
+html[lang="bn"] .prose strong, html[lang="bn"] .prose b { font-family: "Hind Siliguri", "VOSB Light", sans-serif; font-weight: 600; }
 html[data-theme="dark"][lang="bn"] .prose p, html[data-theme="dark"][lang="bn"] .prose li, html[data-theme="dark"][lang="bn"] .prose blockquote { color: #e4e4e4; }
 @media (max-width: 760px) { html[lang="bn"] .prose p, html[lang="bn"] .prose li, html[lang="bn"] .prose blockquote { font-size: 1.12rem; line-height: 1.9; } }
 
