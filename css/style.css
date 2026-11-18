@@ -2175,7 +2175,8 @@ html[lang="bn"] .prose p, html[lang="bn"] .prose li, html[lang="bn"] .prose bloc
 html[lang="bn"] .prose p { margin-top: .85em; }
 html[lang="bn"] .prose strong, html[lang="bn"] .prose b { font-family: "Hind Siliguri", "VOSB Light", sans-serif; font-weight: 600; }
 html[data-theme="dark"][lang="bn"] .prose p, html[data-theme="dark"][lang="bn"] .prose li, html[data-theme="dark"][lang="bn"] .prose blockquote { color: #e4e4e4; }
-@media (max-width: 760px) { html[lang="bn"] .prose p, html[lang="bn"] .prose li, html[lang="bn"] .prose blockquote { font-size: 1.12rem; line-height: 1.9; } }
+/* phone = same size, weight and spacing as desktop (the owner likes the desktop look); iOS must not re-scale the text */
+html[lang="bn"] .prose { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 /* ===== phone: compact footer (the bottom bar + Settings page already carry the navigation) ===== */
 @media (max-width: 760px) {
