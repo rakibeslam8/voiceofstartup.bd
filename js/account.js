@@ -6,6 +6,17 @@
   const U = () => window.VOSB_UI;
   const A = () => window.VOSB_AUTH;
   const T = (bn, en) => U().T(bn, en);
+  /* division / district names: saved in English, shown in Bangla when the site is in Bangla */
+  const PL = { "Dhaka": "ঢাকা", "Chattogram": "চট্টগ্রাম", "Rajshahi": "রাজশাহী", "Khulna": "খুলনা", "Barishal": "বরিশাল", "Sylhet": "সিলেট", "Rangpur": "রংপুর", "Mymensingh": "ময়মনসিংহ",
+    "Gazipur": "গাজীপুর", "Narayanganj": "নারায়ণগঞ্জ", "Narsingdi": "নরসিংদী", "Manikganj": "মানিকগঞ্জ", "Munshiganj": "মুন্সিগঞ্জ", "Tangail": "টাঙ্গাইল", "Kishoreganj": "কিশোরগঞ্জ", "Faridpur": "ফরিদপুর", "Gopalganj": "গোপালগঞ্জ", "Madaripur": "মাদারীপুর", "Rajbari": "রাজবাড়ী", "Shariatpur": "শরীয়তপুর",
+    "Cox's Bazar": "কক্সবাজার", "Cumilla": "কুমিল্লা", "Brahmanbaria": "ব্রাহ্মণবাড়িয়া", "Chandpur": "চাঁদপুর", "Feni": "ফেনী", "Lakshmipur": "লক্ষ্মীপুর", "Noakhali": "নোয়াখালী", "Khagrachhari": "খাগড়াছড়ি", "Rangamati": "রাঙ্গামাটি", "Bandarban": "বান্দরবান",
+    "Bogura": "বগুড়া", "Pabna": "পাবনা", "Sirajganj": "সিরাজগঞ্জ", "Natore": "নাটোর", "Naogaon": "নওগাঁ", "Chapainawabganj": "চাঁপাইনবাবগঞ্জ", "Joypurhat": "জয়পুরহাট",
+    "Jashore": "যশোর", "Satkhira": "সাতক্ষীরা", "Bagerhat": "বাগেরহাট", "Kushtia": "কুষ্টিয়া", "Chuadanga": "চুয়াডাঙ্গা", "Jhenaidah": "ঝিনাইদহ", "Magura": "মাগুরা", "Meherpur": "মেহেরপুর", "Narail": "নড়াইল",
+    "Bhola": "ভোলা", "Patuakhali": "পটুয়াখালী", "Pirojpur": "পিরোজপুর", "Barguna": "বরগুনা", "Jhalokati": "ঝালকাঠি",
+    "Moulvibazar": "মৌলভীবাজার", "Habiganj": "হবিগঞ্জ", "Sunamganj": "সুনামগঞ্জ",
+    "Dinajpur": "দিনাজপুর", "Kurigram": "কুড়িগ্রাম", "Gaibandha": "গাইবান্ধা", "Lalmonirhat": "লালমনিরহাট", "Nilphamari": "নীলফামারী", "Panchagarh": "পঞ্চগড়", "Thakurgaon": "ঠাকুরগাঁও",
+    "Jamalpur": "জামালপুর", "Netrokona": "নেত্রকোণা", "Sherpur": "শেরপুর" };
+  const plName = (n) => T(PL[n] || n, n);
   const esc = (s) => U().esc(s == null ? "" : s);
   const CFG = () => (window.VOSB || {}).companies || {};
   const $ = (s, r) => (r || document).querySelector(s);
@@ -187,8 +198,8 @@
           <div class="ac-fld ac-span"><label for="p-head">${T("পরিচিতি (এক লাইন)", "Headline")}</label><input id="p-head" name="headline" maxlength="120" placeholder="${T("যেমন: ফাউন্ডার, ABC টেক", "e.g. Founder at ABC Tech")}" value="${esc(p.headline || "")}"></div>
           <div class="ac-fld ac-span"><label for="p-bio">${T("আপনার সম্পর্কে", "About you")}</label><textarea id="p-bio" name="bio" rows="3" maxlength="600">${esc(p.bio || "")}</textarea><small class="ac-cnt" data-cnt="bio">${(p.bio || "").length}/600</small></div>
           <div class="ac-fld"><label for="p-org">${T("প্রতিষ্ঠান / কোম্পানি", "Organization")}</label><input id="p-org" name="organization" maxlength="120" autocomplete="organization" value="${esc(p.organization || "")}"></div>
-          <div class="ac-fld"><label for="p-div">${T("বিভাগ", "Division")}</label><select id="p-div" name="division"><option value="">${T("বেছে নিন", "Choose")}</option>${Object.keys(CFG().divisions || {}).map((d) => `<option value="${esc(d)}"${p.division === d ? " selected" : ""}>${esc(d)}</option>`).join("")}</select></div>
-          <div class="ac-fld"><label for="p-dist">${T("জেলা", "District")}</label><select id="p-dist" name="district"><option value="">${T("বেছে নিন", "Choose")}</option>${((CFG().divisions || {})[p.division] || []).map((d) => `<option value="${esc(d)}"${p.district === d ? " selected" : ""}>${esc(d)}</option>`).join("")}</select></div>
+          <div class="ac-fld"><label for="p-div">${T("বিভাগ", "Division")}</label><select id="p-div" name="division"><option value="">${T("বেছে নিন", "Choose")}</option>${Object.keys(CFG().divisions || {}).map((d) => `<option value="${esc(d)}"${p.division === d ? " selected" : ""}>${esc(plName(d))}</option>`).join("")}</select></div>
+          <div class="ac-fld"><label for="p-dist">${T("জেলা", "District")}</label><select id="p-dist" name="district">${distOpts(p.division, p.district)}</select></div>
           <div class="ac-fld"><label for="p-hf">${T("আমাদের খোঁজ কীভাবে পেয়েছেন", "How you found us")}</label><select id="p-hf" name="heard_from"><option value="">${T("বেছে নিন", "Choose")}</option>${[["google","Google","Google"],["facebook","ফেসবুক","Facebook"],["linkedin","লিংকডইন","LinkedIn"],["youtube","ইউটিউব","YouTube"],["x","এক্স (টুইটার)","X (Twitter)"],["instagram","ইনস্টাগ্রাম","Instagram"],["whatsapp","হোয়াটসঅ্যাপ","WhatsApp"],["friend","বন্ধু/পরিচিতজন","Friend / colleague"],["news","সংবাদ/আর্টিকেল","News / article"],["event","ইভেন্ট","Event"],["other","অন্যান্য","Other"]].map((h) => `<option value="${h[0]}"${p.heard_from === h[0] ? " selected" : ""}>${T(h[1], h[2])}</option>`).join("")}</select></div>
           <fieldset class="ac-fld ac-span ac-chips"><legend>${T("আগ্রহের বিষয়", "Topics you follow")}</legend>${((window.VOSB || {}).categories || []).map((c) => `<label class="ac-chip"><input type="checkbox" name="interests" value="${esc(c.id)}"${(p.interests || []).includes(c.id) ? " checked" : ""}><span>${T(c.bn, c.en)}</span></label>`).join("")}</fieldset>
           <div class="ac-fld"><label for="p-imin">${T("বিনিয়োগের সর্বনিম্ন (৳)", "Investment range — minimum (৳)")}</label><input id="p-imin" name="invest_min" inputmode="numeric" maxlength="14" placeholder="${T("ঐচ্ছিক", "Optional")}" value="${p.invest_min == null ? "" : esc(p.invest_min)}"></div>
@@ -198,6 +209,13 @@
         </div>
         <div class="ac-msg" role="alert" aria-live="polite"></div>
         <div class="ac-acts"><button class="btn btn-orange" type="submit">${T("পরিবর্তন সংরক্ষণ", "Save changes")}</button></div></form>`;
+    }
+    /* district list: the chosen division's districts, or every district grouped by division when no division is chosen yet */
+    function distOpts(div, cur) {
+      const D = CFG().divisions || {}, o = (d) => `<option value="${esc(d)}"${cur === d ? " selected" : ""}>${esc(plName(d))}</option>`;
+      const first = `<option value="">${T("বেছে নিন", "Choose")}</option>`;
+      if (D[div]) return first + D[div].map(o).join("") + (cur && !D[div].includes(cur) ? o(cur) : "");
+      return first + Object.keys(D).map((k) => `<optgroup label="${esc(plName(k))}">${D[k].map(o).join("")}</optgroup>`).join("");
     }
     async function saveProfile(form) {
       const f = new FormData(form), msg = $(".ac-msg", form), btn = $("button[type=submit]", form);
@@ -510,6 +528,12 @@
     });
     root.addEventListener("change", (e) => {
       const tg = e.target.closest("[data-invtog]"); if (tg) { setOpen(tg.dataset.invtog, tg.checked, tg); return; }
+      if (e.target.id === "p-div" || e.target.id === "p-dist") {
+        const dv = $("#p-div", root), ds = $("#p-dist", root), D = CFG().divisions || {};
+        if (e.target.id === "p-div") { const keep = D[dv.value] && D[dv.value].includes(ds.value) ? ds.value : ""; ds.innerHTML = distOpts(dv.value, keep); }
+        else if (ds.value && !dv.value) { const k = Object.keys(D).find((x) => D[x].includes(ds.value)); if (k) { dv.value = k; ds.innerHTML = distOpts(k, ds.value); } }
+        return;
+      }
       const up = e.target.closest("[data-avup]"); if (up) { const f = up.files && up.files[0]; up.value = ""; if (f) uploadAvatar(f); }
     });
     root.addEventListener("submit", (e) => {
