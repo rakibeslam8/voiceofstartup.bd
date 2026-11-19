@@ -154,26 +154,4 @@
       <news:title>The biggest fair of local products started on November 22, with products from 400 entrepreneurs</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/two-day-exhibition-of-women-entrepreneurs-in-gulshan-is-over</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-17T00:39:00.000Z</news:publication_date>
-      <news:title>গুলশানে নারী উদ্যোক্তাদের দুই দিনের প্রদর্শনী শেষ</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/two-day-exhibition-of-women-entrepreneurs-in-gulshan-is-over</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-17T00:39:00.000Z</news:publication_date>
-      <news:title>Two-day exhibition of women entrepreneurs in Gulshan is over</news:title>
-    </news:news>
-  </url>
 </urlset>
