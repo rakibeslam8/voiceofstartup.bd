@@ -777,3 +777,16 @@ html[data-theme="dark"] .pill.pr-cancelled, html[data-theme="dark"] .pill.pr-non
 .inst-warn { background: #fff3e6; border: 1px solid #ffc999; border-radius: 12px; padding: 10px 12px; font-size: .9rem; line-height: 1.45; margin: 8px 0 4px; }
 
 .tile .t-sub { display: block; font-style: normal; font-size: .8rem; font-weight: 600; color: var(--muted, #6b6b6b); margin-top: 4px; }
+
+/* alerts bell + inbox */
+.bell-btn { position: relative; flex: none; display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ffffff2e; color: #fff; text-decoration: none; }
+.bell-btn:hover { background: #ffffff1a; }
+.bell-btn .ic { width: 20px; height: 20px; }
+.bell-btn.has .ic { animation: bell-ring 3.2s ease-in-out infinite; transform-origin: 50% 10%; }
+.bell-btn i { position: absolute; top: -4px; right: -4px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; background: #e5352b; color: #fff; font: 800 .7rem/19px var(--font-body, inherit); font-style: normal; text-align: center; box-shadow: 0 0 0 2px #1b1b1b; }
+.bell-btn i[hidden] { display: none; }
+@keyframes bell-ring { 0%, 70%, 100% { transform: rotate(0); } 75% { transform: rotate(14deg); } 80% { transform: rotate(-12deg); } 85% { transform: rotate(8deg); } 90% { transform: rotate(-4deg); } }
+.al-row { text-decoration: none; color: inherit; position: relative; }
+.al-new { background: #fff3e6; }
+.al-dot { flex: none; width: 10px; height: 10px; border-radius: 50%; background: #ff7522; align-self: center; margin-right: 6px; }
+@media (prefers-reduced-motion: reduce) { .bell-btn.has .ic { animation: none; } }

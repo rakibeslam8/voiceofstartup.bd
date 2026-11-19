@@ -7,13 +7,38 @@ window.VOSB_ADMIN_PUSH = function (X) {
   const errMsg = (e) => String((e && (e.message || e.details)) || e || "Something went wrong");
   const must = (res) => { if (res && res.error) throw new Error(errMsg(res.error)); return res ? res.data : null; };
   const busy = async (b, fn) => { if (b) b.disabled = true; try { await fn(); } catch (e) { toast(errMsg(e), "err"); } finally { if (b && b.isConnected) b.disabled = false; } };
-  const handles = (h) => h === "push";
+  const handles = (h) => h === "push" || h === "alerts";
   const LINKS = [["/", "Home page"], ["/news", "News"], ["/funding", "Funding"], ["/founder-stories", "Founder stories"], ["/companies", "Company directory"], ["/opportunities", "Opportunities"]];
   const ACAT = [["orders", "🧾", "PR orders, quotes and PR payments"], ["payments", "💳", "Company listing payments"], ["companies", "🏢", "Company applications, removal and valuation requests"], ["investors", "📈", "Investor interest and investments"], ["members", "👤", "New members and deleted accounts"], ["subscribers", "✉️", "New newsletter subscribers"], ["feedback", "💬", "Reviews and comments (companies and articles)"], ["installs", "📲", "Public app installs"]];
   const KIND = { admin: ["🛎️", "Admin alert"], article: ["📰", "New article"], announce: ["📣", "Announcement"], user: ["👤", "Member update"], test: ["🧪", "Test"] };
   const ST = { pending: "Waiting", sending: "Sending…", sent: "Sent", failed: "Failed" };
 
+  /* ---------------- Alerts inbox: everything that happened (the same events that are pushed to the phone) ---------------- */
+  const AL = { pr_order: ["🧾", "#/pr"], pr_payment: ["💳", "#/pr"], payment_submitted: ["💳", "#/payments"], application_submitted: ["🏢", "#/companies"], delete_request: ["🗑️", "#/companies"], valuation_request: ["📊", "#/valuations"],
+    investor_interest: ["📈", "#/interests"], investment_proposed: ["🤝", "#/deals"], investment_confirmed: ["🤝", "#/deals"], new_member: ["👤", "#/users"], account_deleted: ["👋", "#/deletions"],
+    new_subscriber: ["✉️", "#/subscribers"], new_review: ["⭐", "#/reviews"], new_comment: ["💬", "#/reviews"], post_comment: ["💬", "#/posts"], app_installed: ["📲", "#/dashboard"] };
+  const ago = (iso) => { const m = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000)); return m < 1 ? "just now" : m < 60 ? m + " min ago" : m < 1440 ? Math.round(m / 60) + " h ago" : m < 10080 ? Math.round(m / 1440) + " d ago" : fmtDT(iso); };
+  async function renderAlerts(view) {
+    const st = view._st || (view._st = { unread: false });
+    view.innerHTML = `<div class="page-h"><h1>Alerts</h1><a class="b b-line" href="#/push">🔔 Push settings</a></div><div class="card"><p class="muted">Loading…</p></div>`;
+    let items;
+    try { const r = must(await sb.rpc("my_notifications", { p_limit: 100 })); items = (r && r.items || []).filter((x) => x.for_admin); } catch (e) { view.innerHTML = `<div class="page-h"><h1>Alerts</h1></div><div class="card"><div class="msg err">${esc(errMsg(e))}</div></div>`; return; }
+    if (!view.isConnected) return;
+    const unread = items.filter((x) => !x.read_at).length;
+    const l = st.unread ? items.filter((x) => !x.read_at) : items;
+    view.innerHTML = `<div class="page-h"><h1>Alerts${unread ? ` <span class="pill pr-pending" style="vertical-align:middle">${unread} new</span>` : ""}</h1><a class="b b-line" href="#/push">🔔 Push settings</a></div>
+      <div class="card"><div class="sc-gh"><label class="chk" style="margin:0"><input type="checkbox" id="al-u"${st.unread ? " checked" : ""}> Unread only</label><button type="button" class="b b-line b-sm" data-a="all"${unread ? "" : " disabled"}>Mark all as read</button></div>
+        <div class="rows">${l.length ? l.map((x) => { const k = AL[x.kind] || ["🔔", "#/dashboard"]; return `<a class="row pr-row al-row${x.read_at ? "" : " al-new"}" href="${k[1]}" data-a="open" data-id="${esc(x.id)}"><div class="th co-logo">${k[0]}</div><div class="ti"><h3>${esc(x.title_en || x.title_bn || x.kind)}</h3><div class="meta">${x.body_en ? `<span>${esc(x.body_en)}</span>` : ""}<span>${esc(ago(x.created_at))}</span></div></div>${x.read_at ? "" : `<i class="al-dot" aria-label="Unread"></i>`}</a>`; }).join("")
+          : `<div class="empty"><b>${st.unread ? "No unread alerts" : "No alerts yet"}</b>New orders, payments, applications, sign-ups and comments will appear here.</div>`}</div>
+        ${items.length >= 100 ? `<p class="muted" style="margin:10px 0 0">Showing the latest 100.</p>` : ""}</div>`;
+    const done = () => { if (window.VOSB_ADMIN_ALERTS_REFRESH) window.VOSB_ADMIN_ALERTS_REFRESH(); };
+    $("#al-u", view).addEventListener("change", (e) => { st.unread = e.target.checked; renderAlerts(view); });
+    view._h = view._h || {};
+    view._h.all = (b) => busy(b, async () => { must(await sb.rpc("mark_notifications_read", { p_ids: null })); done(); await renderAlerts(view); });
+    view._h.open = (b) => { const id = b.dataset.id; if (b.classList.contains("al-new")) sb.rpc("mark_notifications_read", { p_ids: [id] }).then(done, () => {}); window.location.hash = b.getAttribute("href"); };
+  }
   async function render(h, view) {
+    if (h === "alerts") { if (!view._hb) { view._hb = true; view._h = {}; view.addEventListener("click", (e) => { const b = e.target.closest("[data-a]"); if (b && view._h && view._h[b.dataset.a]) { e.preventDefault(); view._h[b.dataset.a](b, e); } }); } return renderAlerts(view); }
     if (!view._hb) {
       view._hb = true;
       view.addEventListener("click", (e) => { const b = e.target.closest("[data-a]"); if (b && view._h && view._h[b.dataset.a]) { e.preventDefault(); view._h[b.dataset.a](b, e); } });

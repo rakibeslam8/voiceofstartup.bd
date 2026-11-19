@@ -241,6 +241,7 @@
     users: '<circle cx="12" cy="8" r="3.600"/><path d="M4.500 20.500c.7-4 3.700-6 7.500-6s6.800 2 7.500 6"/>',
     out: '<path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8l4 4-4 4M19 12H9"/>',
     dl: '<path d="M12 4v10m0 0 4-4m-4 4-4-4"/><path d="M5 19h14"/>',
+    bell: '<path d="M6 9a6 6 0 0 1 12 0c0 6 2.500 7.500 2.500 7.500h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
     site: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/>',
   };
   const svg = (k, cls) => `<svg class="ic ${cls || ""}" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg>`;
@@ -321,11 +322,23 @@
       bar.innerHTML = `<span>✨ <b>A new version of the admin is ready.</b> Save what you are doing, then update.</span><button type="button" class="b b-orange b-sm" data-upd-go>Update now</button>`; bar.hidden = false;
     } catch (e) { /* offline: try again later */ }
   }
-  let updTimer = 0;
+  /* the bell: unread admin alerts (new orders, payments, applications, sign-ups, comments …) */
+  async function refreshAlerts() {
+    try {
+      const r = await sb.rpc("my_notifications", { p_limit: 100 }); if (r.error || !r.data) return;
+      const n = (r.data.items || []).filter((x) => x.for_admin && !x.read_at).length, b = $("#alertBadge");
+      if (b) { b.hidden = !n; b.textContent = n > 99 ? "99+" : String(n); }
+      try { const bell = $("#alertBell"); if (bell) bell.classList.toggle("has", !!n); } catch (e) {}
+      try { if (n && navigator.setAppBadge) navigator.setAppBadge(n); else if (!n && navigator.clearAppBadge) navigator.clearAppBadge(); } catch (e) {}   // number on the installed app's icon
+    } catch (e) { /* offline */ }
+  }
+  window.VOSB_ADMIN_ALERTS_REFRESH = refreshAlerts;
+  let updTimer = 0, alTimer = 0;
   function startAdminApp() {
     try { if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {}); } catch (e) {}
     const P = window.VOSB_PUSH; if (P) { try { P.setRpc((n, a) => sb.rpc(n, a)); P.sync(true); } catch (e) {} }   // links this device to the admin account
     paintInstall(); paintAlertBar();
+    refreshAlerts(); if (!alTimer) { alTimer = setInterval(refreshAlerts, 60000); document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && session) refreshAlerts(); }); }
     if (!updTimer) {
       updTimer = setInterval(checkUpdate, 10 * 60000); setTimeout(checkUpdate, 20000);
       document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && session) checkUpdate(); });
@@ -341,6 +354,7 @@
         <span class="tag">Admin</span>
         <nav class="tabs" id="tabs" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}" title="${n.t}">${svg(n.r)}<span class="lbl">${n.t}</span>${n.badge ? '<i class="nbadge" data-badge="${n.r}" hidden></i>' : ""}</a>`).join("")}</nav>
         <span class="sp"></span>
+        <a class="bell-btn" href="#/alerts" id="alertBell" title="Admin alerts" aria-label="Admin alerts">${svg("bell")}<i id="alertBadge" hidden></i></a>
         <button type="button" class="inst-btn" data-install hidden title="Install the admin as an app">${svg("dl", "sm")}<span>Install app</span></button>
         <a class="site-link" href="/" target="_blank" rel="noopener" title="Open the public website">${svg("site", "sm")}<span>View site</span></a>
         <div class="acct" id="acct">
