@@ -42,12 +42,12 @@ window.VOSB_ADMIN_PR = function (X) {
     });
   }
   /* a generic dialog: body html + a function that reads the fields and saves; resolves true when saved */
-  function dialog({ title, html, ok = "Save", wide = false, onSave, onOpen }) {
+  function dialog({ title, html, ok = "Save", wide = false, cls = "", onSave, onOpen }) {
     return new Promise((resolve) => {
       const bg = document.createElement("div");
       bg.className = "modal-bg";
-      bg.innerHTML = `<form class="modal pr-modal${wide ? " wide" : ""}" role="dialog" aria-modal="true" aria-label="${esc(title)}" novalidate><h2>${esc(title)}</h2><div class="pr-mbody">${html}</div>
-        <div class="msg err" hidden style="margin:10px 0 0"></div>
+      bg.innerHTML = `<form class="modal pr-modal${wide ? " wide" : ""}${cls ? " " + cls : ""}" role="dialog" aria-modal="true" aria-label="${esc(title)}" novalidate><div class="pr-mh"><h2>${esc(title)}</h2><button type="button" class="pr-mx" data-x="0" aria-label="Close">✕</button></div><div class="pr-mbody">${html}</div>
+        <div class="msg err" hidden></div>
         <div class="acts"><button type="button" class="b b-line" data-x="0">Cancel</button><button type="submit" class="b b-orange">${esc(ok)}</button></div></form>`;
       const done = (v) => { bg.remove(); document.removeEventListener("keydown", key); resolve(v); };
       const key = (e) => { if (e.key === "Escape") done(false); };
@@ -61,7 +61,7 @@ window.VOSB_ADMIN_PR = function (X) {
       document.addEventListener("keydown", key);
       document.body.appendChild(bg);
       if (onOpen) onOpen(bg);
-      const first = bg.querySelector("input:not([type=hidden]):not([disabled]),select,textarea"); if (first) first.focus();
+      const first = cls === "mo" ? null : bg.querySelector("input:not([type=hidden]):not([disabled]),select,textarea"); if (first) first.focus();
     });
   }
   const val = (bg, id) => { const el = bg.querySelector("#" + id); return el ? (el.type === "checkbox" ? el.checked : el.value.trim()) : ""; };
@@ -183,7 +183,7 @@ window.VOSB_ADMIN_PR = function (X) {
         onSave: async (bg) => { const r = val(bg, "rj"); if (!r) throw new Error("Please write the reason first."); must(await sb.rpc("admin_pr_set_order", { p_id: b.dataset.id, p: { pay_status: "rejected", admin_note: r } })); } });
       if (ok) { toast("Payment rejected — buyer notified", "ok"); await reload(); }
     });
-    view._h.manage = (b) => busy(b, async () => { const o = byId(b.dataset.id); if (!o) return; const r = await manage(o, bks[o.id] || []); if (r) { toast(r === "moved" ? "Date changed" : "Order saved", "ok"); await reload(); } });
+    view._h.manage = (b) => busy(b, async () => { const o = byId(b.dataset.id); if (!o) return; const r = await manage(Object.assign({ service_icon: ico[o.service_id] }, o), bks[o.id] || []); if (r) { toast(r === "moved" ? "Date changed" : "Order saved", "ok"); await reload(); } });
   }
 
   async function manage(o, bookings) {
@@ -193,20 +193,33 @@ window.VOSB_ADMIN_PR = function (X) {
     const lab = (k) => { const ov = (F.OVR[o.service_key] || {})[k], d = F.F[k]; return ov ? ov[1] : d ? d[1] : k; };
     const shown = order.filter((k) => br[k]).concat(Object.keys(br).filter((k) => !order.includes(k) && k !== "extra"));
     const opt = (k, v) => { const d = F.F[k]; const m = d && d[5] ? d[5].find((x) => x[0] === v) : null; return m ? m[2] : v; };
-    const rowsHtml = shown.map((k) => { const v = String(br[k]); const link = /^https?:\/\//i.test(v) ? `<a href="${esc(safeHref(v))}" target="_blank" rel="noopener noreferrer">${esc(v)}</a>` : esc(opt(k, v)); return `<div class="pr-kv"><span>${esc(lab(k))}</span><div>${link}</div></div>`; }).join("");
-    const extras = (Array.isArray(br.extra) ? br.extra : []).map((x) => `<div class="pr-kv"><span>${esc(x.en || x.id)}</span><div>${/^https?:\/\//i.test(x.v) ? `<a href="${esc(safeHref(x.v))}" target="_blank" rel="noopener noreferrer">${esc(x.v)}</a>` : esc(x.v)}</div></div>`).join("");
+    const val2 = (k) => { const v = String(br[k]); if (/^https?:\/\//i.test(v)) return `<a href="${esc(safeHref(v))}" target="_blank" rel="noopener noreferrer">${esc(v)}</a>`; if (k === "phone") return `<a href="tel:${esc(v.replace(/[^\d+]/g, ""))}">${esc(v)}</a>`; if (k === "email") return `<a href="mailto:${esc(v)}">${esc(v)}</a>`; return esc(opt(k, v)); };
+    const kv = (k) => `<div class="mo-kv${String(br[k]).length > 60 ? " long" : ""}"><span>${esc(lab(k))}</span><div>${val2(k)}</div></div>`;
+    const contactKeys = shown.filter((k) => F.CORE.includes(k)), briefKeys = shown.filter((k) => !F.CORE.includes(k));
+    const extras = (Array.isArray(br.extra) ? br.extra : []).map((x) => `<div class="mo-kv${String(x.v || "").length > 60 ? " long" : ""}"><span>${esc(x.en || x.id)}</span><div>${/^https?:\/\//i.test(x.v) ? `<a href="${esc(safeHref(x.v))}" target="_blank" rel="noopener noreferrer">${esc(x.v)}</a>` : esc(x.v)}</div></div>`).join("");
     const verified = o.pay_status === "verified";
-    const dates = (bookings || []).length ? `<div class="fld"><label>Publish dates <span class="hint">the buyer is notified when you change one</span></label><div class="pr-bks">${bookings.map((b) => `<span class="pr-bk" data-bk="${esc(b.id)}"><b>${esc(fmtDay(b.day))}</b> <button type="button" class="b b-line b-sm" data-mv="${esc(b.id)}">Change</button></span>`).join("")}</div></div>` : "";
-    const html = `<div class="pr-sumline"><b>${esc(o.order_no)}</b> · ${esc(o.service_name_en)} × ${o.qty} · ${o.kind === "quote" && o.amount == null ? "quote not given yet" : esc(bdt(o.amount))}${o.coupon_code ? ` · coupon ${esc(o.coupon_code)} (−${esc(bdt(o.discount))})` : ""}<br><small class="muted">${esc(o.user_email || "")} · ${esc(fmtDT(o.created_at))}${o.trx_id ? ` · TrxID <span class="co-trx">${esc(o.trx_id)}</span> <button type="button" class="b b-ghost b-sm" data-copyv="${esc(o.trx_id)}">⧉</button> from ${esc(o.sender_msisdn || "")}` : ""}</small></div>
-      <details class="pr-brief" open><summary>Client brief</summary>${rowsHtml + extras || '<p class="muted">No details.</p>'}</details>
-      ${dates}
-      <div class="pr-two">${fld("m-amt", o.kind === "quote" ? "Price (৳) — set the quote" : "Amount (৳)", inp("m-amt", o.amount == null ? "" : o.amount, `inputmode="decimal" ${verified ? "disabled" : ""}`), verified ? "locked: payment verified" : "")}
-        ${fld("m-st", "Order status", sel("m-st", ORD_ST.map((s) => [s, ORD_L[s]]), o.status))}</div>
-      ${fld("m-pay", "Payment status", sel("m-pay", PAY_ST.map((s) => [s, PAY_L[s]]), o.pay_status), "changing it notifies the buyer")}
-      ${fld("m-note", "Message to the buyer", txt("m-note", o.admin_note || "", 3, 600), "shown on their “My orders” page")}
-      ${fld("m-url", "Published link", inp("m-url", o.delivered_url || "", 'placeholder="https://…" inputmode="url"'), "shown to the buyer when the work is delivered")}
-      ${fld("m-int", "Internal note", txt("m-int", priv, 3, 1000), "only admins see this")}`;
-    const res = await dialog({ title: "Manage order", html, wide: true,
+    const dates = (bookings || []).length ? `<section class="mo-card"><h3>📅 Publish dates</h3><p class="muted mo-sub">The buyer is notified when you change a date.</p><div class="pr-bks">${bookings.map((b) => `<span class="pr-bk" data-bk="${esc(b.id)}"><b>${esc(fmtDay(b.day))}</b> <button type="button" class="b b-line b-sm" data-mv="${esc(b.id)}">Change</button></span>`).join("")}</div></section>` : "";
+    const quote = o.kind === "quote" && o.amount == null;
+    const html = `<div class="mo-head"><div class="mo-ic">${esc((o.service_icon) || "📣")}</div><div class="mo-ht"><b>${esc(o.service_name_en)}${o.qty > 1 ? " × " + o.qty : ""}</b><span class="muted">${esc(o.order_no)} · ${esc(fmtDT(o.created_at))}</span></div>
+        <div class="mo-pills">${pill(o.status, ORD_L[o.status] || o.status)}${pill(o.pay_status, PAY_L[o.pay_status] || o.pay_status)}</div></div>
+      <div class="mo-stats"><div><small>${quote ? "Price" : "Amount"}</small><b>${quote ? "Not set" : esc(bdt(o.amount))}</b></div>${o.coupon_code ? `<div><small>Coupon</small><b>${esc(o.coupon_code)} <span class="muted">−${esc(bdt(o.discount))}</span></b></div>` : ""}<div><small>Buyer</small><b class="mo-em">${esc(o.user_email || "—")}</b></div>${o.trx_id ? `<div><small>bKash TrxID</small><b><span class="co-trx">${esc(o.trx_id)}</span> <button type="button" class="b b-ghost b-sm" data-copyv="${esc(o.trx_id)}" aria-label="Copy TrxID">⧉</button><br><span class="muted mo-sm">from ${esc(o.sender_msisdn || "")}</span></b></div>` : ""}</div>
+      <div class="mo-grid">
+        <div class="mo-col">
+          <section class="mo-card"><h3>👤 Contact</h3>${contactKeys.map(kv).join("") || '<p class="muted">No details.</p>'}</section>
+          <section class="mo-card"><h3>📝 Brief</h3>${briefKeys.map(kv).join("") + extras || '<p class="muted">No details.</p>'}</section>
+          ${dates}
+        </div>
+        <div class="mo-col">
+          <section class="mo-card mo-form"><h3>⚙️ Manage</h3>
+            <div class="pr-two">${fld("m-amt", quote ? "Price (৳) — set the quote" : "Amount (৳)", inp("m-amt", o.amount == null ? "" : o.amount, `inputmode="decimal" ${verified ? "disabled" : ""}`), verified ? "locked: payment verified" : "")}
+              ${fld("m-st", "Order status", sel("m-st", ORD_ST.map((s) => [s, ORD_L[s]]), o.status))}</div>
+            ${fld("m-pay", "Payment status", sel("m-pay", PAY_ST.map((s) => [s, PAY_L[s]]), o.pay_status), "changing it notifies the buyer")}
+            ${fld("m-note", "Message to the buyer", txt("m-note", o.admin_note || "", 3, 600), "shown on their “My orders” page")}
+            ${fld("m-url", "Published link", inp("m-url", o.delivered_url || "", 'placeholder="https://…" inputmode="url"'), "shown to the buyer when delivered")}
+            ${fld("m-int", "Internal note", txt("m-int", priv, 3, 1000), "only admins see this")}</section>
+        </div>
+      </div>`;
+    const res = await dialog({ title: "Manage order", html, wide: true, cls: "mo", ok: "Save changes",
       onOpen: (bg) => bg.addEventListener("click", async (e) => {
         const m = e.target.closest("[data-mv]"); if (!m) return; e.preventDefault();
         const b = (bookings || []).find((x) => x.id === m.dataset.mv); if (!b) return;
@@ -288,7 +301,7 @@ window.VOSB_ADMIN_PR = function (X) {
     return out;
   }
   function svcForm(s, groups) {
-    const n = !s; s = s || { key: "", category: "content", icon: "📣", name_bn: "", name_en: "", desc_bn: "", desc_en: "", unit_bn: "প্রতি আইটেম", unit_en: "per item", price: null, min_qty: 1, max_qty: 10, active: true, popular: false, sort: 100, slot_group: null, notice_bn: "", notice_en: "", extra_fields: [] };
+    const n = !s; s = s || { key: "", category: "content", icon: "📣", name_bn: "", name_en: "", desc_bn: "", desc_en: "", unit_bn: "প্রতি আইটেম", unit_en: "per item", price: null, min_qty: 1, max_qty: 10, active: true, popular: false, sort: 100, slot_group: "article", notice_bn: "", notice_en: "", extra_fields: [] };
     const xf = Array.isArray(s.extra_fields) ? s.extra_fields : [];
     const html = `<div class="pr-two">${fld("s-ne", "Name (English) *", inp("s-ne", s.name_en, 'maxlength="120"'))}${fld("s-nb", "Name (Bangla) *", inp("s-nb", s.name_bn, 'maxlength="120"'))}</div>
       <div class="pr-two">${fld("s-de", "Description (English)", txt("s-de", s.desc_en, 3, 600))}${fld("s-db", "Description (Bangla)", txt("s-db", s.desc_bn, 3, 600))}</div>

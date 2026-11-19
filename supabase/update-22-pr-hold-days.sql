@@ -36,3 +36,8 @@ begin
 end $$;
 revoke all on function public.get_pr_slots() from public, anon;
 grant execute on function public.get_pr_slots() to authenticated;
+
+-- every publishing service follows the booking rules
+update public.pr_services set slot_group = 'article' where slot_group is null and key in ('founder_story','press_release','research','hiring','top_story','newsletter','banner','other');
+update public.pr_services set slot_group = 'post' where slot_group is null and key in ('event','giveaway','collab');
+update public.pr_services set slot_group = 'reel' where slot_group is null and key = 'combo';
