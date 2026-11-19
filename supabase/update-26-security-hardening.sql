@@ -1,0 +1,7 @@
+-- Update 26 — security hardening (applied as migrations "security_hardening_push" and "security_revoke_anon_on_private_tables")
+-- 1) push_subscribe: endpoint host must be a real push service (Google FCM, Mozilla, Apple, Windows), key format checked, per-IP rate limit 20/10min.
+-- 2) admin_push_send: link must be a same-site path (rejects //host, /\host, control characters).
+-- 3) _push_admin_cat / _push_admin_url: fixed search_path.
+-- 4) any stored subscription with a non-push host was switched off (disabled_at) — nothing deleted.
+-- 5) anon (visitors) has no raw privileges on private tables (they never had policies); backup tables closed to authenticated too.
+-- The full function bodies live in the applied migrations; the edge function send-push also refuses non-push hosts (v2).

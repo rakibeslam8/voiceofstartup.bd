@@ -17,6 +17,7 @@ async function rpc(name: string, args: Record<string, unknown> = {}) {
 async function get(path: string) { const r = await fetch(`${URL_}/rest/v1/${path}`, { headers: H }); if (!r.ok) throw new Error("get " + path.slice(0, 40) + " " + r.status); return r.json(); }
 async function patch(path: string, body: unknown) { const r = await fetch(`${URL_}/rest/v1/${path}`, { method: "PATCH", headers: { ...H, Prefer: "return=representation" }, body: JSON.stringify(body) }); if (!r.ok) throw new Error("patch " + r.status); return r.json(); }
 
+const okHost = (u: string) => { try { const x = new URL(u); const h = x.hostname.toLowerCase(); return x.protocol === "https:" && (h === "fcm.googleapis.com" || h === "android.googleapis.com" || h.endsWith(".push.services.mozilla.com") || h === "web.push.apple.com" || h.endsWith(".push.apple.com") || h.endsWith(".notify.windows.com")); } catch { return false; } };
 type Sub = { id: string; endpoint: string; p256dh: string; auth: string; lang: string };
 type Row = { id: string; kind: string; audience: string; user_id: string | null; title_bn: string; title_en: string; body_bn: string | null; body_en: string | null; url: string; image: string | null; cursor: string | null; sent_n: number; failed_n: number };
 
@@ -56,6 +57,7 @@ Deno.serve(async (req) => {
           body: (bn ? row.body_bn || row.body_en : row.body_en || row.body_bn) || "",
           url: row.url, image: row.image || undefined, tag: row.kind + ":" + row.id.slice(0, 8), lang: bn ? "bn" : "en",
         });
+        if (!okHost(s.endpoint)) { gone.push(s.id); return; } // never call anything that is not a real push service
         try { await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, { TTL: 86400, urgency: row.kind === "article" ? "normal" : "high" }); sent++; }
         catch (e: any) { failed++; const c = e?.statusCode; if (c === 404 || c === 410) gone.push(s.id); else if (c === 401 || c === 403) fatal = "push service rejected our keys (" + c + ")"; }
       });
