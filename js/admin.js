@@ -664,12 +664,11 @@
       const btn = $("#fixtr"); btn.disabled = true;
       let fixed = 0, failed = 0, done = 0;
       try {
-        const { data, error } = await sb.from("posts").select("id,body_bn,body_en,image_alt,image_alt_bn,image_alt_en,auto_translate").order("publish_at", { ascending: false });
+        const { data, error } = await sb.from("posts").select("id,body_bn,body_en,image_alt,image_alt_bn,image_alt_en").order("publish_at", { ascending: false });
         if (error) throw error;
         for (const r of data) {
           btn.textContent = `Repairing… ${++done}/${data.length}`;
           const upd = {};
-          if (r.auto_translate === false) continue;   // articles you switched to manual are never touched
           try {
             const en = await TR.altsOnly(r.body_en, "bn", "en"); if (en.changed) upd.body_en = en.text;
             const bn = await TR.altsOnly(r.body_bn, "en", "bn"); if (bn.changed) upd.body_bn = bn.text;
@@ -698,9 +697,9 @@
     id: null, slug: "", slugTouched: false, category: "funding", status: "draft", publish_at: nowLocalInput(), featured: false,
     title_bn: "", title_en: "", excerpt_bn: "", excerpt_en: "", body_bn: "", body_en: "",
     source: "VOSB", source_url: "", author: "VOSB Desk", image_url: "", image_alt: "", image_alt_bn: "", image_alt_en: "",
-    auto_translated_bn: false, auto_translated_en: false, auto_translate: true,
+    auto_translated_bn: false, auto_translated_en: false,
   });
-  const FIELDS = ["category", "publish_at", "featured", "title_bn", "title_en", "excerpt_bn", "excerpt_en", "body_bn", "body_en", "source", "source_url", "author", "image_url", "image_alt_bn", "image_alt_en", "slug", "auto_translate"];
+  const FIELDS = ["category", "publish_at", "featured", "title_bn", "title_en", "excerpt_bn", "excerpt_en", "body_bn", "body_en", "source", "source_url", "author", "image_url", "image_alt_bn", "image_alt_en", "slug"];
 
   async function viewEditor(view, idOrNew) {
     let ed = BLANK();
@@ -742,10 +741,9 @@
           <div class="card">
             <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
               <div class="seg" id="lt" role="tablist" aria-label="Language"><button data-l="bn" role="tab">বাংলা</button><button data-l="en" role="tab">English</button></div>
-              <span class="muted" style="font-size:.82rem">Write in Bangla <b>or</b> English — the other language and the short summary are created automatically when you publish (switch this off below if you want to control both yourself).</span>
+              <span class="muted" style="font-size:.82rem">Write in Bangla <b>or</b> English — the other language and the short summary are created automatically when you publish (use the “Auto-translate” switch next to Publish when you do not want that for one save).</span>
             </div>
             <div class="auto-row"><button type="button" class="b b-line b-sm" id="retr">🌐 Auto-translate this tab</button><span class="muted" id="auto-note" style="font-size:.82rem"></span></div>
-            <label class="chk" style="margin:2px 0 12px"><input type="checkbox" id="f-autotr"> <span>Translate &amp; update the other language automatically when I save <span class="hint" id="autotr-h" style="display:block;font-weight:400"></span></span></label>
             <div class="fld"><label for="f-title">Title <span class="hint" id="title-l"></span></label><input class="inp" id="f-title" maxlength="200"></div>
             <div class="fld"><label for="f-ex">Short summary <span class="hint">(shown on cards & Google — leave empty to auto-create)</span></label><textarea class="txt" id="f-ex" rows="2" maxlength="300"></textarea><div class="cnt" id="ex-c"></div></div>
             <div class="lbl" style="margin-bottom:6px;display:flex;justify-content:space-between;align-items:center"><span>Article content</span>
@@ -798,7 +796,7 @@
     function fillStatic() {
       if (ed.source && !SOURCES.includes(ed.source)) $f("f-src").insertAdjacentHTML("beforeend", `<option>${esc(ed.source)}</option>`);
       $f("f-cat").value = ed.category; $f("f-date").value = ed.publish_at; $f("f-src").value = ed.source || "VOSB";
-      $f("f-srcu").value = ed.source_url; $f("f-au").value = ed.author; $f("f-feat").checked = ed.featured; $f("f-slug").value = ed.slug; $f("f-autotr").checked = ed.auto_translate !== false; autoTrHint();
+      $f("f-srcu").value = ed.source_url; $f("f-au").value = ed.author; $f("f-feat").checked = ed.featured; $f("f-slug").value = ed.slug;
     }
     function fillLang() {
       $$("#lt button").forEach((b) => { b.classList.toggle("on", b.dataset.l === tab); b.classList.toggle("has", !!(ed["title_" + b.dataset.l] || ed["body_" + b.dataset.l])); b.setAttribute("aria-selected", b.dataset.l === tab); });
@@ -830,15 +828,18 @@
       const u = $("#c-url", box); if (u) u.onclick = () => { const v = prompt("Paste image link (https://…)"); if (v && /^https:\/\//i.test(v.trim())) { set("image_url", v.trim()); cover(); } else if (v) toast("Link must start with https://", "err"); };
       $("#c-file").onchange = (e) => { const f = e.target.files[0]; if (f) upload(f, "cover"); };
     }
+    let skipTr = false;   // "Auto-translate" switch next to Publish: off = this save changes nothing in the other language; it switches itself back on after saving
     function saveBar() {
       const future = ed.publish_at && fromLocalInput(ed.publish_at) > new Date().toISOString();
       const isLive = ed.status === "published";
       const sb2 = $f("savebar");
       sb2.innerHTML = `
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b>Status:</b> ${!ed.id ? `<span class="pill draft">NEW</span>` : pillOf({ status: ed.status, publish_at: fromLocalInput(ed.publish_at) })}${dirty ? `<span class="muted" style="font-size:.8rem">· unsaved changes</span>` : ""}</div>
+        <button type="button" class="b ${skipTr ? "b-orange" : "b-line"} b-sm" id="trsw" aria-pressed="${!skipTr}" style="width:100%" title="Turn off to save only what you typed, without translating or changing the other language or the summary. It switches back on after the save.">${skipTr ? "🚫 Auto-translate: OFF for this save — tap to turn on" : "🌐 Auto-translate on save: ON — tap to turn off"}</button>
         <button class="b b-green" id="pub" ${saving ? "disabled" : ""}>${isLive ? (future ? "⏰ Update (scheduled)" : "✅ Update live article") : future ? "⏰ Schedule article" : "🚀 Publish now"}</button>
         <button class="b b-line" id="draft" ${saving ? "disabled" : ""}>${isLive ? "Unpublish → save as draft" : "💾 Save draft"}</button>
         ${ed.id ? `<button class="b b-line b-sm" id="prev-live" ${isLive ? "" : "disabled"}>${isLive ? "Open live page ↗" : "Open live page (after publish)"}</button>` : ""}`;
+      $("#trsw").onclick = () => { skipTr = !skipTr; saveBar(); toast(skipTr ? "Auto-translate is OFF for the next save only" : "Auto-translate is ON", "ok"); };
       $("#pub").onclick = () => save("published");
       $("#draft").onclick = () => save("draft");
       const pl = $("#prev-live"); if (pl && isLive) pl.onclick = () => window.open(liveUrl(ed.slug), "_blank", "noopener");
@@ -862,7 +863,6 @@
     $f("f-srcu").oninput = (e) => set("source_url", e.target.value.trim());
     $f("f-au").oninput = (e) => set("author", e.target.value);
     $f("f-feat").onchange = (e) => set("featured", e.target.checked);
-    $f("f-autotr").onchange = (e) => { set("auto_translate", e.target.checked); autoTrHint(); saveBar(); };
     $f("f-alt").oninput = (e) => { set("image_alt_" + tab, e.target.value); touched[tab] = true; };
     $f("f-slug").oninput = (e) => { ed.slugTouched = true; set("slug", e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-{2,}/g, "-")); slugUrl(); };
     $f("f-slug").onblur = () => { ed.slug = ed.slug.replace(/^-+|-+$/g, ""); $f("f-slug").value = ed.slug; slugUrl(); };
@@ -929,9 +929,6 @@
     /* ---- automatic translation + summary ---- */
     const TR = window.VOSB_TR;
     const LN = { bn: "Bangla", en: "English" };
-    function autoTrHint() {
-      const h = $f("autotr-h"); if (h) h.textContent = ed.auto_translate === false ? "Off — saving will NOT translate, rewrite or fill in anything in the other language or the summary. Use “Auto-translate this tab” when you want it." : "On — a change in one language refreshes the other language and an empty summary when you save.";
-    }
     function autoNote() {
       const n = $f("auto-note"); if (!n) return;
       const flagged = ed["auto_translated_" + tab] && !touched[tab];
@@ -939,7 +936,7 @@
     }
     const chg = (k) => String(ed[k] || "").trim() !== String(savedF[k] || "").trim();      // changed since it was last saved
     const TF = ["title", "excerpt", "body", "image_alt"];
-    const needsTranslation = () => ed.auto_translate !== false && (TF.some((f) => ["bn", "en"].some((l) => { const o = l === "bn" ? "en" : "bn"; return String(ed[f + "_" + o] || "").trim() && (!String(ed[f + "_" + l] || "").trim() || (chg(f + "_" + o) && !chg(f + "_" + l))); }))
+    const needsTranslation = () => !skipTr && (TF.some((f) => ["bn", "en"].some((l) => { const o = l === "bn" ? "en" : "bn"; return String(ed[f + "_" + o] || "").trim() && (!String(ed[f + "_" + l] || "").trim() || (chg(f + "_" + o) && !chg(f + "_" + l))); }))
       || !ed.excerpt_bn.trim() || !ed.excerpt_en.trim());
     /* Keep both languages in step. For every field (title, summary, content incl. links & picture descriptions, cover description):
        - the other language is empty                 -> translate it
@@ -1032,7 +1029,7 @@
       note.textContent = `Imported from ${d.siteName || "the website"}: ${d.imagesSaved || 0} of ${d.imagesFound || 0} pictures copied${missed > 0 ? ` (${missed} could not be copied: ${[...why][0] || "unknown reason"} — add them with the Image button)` : ""}. Translating to ${LN[O]}…`;
       btn.textContent = "Translating…";
       try {
-        if (ed.auto_translate === false) throw new Error("auto-translate off");
+        if (skipTr) throw new Error("auto-translate off");
         if (!TR) throw new Error("no translator");
         ed["title_" + O] = await TR.headline(ed["title_" + L], L, O);
         ed["body_" + O] = await TR.markdown(ed["body_" + L], L, O);
@@ -1042,7 +1039,7 @@
         note.textContent = `Done — ${d.imagesSaved || 0} of ${d.imagesFound || 0} pictures copied${missed > 0 ? ` (${missed} could not be copied: ${[...why][0] || "unknown reason"} — add them with the Image button)` : ""}; ${LN[L]} and ${LN[O]} versions are ready. Please read both tabs, choose the date and publish.`;
         toast("Imported & translated — check, then publish", "ok");
       } catch (e) {
-        if (ed.auto_translate === false) { note.textContent = `Imported. Auto-translate is off, so the ${LN[O]} version was not created — use “Auto-translate this tab” if you want it.`; toast("Imported (not translated — auto-translate is off)", "ok"); }
+        if (skipTr) { note.textContent = `Imported. Auto-translate is switched off, so the ${LN[O]} version was not created — use “Auto-translate this tab” if you want it.`; toast("Imported (not translated — auto-translate is switched off)", "ok"); }
         else { note.textContent = `Imported. The ${LN[O]} version will be created automatically when you publish.`; toast("Imported. The other language is created when you publish.", "ok"); }
       }
       dirty = true; persist(); fillLang(); fillLangTabsOnly(); saveBar(); counts(); renderPv();
@@ -1080,7 +1077,7 @@
         body_bn: ed.body_bn, body_en: ed.body_en,
         source: ed.source === "Other" ? "Other" : ed.source, source_url: ed.source_url || null, author: ed.author.trim() || "VOSB Desk",
         image_url: ed.image_url || null, image_alt_bn: ed.image_alt_bn.trim(), image_alt_en: ed.image_alt_en.trim(), image_alt: (ed.image_alt_bn || ed.image_alt_en).trim(),
-        auto_translated_bn: !!ed.auto_translated_bn, auto_translated_en: !!ed.auto_translated_en, auto_translate: ed.auto_translate !== false,
+        auto_translated_bn: !!ed.auto_translated_bn, auto_translated_en: !!ed.auto_translated_en
       };
       let res;
       try {
@@ -1093,7 +1090,7 @@
         saveBar(); return toast(m, "err");
       }
       const prevF = Object.assign({}, savedF);
-      ed.id = res.data.id; ed.status = status; dirty = false; clearTimeout(persistTimer); Object.assign(savedF, pickFields(ed));
+      ed.id = res.data.id; ed.status = status; dirty = false; clearTimeout(persistTimer); Object.assign(savedF, pickFields(ed)); skipTr = false;
       (tr.failedFields || []).forEach((k) => { savedF[k] = prevF[k]; });   // translation failed for this field: keep it "changed" so the next save tries again
       try { localStorage.removeItem(draftKey); localStorage.removeItem("vosb-draft-new"); } catch (e) {}
       postsLoaded = false;
