@@ -1412,7 +1412,6 @@ html[data-theme="dark"] {
 }
 html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
 html[data-theme="dark"] .site-header { background: rgba(18, 19, 21, .94); }
-html[data-theme="dark"] .brand img { background: #fff; border-radius: 10px; padding: 3px 8px; height: 46px; }
 html[data-theme="dark"] .nav a:hover, html[data-theme="dark"] .nav a.active { color: #ffa066; }
 /* surfaces that were hard-coded white */
 html[data-theme="dark"] :is(.lang-toggle, .hero-trust-list span, .hero-card, .verified-pill, .cat-card, .post-card, .sample-note, .social-btn, .page-hero, .filter, .article, .article .src, .mail-card, .form-card, .form-card input, .form-card textarea, .form-card select, .role, .team-card, .empty-state, .legal, .legal-contact, .featured-card, .share-bar, .share-btn, .tr-note, .ad, .ad-pop, .faq-item, .f-arrow, .trust-strip, .ts-chip, .who-chip, .what-card, .std-list li, .nav-dd .dd-menu, .list-count, .hero-search, .hero-pop button, .hs, .seg, .month-sel select, .most-read, .mr-list a, .pager button, .search-note, .hs-pop a, .topic-bar .cat-grid .cat-card, .side-card, .ticker, .pt-card, .nc, .std-ic) { background: var(--card); color: var(--text); border-color: var(--line); }
@@ -2209,5 +2208,6 @@ html[data-theme="dark"] .au-form select { background-color: var(--bg); color: va
 .au-form label.au-chk { display: flex; align-items: flex-start; gap: 10px; font-weight: 500; font-size: .86rem; line-height: 1.45; color: var(--text); cursor: pointer; padding: 2px 0; }
 .au-form label.au-chk input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--orange); }
 
-/* dark mode: the logo has black letters — keep it on its cream tile everywhere it sits on a dark surface */
-html[data-theme="dark"] .au-logo { background: #faefe0; border-radius: 12px; padding: 5px 10px; height: 54px; box-sizing: border-box; }
+/* dark mode: same logo as light mode, no tile — the black letters turn white, the orange stays (assets/logo-dark.png) */
+html[data-theme="dark"] :is(.brand img, .footer-logo img, .au-logo, .site-footer .footer-grid > div:first-child img) { content: url(/assets/logo-dark.png); background: none; }
+html[data-theme="dark"] .footer-logo { background: none; padding: 0; border-radius: 0; }
