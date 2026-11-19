@@ -309,7 +309,7 @@
           </div>
           <div>
             <h4>${T("যোগাযোগ", "Contact")}</h4>
-            <div class="fc-list">${C.emails.map((e) => `<a class="fc" href="mailto:${e.address}"><span class="fc-ic" aria-hidden="true">${e.icon}</span><span class="fc-tx"><small>${esc(pick(e))}</small><b>${e.address}</b></span></a>`).join("")}</div>
+            <div class="fc-list">${C.emails.map((e) => `<a class="fc" href="mailto:${e.address}"><span class="fc-ic" aria-hidden="true">${e.icon}</span><span class="fc-tx"><small>${esc(pick(e))}</small><b>${e.address}</b></span></a>`).join("")}<a class="fc fc-pr" href="/pr"><span class="fc-ic" aria-hidden="true">📣</span><span class="fc-tx"><small>${T("পেইড প্রমোশন ও কোলাবরেশন", "Paid promotion & collaboration")}</small><b>${T("আমাদের সাথে প্রচার করুন →", "Promote with us →")}</b></span></a></div>
           </div>
         </div>
         <nav class="legal-links" aria-label="Legal">${LEGAL.map((l) => `<a href="${l.href}">${esc(pick(l))}</a>`).join("")}</nav>
@@ -530,7 +530,13 @@
       <p>${esc(lang === "bn" ? e.useBn : e.useEn)}</p>
       <span class="addr">${e.address}</span>
       <span class="mc-go">${T("ইমেইল করুন", "Send email")} →</span>
-    </a>`).join(""));
+    </a>`).join("") + `<a class="mail-card mail-card-pr" href="/pr">
+      <span class="mc-ic" aria-hidden="true">📣</span>
+      <h3>${T("পেইড প্রমোশন ও কোলাবরেশন", "Paid promotion & collaboration")}</h3>
+      <p>${T("স্পনসর্ড আর্টিকেল, ফেসবুক পোস্ট, রিলস ও আরও — দাম ও অর্ডার এক জায়গায়। (লগইন দরকার)", "Sponsored articles, posts, reels and more — prices and ordering in one place. (Login required)")}</p>
+      <span class="addr">${T("আমাদের সাথে প্রচার করুন", "Promote with us")}</span>
+      <span class="mc-go">${T("সেবা ও দাম দেখুন", "See services & prices")} →</span>
+    </a>`);
 
   /* News listing with filters */
   let shown = 12;

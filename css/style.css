@@ -2213,3 +2213,13 @@ html[data-theme="dark"] :is(.brand img, .au-logo) { content: url(/assets/logo-da
 /* the footer is black in BOTH modes, so its logo always uses the white-letter version, with no tile */
 .footer-logo img, .site-footer .footer-grid > div:first-child img { content: url(/assets/logo-dark.svg?v=1); }
 .footer-logo, html:not([data-theme="dark"]) .footer-logo { background: none; padding: 0; border-radius: 0; }
+
+/* paid promotion entry points (Contact page card + footer button under the contacts) */
+.fc.fc-pr { border-color: var(--orange); background: rgba(255, 117, 34, .12); margin-top: 2px; }
+.fc.fc-pr:hover { background: rgba(255, 117, 34, .2); }
+.fc.fc-pr .fc-ic { background: var(--orange); }
+.fc.fc-pr .fc-tx b { color: #ffb68a; }
+.mail-card.mail-card-pr { border-color: #f4c08f; background: linear-gradient(160deg, var(--card), var(--orange-soft)); }
+.mail-card.mail-card-pr .mc-ic { background: var(--orange-soft); }
+.mail-card.mail-card-pr .addr { word-break: normal; }
+html[data-theme="dark"] .mail-card.mail-card-pr { border-color: #6b3d1c; background: linear-gradient(160deg, var(--card), #2c1b10); }

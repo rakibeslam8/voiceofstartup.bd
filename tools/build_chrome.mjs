@@ -65,7 +65,7 @@ function bottom(en) {
         <div class="footer-grid">
           <div><p style="color:#d6d6d6;max-width:40ch">${t("স্টার্টআপ, ব্যবসা ও বিনিয়োগের সব আপডেট সবার আগে।", "Startup, business & investment updates — first.")}</p><div class="footer-socials">${social}</div></div>
           <div><h4>${t("এক্সপ্লোর", "Explore")}</h4><ul>${C.categories.map((c) => `<li><a href="/${c.slug}">${esc(t(c.bn, c.en))}</a></li>`).join("")}<li><a href="/companies">${t("🏢 কোম্পানি ডিরেক্টরি", "🏢 Company Directory")}</a></li><li><a href="/list-your-company">${t("কোম্পানি লিস্ট করুন", "List your company")}</a></li><li><a href="/about">${t("আমাদের সম্পর্কে", "About us")}</a></li><li><a href="/careers">${t("ক্যারিয়ার", "Careers")}</a></li></ul></div>
-          <div><h4>${t("যোগাযোগ", "Contact")}</h4>${C.emails.map((e) => `<p><a href="mailto:${e.address}">${e.address}</a></p>`).join("")}</div>
+          <div><h4>${t("যোগাযোগ", "Contact")}</h4>${C.emails.map((e) => `<p><a href="mailto:${e.address}">${e.address}</a></p>`).join("")}<p><a href="/pr">${t("📣 আমাদের সাথে প্রচার করুন →", "📣 Promote with us →")}</a></p></div>
         </div>
         <nav class="legal-links" aria-label="Legal">${LEGAL.map(([h, bn, e]) => `<a href="${h}">${esc(t(bn, e))}</a>`).join("")}</nav>
         <div class="footer-bottom"><span>© Voice of Startup Bangladesh. ${t("সর্বস্বত্ব সংরক্ষিত।", "All rights reserved.")}</span><span>${C.site.domain}</span></div>

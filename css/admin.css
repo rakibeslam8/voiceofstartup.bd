@@ -613,3 +613,34 @@ table.t tr[data-a] { transition: background .15s; } table.t tr[data-a]:hover td 
 .imp .imp-row .inp { flex: 1; min-width: 0; }
 .imp .imp-row .b { flex: none; white-space: nowrap; }
 @media (max-width: 560px) { .imp .imp-row { flex-direction: column; } .imp .imp-row .b { width: 100%; } }
+
+/* ---- Paid promotion (PR) ---- */
+.pill.pr-new { background: var(--orange-soft); color: #9a3d06; }
+.pill.pr-confirmed, .pill.pr-in_progress { background: #e6f0ff; color: #1c4aa8; }
+.pill.pr-delivered, .pill.pr-verified { background: #eaf7f0; color: var(--green-dark); }
+.pill.pr-cancelled, .pill.pr-none, .pill.pr-off { background: #eee; color: #555; }
+.pill.pr-rejected { background: #fdecec; color: #a11b19; }
+.pill.pr-pending { background: #fff1d6; color: #8a5a00; }
+.pr-filters { grid-template-columns: 1.6fr 1fr 1fr 1fr; }
+.pr-row h3 small { font-weight: 600; color: var(--muted); }
+.modal.pr-modal { max-height: calc(100vh - 32px); overflow-y: auto; }
+.modal.pr-modal.wide { width: min(720px, calc(100vw - 24px)); max-width: 720px; }
+.pr-mbody .fld { margin-bottom: 12px; }
+.pr-two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.pr-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 14px; }
+.pr-two > *, .pr-three > * { min-width: 0; }
+.pr-checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 14px; }
+.pr-sumline { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; line-height: 1.6; }
+.pr-brief { border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px 8px; margin-bottom: 14px; }
+.pr-brief summary { cursor: pointer; font-weight: 800; padding: 8px 0; }
+.pr-kv { display: grid; grid-template-columns: 170px 1fr; gap: 10px; padding: 7px 0; border-top: 1px dashed var(--line); font-size: .92rem; }
+.pr-kv span { color: var(--muted); font-weight: 600; } .pr-kv div { overflow-wrap: anywhere; white-space: pre-wrap; }
+html[data-theme="dark"] .pill.pr-cancelled, html[data-theme="dark"] .pill.pr-none { background: #2a2b2f; color: #bbb; }
+@media (max-width: 760px) {
+  .pr-filters { grid-template-columns: 1fr 1fr; } .pr-filters .inp { grid-column: 1 / -1; }
+  .pr-two, .pr-three, .pr-checks { grid-template-columns: 1fr; }
+  .pr-kv { grid-template-columns: 1fr; gap: 2px; }
+  .modal.pr-modal { padding: 18px 16px; }
+}
+.pr-mbody input[type="datetime-local"] { min-width: 0; width: 100%; font-size: .88rem; padding-inline: 8px; }
+.pr-modal h2 { margin-bottom: 12px; }

@@ -246,7 +246,7 @@
     { r: "visitors", t: "Visitors", s: "Visits" },
     { r: "posts", t: "Articles", s: "Posts" },
     { r: "edit/new", t: "New article", s: "New" },
-    { r: "ads", t: "Ads" },
+    { r: "ads", t: "Ads & PR", s: "Ads", badge: true },
     { r: "subscribers", t: "Subscribers", s: "Mail" },
     { r: "companies", t: "Companies", s: "Firms", badge: true },
     { r: "users", t: "Users" },
@@ -254,6 +254,8 @@
   ];
   /* Company Directory control centre (js/admin-co.js): users, applications, payments, reviews, investor interest */
   const CO = typeof window.VOSB_ADMIN_CO === "function" ? window.VOSB_ADMIN_CO({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll }) : null;
+  /* Paid promotion (PR) control centre (js/admin-pr.js): orders, services, coupons, free campaigns, page stats */
+  const PR = typeof window.VOSB_ADMIN_PR === "function" ? window.VOSB_ADMIN_PR({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll }) : null;
   let shellOn = false;
   function shell() {
     const email = session.user.email || "";
@@ -262,7 +264,7 @@
       <header class="topbar"><div class="topbar-in">
         <a class="brand" href="#/dashboard" aria-label="Dashboard"><img src="/assets/logo.png" alt="Voice of Startup Bangladesh" width="90" height="36"></a>
         <span class="tag">Admin</span>
-        <nav class="tabs" id="tabs" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}" title="${n.t}">${svg(n.r)}<span class="lbl">${n.t}</span>${n.badge ? '<i class="nbadge" data-badge="companies" hidden></i>' : ""}</a>`).join("")}</nav>
+        <nav class="tabs" id="tabs" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}" title="${n.t}">${svg(n.r)}<span class="lbl">${n.t}</span>${n.badge ? '<i class="nbadge" data-badge="${n.r}" hidden></i>' : ""}</a>`).join("")}</nav>
         <span class="sp"></span>
         <a class="site-link" href="/" target="_blank" rel="noopener" title="Open the public website">${svg("site", "sm")}<span>View site</span></a>
         <div class="acct" id="acct">
@@ -276,7 +278,7 @@
         </div>
       </div></header>
       <main class="main" id="view"></main>
-      <nav class="bottom-nav" id="bnav" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}">${svg(n.r)}<em>${n.s || n.t}</em>${n.badge ? '<i class="nbadge" data-badge="companies" hidden></i>' : ""}</a>`).join("")}</nav>`;
+      <nav class="bottom-nav" id="bnav" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}">${svg(n.r)}<em>${n.s || n.t}</em>${n.badge ? '<i class="nbadge" data-badge="${n.r}" hidden></i>' : ""}</a>`).join("")}</nav>`;
     const btn = $("#acctBtn"), menu = $("#acctMenu");
     const close = () => { menu.hidden = true; btn.setAttribute("aria-expanded", "false"); };
     btn.onclick = (e) => { e.stopPropagation(); const open = menu.hidden; menu.hidden = !open; btn.setAttribute("aria-expanded", String(open)); };
@@ -286,10 +288,11 @@
     $("#out").onclick = () => { close(); logout("You have been signed out."); };
     shellOn = true;
     if (CO) { try { CO.refreshBadges(true); } catch (e) {} }
+    if (PR) { try { PR.refreshBadges(true); } catch (e) {} }
   }
 
   function markNav(r) {
-    const base = r.startsWith("edit") ? "edit/new" : r.startsWith("ads") ? "ads" : r.startsWith("newsletter") ? "subscribers"
+    const base = r.startsWith("edit") ? "edit/new" : r.startsWith("ads") || r === "pr" || r.startsWith("pr/") ? "ads" : r.startsWith("newsletter") ? "subscribers"
       : (r === "companies" || r.startsWith("companies/") || ["payments", "reviews", "interests", "company-settings", "valuations", "deals", "trash"].includes(r)) ? "companies"
       : (r === "users" || r === "deletions" || r === "active") ? "users" : r;
     $$("[data-r]").forEach((a) => a.classList.toggle("on", a.dataset.r === base || (base === "edit/new" && a.dataset.r === "edit/new")));
@@ -316,6 +319,7 @@
       else if (h === "posts") await viewPosts(view);
       else if (h === "settings") viewSettings(view);
       else if (h.startsWith("edit/")) await viewEditor(view, h.slice(5));
+      else if (PR && PR.handles(h)) await PR.render(h, view);
       else if (CO && CO.handles(h)) await CO.render(h, view);
       else { location.hash = "#/dashboard"; }
     } catch (e) {
@@ -1334,13 +1338,14 @@
   }
 
   async function viewAds(view) {
-    view.innerHTML = `<div class="page-h"><h1>Ads</h1><a class="b b-orange" href="#/ads/new">➕ New ad</a></div><div class="card"><p class="muted">Loading…</p></div>`;
+    view.innerHTML = `<div class="page-h"><h1>Ads</h1><a class="b b-orange" href="#/ads/new">➕ New ad</a></div>${PR ? PR.tabs("ads") : ""}<div class="card"><p class="muted">Loading…</p></div>`;
     await loadAds(true);
     if (!view.isConnected) return;
     const live = ads.filter((a) => adState(a) === "live").length;
     const imp = ads.reduce((n, a) => n + Number(a.impressions || 0), 0), clk = ads.reduce((n, a) => n + Number(a.clicks || 0), 0);
     view.innerHTML = `
       <div class="page-h"><h1>Ads <span class="muted" style="font-size:1rem">(${ads.length})</span></h1><a class="b b-orange" href="#/ads/new">➕ New ad</a></div>
+      ${PR ? PR.tabs("ads") : ""}
       <div class="tiles">
         <div class="tile g"><small>Live ads</small><b>${fmtN(live)}</b></div>
         <div class="tile"><small>Times shown</small><b>${fmtN(imp)}</b></div>
