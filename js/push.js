@@ -68,7 +68,7 @@
       await subscribe(reg);
       ls.set(K.on, "1"); ls.del(K.dismissed);
       try { await reg.showNotification(T("নোটিফিকেশন চালু হয়েছে ✓", "Notifications are on ✓"), { body: T("নতুন খবর প্রকাশ হলেই এখানে জানতে পারবেন।", "You'll hear about new stories here as soon as they go live."), icon: "/assets/icon-192.png", badge: "/assets/favicon-96.png", tag: "vosb-welcome", data: { url: "/news" }, lang: lang() }); } catch (e) {}
-      paint(); hidePrompt();
+      paint(); hidePrompt(true);
       return { ok: true, reason: "ok" };
     } catch (e) { console.warn("push enable failed", e); return { ok: false, reason: "error" }; }
   }
@@ -90,8 +90,27 @@
 
   /* ---------- small UI: prompt card + rows that show / flip the state ---------- */
   let promptEl = null;
-  function hidePrompt() { if (promptEl) { promptEl.classList.remove("on"); const e = promptEl; promptEl = null; setTimeout(() => e.remove(), 260); } }
+  function hidePrompt(ok) {
+    if (ok && promptEl && promptEl.classList.contains("pusht")) {
+      const e = promptEl; promptEl = null;
+      e.classList.add("done"); e.innerHTML = `<div class="pusht-in"><div class="pusht-bell ok" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div class="pusht-tx"><b>${T("নোটিফিকেশন চালু হয়েছে", "Notifications are on")}</b><span>${T("নতুন খবর প্রকাশ হলেই আপনাকে জানাব।", "We'll let you know when news is published.")}</span></div></div>`;
+      setTimeout(() => { e.classList.remove("on"); setTimeout(() => e.remove(), 400); }, 2000); return;
+    }
+    if (promptEl) { promptEl.classList.remove("on"); const e = promptEl; promptEl = null; setTimeout(() => e.remove(), 260); } }
+  const BELL = '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>';
+  /* people who installed the app (or open it from the home screen) get a bigger, friendlier sheet at the top of the screen */
+  function showTopSheet() {
+    if (promptEl || state() !== "off" || document.querySelector(".pushp, .pusht")) return;
+    const el = document.createElement("div"); el.className = "pusht"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", T("নোটিফিকেশন চালু করুন", "Turn on notifications"));
+    el.innerHTML = `<div class="pusht-in"><div class="pusht-bell" aria-hidden="true">${BELL}<i></i></div>
+      <div class="pusht-tx"><b>${T("কোনো খবর মিস করবেন না", "Never miss a story")}</b><span>${T("নোটিফিকেশন চালু করলে নতুন খবর প্রকাশ হওয়ামাত্র ফোনেই জানতে পারবেন — অ্যাপ বন্ধ থাকলেও।", "Turn on notifications and we'll tell you the moment news is published — even when the app is closed.")}</span></div>
+      <button type="button" class="pusht-x" data-push-no aria-label="${T("পরে", "Later")}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="pusht-chips" aria-hidden="true"><i>💰 ${T("ফান্ডিং", "Funding")}</i><i>🚀 ${T("স্টার্টআপ", "Startups")}</i><i>📈 ${T("ব্যবসা", "Business")}</i><i>🏛️ ${T("নীতিমালা", "Policy")}</i></div>
+      <div class="pusht-a"><button type="button" class="pusht-y" data-push-on>🔔 ${T("নোটিফিকেশন চালু করুন", "Turn on notifications")}</button><button type="button" class="pusht-n" data-push-no>${T("পরে", "Later")}</button></div>`;
+    document.body.appendChild(el); promptEl = el; requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("on")));
+  }
   function showPrompt() {
+    if (standalone()) return showTopSheet();
     if (promptEl || state() !== "off" || document.querySelector(".pushp")) return;
     const el = document.createElement("div"); el.className = "pushp"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", T("নোটিফিকেশন", "Notifications"));
     el.innerHTML = `<div class="pushp-ic" aria-hidden="true">🔔</div><div class="pushp-t"><b>${T("নতুন খবর সবার আগে পান", "Get the news first")}</b><span>${T("ফান্ডিং, স্টার্টআপ ও ব্যবসার নতুন খবর প্রকাশ হলেই আপনার ডিভাইসে নোটিফিকেশন পাবেন।", "We'll notify you the moment new funding, startup and business stories go live.")}</span></div>
@@ -99,11 +118,11 @@
     document.body.appendChild(el); promptEl = el; requestAnimationFrame(() => el.classList.add("on"));
   }
   function maybePrompt() {
-    if (/^\/admin/.test(location.pathname) || state() !== "off") return;
-    const no = Number(ls.get(K.dismissed) || 0); if (no && Date.now() - no < 14 * 864e5) return;
+    if (/^\/(admin|reset-password|auth-confirm|unsubscribe)/.test(location.pathname) || state() !== "off") return;
+    const no = Number(ls.get(K.dismissed) || 0); if (no && Date.now() - no < (standalone() ? 1 : 14) * 864e5) return;   // installed app: ask again the next day
     const v = Number(ls.get(K.views) || 0) + 1; ls.set(K.views, String(v));   // pages this device has opened
     if (v < 2 && !standalone()) return;                      // a first-time reader gets a few pages before we ask (installed app: right away)
-    setTimeout(showPrompt, standalone() ? 2500 : 9000);
+    setTimeout(showPrompt, standalone() ? 1200 : 9000);
   }
   function stateText() {
     const s = state();
