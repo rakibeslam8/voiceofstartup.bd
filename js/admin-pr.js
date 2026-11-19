@@ -410,11 +410,13 @@ window.VOSB_ADMIN_PR = function (X) {
     const act = groups.filter((g) => g.active);
     const bookedOn = (iso, g) => bks.filter((b) => b.day === iso && b.slot_group === g.key);
     const blockedOn = (iso, g) => blk.filter((x) => x.day === iso && (!x.slot_group || x.slot_group === g.key));
-    const usedOf = (iso, g) => bookedOn(iso, g).length + blockedOn(iso, g).reduce((n, x) => n + (x.seats == null ? g.daily_cap : x.seats), 0);
+    const heldOf = (iso, g) => !!g.hold_days && iso >= shiftDay(today, g.lead_days) && iso < shiftDay(today, g.lead_days + g.hold_days);
+    const realOf = (iso, g) => bookedOn(iso, g).length + blockedOn(iso, g).reduce((n, x) => n + (x.seats == null ? g.daily_cap : x.seats), 0);
+    const usedOf = (iso, g) => heldOf(iso, g) ? Math.max(g.daily_cap, realOf(iso, g)) : realOf(iso, g);
     view.innerHTML = head("Publishing schedule", `<button type="button" class="b b-orange" data-a="blk-add">🚫 Close a day / reserve seats</button>`) + tabs("schedule") + `
       <div class="msg info">Each day has a limited number of seats per group — for example <b>1 Facebook post, 1 reel and 10 paid articles</b>. Buyers can only pick days that still have a seat, so the same date can never be booked twice. Click a day to see who is booked, move a booking, or close the day (holiday, offline booking). Seats are released automatically when an order is cancelled or rejected.</div>
       <div class="card sc-groups"><div class="sc-gh"><h2>Seats per day</h2><button type="button" class="b b-line b-sm" data-a="grp-add">➕ New group</button></div>
-        <div class="sc-glist">${groups.map((g) => `<div class="sc-g-row"><div><b>${esc(g.name_en)}</b> <small class="muted">· ${esc(g.name_bn)} · <code>${esc(g.key)}</code></small>${g.active ? "" : " " + pill("none", "Off")}</div><div class="muted">max <b>${g.daily_cap}</b> per day · earliest = today + ${g.lead_days} day${g.lead_days === 1 ? "" : "s"} · up to ${g.horizon_days} days ahead</div><button type="button" class="b b-line b-sm" data-a="grp-edit" data-k="${esc(g.key)}">Edit</button></div>`).join("") || '<p class="muted">No groups.</p>'}</div></div>
+        <div class="sc-glist">${groups.map((g) => `<div class="sc-g-row"><div><b>${esc(g.name_en)}</b> <small class="muted">· ${esc(g.name_bn)} · <code>${esc(g.key)}</code></small>${g.active ? "" : " " + pill("none", "Off")}</div><div class="muted">max <b>${g.daily_cap}</b> per day · earliest = today + ${g.lead_days} day${g.lead_days === 1 ? "" : "s"} · ${g.hold_days ? `next <b>${g.hold_days}</b> day${g.hold_days === 1 ? "" : "s"} always show as booked · ` : ""}up to ${g.horizon_days} days ahead</div><button type="button" class="b b-line b-sm" data-a="grp-edit" data-k="${esc(g.key)}">Edit</button></div>`).join("") || '<p class="muted">No groups.</p>'}</div></div>
       <div class="card sc-cal"><div class="sc-top"><button type="button" class="b b-line b-sm" data-a="nav" data-n="-1" aria-label="Previous month">‹</button><h2 id="sc-title"></h2><button type="button" class="b b-line b-sm" data-a="nav" data-n="1" aria-label="Next month">›</button><button type="button" class="b b-line b-sm" data-a="now">Today</button></div>
         <div class="sc-w" aria-hidden="true">${["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((w) => `<span>${w}</span>`).join("")}</div><div class="sc-grid" id="sc-grid"></div>
         <div class="sc-leg"><span><i class="o"></i>Some seats taken</span><span><i class="r"></i>Full / closed</span></div></div>
@@ -434,7 +436,8 @@ window.VOSB_ADMIN_PR = function (X) {
         return `<div class="sc-dg"><h3>${esc(g.name_en)} <small class="${u >= g.daily_cap ? "sc-full" : "muted"}">${u} / ${g.daily_cap} seats${u > g.daily_cap ? " (over limit)" : ""}</small>${g.active ? "" : " " + pill("none", "Off")}</h3>
           ${bl.map((b) => { const o = b.pr_orders || {}, br = o.brief || {}; return `<div class="sc-bk"><div><b>${esc(o.order_no || "")}</b> · ${esc(o.service_name_en || "")} <span class="muted">· ${esc(br.brand || "")} · ${esc(br.name || o.user_email || "")}</span> ${pill(o.status, ORD_L[o.status] || o.status)}</div><button type="button" class="b b-line b-sm" data-a="move" data-id="${esc(b.id)}">Move</button></div>`; }).join("")}
           ${cl.map((x) => `<div class="sc-bk sc-blk"><div>🚫 ${x.seats == null ? "Closed all day" : x.seats + " seat" + (x.seats > 1 ? "s" : "") + " reserved"}${x.slot_group ? "" : " <span class=\"muted\">(all groups)</span>"}${x.note ? ` <span class="muted">· ${esc(x.note)}</span>` : ""}</div><button type="button" class="b b-ghost b-sm" data-a="blk-rm" data-id="${esc(x.id)}">Reopen</button></div>`).join("")}
-          ${!bl.length && !cl.length ? '<p class="muted" style="margin:2px 0 0">Nothing booked.</p>' : ""}</div>`;
+          ${heldOf(iso, g) ? `<div class="sc-bk sc-blk"><div>🔒 Always shown as booked <span class="muted">· buyers cannot pick this day (change “Always shown as booked” in Edit)</span></div></div>` : ""}
+          ${!bl.length && !cl.length && !heldOf(iso, g) ? '<p class="muted" style="margin:2px 0 0">Nothing booked.</p>' : ""}</div>`;
       }).join("");
     };
     paint();
@@ -463,19 +466,21 @@ window.VOSB_ADMIN_PR = function (X) {
       } });
   }
   function grpForm(g) {
-    const n = !g; g = g || { key: "", name_en: "", name_bn: "", daily_cap: 1, lead_days: 1, horizon_days: 60, active: true, sort: 100 };
+    const n = !g; g = g || { key: "", name_en: "", name_bn: "", daily_cap: 1, lead_days: 1, hold_days: 0, horizon_days: 60, active: true, sort: 100 };
     return dialog({ title: n ? "New booking group" : "Edit seats — " + g.name_en, html: `<div class="pr-two">${fld("g-ne", "Name (English) *", inp("g-ne", g.name_en, 'maxlength="80"'))}${fld("g-nb", "Name (Bangla) *", inp("g-nb", g.name_bn, 'maxlength="80"'))}</div>
       <div class="pr-three">${fld("g-cap", "Seats per day *", inp("g-cap", g.daily_cap, 'inputmode="numeric"'), "e.g. 1 post, 10 articles")}${fld("g-lead", "Earliest: today + (days)", inp("g-lead", g.lead_days, 'inputmode="numeric"'), "1 = from tomorrow")}${fld("g-hor", "Bookable up to (days ahead)", inp("g-hor", g.horizon_days, 'inputmode="numeric"'))}</div>
+      ${fld("g-hold", "Always shown as booked (days)", inp("g-hold", g.hold_days == null ? 0 : g.hold_days, 'inputmode="numeric"'), "The next N days after “earliest” always look booked to buyers, even if nothing is booked. 0 = off. Real bookings stay booked.")}
       ${n ? fld("g-key", "Short key *", inp("g-key", "", 'maxlength="30" autocapitalize="off" placeholder="e.g. newsletter"'), "letters, numbers, - and _; cannot be changed later") : `<p class="muted" style="margin:0 0 10px">Key: <code>${esc(g.key)}</code></p>`}
       ${fld("g-so", "Order (small = first)", inp("g-so", g.sort, 'inputmode="numeric"'))}${chk("g-ac", "Group is open for booking", g.active)}
       <div class="msg info" style="margin:0">Lowering the seats never removes existing bookings — it only stops new ones on days that are already over the new limit. Assign services to a group under <b>Services → Edit → Booking calendar</b>.</div>`,
       onSave: async (bg) => {
-        const cap = num(val(bg, "g-cap")), lead = num(val(bg, "g-lead")), hor = num(val(bg, "g-hor")), so = num(val(bg, "g-so"));
+        const hold = num(val(bg, "g-hold")), cap = num(val(bg, "g-cap")), lead = num(val(bg, "g-lead")), hor = num(val(bg, "g-hor")), so = num(val(bg, "g-so"));
         if (val(bg, "g-ne").length < 2 || val(bg, "g-nb").length < 2) throw new Error("Please give the name in both English and Bangla.");
         if (!cap || cap < 1 || cap > 200) throw new Error("Seats per day must be between 1 and 200.");
+        if (hold == null || Number.isNaN(hold) || hold < 0 || hold > 60) throw new Error("Always-booked days must be between 0 and 60.");
         if (lead == null || Number.isNaN(lead) || lead < 0 || lead > 60) throw new Error("Earliest day must be between 0 and 60.");
         if (!hor || Number.isNaN(hor) || hor < 7 || hor > 365 || hor <= lead) throw new Error("“Up to” must be 7–365 days and more than the earliest day.");
-        const row = { name_en: val(bg, "g-ne"), name_bn: val(bg, "g-nb"), daily_cap: cap, lead_days: lead, horizon_days: hor, active: val(bg, "g-ac"), sort: so == null || Number.isNaN(so) ? 100 : so };
+        const row = { name_en: val(bg, "g-ne"), name_bn: val(bg, "g-nb"), daily_cap: cap, lead_days: lead, hold_days: hold, horizon_days: hor, active: val(bg, "g-ac"), sort: so == null || Number.isNaN(so) ? 100 : so };
         if (n) { const key = val(bg, "g-key").toLowerCase(); if (!/^[a-z0-9_-]{2,30}$/.test(key)) throw new Error("Key: 2–30 letters, numbers, - or _."); must(await sb.from("pr_slot_groups").insert(Object.assign({ key }, row))); }
         else must(await sb.from("pr_slot_groups").update(row).eq("key", g.key));
       } });
