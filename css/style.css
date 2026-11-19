@@ -2209,7 +2209,7 @@ html[data-theme="dark"] .au-form select { background-color: var(--bg); color: va
 .au-form label.au-chk input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--orange); }
 
 /* dark mode: same logo as light mode, no tile — the black letters turn white, the orange stays (assets/logo-dark.png) */
-html[data-theme="dark"] :is(.brand img, .au-logo) { content: url(/assets/logo-dark.png?v=2); background: none; }
+html[data-theme="dark"] :is(.brand img, .au-logo) { content: url(/assets/logo-dark.svg?v=1); background: none; }
 /* the footer is black in BOTH modes, so its logo always uses the white-letter version, with no tile */
-.footer-logo img, .site-footer .footer-grid > div:first-child img { content: url(/assets/logo-dark.png?v=2); }
+.footer-logo img, .site-footer .footer-grid > div:first-child img { content: url(/assets/logo-dark.svg?v=1); }
 .footer-logo, html:not([data-theme="dark"]) .footer-logo { background: none; padding: 0; border-radius: 0; }
