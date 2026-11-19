@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/new-investment-in-closed-factory-in-chittagong-epz-employment-of-2-tho</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-19T03:27:00.000Z</news:publication_date>
+      <news:title>চট্টগ্রাম ইপিজেডে বন্ধ কারখানায় নতুন বিনিয়োগ, কর্মসংস্থান হবে ২ হাজার মানুষের</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/new-investment-in-closed-factory-in-chittagong-epz-employment-of-2-tho</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-19T03:27:00.000Z</news:publication_date>
+      <news:title>Closed factory in Chattogram EPZ gets fresh investment, 2,000 jobs expected</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/ghana-is-interested-in-buying-products-from-bangladesh-there-is-more-p</loc>
     <news:news>
       <news:publication>
@@ -19,7 +41,7 @@
         <news:language>en</news:language>
       </news:publication>
       <news:publication_date>2026-11-18T16:37:00.000Z</news:publication_date>
-      <news:title>Ghana is interested in buying products from Bangladesh, there is more potential in six products including medicine and clothing</news:title>
+      <news:title>Ghana keen to import from Bangladesh, sees big potential in six products including medicine and garments</news:title>
     </news:news>
   </url>
   <url>
@@ -41,7 +63,7 @@
         <news:language>en</news:language>
       </news:publication>
       <news:publication_date>2026-11-18T15:40:00.000Z</news:publication_date>
-      <news:title>This time Renata medicine of Bangladesh in the Netherlands market</news:title>
+      <news:title>Bangladesh&#39;s Renata medicines head to the Netherlands market</news:title>
     </news:news>
   </url>
   <url>
@@ -63,7 +85,7 @@
         <news:language>en</news:language>
       </news:publication>
       <news:publication_date>2026-11-18T15:34:00.000Z</news:publication_date>
-      <news:title>Blessings on Halal Earnings: 5 Prophetic Principles for Businessmen</news:title>
+      <news:title>Blessings in halal earnings: 5 principles the Prophet taught for businesspeople</news:title>
     </news:news>
   </url>
   <url>
@@ -85,7 +107,7 @@
         <news:language>en</news:language>
       </news:publication>
       <news:publication_date>2026-11-18T15:29:00.000Z</news:publication_date>
-      <news:title>Struggle to fulfill her husband&#39;s dream, Khadija succeeds in cultivating foreign fruits</news:title>
+      <news:title>Khadija fights to fulfil her husband&#39;s dream, finds success growing foreign fruits</news:title>
     </news:news>
   </url>
   <url>
@@ -107,29 +129,7 @@
         <news:language>en</news:language>
       </news:publication>
       <news:publication_date>2026-11-17T04:53:00.000Z</news:publication_date>
-      <news:title>A maximum grant of Rs 50 lakh to startups, will be available in three phases</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-17T03:25:00.000Z</news:publication_date>
-      <news:title>পাঁচ দিনে আড়াই লাখ কোটি টাকার সম্পদ খোয়ালেন জেনসেন হুয়াং</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/jensen-huang-opened-a-wealth-of-two-and-a-half-million-rupees-in-five</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-17T03:25:00.000Z</news:publication_date>
-      <news:title>Jensen Huang opened a wealth of two and a half million rupees in five days</news:title>
+      <news:title>Startups can get grants of up to Tk 50 lakh in three phases</news:title>
     </news:news>
   </url>
 </urlset>

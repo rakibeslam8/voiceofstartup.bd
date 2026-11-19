@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Wed, 18 Nov 2026 16:37:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 19 Nov 2026 03:27:00 GMT</lastBuildDate>
+    <item>
+      <title>চট্টগ্রাম ইপিজেডে বন্ধ কারখানায় নতুন বিনিয়োগ, কর্মসংস্থান হবে ২ হাজার মানুষের</title>
+      <link>https://www.voiceofstartup.bd/read/new-investment-in-closed-factory-in-chittagong-epz-employment-of-2-tho</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/new-investment-in-closed-factory-in-chittagong-epz-employment-of-2-tho</guid>
+      <pubDate>Thu, 19 Nov 2026 03:27:00 GMT</pubDate>
+      <category>ব্যবসা, বিনিয়োগ ও নীতিমালা</category>
+      <description>প্রধানমন্ত্রীর কার্যালয়ের অনুমোদন নিয়ে সম্প্রতি উন্মুক্ত নিলামের আয়োজন করা হয়। এতে সর্বোচ্চ দরদাতা হিসেবে কারখানাটির যন্ত্রপাতি ও অবকাঠামো কিনে নেয় জয়ফুল (বাংলাদেশ) গার্মেন্ট।</description>
+    </item>
     <item>
       <title>বাংলাদেশ থেকে পণ্য নিতে আগ্রহী ঘানা, ওষুধ–পোশাকসহ ছয় পণ্যে সম্ভাবনা বেশি</title>
       <link>https://www.voiceofstartup.bd/read/ghana-is-interested-in-buying-products-from-bangladesh-there-is-more-p</link>
@@ -238,14 +246,6 @@
       <pubDate>Mon, 09 Nov 2026 03:01:00 GMT</pubDate>
       <category>প্রযুক্তি ও এআই</category>
       <description>বাংলা ভাষায় কৃত্রিম বুদ্ধিমত্তার (এআই) নিজস্ব মডেল তৈরির পরিকল্পনা করছে সরকার। এ জন্য দেশেই শক্তিশালী কম্পিউটার ও সার্ভারের অবকাঠামো গড়ে তুলতে চায়।</description>
-    </item>
-    <item>
-      <title>যুক্তরাষ্ট্রফেরত জাহিদুল এখন সফল কৃষি উদ্যোক্তা</title>
-      <link>https://www.voiceofstartup.bd/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/zahidul-returned-to-the-united-states-and-is-now-a-successful-agricult</guid>
-      <pubDate>Mon, 09 Nov 2026 02:43:00 GMT</pubDate>
-      <category>ফাউন্ডার স্টোরি</category>
-      <description>প্রায় দেড় যুগ বিদেশে কাটিয়ে দেশে ফিরে কৃষি উদ্যোক্তা হিসেবে নিজেকে প্রতিষ্ঠিত করেছেন মো. জাহিদুল ইসলাম। মূলত ভেজালমুক্ত ফসলের চিন্তা থেকেই তাঁর উদ্যোগের শুরু, পরে সেটি বাণিজ্যিক রূপ পায়।</description>
     </item>
   </channel>
 </rss>
