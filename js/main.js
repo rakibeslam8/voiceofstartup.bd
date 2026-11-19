@@ -71,7 +71,7 @@
   });
   if ("serviceWorker" in navigator) window.addEventListener("load", () => { navigator.serviceWorker.register("/sw.js").catch(() => {}); });
   /* Web Push (turn-on prompt, settings row, bell strip) — loaded after the page is ready so it never slows reading */
-  window.addEventListener("load", () => { setTimeout(() => { try { const sc = document.createElement("script"); sc.src = "/js/push.js?v=20261119b"; sc.async = true; document.head.appendChild(sc); } catch (e) {} }, 1200); });
+  window.addEventListener("load", () => { setTimeout(() => { try { const sc = document.createElement("script"); sc.src = "/js/push.js?v=20261119c"; sc.async = true; document.head.appendChild(sc); } catch (e) {} }, 1200); });
 
   const NAV = [
     { href: "/", bn: "হোম", en: "Home" },
