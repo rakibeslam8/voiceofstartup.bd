@@ -96,10 +96,24 @@
       (A().isIn() ? `<a class="btn btn-outline" href="#orders">${T("আমার অর্ডার", "My orders")}${n ? ` <span class="ac-count">${nd(n)}</span>` : ""}</a>` : `<button type="button" class="btn btn-outline" data-act="login">${T("লগইন / সাইন আপ", "Log in / Sign up")}</button>`);
   }
 
+  /* hero quick facts (shown above the buttons, so they are on the first phone screen): the lowest listed price and the earliest free date */
+  function heroFacts() {
+    const el = $("#pr-facts"); if (!el) return;
+    if (!A().isIn()) { el.innerHTML = ""; return; }
+    const paid = svcs().filter((s) => s.price != null && Number(s.price) > 0).sort((x, y) => Number(x.price) - Number(y.price))[0];
+    const g = st.slots && st.slots.groups; let first = "";
+    if (g) Object.keys(g).forEach((k) => { const d = g[k].days.find((x) => x.left > 0); if (d && (!first || d.d < first)) first = d.d; });
+    const out = [];
+    if (paid) out.push(`<span class="pr-fact"><i aria-hidden="true">💰</i><em>${T("দাম শুরু", "Starting from")}</em><b>${money(paid.price)}</b></span>`);
+    if (first) out.push(`<span class="pr-fact"><i aria-hidden="true">📅</i><em>${T("পরবর্তী খালি তারিখ", "Next free date")}</em><b>${esc(fmtD(first, true))}</b></span>`);
+    el.innerHTML = out.join("");
+  }
+
   /* hero, right-hand card: when the next free dates are — fills the corner and answers "when can I publish?" */
   const GIC = { article: "📰", post: "📘", reel: "🎬" };
   function heroCard() {
     const el = $("#pr-hero-r"); if (!el) return;
+    heroFacts();
     if (!A().isIn()) { el.innerHTML = ""; return; }
     const g = st.slots && st.slots.groups, sx = ((st.pub && st.pub.page) || {}).stats || {};
     let rows;
