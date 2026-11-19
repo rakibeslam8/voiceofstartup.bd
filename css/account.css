@@ -228,3 +228,12 @@ html[data-theme="dark"] .pay-num { background: #2b0f1c; }
 .rs-ok .rs-ic { font-size: 3rem; }
 .rs-card .ac-center, .rs-card.ac-center { padding: 30px 20px; }
 @media (max-width: 560px) { .rs-card { padding: 18px 16px; } .rs-card h2 { font-size: 1.2rem; } }
+
+/* coupon box on the company-listing payment screen */
+.pay-cpn { margin: 14px 0; padding: 12px 14px; border: 1.5px dashed var(--line); border-radius: 14px; background: var(--card); }
+.pay-cpn label { display: block; font-weight: 700; font-size: .92rem; margin-bottom: 6px; }
+.pay-cpn-r { display: flex; gap: 8px; }
+.pay-cpn-r input { flex: 1; min-width: 0; min-height: 44px; padding: 8px 12px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--bg); color: var(--text); text-transform: uppercase; letter-spacing: .04em; font: 700 .95rem var(--font-body); }
+.pay-cpn-m { min-height: 1.2em; margin-top: 6px; font-size: .86rem; }
+.pay-cpn-m.ok { color: var(--green); font-weight: 700; } .pay-cpn-m.err { color: #c0392b; }
+.pay-was { opacity: .55; font-size: .7em; margin-right: 6px; font-weight: 600; }

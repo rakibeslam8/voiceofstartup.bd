@@ -1,7 +1,8 @@
 /* Voice of Startup Bangladesh — /pr : paid promotion, sponsored articles, posts, reels, collaborations.
-   Anyone can read the page; ordering needs a login. Reached ONLY from the Contact page and the footer (under the contacts) — no menu, no sitemap, noindex.
+   Signed-in members only: signed-out visitors see a login wall and nothing else (no prices, no dates, no payment numbers). Reached ONLY from the Contact page and the footer (under the contacts) — no menu, no sitemap, noindex.
    The screen collects and displays. Prices, coupons, free-campaign rules, TrxID checks and ownership are all enforced by the database functions
-   (get_pr_public, pr_quote, pr_submit_order, pr_pay_order, pr_cancel_order). */
+   (get_pr_public, get_pr_slots, pr_quote, pr_submit_order, pr_pay_order, pr_cancel_order). Publish dates are booked by the database:
+   a service in a "slot group" (post / reel: 1 per day, article: 10 per day) can never be double-booked. */
 (function () {
   "use strict";
   const AC = window.VOSB_AC, F = window.VOSB_PRF;
@@ -13,6 +14,11 @@
   const nd = (n) => U().bnDigits(String(n));
   const money = (n) => "৳" + nd(Number(n || 0).toLocaleString("en-IN"));
   const en = (x) => String(x == null ? "" : x).replace(/[০-৯]/g, (d) => "০১২৩৪৫৬৭৮৯".indexOf(d));
+  const MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const MONTHS_BN = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
+  const WD_EN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], WD_BN = ["রবি", "সোম", "মঙ্গল", "বুধ", "বৃহঃ", "শুক্র", "শনি"];
+  const pd = (iso) => { const a = iso.split("-").map(Number); return new Date(Date.UTC(a[0], a[1] - 1, a[2])); };   // calendar maths in UTC: no time-zone drift
+  const fmtD = (iso, wd) => { const d = pd(iso), bn = U().lang === "bn", m = (bn ? MONTHS_BN : MONTHS_EN)[d.getUTCMonth()]; return (wd ? (bn ? WD_BN : WD_EN)[d.getUTCDay()] + (bn ? ", " : ", ") : "") + (bn ? nd(d.getUTCDate()) : d.getUTCDate()) + " " + (bn ? m : m.slice(0, 3)); };
   const pk = (a) => T(a[1], a[2]);                       // [cls, bn, en] → text
   const pill = (a) => `<span class="ac-pill ${a[0]}">${esc(pk(a))}</span>`;
   const compact = (n) => {
@@ -23,11 +29,14 @@
   const MAX = { name: 80, phone: 20, email: 120, brand: 120, website: 200, social_url: 200, what: 1500, audience: 200, key_points: 1200, assets: 600, article_link: 200, keywords: 200, concept: 1200, location: 120, budget: 60, venue: 160, prize: 200, handles: 200, notes: 1200 };
   const SOLID = { bkash: "#e2136e" };
 
-  const st = { pub: null, err: "", orders: null, ordersErr: "", cat: "all", o: null, done: null, payFor: null, cancelAsk: null, pay: { method: "bkash", sender: "", trx: "", msg: "", busy: false }, want: null, prof: null, lastView: "" };
+  const st = { pub: null, slots: null, bk: {}, rev: {}, gate: false, gateShown: false, err: "", orders: null, ordersErr: "", cat: "all", o: null, done: null, payFor: null, cancelAsk: null, pay: { method: "bkash", sender: "", trx: "", msg: "", busy: false }, want: null, prof: null, lastView: "" };
 
   /* ---------- data ---------- */
   async function loadPub() {
     try { st.pub = await rpc("get_pr_public"); st.err = ""; } catch (e) { st.err = friendly(e); }
+  }
+  async function loadSlots() {
+    try { st.slots = await rpc("get_pr_slots"); } catch (e) { st.slots = st.slots || null; }
   }
   async function loadOrders() {
     if (!A().isIn()) { st.orders = null; return; }
@@ -36,6 +45,11 @@
       const { data, error } = await c.from("pr_orders").select("*").eq("user_id", uid).is("deleted_at", null).order("created_at", { ascending: false });
       if (error) throw error;
       st.orders = data || []; st.ordersErr = "";
+      st.bk = {};
+      if (st.orders.length) {
+        const b = await c.from("pr_bookings").select("order_id,day,slot_group").in("order_id", st.orders.map((o) => o.id)).order("day");
+        (b.data || []).forEach((x) => { (st.bk[x.order_id] = st.bk[x.order_id] || []).push(x.day); });
+      }
       if (!st.prof) { const p = await c.from("profiles").select("full_name,phone").eq("id", uid).maybeSingle(); st.prof = p.data || {}; }
     } catch (e) { st.ordersErr = friendly(e); if (!st.orders) st.orders = []; }
   }
@@ -48,7 +62,9 @@
 
   function prErr(e) {
     const m = String((e && (e.message || e.error_description)) || e || "");
-    const x = /PR:\s*([a-z_]+)/i.exec(m);
+    const x = /PR:\s*([a-z_]+)\s*([^\n]*)/i.exec(m);
+    if (x && x[1] === "date_full" && /^\d{4}-\d{2}-\d{2}/.test(x[2])) return fmtD(x[2].slice(0, 10), true) + " — " + T(F.ERR.date_full[0], F.ERR.date_full[1]);
+    if (x && x[1] === "field_required" && x[2]) { const f = (svcByKey((st.o || {}).key) || {}).extra_fields || []; const hit = f.find((q) => q.en === x[2].trim()); return T("প্রয়োজনীয় তথ্য বাকি: ", "Required: ") + (hit ? T(hit.bn, hit.en) : x[2].trim()); }
     if (x && F.ERR[x[1]]) return T(F.ERR[x[1]][0], F.ERR[x[1]][1]);
     if (/Too many attempts/i.test(m)) return T("অনেকবার চেষ্টা হয়েছে — একটু পরে আবার চেষ্টা করুন।", "Too many attempts — please try again a little later.");
     if (/not available yet/i.test(m)) return T("এই পেমেন্ট মাধ্যম এখনো চালু হয়নি।", "This payment method is not available yet.");
@@ -76,9 +92,53 @@
   function cta() {
     const el = $("#pr-cta"); if (!el) return;
     const n = (st.orders || []).length;
-    el.innerHTML = `<a class="btn btn-orange" href="#services">${T("সেবা ও দাম দেখুন", "See services & prices")}</a>` +
+    el.innerHTML = `<a class="btn btn-orange" href="#services">${T("সেবা দেখুন", "Browse services")}</a>` +
       (A().isIn() ? `<a class="btn btn-outline" href="#orders">${T("আমার অর্ডার", "My orders")}${n ? ` <span class="ac-count">${nd(n)}</span>` : ""}</a>` : `<button type="button" class="btn btn-outline" data-act="login">${T("লগইন / সাইন আপ", "Log in / Sign up")}</button>`);
   }
+
+  /* hero, right-hand card: when the next free dates are — fills the corner and answers "when can I publish?" */
+  const GIC = { article: "📰", post: "📘", reel: "🎬" };
+  function heroCard() {
+    const el = $("#pr-hero-r"); if (!el) return;
+    if (!A().isIn()) { el.innerHTML = ""; return; }
+    const g = st.slots && st.slots.groups, sx = ((st.pub && st.pub.page) || {}).stats || {};
+    let rows;
+    if (!g) rows = `<div class="ac-skel" aria-hidden="true" style="height:140px;margin:0"></div>`;
+    else rows = Object.keys(g).map((k) => {
+      const x = g[k], i = x.days.findIndex((d) => d.left > 0), d = i >= 0 ? x.days[i] : null;
+      const sub = !d ? T("এখন সব তারিখ বুকড", "Fully booked right now") : i > 0 ? T(`আগামী ${nd(i)} দিন বুকড`, `Next ${i} day${i > 1 ? "s" : ""} are booked`) : T("আগামীকাল থেকেই খালি", "Open from tomorrow");
+      return `<li><span class="pr-hr-ic" aria-hidden="true">${GIC[k] || "📅"}</span><div class="pr-hr-t"><b>${esc(T(x.name_bn, x.name_en))}</b><small>${esc(sub)}</small></div>
+        <div class="pr-hr-d">${d ? `<b>${esc(fmtD(d.d, true))}</b><small>${x.cap > 1 ? nd(d.left) + " " + T("টি খালি", "seats left") : T("১টি স্লট খালি", "1 slot free")}</small>` : `<b class="full">${T("বুকড", "Full")}</b>`}</div></li>`;
+    }).join("");
+    const chips = [sx.avg_views ? "👁️ " + compact(sx.avg_views) + "+ " + T("গড় ভিউ/পোস্ট", "avg views / post") : "", sx.monthly_visitors ? "🌐 " + compact(sx.monthly_visitors) + "+ " + T("মাসিক ভিজিটর", "visitors / month") : ""].filter(Boolean);
+    el.innerHTML = `<div class="pr-hr-card"><div class="pr-hr-h"><span class="pr-live" aria-hidden="true"></span><h2>${T("📅 পরবর্তী খালি তারিখ", "📅 Next available dates")}</h2></div>
+      <ul class="pr-hr-list">${rows}</ul>
+      <p class="pr-hr-note">${T("সাধারণত ৩–৫ দিনের স্লট আগেই বুক হয়ে যায় — আগেভাগে তারিখ নিশ্চিত করুন।", "Slots usually fill 3–5 days ahead — lock your date early.")}</p>
+      ${chips.length ? `<div class="pr-hr-chips">${chips.map((c) => `<span>${esc(c)}</span>`).join("")}</div>` : ""}</div>`;
+  }
+
+  /* price reveal: the price stays hidden until the visitor asks — then it counts up from zero */
+  const reduced = () => { try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } };
+  function revealHtml(s, anim) {
+    const sp = anim ? Array.from({ length: 12 }, (_, i) => `<i class="pr-sp" style="--a:${i * 30}deg;--d:${34 + (i % 3) * 16}px;--t:${(i % 4) * 40}ms" aria-hidden="true"></i>`).join("") : "";
+    const pr = s.price == null ? `<div class="pr-price q"><b>${T("কাস্টম কোটেশন", "Custom quote")}</b><span>${T("আপনার প্রয়োজন অনুযায়ী দাম", "Priced to your needs")}</span></div>`
+      : `<div class="pr-price"><b data-count="${s.price}">${money(s.price)}</b><span>${esc(T(s.unit_bn, s.unit_en))}</span></div>`;
+    return `<div class="pr-rv${anim ? " anim" : ""}">${sp}${pr}</div>
+      <button type="button" class="btn ${s.price != null ? "btn-orange" : "btn-outline"} pr-order-b" data-order="${esc(s.key)}">${s.price != null ? T("অর্ডার করুন →", "Order now →") : T("কোটেশন চান →", "Get a quote →")}</button>`;
+  }
+  const pboxHtml = (s) => st.rev[s.key] ? revealHtml(s, false) : `<button type="button" class="pr-see" data-see="${esc(s.key)}"><span class="pr-see-ic" aria-hidden="true">💰</span><span>${T("দাম দেখুন", "See price")}</span></button>`;
+  function countUp(el, to, ms) {
+    const t0 = performance.now(), ease = (x) => 1 - Math.pow(1 - x, 3);
+    el.textContent = money(0);
+    (function f(t) { const k = Math.min(1, (t - t0) / ms); el.textContent = money(Math.round(to * ease(k))); if (k < 1 && document.body.contains(el)) requestAnimationFrame(f); else el.textContent = money(to); })(t0);
+  }
+  function reveal(key) {
+    const s = svcByKey(key), box = $$("[data-pbox]").find((x) => x.dataset.pbox === key);
+    if (!s || !box || st.rev[key]) return;
+    st.rev[key] = true; box.innerHTML = revealHtml(s, !reduced()); box.classList.add("on");
+    const b = box.querySelector("[data-count]"); if (b && !reduced()) countUp(b, Number(s.price), 950);
+  }
+  function revealAll() { svcs().filter((s) => (st.cat === "all" || s.category === st.cat) && !st.rev[s.key]).forEach((s, i) => setTimeout(() => reveal(s.key), reduced() ? 0 : i * 110)); }
 
   /* ---------- HOME ---------- */
   function statsHtml() {
@@ -102,12 +162,12 @@
       ${names.length ? `<button type="button" class="btn btn-orange" data-order="${esc(names[0].key)}">${T("ফ্রি স্লট নিন →", "Claim a free slot →")}</button>` : ""}</section>`;
   }
   function cardHtml(s) {
-    const free = campFor(s);
-    const price = s.price != null ? `<div class="pr-price"><b>${money(s.price)}</b><span>${esc(T(s.unit_bn, s.unit_en))}</span></div>` : `<div class="pr-price q"><b>${T("কাস্টম কোটেশন", "Custom quote")}</b><span>${T("আপনার প্রয়োজন অনুযায়ী দাম", "Priced to your needs")}</span></div>`;
-    return `<article class="pr-card${s.popular ? " pop" : ""}"><div class="pr-card-top"><span class="pr-ic" aria-hidden="true">${esc(s.icon || "📣")}</span><span class="pr-badges">${s.popular ? `<span class="pr-badge">${T("জনপ্রিয়", "Popular")}</span>` : ""}${free ? `<span class="pr-badge free">${T("🎁 ফ্রি ক্যাম্পেইন", "🎁 Free campaign")}</span>` : ""}</span></div>
-      <h3>${esc(T(s.name_bn, s.name_en))}</h3><p>${esc(T(s.desc_bn, s.desc_en))}</p>${price}
-      <button type="button" class="btn ${s.price != null ? "btn-orange" : "btn-outline"}" data-order="${esc(s.key)}">${s.price != null ? T("অর্ডার করুন →", "Order now →") : T("কোটেশন চান →", "Get a quote →")}</button></article>`;
+    const free = campFor(s), note = T(s.notice_bn, s.notice_en);
+    return `<article class="pr-card${s.popular ? " pop" : ""}"><div class="pr-card-top"><span class="pr-ic" aria-hidden="true">${esc(s.icon || "📣")}</span><span class="pr-badges">${s.popular ? `<span class="pr-badge">${T("জনপ্রিয়", "Popular")}</span>` : ""}${free ? `<span class="pr-badge free">${T("🎁 ফ্রি ক্যাম্পেইন", "🎁 Free campaign")}</span>` : ""}${s.slot_group ? `<span class="pr-badge cal">${T("📅 তারিখ বেছে নিন", "📅 Pick a date")}</span>` : ""}</span></div>
+      <h3>${esc(T(s.name_bn, s.name_en))}</h3><p>${esc(T(s.desc_bn, s.desc_en))}</p>${note ? `<p class="pr-cnote">ℹ️ ${esc(note)}</p>` : ""}
+      <div class="pr-pbox${st.rev[s.key] ? " on" : ""}" data-pbox="${esc(s.key)}">${pboxHtml(s)}</div></article>`;
   }
+  const revAllBtn = () => svcs().some((s) => !st.rev[s.key]) ? `<button type="button" class="pr-revall" data-act="rev-all">💰 ${T("সব দাম দেখুন", "Show all prices")}</button>` : "";
   function gridHtml() {
     const list = svcs().filter((s) => st.cat === "all" || s.category === st.cat);
     return list.length ? list.map(cardHtml).join("") : `<p class="muted">${T("এই ক্যাটাগরিতে এখন কিছু নেই।", "Nothing in this category right now.")}</p>`;
@@ -117,7 +177,7 @@
     return F.CATS.filter((c) => c[0] === "all" || have.has(c[0])).map((c) => `<button type="button" class="pr-chip" role="tab" aria-selected="${st.cat === c[0]}" data-cat="${c[0]}">${esc(T(c[1], c[2]))}</button>`).join("");
   }
   const STEPS = [
-    ["১", "1", "সেবা বেছে নিন", "Pick a service", "আর্টিকেল, পোস্ট, রিলস বা প্যাকেজ — দাম আগেই দেখানো থাকে।", "Article, post, reel or a package — prices are shown up front."],
+    ["১", "1", "সেবা বেছে নিন", "Pick a service", "আর্টিকেল, পোস্ট, রিলস বা প্যাকেজ — “দাম দেখুন” চাপলেই দাম, তারপর ক্যালেন্ডার থেকে প্রকাশের তারিখ।", "Article, post, reel or a package — tap “See price”, then pick your publish date on the calendar."],
     ["২", "2", "ব্রিফ পাঠান", "Send your brief", "আপনার ব্র্যান্ড, লক্ষ্য ও প্রয়োজনীয় তথ্য ফর্মে লিখুন।", "Tell us about your brand, goal and what to include."],
     ["৩", "3", "বিকাশে পেমেন্ট", "Pay with bKash", "Send Money করে TrxID দিন। কাস্টম সেবায় আগে কোটেশন পাবেন।", "Send Money and enter the TrxID. Custom services get a quote first."],
     ["৪", "4", "আমরা প্রকাশ করি", "We publish", "কাজ শেষ হলে লিংক “আমার অর্ডার”-এ পাবেন। সব কনটেন্টে “Sponsored” লেবেল থাকে।", "Your link appears in “My orders”. Everything is labelled “Sponsored”."],
@@ -126,6 +186,7 @@
     ["প্রচারিত কনটেন্ট কি স্পষ্টভাবে চিহ্নিত থাকে?", "Is promoted content clearly labelled?", "হ্যাঁ। প্রতিটি পেইড আর্টিকেল, পোস্ট ও ভিডিওতে “Sponsored” বা “Partner content” লেবেল থাকে। আমাদের সম্পাদকীয় সংবাদ আলাদা এবং বিক্রির জন্য নয়।", "Yes. Every paid article, post and video carries a “Sponsored” or “Partner content” label. Our editorial news is separate and not for sale."],
     ["ভিউ বা ফলাফলের নিশ্চয়তা আছে কি?", "Do you guarantee views or results?", "না। আমরা পেজের গড় ও সাম্প্রতিক পারফরম্যান্স দেখাই, কিন্তু প্রতিটি পোস্টের ভিউ আলাদা হয়। কোনো নির্দিষ্ট ভিউ বা বিক্রির প্রতিশ্রুতি দেওয়া হয় না।", "No. We show our page averages and recent performance, but every post is different. We do not promise specific views or sales."],
     ["কীভাবে পেমেন্ট করব?", "How do I pay?", "বিকাশ Send Money করে পেমেন্টের SMS-এর TrxID ও আপনার নম্বর অর্ডার ফর্মে দিন। আমাদের টিম মিলিয়ে নিয়ে নিশ্চিত করে — “আমার অর্ডার” পেজে অবস্থা দেখতে পাবেন। চাইলে অর্ডার করে পরে পেমেন্টও দিতে পারবেন।", "Send Money via bKash, then enter the TrxID from the payment SMS and your number in the order form. Our team matches it and confirms — you can follow the status in “My orders”. You can also place the order now and pay later."],
+    ["কত আগে বুক করতে হয়? একই দিনে কয়টি প্রকাশ হয়?", "How early should I book? How many items go out per day?", "সাধারণত ৩–৫ দিনের তারিখ আগেই বুক থাকে, তাই আগেভাগে বুক করা ভালো। প্রতিদিন ১টি ফেসবুক পোস্ট, ১টি রিলস এবং সর্বোচ্চ ১০টি পেইড আর্টিকেল প্রকাশ হয় — একই তারিখে দ্বিতীয় পোস্ট বা রিলস নেওয়া হয় না। ক্যালেন্ডারে শুধু খালি তারিখই বেছে নেওয়া যায়।", "Dates are usually booked 3–5 days ahead, so book early. Each day we publish 1 Facebook post, 1 reel and up to 10 paid articles — a second post or reel on the same date is not accepted. The calendar only lets you pick free dates."],
     ["কুপন কোড কোথায় দেব?", "Where do I use a coupon code?", "অর্ডার ফর্মের সারাংশে “কুপন” ঘরে কোড লিখে Apply চাপুন — ছাড় সাথে সাথে মোট দামে দেখা যাবে।", "Type it in the “Coupon” box in the order summary and press Apply — the discount shows in your total straight away."],
     ["কোন কনটেন্ট আপনারা প্রকাশ করেন না?", "What content do you not publish?", "বিভ্রান্তিকর দাবি, বেআইনি বা বিনিয়োগ-প্রতারণামূলক বার্তা, ঘৃণা বা অশ্লীল কনটেন্ট প্রকাশ করা হয় না। এমন হলে আমরা আগে আপনাকে জানাই।", "Misleading claims, unlawful or investment-scam messages, hateful or adult content are not published. If something is an issue we tell you first."],
     ["বাতিল বা রিফান্ড কীভাবে হয়?", "What about cancellations and refunds?", "কাজ শুরুর আগে বাতিল করা যায়। বিস্তারিত নিয়ম আমাদের রিফান্ড নীতিতে আছে — অথবা পার্টনারশিপ ইমেইলে লিখুন।", "You can cancel before work starts. The details are in our refund policy — or write to our partnerships email."],
@@ -137,7 +198,7 @@
     const wa = String(pg.whatsapp || "").replace(/[^\d]/g, "");
     return `${intro ? `<p class="pr-intro">${esc(intro)}</p>` : ""}${statsHtml()}${campaignHtml()}
       <section class="pr-sec" id="services" aria-labelledby="pr-h-svc"><div class="pr-sec-h"><h2 id="pr-h-svc">${T("সেবা ও দাম", "Services & prices")}</h2><p>${T("যেভাবে আমাদের সাথে কাজ করতে পারেন", "Every way you can work with us")}</p></div>
-        <div class="pr-chips" role="tablist" id="pr-chips">${chipsHtml()}</div><div class="pr-grid" id="pr-grid">${gridHtml()}</div></section>
+        <div class="pr-bar"><div class="pr-chips" role="tablist" id="pr-chips">${chipsHtml()}</div><span id="pr-revall">${revAllBtn()}</span></div><div class="pr-grid" id="pr-grid">${gridHtml()}</div></section>
       <section class="pr-sec" aria-labelledby="pr-h-how"><div class="pr-sec-h"><h2 id="pr-h-how">${T("কীভাবে কাজ করে", "How it works")}</h2></div>
         <ol class="pr-steps">${STEPS.map((x) => `<li><span class="pr-sn" aria-hidden="true">${U().lang === "bn" ? x[0] : x[1]}</span><div><h3>${T(x[2], x[3])}</h3><p>${T(x[4], x[5])}</p></div></li>`).join("")}</ol></section>
       <section class="pr-sec" aria-labelledby="pr-h-faq"><div class="pr-sec-h"><h2 id="pr-h-faq">${T("সচরাচর জিজ্ঞাসা", "Questions people ask")}</h2></div>
@@ -150,7 +211,7 @@
   const todayIso = () => new Date().toISOString().slice(0, 10);
   function newOrder(s) {
     const u = A().user() || {}, p = st.prof || {};
-    return { key: s.key, qty: Math.max(1, s.min_qty || 1), coupon: "", applied: "", free: false, quote: null, cmsg: "", cbusy: false, agree: false, msg: "", busy: false,
+    return { key: s.key, qty: Math.max(1, s.min_qty || 1), coupon: "", applied: "", free: false, quote: null, cmsg: "", cbusy: false, agree: false, msg: "", busy: false, dates: {}, cal: "", extra: {},
       vals: { name: p.full_name || "", phone: p.phone || "", email: u.email || "" } };
   }
   function fieldHtml(k, key) {
@@ -166,6 +227,72 @@
     else ctl = `<input id="${id}" data-bf="${k}" type="${type === "tel" ? "tel" : type === "email" ? "email" : type === "url" ? "url" : "text"}"${type === "tel" ? ' inputmode="tel"' : ""}${type === "url" ? ' inputmode="url" autocapitalize="off"' : ""} maxlength="${MAX[k] || 200}" placeholder="${ph}" value="${esc(v)}" autocomplete="${k === "name" ? "name" : k === "phone" ? "tel" : k === "email" ? "email" : "off"}">`;
     return `<div class="ac-fld${type === "textarea" || k === "what" ? " ac-span" : ""}">${lab}${ctl}<span class="ac-err" data-err="${k}" role="alert"></span></div>`;
   }
+  /* publish dates — a calendar of free dates for the service's slot group (post/reel: 1 per day, article: 10 per day) */
+  const grp = (s) => s.slot_group && st.slots && st.slots.groups && st.slots.groups[s.slot_group];
+  const need = (s) => (st.o.free ? 1 : st.o.qty || 1);
+  const picked = () => Object.keys(st.o.dates).reduce((a, k) => a + (st.o.dates[k] || 0), 0);
+  const pad2 = (n) => String(n).padStart(2, "0");
+  const leftOf = (g, iso) => { const d = g.days.find((x) => x.d === iso); return d ? d.left : -1; };
+  function trimDates(s) {
+    const o = st.o; let extra = picked() - need(s);
+    Object.keys(o.dates).sort().reverse().forEach((k) => { while (extra > 0 && o.dates[k] > 0) { o.dates[k]--; extra--; } if (!o.dates[k]) delete o.dates[k]; });
+  }
+  function calBlock(s) {
+    const g = grp(s), o = st.o;
+    if (!g || !g.days.length) return `<div class="ac-note">${T("তারিখের তালিকা লোড করা যায়নি।", "Could not load the available dates.")} <button type="button" class="btn btn-outline ac-sm" data-act="slotsretry">${T("আবার চেষ্টা", "Retry")}</button></div>`;
+    const bn = U().lang === "bn", n = need(s), cap = g.cap, first = g.days[0].d, last = g.days[g.days.length - 1].d;
+    if (!o.cal) o.cal = (g.days.find((d) => d.left > 0) || g.days[0]).d.slice(0, 7);
+    const ym = o.cal.split("-").map(Number), Y = ym[0], M = ym[1];
+    const dow = new Date(Date.UTC(Y, M - 1, 1)).getUTCDay(), dim = new Date(Date.UTC(Y, M, 0)).getUTCDate();
+    const idx = (iso) => Number(iso.slice(0, 4)) * 12 + Number(iso.slice(5, 7)) - 1, cur = Y * 12 + M - 1;
+    let cells = ""; for (let i = 0; i < dow; i++) cells += `<span class="pr-cd pad" aria-hidden="true"></span>`;
+    for (let d = 1; d <= dim; d++) {
+      const iso = `${Y}-${pad2(M)}-${pad2(d)}`, left = leftOf(g, iso), c = o.dates[iso] || 0, num = bn ? nd(d) : d;
+      if (left < 0) cells += `<span class="pr-cd out"><span class="d">${num}</span></span>`;
+      else if (left === 0) cells += `<span class="pr-cd full" aria-label="${esc(fmtD(iso, true))}, ${T("বুকড", "fully booked")}"><span class="d">${num}</span><small>${T("বুকড", "Full")}</small></span>`;
+      else cells += `<button type="button" class="pr-cd ok${c ? " sel" : ""}" data-day="${iso}" aria-pressed="${c > 0}" aria-label="${esc(fmtD(iso, true))}, ${cap > 1 ? nd(left - c) + " " + T("টি খালি", "seats left") : T("খালি", "free")}"><span class="d">${num}</span><small>${c ? "✓" + (c > 1 ? " ×" + nd(c) : "") : cap > 1 ? nd(left) + T(" খালি", " free") : T("খালি", "Free")}</small></button>`;
+    }
+    const days = Object.keys(o.dates).filter((k) => o.dates[k] > 0).sort(), tot = picked();
+    const chips = days.map((k) => `<span class="pr-pk"><b>${esc(fmtD(k, true))}</b>${o.dates[k] > 1 ? ` × ${nd(o.dates[k])}` : ""}${cap > 1 && tot < n && o.dates[k] < leftOf(g, k) ? `<button type="button" data-dayadd="${k}" aria-label="${T("আরও একটি", "Add one more")}">+</button>` : ""}<button type="button" data-dayrm="${k}" aria-label="${T("সরান", "Remove")}">×</button></span>`).join("");
+    return `<div class="pr-cal-top"><button type="button" class="pr-cn" data-calnav="-1" aria-label="${T("আগের মাস", "Previous month")}"${cur <= idx(first) ? " disabled" : ""}>‹</button><b>${(bn ? MONTHS_BN : MONTHS_EN)[M - 1]} ${bn ? nd(Y) : Y}</b><button type="button" class="pr-cn" data-calnav="1" aria-label="${T("পরের মাস", "Next month")}"${cur >= idx(last) ? " disabled" : ""}>›</button></div>
+      <div class="pr-cal-w" aria-hidden="true">${(bn ? WD_BN : WD_EN).map((w) => `<span>${w}</span>`).join("")}</div><div class="pr-cal-g">${cells}</div>
+      <div class="pr-cal-leg"><span><i class="free"></i>${T("খালি", "Free")}</span><span><i class="sel"></i>${T("আপনার বাছাই", "Your pick")}</span><span><i class="full"></i>${T("বুকড", "Booked")}</span></div>
+      <div class="pr-cal-sum ${tot === n ? "done" : ""}"><b>${T("বেছে নেওয়া হয়েছে", "Selected")}: ${nd(tot)} / ${nd(n)}</b><span class="pr-cal-acts"><button type="button" class="btn btn-outline ac-sm" data-act="autopick">⚡ ${T("সবচেয়ে কাছের তারিখ নিন", "Auto-pick earliest")}</button>${tot ? `<button type="button" class="btn btn-outline ac-sm" data-act="clearpick">${T("মুছুন", "Clear")}</button>` : ""}</span></div>
+      ${chips ? `<div class="pr-pks">${chips}</div>` : ""}
+      <p class="pr-fine">${T(`প্রতিদিন সর্বোচ্চ ${nd(cap)}টি ${esc(g.name_bn)} প্রকাশ হয় — একই তারিখ আবার নেওয়া যায় না।`, `We publish at most ${cap} ${esc(g.name_en).toLowerCase()} per day — a full date cannot be booked again.`)}</p>`;
+  }
+  function refreshCal() { const el = $("#pr-cal"), s = st.o && svcByKey(st.o.key); if (el && s) el.innerHTML = calBlock(s); }
+  function toggleDay(iso) {
+    const s = svcByKey(st.o.key), g = grp(s), o = st.o; if (!g) return;
+    const left = leftOf(g, iso), c = o.dates[iso] || 0, n = need(s);
+    if (left <= 0) return;
+    if (picked() < n && c < left) o.dates[iso] = c + 1;
+    else if (c) delete o.dates[iso];
+    else if (n === 1) o.dates = { [iso]: 1 };
+    else toast(T(`${nd(n)}টি তারিখ বেছে নেওয়া হয়ে গেছে — আগে একটি সরান।`, `All ${n} dates are chosen — remove one first.`), "");
+    o.msg = ""; const m = $("#pr-msg"); if (m) m.textContent = "";
+    refreshCal();
+  }
+  function autoPick() {
+    const s = svcByKey(st.o.key), g = grp(s), o = st.o; if (!g) return;
+    let r = need(s); o.dates = {};
+    for (const d of g.days) { if (r <= 0) break; if (d.left > 0) { const k = Math.min(d.left, r); o.dates[d.d] = k; r -= k; } }
+    if (r > 0) toast(T("এতগুলো খালি তারিখ এখন নেই — পরিমাণ কমান।", "Not enough free dates right now — reduce the quantity."), "");
+    const f = Object.keys(o.dates).sort()[0]; if (f) o.cal = f.slice(0, 7);
+    refreshCal();
+  }
+  const datesList = () => { const o = st.o, a = []; Object.keys(o.dates).sort().forEach((k) => { for (let i = 0; i < o.dates[k]; i++) a.push(k); }); return a; };
+
+  /* extra fields the admin added to a service */
+  function xfHtml(f) {
+    const v = st.o.extra[f.id] || "", id = "xf-" + f.id, lab = `<label for="${id}">${esc(T(f.bn, f.en))}${f.required ? ` <i class="req" aria-hidden="true">*</i>` : ""}</label>`;
+    let ctl;
+    if (f.type === "textarea") ctl = `<textarea id="${id}" data-xf="${esc(f.id)}" rows="3" maxlength="1200">${esc(v)}</textarea>`;
+    else if (f.type === "select") ctl = `<select id="${id}" data-xf="${esc(f.id)}"><option value="">${T("— বেছে নিন —", "— Select —")}</option>${(f.options || []).map((o) => `<option value="${esc(o.en)}"${v === o.en ? " selected" : ""}>${esc(T(o.bn, o.en))}</option>`).join("")}</select>`;
+    else ctl = `<input id="${id}" data-xf="${esc(f.id)}" type="${f.type === "date" ? "date" : f.type === "number" ? "text" : f.type === "url" ? "url" : "text"}"${f.type === "number" ? ' inputmode="decimal"' : ""}${f.type === "url" ? ' inputmode="url" autocapitalize="off"' : ""} maxlength="300" value="${esc(v)}">`;
+    return `<div class="ac-fld${f.type === "textarea" ? " ac-span" : ""}">${lab}${ctl}<span class="ac-err" data-err="xf-${esc(f.id)}" role="alert"></span></div>`;
+  }
+
   function kindNow(s) {
     const o = st.o;
     if (o.free) return "free";
@@ -210,15 +337,20 @@
 
   function orderHtml(s) {
     const o = st.o, c = campFor(s), t = totals(s);
-    const set = F.SETS[F.SET_OF[s.key] || "other"] || F.SETS.other;
+    const sched = !!s.slot_group, xf = Array.isArray(s.extra_fields) ? s.extra_fields : [], note = T(s.notice_bn, s.notice_en);
+    const set = (F.SETS[F.SET_OF[s.key] || "other"] || F.SETS.other).filter((k) => !(sched && k === "date"));
+    let sn = 2; const num = () => nd(++sn) + ". ";
     const unit = T(s.unit_bn, s.unit_en);
     const qtyOk = (s.max_qty || 1) > (s.min_qty || 1);
     return `<div class="pr-back"><a href="#services" data-act="home">← ${T("সব সেবা", "All services")}</a></div>
       <div class="pr-order">
         <form class="pr-form ac-card ac-form" id="pr-form" novalidate autocomplete="on">
           <div class="pr-svc"><span class="pr-ic" aria-hidden="true">${esc(s.icon || "📣")}</span><div><h2>${esc(T(s.name_bn, s.name_en))}</h2><p>${esc(T(s.desc_bn, s.desc_en))}</p></div></div>
+          ${note ? `<div class="ac-note pr-notice">ℹ️ ${esc(note)}</div>` : ""}
           <fieldset><legend>${T("১. আপনার তথ্য", "1. About you")}</legend><div class="ac-grid2">${F.CORE.map((k) => fieldHtml(k, s.key)).join("")}</div></fieldset>
           <fieldset><legend>${T("২. কী প্রচার করবেন", "2. What to promote")}</legend><div class="ac-grid2">${fieldHtml("what", s.key)}${set.map((k) => fieldHtml(k, s.key)).join("")}${fieldHtml("notes", s.key)}</div></fieldset>
+          ${xf.length ? `<fieldset><legend>${num()}${T("এই সেবার জন্য আরও তথ্য", "More details for this service")}</legend><div class="ac-grid2">${xf.map(xfHtml).join("")}</div></fieldset>` : ""}
+          ${sched ? `<fieldset class="pr-datefs" id="pr-datefs"><legend>${num()}${T("প্রকাশের তারিখ বেছে নিন", "Choose your publish date")}</legend><div class="pr-cal" id="pr-cal">${calBlock(s)}</div><span class="ac-err" data-err="dates" role="alert"></span></fieldset>` : ""}
           <label class="pr-agree"><input type="checkbox" id="pr-agree" ${o.agree ? "checked" : ""}><span>${T(`আমি জানি কনটেন্টে “Sponsored” লেবেল থাকবে এবং বিভ্রান্তিকর বা বেআইনি কনটেন্ট VOSB প্রকাশ নাও করতে পারে। <a href="/refund-policy" target="_blank" rel="noopener">রিফান্ড নীতি</a>`, `I understand the content will be labelled “Sponsored” and that VOSB may decline misleading or unlawful content. <a href="/refund-policy" target="_blank" rel="noopener">Refund policy</a>`)}</span></label>
         </form>
         <aside class="pr-sum ac-card" aria-label="${T("অর্ডার সারাংশ", "Order summary")}">
@@ -270,17 +402,26 @@
     const s = svcByKey(st.o.key), o = st.o;
     n = Math.max(s.min_qty || 1, Math.min(s.max_qty || 1, Math.round(Number(n) || 1)));
     o.qty = n; const i = $("#pr-qty"); if (i) i.value = n;
+    if (s.slot_group) { trimDates(s); refreshCal(); }
     if (o.applied) { clearTimeout(qT); qT = setTimeout(quote, 250); } else refreshSummary();
   }
   function validate(s) {
     const o = st.o, v = o.vals, set = F.SETS[F.SET_OF[s.key] || "other"];
     $$(".ac-err").forEach((e) => (e.textContent = ""));
-    const bad = (k, bn, en2) => { const e = $(`[data-err="${k}"]`); if (e) e.textContent = T(bn, en2); const f = $("#bf-" + k); if (f) f.focus(); return T(bn, en2); };
+    const bad = (k, bn, en2, fid) => { const e = $(`[data-err="${k}"]`); if (e) e.textContent = T(bn, en2); const f = $("#" + (fid || "bf-" + k)); if (f) f.focus(); return T(bn, en2); };
     if ((v.name || "").trim().length < 2) return bad("name", "আপনার নাম লিখুন।", "Please enter your name.");
     if (!/^(\+?88)?01[3-9]\d{8}$/.test(en(v.phone || "").replace(/[\s-]/g, ""))) return bad("phone", "সঠিক মোবাইল নম্বর দিন (01XXXXXXXXX)।", "Enter a valid mobile number (01XXXXXXXXX).");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test((v.email || "").trim())) return bad("email", "সঠিক ইমেইল দিন।", "Enter a valid email.");
     if ((v.brand || "").trim().length < 2) return bad("brand", "ব্র্যান্ড বা কোম্পানির নাম লিখুন।", "Enter your brand or company name.");
     if ((v.what || "").trim().length < 20) return bad("what", "কী প্রচার করতে চান তা অন্তত ২০ অক্ষরে লিখুন।", "Describe what you want to promote (at least 20 characters).");
+    for (const f of (Array.isArray(s.extra_fields) ? s.extra_fields : [])) {
+      if (f.required && !String(o.extra[f.id] || "").trim()) return bad("xf-" + f.id, "“" + f.bn + "” লিখুন।", "Please fill in “" + f.en + "”.", "xf-" + f.id);
+    }
+    if (s.slot_group) {
+      if (!grp(s)) return T("তারিখের তালিকা লোড হয়নি — “আবার চেষ্টা” চাপুন।", "The date list did not load — press “Retry”.");
+      const n = need(s), t = picked();
+      if (t !== n) { const e = $('[data-err="dates"]'), m2 = n === 1 ? T("ক্যালেন্ডার থেকে একটি প্রকাশের তারিখ বেছে নিন।", "Pick a publish date on the calendar.") : T(`ক্যালেন্ডার থেকে ${nd(n)}টি তারিখ বেছে নিন (এখন ${nd(t)}টি)।`, `Pick ${n} dates on the calendar (you have ${t}).`); if (e) e.textContent = m2; const f = $("#pr-datefs"); if (f) f.scrollIntoView({ behavior: "smooth", block: "center" }); return m2; }
+    }
     if (!o.agree) { const a = $("#pr-agree"); if (a) a.focus(); return T("এগোতে নিচের শর্তে টিক দিন।", "Please tick the agreement to continue."); }
     void set; return "";
   }
@@ -295,15 +436,21 @@
     }
     if (m) { o.msg = m; const e = $("#pr-msg"); if (e) { e.className = "ac-msg err"; e.textContent = m; } return; }
     o.msg = ""; o.busy = true; refreshSummary();
-    const brief = {}; const keys = F.CORE.concat(["what"], F.SETS[F.SET_OF[s.key] || "other"], ["notes"]);
+    const brief = {}; const keys = F.CORE.concat(["what"], (F.SETS[F.SET_OF[s.key] || "other"] || []).filter((k) => !(s.slot_group && k === "date")), ["notes"]);
     keys.forEach((k) => { const x = String(o.vals[k] || "").trim(); if (x) brief[k] = x; });
+    const ex = {}; (Array.isArray(s.extra_fields) ? s.extra_fields : []).forEach((f) => { const x = String(o.extra[f.id] || "").trim(); if (x) ex[f.id] = x; });
+    if (Object.keys(ex).length) brief.extra = ex;
     if (brief.phone) brief.phone = en(brief.phone).replace(/[\s-]/g, "");
     const p = { service: s.id, qty: t.kind === "free" ? 1 : o.qty, free: t.kind === "free", coupon: t.kind === "paid" ? (o.coupon || "").trim().toUpperCase() : "", brief };
+    if (s.slot_group) p.dates = datesList();
     if (payNow && t.kind === "paid" && t.amount > 0) { p.method = P.method; p.sender = P.sender; p.trx = P.trx; }
     try {
       const r = await rpc("pr_submit_order", { p });
-      st.done = { r, s, brief }; st.o = null; P.trx = ""; await loadOrders(); cta(); render(true);
-    } catch (e) { o.busy = false; o.msg = prErr(e); refreshSummary(); const el = $("#pr-msg"); if (el) { el.className = "ac-msg err"; el.textContent = o.msg; } }
+      st.done = { r, s, brief }; st.o = null; P.trx = ""; await Promise.all([loadOrders(), loadSlots()]); cta(); heroCard(); render(true);
+    } catch (e) {
+      o.busy = false; o.msg = prErr(e);
+      if (/PR:\s*date_(full|invalid)/i.test(String((e && e.message) || e))) { await loadSlots(); const g = grp(s); if (g) Object.keys(o.dates).forEach((k) => { if (leftOf(g, k) < (o.dates[k] || 0)) delete o.dates[k]; }); refreshCal(); heroCard(); }
+      refreshSummary(); const el = $("#pr-msg"); if (el) { el.className = "ac-msg err"; el.textContent = o.msg; } }
   }
   function doneHtml() {
     const { r, s } = st.done, due = r.kind === "paid" && Number(r.amount) > 0 && r.pay_status === "none";
@@ -314,6 +461,7 @@
       : T("আমাদের টিম শীঘ্রই কাজ শুরু করবে এবং আপনাকে জানাবে।", "Our team will start soon and keep you posted.");
     return `<div class="ac-card pay-state pr-done"><div class="pay-tick" aria-hidden="true">✓</div><h2>${ttl}</h2><p>${txt}</p>
       <p class="pay-inv">${esc(r.order_no)} · ${esc(T(s.name_bn, s.name_en))}${r.amount != null ? " · " + money(r.amount) : ""}</p>
+      ${(r.dates || []).length ? `<p class="pr-dates">📅 ${T("প্রকাশের তারিখ", "Publish dates")}: ${r.dates.map((d) => `<b>${esc(fmtD(d, true))}</b>`).join(" · ")}</p>` : ""}
       <div class="ac-acts"><a class="btn btn-orange" href="#orders">${T("আমার অর্ডার", "My orders")}</a><a class="btn btn-outline" href="#services">${T("আরও সেবা দেখুন", "More services")}</a></div></div>`;
   }
 
@@ -340,6 +488,7 @@
     const quoteReady = o.kind === "quote" && amount > 0 && canPay && o.pay_status === "none";
     return `<article class="ac-card pr-ord" id="o-${esc(o.id)}"><header><div><b class="pr-ono">${esc(o.order_no)}</b><h3>${esc(sname)}${o.qty > 1 ? ` × ${nd(o.qty)}` : ""}</h3><p class="muted">${esc(br.brand || "")}${br.brand ? " · " : ""}${esc(when)}</p></div><div class="ac-pills">${pills.join("")}</div></header>
       <div class="pr-ord-price">${price}</div>
+      ${(st.bk[o.id] || []).length ? `<p class="pr-dates">📅 ${T("প্রকাশের তারিখ", "Publish dates")}: ${st.bk[o.id].map((d) => `<b>${esc(fmtD(d, true))}</b>`).join(" · ")}</p>` : ""}
       ${quoteReady ? `<div class="ac-note"><b>${T("আপনার কোটেশন তৈরি", "Your quote is ready")}:</b> ${money(amount)} — ${T("নিচ থেকে পেমেন্ট করুন।", "pay below to get started.")}</div>` : ""}
       ${o.pay_status === "rejected" && amount > 0 ? `<div class="ac-note bad"><b>${T("পেমেন্ট গৃহীত হয়নি", "Payment not accepted")}</b>${o.admin_note ? ": " + esc(o.admin_note) : ""} ${T("সঠিক তথ্য দিয়ে আবার দিন।", "Please send the correct details again.")}</div>`
         : o.admin_note ? `<div class="ac-note"><b>${T("VOSB-এর নোট", "Note from VOSB")}:</b> ${esc(o.admin_note)}</div>` : ""}
@@ -365,28 +514,34 @@
   }
 
   /* ---------- shell ---------- */
-  function loginCard(why) {
-    root.innerHTML = `<div class="ac-card ac-center"><div class="ac-big" aria-hidden="true">🔐</div><h2>${esc(why)}</h2>
-      <p class="muted">${T("অর্ডার ও পেমেন্ট আপনার অ্যাকাউন্টে সংরক্ষিত থাকে — যেকোনো সময় অবস্থা দেখতে পারবেন।", "Your orders and payments are saved to your account — you can check the status any time.")}</p>
-      <p class="ac-acts" style="justify-content:center"><button type="button" class="btn btn-orange" data-act="login">${T("লগইন / সাইন আপ", "Login / Sign up")}</button><a class="btn btn-outline" href="#services">${T("সেবা দেখুন", "See services")}</a></p></div>`;
+  function gateCard() {
+    root.innerHTML = `<div class="ac-card ac-center pr-gatecard"><div class="ac-big" aria-hidden="true">🔐</div><h1>${T("শুধু সদস্যদের জন্য", "Members only")}</h1>
+      <p class="muted">${T("এই পেজ দেখতে লগইন বা সাইন আপ করুন। অ্যাকাউন্ট বিনামূল্যে — এক মিনিটেই হয়ে যায়।", "Log in or sign up to open this page. An account is free and takes a minute.")}</p>
+      <p class="ac-acts" style="justify-content:center"><button type="button" class="btn btn-orange" data-act="login">${T("লগইন / সাইন আপ", "Log in / Sign up")}</button><a class="btn btn-outline" href="/">${T("হোমে ফিরুন", "Back to home")}</a></p></div>`;
+    if (!st.gateShown) { st.gateShown = true; setTimeout(() => { if (!A().isIn()) A().open("login"); }, 350); }
   }
   function render(keepScroll) {
-    cta();
+    const inn = A().isIn();
+    document.body.classList.toggle("pr-gate", !inn);
+    if (!inn) { st.pub = null; st.slots = null; st.orders = null; st.o = null; return gateCard(); }
+    cta(); heroCard();
     const r = route();
     if (!st.pub) { root.innerHTML = st.err ? `<div class="ac-card ac-center"><div class="ac-big" aria-hidden="true">⚠️</div><p>${esc(st.err)}</p><p><button type="button" class="btn btn-orange" data-act="retry">${T("আবার চেষ্টা করুন", "Try again")}</button></p></div>` : `<div class="ac-skel" aria-hidden="true"></div><div class="ac-skel" aria-hidden="true"></div>`; return; }
     if ((st.pub.page || {}).enabled === false) { root.innerHTML = `<div class="ac-card ac-center"><div class="ac-big" aria-hidden="true">⏸️</div><h2>${T("পেইড প্রমোশন এখন বন্ধ আছে", "Paid promotion is paused right now")}</h2><p class="muted">${T("কিছুদিন পরে আবার দেখুন, অথবা ইমেইল করুন:", "Please check back soon, or email us:")} <a href="mailto:partnerships@voiceofstartup.bd">partnerships@voiceofstartup.bd</a></p></div>`; return; }
     const changed = st.lastView !== r.v + (r.key || "");
     st.lastView = r.v + (r.key || "");
     if (r.v === "orders") {
-      if (!A().isIn()) return loginCard(T("অর্ডার দেখতে লগইন করুন", "Log in to see your orders"));
       if (st.orders == null) { root.innerHTML = `<div class="ac-skel" aria-hidden="true"></div>`; loadOrders().then(() => render(true)); return; }
       root.innerHTML = ordersHtml();
     } else if (r.v === "order") {
       const s = svcByKey(r.key);
       if (!s) { root.innerHTML = `<div class="ac-card ac-center"><div class="ac-big" aria-hidden="true">🔎</div><p>${T("সেবাটি পাওয়া যায়নি।", "That service was not found.")}</p><p><a class="btn btn-orange" href="#services">${T("সব সেবা", "All services")}</a></p></div>`; return; }
-      if (!A().isIn()) return loginCard(T("অর্ডার করতে লগইন করুন", "Log in to place an order"));
       if (st.done) root.innerHTML = doneHtml();
-      else { if (!st.o || st.o.key !== s.key) st.o = newOrder(s); root.innerHTML = orderHtml(s); }
+      else {
+        if (!st.o || st.o.key !== s.key) st.o = newOrder(s);
+        root.innerHTML = orderHtml(s);
+        if (changed && s.slot_group) loadSlots().then(() => { refreshCal(); heroCard(); });   // always show the freshest free dates
+      }
     } else {
       st.o = st.o && st.o.busy ? st.o : null;
       root.innerHTML = homeHtml();
@@ -399,11 +554,16 @@
 
   /* ---------- events ---------- */
   document.addEventListener("click", (e) => {
-    const t = e.target.closest("[data-act],[data-order],[data-cat],[data-pm],[data-copy],[data-qty],[data-payfor],[data-paysub],[data-cancel],[data-cancel-yes]");
+    const t = e.target.closest("[data-act],[data-order],[data-cat],[data-pm],[data-copy],[data-qty],[data-payfor],[data-paysub],[data-cancel],[data-cancel-yes],[data-see],[data-day],[data-dayrm],[data-dayadd],[data-calnav]");
     if (!t || !document.body.contains(t) || !(root.contains(t) || t.closest("#pr-cta"))) return;
     const d = t.dataset;
+    if (d.see) { reveal(d.see); const rb = $("#pr-revall"); if (rb) rb.innerHTML = revAllBtn(); return; }
+    if (d.day) { toggleDay(d.day); return; }
+    if (d.dayrm) { delete st.o.dates[d.dayrm]; refreshCal(); return; }
+    if (d.dayadd) { st.o.dates[d.dayadd] = (st.o.dates[d.dayadd] || 0) + 1; refreshCal(); return; }
+    if (d.calnav) { const a = (st.o.cal || "").split("-").map(Number); const dt = new Date(Date.UTC(a[0], a[1] - 1 + Number(d.calnav), 1)); st.o.cal = dt.getUTCFullYear() + "-" + pad2(dt.getUTCMonth() + 1); refreshCal(); return; }
     if (d.order) { const key = d.order; A().isIn() ? go("#order/" + encodeURIComponent(key)) : A().requireLogin("অর্ডার করতে লগইন করুন", "Log in to place an order").then(() => go("#order/" + encodeURIComponent(key))); return; }
-    if (d.cat) { st.cat = d.cat; const c = $("#pr-chips"), g = $("#pr-grid"); if (c) c.innerHTML = chipsHtml(); if (g) g.innerHTML = gridHtml(); return; }
+    if (d.cat) { st.cat = d.cat; const c = $("#pr-chips"), g = $("#pr-grid"), rb = $("#pr-revall"); if (c) c.innerHTML = chipsHtml(); if (g) g.innerHTML = gridHtml(); if (rb) rb.innerHTML = revAllBtn(); return; }
     if (d.pm) { st.pay.method = d.pm; $$(".pr-pay").forEach((x) => (x.innerHTML = payHtml(Number(x.dataset.amt)))); return; }
     if (d.copy) { try { navigator.clipboard.writeText(d.copy).then(() => toast(T("কপি হয়েছে ✓", "Copied ✓"), "ok"), () => toast(d.copy, "")); } catch (x) { toast(d.copy, ""); } return; }
     if (d.qty) { setQty((st.o.qty || 1) + Number(d.qty)); return; }
@@ -413,6 +573,10 @@
     if (d.cancelYes) { cancelOrder(d.cancelYes); return; }
     switch (d.act) {
       case "login": A().open("login"); break;
+      case "rev-all": revealAll(); { const rb = $("#pr-revall"); if (rb) rb.innerHTML = ""; } break;
+      case "autopick": autoPick(); break;
+      case "clearpick": st.o.dates = {}; refreshCal(); break;
+      case "slotsretry": loadSlots().then(() => { refreshCal(); heroCard(); }); break;
       case "retry": st.err = ""; render(); loadPub().then(() => render()); break;
       case "refresh": st.orders = null; render(true); break;
       case "home": e.preventDefault(); go("#services"); break;
@@ -427,6 +591,7 @@
   document.addEventListener("input", (e) => {
     const t = e.target; if (!root.contains(t) || !st.o && !t.id.startsWith("pay-")) return;
     if (t.dataset.bf && st.o) { st.o.vals[t.dataset.bf] = t.value; const er = $(`[data-err="${t.dataset.bf}"]`); if (er) er.textContent = ""; }
+    else if (t.dataset.xf && st.o) { st.o.extra[t.dataset.xf] = t.value; const er = $(`[data-err="xf-${t.dataset.xf}"]`); if (er) er.textContent = ""; }
     else if (t.id === "pr-qty") { const n = Number(en(t.value).replace(/\D/g, "")); if (n) { clearTimeout(qT); qT = setTimeout(() => setQty(n), 400); } }
     else if (t.id === "pr-cpn" && st.o) st.o.coupon = t.value.toUpperCase();
     else if (t.id === "pay-snd") st.pay.sender = t.value;
@@ -436,16 +601,23 @@
     const t = e.target; if (!root.contains(t)) return;
     if (t.dataset.bf && st.o) st.o.vals[t.dataset.bf] = t.value;
     else if (t.id === "pr-agree" && st.o) st.o.agree = t.checked;
-    else if (t.id === "pr-free" && st.o) { st.o.free = t.checked; if (t.checked) { st.o.applied = ""; st.o.quote = null; } render(true); }
+    else if (t.id === "pr-free" && st.o) { st.o.free = t.checked; if (t.checked) { st.o.applied = ""; st.o.quote = null; } const sv = svcByKey(st.o.key); if (sv && sv.slot_group) trimDates(sv); render(true); }
+    else if (t.dataset.xf && st.o) st.o.extra[t.dataset.xf] = t.value;
     else if (t.id === "pr-qty") setQty(en(t.value).replace(/\D/g, ""));
   });
   document.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.id === "pr-cpn") { e.preventDefault(); const b = $('[data-act="cpn-on"]'); if (b) b.click(); } });
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && A().isIn() && route().v === "orders" && !st.payFor) loadOrders().then(() => render(true)); });
 
+  async function boot() {
+    if (!A().isIn()) { st.pub = null; st.slots = null; return render(true); }
+    await Promise.all([loadPub(), loadSlots()]);
+    if (A().isIn()) await loadOrders();
+    render(true);
+  }
   whenReady(() => {
-    A().onChange(async () => { st.orders = null; st.prof = null; st.o = null; await loadPub(); if (A().isIn()) await loadOrders(); render(true); if (A().isIn() && /^#order\//.test(location.hash) === false && st.want) { const k = st.want; st.want = null; go("#order/" + k); } });
-    U().onRender(() => { if (st.pub) render(true); else cta(); });
-    cta(); render();
-    loadPub().then(async () => { if (A().isIn()) await loadOrders(); render(); });
+    A().onChange(async () => { st.orders = null; st.prof = null; st.o = null; st.done = null; await boot(); if (A().isIn() && st.want) { const k = st.want; st.want = null; go("#order/" + k); } });
+    U().onRender(() => { render(true); });
+    render();
+    boot();
   });
 })();

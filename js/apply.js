@@ -25,7 +25,7 @@
   const pn = (x) => { const t = en(x).replace(/[,\s৳]/g, ""); return t === "" ? NaN : Number(t); };
   const MIN_DESC = 80;
 
-  const st = { ready: false, id: null, co: null, priv: {}, fin: {}, finSaved: false, pays: [], docs: [], step: "info", vals: {}, social: {}, team: [{ name: "", role: "" }], dirty: false, saving: null, saveMsg: "", settings: null, pay: { screen: "A", method: "bkash", sender: "", trx: "", msg: "", busy: false, until: 0 }, subMsg: "", missing: [], err: "", done: false };
+  const st = { ready: false, id: null, co: null, priv: {}, fin: {}, finSaved: false, pays: [], docs: [], step: "info", vals: {}, social: {}, team: [{ name: "", role: "" }], dirty: false, saving: null, saveMsg: "", settings: null, pay: { screen: "A", method: "bkash", sender: "", trx: "", msg: "", busy: false, until: 0, cpn: "", applied: null, cmsg: "", cbusy: false }, subMsg: "", missing: [], err: "", done: false };
   let timer = null, poll = null, tick = null, saveT = null, rendering = false;
 
   const editable = () => !st.co || st.co.status === "draft" || st.co.status === "changes_requested";
@@ -62,6 +62,13 @@
   }
   async function loadSettings() { try { st.settings = await rpc("get_listing_settings"); } catch (e) { st.settings = st.settings || { fee: CFG().fee || 1000, methods: {} }; } }
   const fee = () => Number((st.settings && st.settings.fee) || CFG().fee || 1000);
+  /* coupon: the database (listing_quote / submit_listing_payment) decides the discount; this screen only shows it */
+  const net = () => (st.pay.applied ? Number(st.pay.applied.amount) : fee());
+  const CERR = {
+    coupon_invalid: ["কুপন কোডটি সঠিক নয়।", "This coupon code is not valid."], coupon_not_started: ["এই কুপন এখনো চালু হয়নি।", "This coupon is not active yet."], coupon_expired: ["এই কুপনের মেয়াদ শেষ।", "This coupon has expired."],
+    coupon_not_for_service: ["এই কুপন কোম্পানি লিস্টিং ফি-তে প্রযোজ্য নয়।", "This coupon does not apply to the company listing fee."], coupon_min_amount: ["কুপনটির জন্য আরও বেশি অঙ্কের ফি লাগবে।", "This coupon needs a higher amount."],
+    coupon_used_up: ["এই কুপনের ব্যবহারের সীমা শেষ।", "This coupon has been fully used."], coupon_already_used: ["আপনি এই কুপন আগেই ব্যবহার করেছেন।", "You have already used this coupon."] };
+  const payErr = (e) => { const x = /PR:\s*([a-z_]+)/i.exec(String((e && e.message) || e || "")); return x && CERR[x[1]] ? T(CERR[x[1]][0], CERR[x[1]][1]) : friendly(e); };
   const methodInfo = (id) => ((st.settings && st.settings.methods) || {})[id] || {};
 
   /* ---------- helpers: form values ---------- */
@@ -381,13 +388,22 @@
 
   /* ---------- step 3: payment ---------- */
   const bk = () => `<span class="pay-wm" style="--pc:#e2136e">bKash</span>`;
-  const payHead = (sub) => `<div class="pay-head"><div class="pay-brand"><span class="pay-vosb">VOSB</span><span>${T("কোম্পানি লিস্টিং ফি", "Company listing fee")}</span></div><div class="pay-amt">${money(fee())}<small>${T("একবারের ফি · চিরকালের জন্য", "one-time · forever")}</small></div>${sub || ""}</div>`;
+  const payHead = (sub, done) => {
+    const a = done ? Number(done.amount) : net(), base = done ? Number(done.base_amount || done.amount) : fee(), cpn = done ? done.coupon_code : st.pay.applied && st.pay.applied.coupon, off = base - a;
+    return `<div class="pay-head"><div class="pay-brand"><span class="pay-vosb">VOSB</span><span>${T("কোম্পানি লিস্টিং ফি", "Company listing fee")}</span></div><div class="pay-amt">${cpn && off > 0 ? `<s class="pay-was">${money(base)}</s> ` : ""}${a > 0 ? money(a) : T("বিনামূল্যে", "Free")}<small>${cpn && off > 0 ? T(`কুপন ${esc(cpn)} · ছাড় ${money(off)}`, `Coupon ${esc(cpn)} · you save ${money(off)}`) : T("একবারের ফি · চিরকালের জন্য", "one-time · forever")}</small></div>${sub || ""}</div>`;
+  };
+  function couponBox() {
+    const P = st.pay, ap = P.applied;
+    return `<div class="pay-cpn"><label for="pay-cpn">${T("কুপন কোড আছে?", "Have a coupon code?")}</label><div class="pay-cpn-r"><input id="pay-cpn" maxlength="30" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="${T("কোড লিখুন", "Enter code")}" value="${esc(ap ? ap.coupon : P.cpn)}"${ap ? " readonly" : ""}>
+      ${ap ? `<button type="button" class="btn btn-outline ac-sm" data-pay="cpn-off">${T("সরান", "Remove")}</button>` : `<button type="button" class="btn btn-outline ac-sm" data-pay="cpn-on"${P.cbusy ? " disabled" : ""}>${P.cbusy ? "…" : "Apply"}</button>`}</div>
+      <div class="pay-cpn-m ${ap ? "ok" : P.cmsg ? "err" : ""}" role="status">${ap ? T(`✓ কুপন প্রয়োগ হয়েছে — ছাড় ${money(fee() - Number(ap.amount))}`, `✓ Coupon applied — you save ${money(fee() - Number(ap.amount))}`) : esc(P.cmsg)}</div></div>`;
+  }
   function payView(el) {
     if (!st.id) { el.innerHTML = `<div class="ac-card ac-center"><p>${T("আগে কোম্পানির তথ্য সংরক্ষণ করুন।", "Save your company details first.")}</p><button class="btn btn-orange" data-step="info">${T("তথ্য দিন", "Company info")}</button></div>`; return; }
     const pr = pendingPay(), ok = st.pays.find((p) => p.status === "verified");
     if (ok) {
-      el.innerHTML = `<div class="ac-card pay-card pay-ok">${payHead()}<div class="pay-state"><div class="pay-tick" aria-hidden="true">✓</div><h3>${T("পেমেন্ট সম্পন্ন হয়েছে", "Payment successful")}</h3>
-        <p>${T("ধন্যবাদ! আপনার লিস্টিং ফি পরিশোধিত — আর কখনো দিতে হবে না।", "Thank you! Your listing fee is paid — you never need to pay again.")}</p><p class="pay-inv">${esc(ok.invoice_no)} · ${esc(ok.method)} · ${esc(ok.trx_id)}</p>
+      el.innerHTML = `<div class="ac-card pay-card pay-ok">${payHead("", ok)}<div class="pay-state"><div class="pay-tick" aria-hidden="true">✓</div><h3>${ok.method === "coupon" ? T("কুপনে ফি মওকুফ — পেমেন্ট লাগবে না", "Fee waived by coupon — no payment needed") : T("পেমেন্ট সম্পন্ন হয়েছে", "Payment successful")}</h3>
+        <p>${T("ধন্যবাদ! আপনার লিস্টিং ফি পরিশোধিত — আর কখনো দিতে হবে না।", "Thank you! Your listing fee is paid — you never need to pay again.")}</p><p class="pay-inv">${esc(ok.invoice_no)} · ${esc(ok.method)}${ok.method === "coupon" ? "" : " · " + esc(ok.trx_id)}</p>
         <div class="ac-acts"><button class="btn btn-outline" data-step="docs">← ${T("পেছনে", "Back")}</button><button class="btn btn-orange" data-step="submit">${T("পরের ধাপ →", "Next →")}</button></div></div></div>`;
       return;
     }
@@ -396,9 +412,9 @@
     const last = st.pays[0];
     const rejected = last && last.status === "rejected" ? `<div class="ac-note bad"><b>${T("আগের পেমেন্ট গৃহীত হয়নি", "Your previous payment was not accepted")}</b>${last.note ? ": " + esc(last.note) : ""}. ${T("সঠিক ট্রানজেকশন আইডি দিয়ে আবার চেষ্টা করুন।", "Please try again with the correct Transaction ID.")}</div>` : "";
     if (P.screen === "A") {
-      el.innerHTML = `<div class="ac-card pay-card">${payHead()}${rejected}<h3 class="pay-h">${T("পেমেন্ট পদ্ধতি বেছে নিন", "Choose a payment method")}</h3>
+      el.innerHTML = `<div class="ac-card pay-card">${payHead()}${rejected}${couponBox()}${net() <= 0 ? `<div class="ac-note"><b>${T("কুপনে সম্পূর্ণ ফি মওকুফ!", "This coupon covers the whole fee!")}</b> ${T("কোনো পেমেন্ট লাগবে না।", "No payment is needed.")}</div><div class="ap-nav"><button class="btn btn-outline" type="button" data-step="docs">← ${T("পেছনে", "Back")}</button><button class="btn btn-orange" type="button" data-pay="cpn-free"${P.cbusy ? " disabled" : ""}>${P.cbusy ? T("প্রক্রিয়া হচ্ছে…", "Working…") : T("কুপন ব্যবহার করে এগিয়ে যান →", "Use coupon & continue →")}</button></div></div>` : ""}${net() <= 0 ? "" : `<h3 class="pay-h">${T("পেমেন্ট পদ্ধতি বেছে নিন", "Choose a payment method")}</h3>
         <div class="pay-methods" role="radiogroup">${(CFG().payMethods || []).map((m) => { const on = !!methodInfo(m.id).enabled; return `<button type="button" role="radio" aria-checked="${on && P.method === m.id}" class="pay-m ${on ? "on" : "off"} ${on && P.method === m.id ? "sel" : ""}" data-pm="${m.id}" ${on ? "" : "disabled"} style="--pc:${m.color}"><span class="pay-mlogo">${esc(m.name)}</span><span class="pay-mtxt">${on ? T("এখন চালু", "Available now") : T("শীঘ্রই আসছে", "Coming soon")}</span></button>`; }).join("")}</div>
-        <div class="ap-nav"><button class="btn btn-outline" type="button" data-step="docs">← ${T("পেছনে", "Back")}</button><button class="btn btn-orange" type="button" data-pay="toB">${T("পরবর্তী →", "Next →")}</button></div></div>`;
+        <div class="ap-nav"><button class="btn btn-outline" type="button" data-step="docs">← ${T("পেছনে", "Back")}</button><button class="btn btn-orange" type="button" data-pay="toB">${T("পরবর্তী →", "Next →")}</button></div></div>`}`;
     } else if (P.screen === "B") {
       el.innerHTML = `<div class="ac-card pay-card">${payHead()}<div class="pay-via">${T("পেমেন্ট মাধ্যম", "Pay with")} ${bk()}</div>
         <div class="ac-fld"><label for="pay-snd">${T("যে বিকাশ নম্বর থেকে টাকা পাঠাবেন", "The bKash number you will send money from")}</label><input id="pay-snd" inputmode="tel" maxlength="14" autocomplete="tel" placeholder="01XXXXXXXXX" value="${esc(P.sender)}"></div>
@@ -408,9 +424,9 @@
       const mi = methodInfo(P.method), num = mi.number || "";
       if (!P.until) P.until = Date.now() + 15 * 60 * 1000;
       el.innerHTML = `<div class="ac-card pay-card">${payHead(`<div class="pay-timer" aria-live="off">${T("সময় বাকি", "Time left")} <b id="pay-t">15:00</b></div>`)}
-        <ol class="pay-how"><li>${T("আপনার বিকাশ অ্যাপ বা *247# ডায়াল করে <b>Send Money</b> বেছে নিন।", "Open your bKash app (or dial *247#) and choose <b>Send Money</b>.")}</li><li>${T("নিচের নম্বরটি কপি করে বসান, তারপর ঠিক", "Paste the number below, then send exactly")} <b>${money(fee())}</b> ${T("পাঠান।", ".")}</li><li>${T("পেমেন্টের SMS-এ পাওয়া <b>TrxID</b> নিচে লিখে ভেরিফাই করুন।", "Enter the <b>TrxID</b> from the payment SMS below and verify.")}</li></ol>
+        <ol class="pay-how"><li>${T("আপনার বিকাশ অ্যাপ বা *247# ডায়াল করে <b>Send Money</b> বেছে নিন।", "Open your bKash app (or dial *247#) and choose <b>Send Money</b>.")}</li><li>${T("নিচের নম্বরটি কপি করে বসান, তারপর ঠিক", "Paste the number below, then send exactly")} <b>${money(net())}</b> ${T("পাঠান।", ".")}</li><li>${T("পেমেন্টের SMS-এ পাওয়া <b>TrxID</b> নিচে লিখে ভেরিফাই করুন।", "Enter the <b>TrxID</b> from the payment SMS below and verify.")}</li></ol>
         <div class="pay-num" ${num ? "" : "hidden"}><span class="pay-nl">${T("Send Money নম্বর", "Send Money number")}</span><b id="pay-num">${esc(num)}</b><button type="button" class="btn btn-outline ac-sm" data-pay="copy">${T("কপি", "Copy")}</button></div>
-        <div class="pay-num pay-amt"><span class="pay-nl">${T("পাঠানোর পরিমাণ", "Amount to send")}</span><b id="pay-amt" data-v="${fee()}">${money(fee())}</b><button type="button" class="btn btn-outline ac-sm" data-pay="copyamt">${T("কপি", "Copy")}</button></div>
+        <div class="pay-num pay-amt"><span class="pay-nl">${T("পাঠানোর পরিমাণ", "Amount to send")}</span><b id="pay-amt" data-v="${net()}">${money(net())}</b><button type="button" class="btn btn-outline ac-sm" data-pay="copyamt">${T("কপি", "Copy")}</button></div>
         <div class="pay-from">${T("আপনার নম্বর:", "Your number:")} <b>${esc(P.sender)}</b> <button type="button" class="co-link" data-pay="toB">${T("বদলান", "Change")}</button></div>
         <div class="ac-fld"><label for="pay-trx">${T("ট্রানজেকশন আইডি (TrxID)", "Transaction ID (TrxID)")}</label><input id="pay-trx" maxlength="14" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="${T("যেমন: 9AB3C4D5EF", "e.g. 9AB3C4D5EF")}" value="${esc(P.trx)}"></div>
         <div class="ac-msg ${P.msg ? "err" : ""}" id="pay-msg" role="alert">${esc(P.msg)}</div>
@@ -421,7 +437,7 @@
     }
   }
   function sentView(el, pr) {
-    el.innerHTML = `<div class="ac-card pay-card pay-ok">${payHead()}<div class="pay-state"><div class="pay-tick" aria-hidden="true">✓</div><h3>${T("পেমেন্টের তথ্য পেয়েছি", "Payment details received")}</h3>
+    el.innerHTML = `<div class="ac-card pay-card pay-ok">${payHead("", pr)}<div class="pay-state"><div class="pay-tick" aria-hidden="true">✓</div><h3>${T("পেমেন্টের তথ্য পেয়েছি", "Payment details received")}</h3>
       <p>${T("আর অপেক্ষা করতে হবে না — এখনই আবেদন জমা দিতে পারবেন। VOSB টিম ব্যাকগ্রাউন্ডে আপনার TrxID মিলিয়ে নেবে এবং নিশ্চিত হলে নোটিফিকেশন পাঠাবে।", "No waiting needed — you can submit your application right now. The VOSB team matches your TrxID in the background and notifies you once it is confirmed.")}</p>
       <p class="pay-inv">${esc(pr.invoice_no)} · ${esc(pr.method)} · TrxID ${esc(pr.trx_id)}</p><div class="ac-acts"><button class="btn btn-outline" data-step="docs">← ${T("ডকুমেন্ট", "Documents")}</button><button class="btn btn-orange" data-step="submit">${T("জমা দেওয়ার ধাপে যান →", "Go to submit →")}</button></div></div></div>`;
   }
@@ -430,6 +446,22 @@
   }
   async function payAct(a) {
     const P = st.pay;
+    if (a === "cpn-on") {
+      const code = (($("#pay-cpn") || {}).value || "").trim().toUpperCase(); P.cpn = code; P.cmsg = "";
+      if (!code) { P.cmsg = T("কুপন কোড লিখুন।", "Enter a coupon code."); return payView($("#ap-body")); }
+      P.cbusy = true; payView($("#ap-body"));
+      try { const r = await rpc("listing_quote", { p_code: code }); if (r && r.coupon && !r.coupon_error) { P.applied = r; P.cmsg = ""; } else { P.applied = null; P.cmsg = r && CERR[r.coupon_error] ? T(CERR[r.coupon_error][0], CERR[r.coupon_error][1]) : T("কুপন কোডটি সঠিক নয়।", "This coupon code is not valid."); } }
+      catch (e) { P.applied = null; P.cmsg = payErr(e); }
+      P.cbusy = false; return payView($("#ap-body"));
+    }
+    if (a === "cpn-off") { P.applied = null; P.cpn = ""; P.cmsg = ""; return payView($("#ap-body")); }
+    if (a === "cpn-free") {
+      if (!P.applied || net() > 0) return;
+      P.cbusy = true; payView($("#ap-body"));
+      try { await rpc("apply_listing_free", { p_company: st.id, p_coupon: P.applied.coupon }); P.cbusy = false; await reloadParts(); toast(T("কুপন প্রয়োগ হয়েছে ✓ — ফি মওকুফ", "Coupon applied ✓ — fee waived"), "ok"); render(); }
+      catch (e) { P.cbusy = false; P.cmsg = payErr(e); P.applied = null; payView($("#ap-body")); }
+      return;
+    }
     if (a === "toA") { P.screen = "A"; P.msg = ""; return payView($("#ap-body")); }
     if (a === "toB") { if (P.screen === "A" && !methodInfo(P.method).enabled) return; P.screen = "B"; P.msg = ""; P.until = 0; clearInterval(tick); return payView($("#ap-body")); }
     if (a === "toC") { const s = en($("#pay-snd").value || "").replace(/[\s-]/g, ""); P.sender = s;
@@ -441,8 +473,8 @@
       P.trx = en($("#pay-trx").value || "").replace(/\s/g, "").toUpperCase();
       if (!/^[A-Z0-9]{8,14}$/.test(P.trx)) { P.msg = T("পেমেন্টের SMS-এ যেমন আছে হুবহু TrxID লিখুন (৮–১৪ অক্ষর, ইংরেজি অক্ষর ও সংখ্যা)।", "Enter the TrxID exactly as in your payment SMS (8–14 letters/numbers)."); return payView($("#ap-body")); }
       P.busy = true; P.msg = ""; payView($("#ap-body"));
-      try { await rpc("submit_listing_payment", { p_company: st.id, p_method: P.method, p_sender: P.sender, p_trx: P.trx }); P.busy = false; P.trx = ""; P.until = 0; clearInterval(tick); await reloadParts(); toast(T("পেমেন্টের তথ্য জমা হয়েছে ✓", "Payment details saved ✓"), "ok"); payView($("#ap-body")); }
-      catch (e) { P.busy = false; P.msg = friendly(e); payView($("#ap-body")); }
+      try { await rpc("submit_listing_payment", { p_company: st.id, p_method: P.method, p_sender: P.sender, p_trx: P.trx, p_coupon: P.applied ? P.applied.coupon : null }); P.busy = false; P.trx = ""; P.until = 0; clearInterval(tick); await reloadParts(); toast(T("পেমেন্টের তথ্য জমা হয়েছে ✓", "Payment details saved ✓"), "ok"); payView($("#ap-body")); }
+      catch (e) { P.busy = false; P.msg = payErr(e); if (/PR:\s*coupon/i.test(String((e && e.message) || ""))) { P.applied = null; P.screen = "A"; P.cmsg = P.msg; P.msg = ""; } payView($("#ap-body")); }
     }
   }
 
@@ -526,4 +558,6 @@
     render();
   }
   whenReady(() => { A().onChange(() => { booted = false; st.err = ""; boot(); }); boot(); U().onRender(() => { if (st.ready && !st.done) { collect(); render(); } }); });
+
+  document.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target && e.target.id === "pay-cpn") { e.preventDefault(); const b = document.querySelector('[data-pay="cpn-on"]'); if (b) b.click(); } });
 })();

@@ -113,7 +113,7 @@ window.VOSB_ADMIN_CO = function (X) {
   }
 
   /* ---------------- shared page furniture ---------------- */
-  const COTABS = [["apps", "Applications", "#/companies"], ["all", "All companies", "#/companies/all"], ["pay", "Payments", "#/payments"], ["rev", "Reviews & comments", "#/reviews"], ["val", "Valuations", "#/valuations"], ["deals", "Investments", "#/deals"], ["int", "Investor interest", "#/interests"], ["set", "Listing settings", "#/company-settings"], ["trash", "Trash", "#/trash"]];
+  const COTABS = [["apps", "Applications", "#/companies"], ["all", "All companies", "#/companies/all"], ["pay", "Payments", "#/payments"], ["rev", "Reviews & comments", "#/reviews"], ["val", "Valuations", "#/valuations"], ["deals", "Investments", "#/deals"], ["int", "Investor interest", "#/interests"], ["cpn", "Coupons", "#/pr/coupons"], ["set", "Listing settings", "#/company-settings"], ["trash", "Trash", "#/trash"]];
   function tabs(active, c) {
     const badge = { apps: waiting(c), pay: Number(c && c.payments_pending) || 0, int: Number(c && c.interests_new) || 0 };
     return `<div class="co-tabs" role="tablist" aria-label="Company Directory">${COTABS.map(([k, t, h]) => `<a href="${h}" role="tab" class="${k === active ? "on" : ""}" ${k === active ? 'aria-selected="true"' : ""}>${esc(t)}${badge[k] ? `<i>${badge[k] > 99 ? "99+" : badge[k]}</i>` : ""}</a>`).join("")}</div>`;
@@ -155,8 +155,11 @@ window.VOSB_ADMIN_CO = function (X) {
     return [
       tile("g", "Total users", fmtN(u.total), "#/users"),
       tile("k", "Investors · Founders · Readers", `${fmtN(ro.investor || 0)} · ${fmtN(ro.founder || 0)} · ${fmtN(ro.reader || 0)}`, "#/users"),
-      tile("g", "Total revenue", esc(bdt(r.listing_verified)), "#/payments"),
-      tile("", "Revenue · 30 days", esc(bdt(r.listing_30d)), "#/payments"),
+      tile("g", "Total revenue · listing + PR", esc(bdt(r.total_verified != null ? r.total_verified : r.listing_verified)), "#/payments"),
+      tile("", "Revenue · 30 days", esc(bdt(r.total_30d != null ? r.total_30d : r.listing_30d)), "#/payments"),
+      tile("", "of which PR / ads", esc(bdt(r.pr_verified || 0)), "#/pr/revenue"),
+      tile("r", "Ads & admin charges", esc(bdt(r.charges_total || 0)), "#/pr/revenue"),
+      tile("g", "Net after charges", esc(bdt(r.net_verified != null ? r.net_verified : (r.total_verified || 0))), "#/pr/revenue"),
       tile("g", "Listed companies", fmtN(c.published), "#/companies/all"),
     ].join("");
   }
@@ -578,7 +581,7 @@ window.VOSB_ADMIN_CO = function (X) {
       $("#cnt", view).textContent = `${l.length} payment${l.length === 1 ? "" : "s"}`;
       $("#list", view).innerHTML = l.length ? l.map((x) => { const co = one(x.companies);
         return `<div class="row co-pay-row"><div class="th co-logo">৳</div><div class="ti"><h3>${esc(bdt(x.amount))} <small>· ${esc(String(x.method).toUpperCase())}</small> ${simplePay(x.status)}</h3>
-          <div class="meta"><span>TrxID <code class="co-trx">${esc(x.trx_id)}</code> ${copyBtn(x.trx_id, "TrxID")}</span><span>from ${esc(x.sender_msisdn)}</span><span>${esc(x.user_email || "")}</span><span>${esc(fmtDT(x.created_at))}</span></div>
+          <div class="meta"><span>TrxID <code class="co-trx">${esc(x.trx_id)}</code> ${copyBtn(x.trx_id, "TrxID")}</span><span>from ${esc(x.sender_msisdn)}</span>${x.coupon_code ? `<span>Coupon <b>${esc(x.coupon_code)}</b> −${esc(bdt(x.discount))} (fee ${esc(bdt(x.base_amount))})</span>` : ""}<span>${esc(x.user_email || "")}</span><span>${esc(fmtDT(x.created_at))}</span></div>
           <div class="meta">${co ? `<a href="#/companies/${esc(co.id)}">${esc(co.name || "(no name yet)")} →</a>` : "<span>company removed</span>"}<span>Invoice ${esc(x.invoice_no)}</span>${x.note ? `<span>Note: ${esc(x.note)}</span>` : ""}${x.verified_at ? `<span>verified ${esc(fmtD(x.verified_at))}</span>` : ""}</div></div>
           <div class="acts">${x.status !== "verified" ? `<button type="button" class="b b-green b-sm" data-a="pay" data-id="${esc(x.id)}" data-s="verified">Verify</button>` : ""}${x.status === "pending" ? `<button type="button" class="b b-red b-sm" data-a="pay" data-id="${esc(x.id)}" data-s="rejected">Reject</button>` : ""}${x.status === "verified" ? `<button type="button" class="b b-line b-sm" data-a="pay" data-id="${esc(x.id)}" data-s="pending">Undo</button>` : ""}${x.status === "rejected" ? `<button type="button" class="b b-line b-sm" data-a="pay" data-id="${esc(x.id)}" data-s="pending">Re-open</button>` : ""}</div></div>`; }).join("")
         : `<div class="empty"><b>No payments</b>Nothing matches these filters.</div>`;

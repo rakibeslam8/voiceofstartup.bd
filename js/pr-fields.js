@@ -69,6 +69,11 @@
     coupon_min_amount: ["কুপনটির জন্য আরও বেশি অর্ডার মূল্য লাগবে।", "This coupon needs a higher order value."],
     coupon_used_up: ["এই কুপনের ব্যবহারের সীমা শেষ।", "This coupon has been fully used."],
     coupon_already_used: ["আপনি এই কুপন আগেই ব্যবহার করেছেন।", "You have already used this coupon."],
+    date_full: ["এই তারিখটি এইমাত্র বুক হয়ে গেছে — অন্য তারিখ বেছে নিন।", "That date has just been booked — please pick another date."],
+    date_invalid: ["তারিখটি বুক করা যাবে না — ক্যালেন্ডার থেকে একটি খালি তারিখ বেছে নিন।", "That date cannot be booked — pick a free date from the calendar."],
+    dates_required: ["প্রতিটি আইটেমের জন্য একটি প্রকাশের তারিখ বেছে নিন।", "Please choose a publish date for every item."],
+    field_required: ["একটি প্রয়োজনীয় তথ্য বাকি আছে।", "A required detail is missing."],
+    field_invalid: ["একটি তথ্য সঠিক নয় — আবার দেখুন।", "One of the details is not valid — please check it."],
   };
   window.VOSB_PRF = { F, CORE, SETS, SET_OF, OVR, CATS, ORDER, PAY, ERR };
 })();
