@@ -185,7 +185,9 @@
       <div class="fld"><label for="p">Password</label><div class="pw"><input class="inp" id="p" type="password" name="password" autocomplete="current-password" required><button type="button" class="b b-ghost b-sm" id="show">Show</button></div></div>
       <button class="b b-orange" style="width:100%" id="go" type="submit">Sign in</button>
       <p class="lock-note">🔒 Protected connection · Auto sign-out after 30 min idle</p>
+      <p class="lock-note"><button type="button" class="b b-line b-sm" data-install hidden>${svg("dl", "sm")} Install admin app</button></p>
     </form></div>`;
+    paintInstall();
     $("#show").onclick = () => { const p = $("#p"); const h = p.type === "password"; p.type = h ? "text" : "password"; $("#show").textContent = h ? "Hide" : "Show"; };
     $("#lf").onsubmit = async (e) => {
       e.preventDefault();
@@ -238,6 +240,7 @@
     companies: '<path d="M4 20V6.500A1.500 1.500 0 0 1 5.500 5H13a1.500 1.500 0 0 1 1.500 1.500V20"/><path d="M14.500 10H18a2 2 0 0 1 2 2v8"/><path d="M3 20h18M8 9h3M8 12.500h3M8 16h3"/>',
     users: '<circle cx="12" cy="8" r="3.600"/><path d="M4.500 20.500c.7-4 3.700-6 7.500-6s6.800 2 7.500 6"/>',
     out: '<path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8l4 4-4 4M19 12H9"/>',
+    dl: '<path d="M12 4v10m0 0 4-4m-4 4-4-4"/><path d="M5 19h14"/>',
     site: '<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/>',
   };
   const svg = (k, cls) => `<svg class="ic ${cls || ""}" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg>`;
@@ -258,6 +261,75 @@
   const PR = typeof window.VOSB_ADMIN_PR === "function" ? window.VOSB_ADMIN_PR({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll, coTabs: (a) => (CO ? CO.tabsHtml(a) : "") }) : null;
   /* Push notifications (js/admin-push.js): subscribed devices, automatic article alerts, announcements */
   const PU = typeof window.VOSB_ADMIN_PUSH === "function" ? window.VOSB_ADMIN_PUSH({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll }) : null;
+
+  /* ---------------- install the admin as its own app + admin alerts + "new version" notice ---------------- */
+  const isStandalone = () => { try { return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true; } catch (e) { return false; } };
+  const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const lsGet = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+  let instEv = null;
+  const paintInstall = () => $$("[data-install]").forEach((b) => { b.hidden = isStandalone(); });
+  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); instEv = e; paintInstall(); });
+  window.addEventListener("appinstalled", () => { instEv = null; paintInstall(); try { toast("Admin app installed ✓ — open it from your home screen or apps list.", "ok"); } catch (e) {} setTimeout(paintAlertBar, 1500); });
+  function installHelp() {
+    const ios = isIOS(), android = /android/i.test(navigator.userAgent);
+    const steps = ios ? ["Tap the <b>Share</b> button (the square with an arrow).", "Choose <b>Add to Home Screen</b>, then <b>Add</b>.", "Open <b>VOSB Admin</b> from your Home Screen, sign in, then turn on alerts (iPhone and iPad only allow notifications for apps added to the Home Screen)."]
+      : android ? ["Tap the <b>⋮</b> menu in Chrome.", "Choose <b>Install app</b> (or <b>Add to Home screen</b>).", "Open <b>VOSB Admin</b> from your home screen."]
+      : ["Click the <b>install icon</b> at the right end of the address bar (or the <b>⋮</b> menu → <b>Install VOSB Admin</b>).", "Press <b>Install</b>. The admin opens in its own window.", "Pin it to the taskbar or dock if you like."];
+    const bg = document.createElement("div"); bg.className = "modal-bg";
+    bg.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="Install the admin app"><h2>Install the admin app</h2>
+      <p>This installs the admin panel only — separate from the public website app.</p><ol class="inst-steps">${steps.map((x) => `<li>${x}</li>`).join("")}</ol>
+      <p class="muted" style="font-size:.88rem">${ios ? "" : "If you do not see the option, open this page in Chrome or Edge (Firefox and some in-app browsers cannot install apps)."}</p>
+      <div class="acts"><button class="b b-orange" data-x="1">Got it</button></div></div>`;
+    const done = () => { bg.remove(); document.removeEventListener("keydown", key); };
+    const key = (e) => { if (e.key === "Escape") done(); };
+    bg.addEventListener("click", (e) => { if (e.target === bg || e.target.closest("[data-x]")) done(); });
+    document.addEventListener("keydown", key); document.body.appendChild(bg); const f = bg.querySelector("[data-x]"); if (f) f.focus();
+  }
+  async function doInstall() {
+    if (instEv) { const ev = instEv; instEv = null; try { ev.prompt(); await ev.userChoice; } catch (e) {} paintInstall(); return; }
+    installHelp();
+  }
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-install]"); if (b) { e.preventDefault(); doInstall(); return; }
+    const on = e.target.closest("[data-alert-on]");
+    if (on) { e.preventDefault(); on.disabled = true; const P = window.VOSB_PUSH; (P ? P.enable() : Promise.resolve({ ok: false })).then((r) => {
+      if (r.ok) { try { toast("Admin alerts are on for this device ✓", "ok"); } catch (x) {} } else if (r.reason === "denied") { try { toast("Notifications are blocked — allow them in the browser's site settings, then try again.", "err"); } catch (x) {} } on.disabled = false; paintAlertBar(); }); return; }
+    if (e.target.closest("[data-alert-no]")) { e.preventDefault(); lsSet("vosb-adm-alerts-no", String(Date.now())); paintAlertBar(); return; }
+    if (e.target.closest("[data-upd-go]")) { e.preventDefault(); location.reload(); }
+  });
+  /* a thin bar under the top bar: "turn on admin alerts on this device" */
+  function paintAlertBar() {
+    const bar = $("#alertBar"), P = window.VOSB_PUSH; if (!bar) return;
+    const st = P ? P.state() : "unsupported", no = Number(lsGet("vosb-adm-alerts-no") || 0), snoozed = no && Date.now() - no < 3 * 864e5;
+    let html = "";
+    if (st === "off" && !snoozed) html = `<span>🔔 <b>Get admin alerts on this device</b> — new orders, payments, applications, comments, sign-ups and more, even when the admin is closed.</span><button type="button" class="b b-orange b-sm" data-alert-on>Turn on</button><button type="button" class="b b-line b-sm" data-alert-no>Not now</button>`;
+    else if (st === "ios" && !snoozed) html = `<span>🔔 To get admin alerts on iPhone / iPad, tap <b>Share → Add to Home Screen</b>, open <b>VOSB Admin</b> from there, then turn them on.</span><button type="button" class="b b-line b-sm" data-alert-no>OK</button>`;
+    else if (st === "denied" && !snoozed) html = `<span>🔕 Notifications are blocked in this browser. Allow them in the site settings (🔒 next to the address) to get admin alerts.</span><button type="button" class="b b-line b-sm" data-alert-no>OK</button>`;
+    bar.hidden = !html; bar.innerHTML = html;
+  }
+  /* "A new version is ready": compare the script / style versions this page loaded with the ones the server serves now */
+  const assetSig = (list) => list.filter((u) => /^\/(js|css)\//.test(u)).join("|");
+  const mySig = () => assetSig([...document.querySelectorAll("script[src],link[rel=stylesheet]")].map((e) => e.getAttribute("src") || e.getAttribute("href") || ""));
+  const BOOT_SIG = mySig();
+  async function checkUpdate() {
+    try {
+      const r = await fetch("/admin.html?_=" + Date.now(), { cache: "no-store" }); if (!r.ok) return;
+      const t = await r.text(), now = assetSig([...t.matchAll(/(?:src|href)="(\/(?:js|css)\/[^"]+)"/g)].map((m) => m[1]));
+      const bar = $("#updBar"); if (!bar || !now || now === BOOT_SIG) return;
+      bar.innerHTML = `<span>✨ <b>A new version of the admin is ready.</b> Save what you are doing, then update.</span><button type="button" class="b b-orange b-sm" data-upd-go>Update now</button>`; bar.hidden = false;
+    } catch (e) { /* offline: try again later */ }
+  }
+  let updTimer = 0;
+  function startAdminApp() {
+    try { if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {}); } catch (e) {}
+    const P = window.VOSB_PUSH; if (P) { try { P.setRpc((n, a) => sb.rpc(n, a)); P.sync(true); } catch (e) {} }   // links this device to the admin account
+    paintInstall(); paintAlertBar();
+    if (!updTimer) {
+      updTimer = setInterval(checkUpdate, 10 * 60000); setTimeout(checkUpdate, 20000);
+      document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && session) checkUpdate(); });
+    }
+  }
   let shellOn = false;
   function shell() {
     const email = session.user.email || "";
@@ -268,17 +340,20 @@
         <span class="tag">Admin</span>
         <nav class="tabs" id="tabs" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}" title="${n.t}">${svg(n.r)}<span class="lbl">${n.t}</span>${n.badge ? '<i class="nbadge" data-badge="${n.r}" hidden></i>' : ""}</a>`).join("")}</nav>
         <span class="sp"></span>
+        <button type="button" class="inst-btn" data-install hidden title="Install the admin as an app">${svg("dl", "sm")}<span>Install app</span></button>
         <a class="site-link" href="/" target="_blank" rel="noopener" title="Open the public website">${svg("site", "sm")}<span>View site</span></a>
         <div class="acct" id="acct">
           <button class="acct-btn" id="acctBtn" aria-haspopup="true" aria-expanded="false" aria-label="Account menu"><span class="av">${esc(ini)}</span><svg class="chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.400" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
           <div class="acct-menu" id="acctMenu" role="menu" hidden>
             <div class="acct-id"><span class="av lg">${esc(ini)}</span><div><b>Administrator</b><small title="${esc(email)}">${esc(email)}</small></div></div>
             <a role="menuitem" href="/" target="_blank" rel="noopener">${svg("site", "sm")}View website</a>
+            <button role="menuitem" type="button" data-install hidden>${svg("dl", "sm")}Install admin app</button>
             <a role="menuitem" href="#/settings">${svg("settings", "sm")}Settings</a>
             <button role="menuitem" class="danger" id="out">${svg("out", "sm")}Sign out</button>
           </div>
         </div>
       </div></header>
+      <div class="adm-bars"><div class="alert-bar" id="alertBar" hidden></div><div class="alert-bar upd" id="updBar" hidden></div></div>
       <main class="main" id="view"></main>
       <nav class="bottom-nav" id="bnav" aria-label="Admin">${NAV.map((n) => `<a href="#/${n.r}" data-r="${n.r}">${svg(n.r)}<em>${n.s || n.t}</em>${n.badge ? '<i class="nbadge" data-badge="${n.r}" hidden></i>' : ""}</a>`).join("")}</nav>`;
     const btn = $("#acctBtn"), menu = $("#acctMenu");
@@ -289,6 +364,7 @@
     document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { close(); btn.focus(); } });
     $("#out").onclick = () => { close(); logout("You have been signed out."); };
     shellOn = true;
+    startAdminApp();
     if (CO) { try { CO.refreshBadges(true); } catch (e) {} }
     if (PR) { try { PR.refreshBadges(true); } catch (e) {} }
   }

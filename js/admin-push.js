@@ -9,7 +9,8 @@ window.VOSB_ADMIN_PUSH = function (X) {
   const busy = async (b, fn) => { if (b) b.disabled = true; try { await fn(); } catch (e) { toast(errMsg(e), "err"); } finally { if (b && b.isConnected) b.disabled = false; } };
   const handles = (h) => h === "push";
   const LINKS = [["/", "Home page"], ["/news", "News"], ["/funding", "Funding"], ["/founder-stories", "Founder stories"], ["/companies", "Company directory"], ["/opportunities", "Opportunities"]];
-  const KIND = { article: ["📰", "New article"], announce: ["📣", "Announcement"], user: ["👤", "Member update"], test: ["🧪", "Test"] };
+  const ACAT = [["orders", "🧾", "PR orders, quotes and PR payments"], ["payments", "💳", "Company listing payments"], ["companies", "🏢", "Company applications, removal and valuation requests"], ["investors", "📈", "Investor interest and investments"], ["members", "👤", "New members and deleted accounts"], ["subscribers", "✉️", "New newsletter subscribers"], ["feedback", "💬", "Reviews and comments (companies and articles)"], ["installs", "📲", "Public app installs"]];
+  const KIND = { admin: ["🛎️", "Admin alert"], article: ["📰", "New article"], announce: ["📣", "Announcement"], user: ["👤", "Member update"], test: ["🧪", "Test"] };
   const ST = { pending: "Waiting", sending: "Sending…", sent: "Sent", failed: "Failed" };
 
   async function render(h, view) {
@@ -40,7 +41,12 @@ window.VOSB_ADMIN_PUSH = function (X) {
         <div class="tile"><small>New · last 7 days</small><b>${fmtN(S.new_7d || 0)}</b></div>
       </div>
       <div class="msg info">Visitors get a “Turn on notifications” prompt on their second page (and in Settings and the bell). When they turn it on, their phone or computer receives your news <b>even when the site is closed</b>. Bangla readers get the Bangla text, English readers the English text · Bangla ${fmtN(S.bn || 0)} · English ${fmtN(S.en || 0)} · switched off or removed ${fmtN(S.lost || 0)}.</div>
-      <div class="card"><h2>Automatic notifications</h2>
+      <div class="card"><h2>Admin alerts — for you</h2>
+        <p class="muted" style="margin:2px 0 10px">Every event below reaches <b>your own</b> devices (this browser and the installed admin app) the moment it happens — tap an alert to open the right admin page. Turn the devices on from “This device” below.</p>
+        <label class="chk" style="margin:6px 0 8px"><input type="checkbox" id="pa-all"${cfg.auto_admin === false ? "" : " checked"}> <span><b>Send me admin alerts</b></span></label>
+        <div class="pa-grid" id="pa-grid">${ACAT.map(([k, ic, t]) => `<label class="chk pa-i"><input type="checkbox" data-ac="${k}"${(cfg.admin_off || []).includes(k) ? "" : " checked"}> <span>${ic} ${esc(t)}</span></label>`).join("")}</div>
+        <p class="muted" style="margin:10px 0 0">Changes save when you tick or untick. If a burst arrives (more than 15 in 5 minutes) the rest stay in the in-app list so your phone is not flooded.</p></div>
+      <div class="card" style="margin-top:16px"><h2>Automatic notifications</h2>
         <label class="chk" style="margin:6px 0 4px"><input type="checkbox" id="pn-art"${cfg.auto_articles === false ? "" : " checked"}> <span><b>New articles</b> — everyone gets a notification about a minute after an article goes live (scheduled articles when their time comes; old or back-dated articles are skipped).</span></label>
         <label class="chk" style="margin:6px 0 0"><input type="checkbox" id="pn-mem"${cfg.auto_members === false ? "" : " checked"}> <span><b>Member updates</b> — order, payment, quote, company and deal updates reach that member's own devices (and yours for admin alerts).</span></label>
         <p class="muted" style="margin:10px 0 0">Changes save when you tick or untick.</p></div>
@@ -76,6 +82,9 @@ window.VOSB_ADMIN_PUSH = function (X) {
     const body = (test) => ({ title_bn: val("pn-tb"), title_en: val("pn-te"), body_bn: val("pn-bb"), body_en: val("pn-be"), url: val("pn-link").trim() || "/", audience: val("pn-aud") || "all", test: !!test });
     const err = (m) => { const e = $("#pn-err", view); e.hidden = !m; e.textContent = m || ""; };
     const reload = () => render(h, view);
+    const saveAdm = (b) => busy(b, async () => { must(await sb.rpc("admin_push_set", { p: { auto_admin: $("#pa-all", view).checked, admin_off: [...view.querySelectorAll("[data-ac]")].filter((x) => !x.checked).map((x) => x.dataset.ac) } })); toast("Saved", "ok"); });
+    $("#pa-all", view).addEventListener("change", (e) => { view.querySelectorAll("[data-ac]").forEach((x) => (x.disabled = !e.target.checked)); saveAdm(e.target); });
+    view.querySelectorAll("[data-ac]").forEach((x) => { x.disabled = !$("#pa-all", view).checked; x.addEventListener("change", () => saveAdm(x)); });
     const saveCfg = (b) => busy(b, async () => { must(await sb.rpc("admin_push_set", { p: { auto_articles: $("#pn-art", view).checked, auto_members: $("#pn-mem", view).checked } })); toast("Saved", "ok"); });
     $("#pn-art", view).addEventListener("change", (e) => saveCfg(e.target)); $("#pn-mem", view).addEventListener("change", (e) => saveCfg(e.target));
     view._h["here-on"] = (b) => busy(b, async () => { const r = await P.enable(); if (!r.ok) { toast(r.reason === "denied" ? "Blocked in this browser — allow notifications in the site settings." : "Could not turn on — " + r.reason, "err"); return; } toast("Turned on for this device", "ok"); reload(); });

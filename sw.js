@@ -3,7 +3,7 @@
  * so readers always get the latest news.
  * If a page cannot be loaded it first retries; only if that also fails does it show a short notice
  * (a real "offline" notice only when the device itself is offline, otherwise a "try again" notice). */
-const V = "vosb-sw-3";
+const V = "vosb-sw-4";
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
 
@@ -60,8 +60,11 @@ self.addEventListener("notificationclick", (e) => {
   let target; try { target = new URL(raw, self.location.origin); if (target.origin !== self.location.origin) target = new URL("/", self.location.origin); } catch (x) { target = new URL("/", self.location.origin); }
   e.waitUntil((async () => {
     const all = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    const isAdminUrl = (u) => { try { return /^\/admin(\/|\.html|$)/.test(new URL(u).pathname); } catch (x) { return false; } };
+    const wantAdmin = /^\/admin(\/|\.html|$)/.test(target.pathname);
+    // an admin alert goes to an open admin window, a news alert to an open reader window — never the other way round
     for (const c of all) {
-      if (new URL(c.url).origin === self.location.origin && "focus" in c) { try { await c.focus(); if ("navigate" in c) await c.navigate(target.href); return; } catch (x) { /* fall through */ } }
+      if (new URL(c.url).origin === self.location.origin && isAdminUrl(c.url) === wantAdmin && "focus" in c) { try { await c.focus(); if ("navigate" in c) await c.navigate(target.href); return; } catch (x) { /* fall through */ } }
     }
     if (self.clients.openWindow) await self.clients.openWindow(target.href);
   })());

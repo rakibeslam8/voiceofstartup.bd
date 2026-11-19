@@ -752,3 +752,24 @@ html[data-theme="dark"] .pill.pr-cancelled, html[data-theme="dark"] .pill.pr-non
 .pn-card span { font-size: .85rem; color: #444; line-height: 1.35; overflow-wrap: anywhere; }
 .pn-card em { font-style: normal; font-size: .74rem; color: #888; }
 @media (max-width: 700px) { .pn-prev, .pr-two { grid-template-columns: 1fr !important; } }
+
+.pa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; }
+.pa-i { align-items: flex-start; font-weight: 600; }
+.pa-i span { line-height: 1.35; }
+@media (max-width: 700px) { .pa-grid { grid-template-columns: 1fr; } }
+/* install button (admin only) + bars under the top bar */
+.inst-btn { flex: none; display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid #ff752299; background: #ff7522; color: #fff; font: 700 .86rem/1 inherit; cursor: pointer; white-space: nowrap; }
+.inst-btn:hover { background: #e55f0f; }
+.inst-btn[hidden], [data-install][hidden] { display: none !important; }
+.inst-btn .ic { width: 18px; height: 18px; }
+.acct-menu button[data-install] { display: flex; width: 100%; align-items: center; gap: 10px; background: none; border: 0; padding: 10px 14px; font: inherit; font-weight: 600; color: inherit; cursor: pointer; text-align: left; }
+.acct-menu button[data-install]:hover { background: #00000008; }
+.adm-bars:empty, .adm-bars:not(:has(.alert-bar:not([hidden]))) { display: none; }
+.alert-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; max-width: 1240px; margin: 10px auto 0; padding: 10px 16px; background: #fff3e6; border: 1px solid #ffc999; border-radius: 14px; font-size: .92rem; line-height: 1.4; }
+.alert-bar[hidden] { display: none; }
+.alert-bar > span { flex: 1 1 260px; min-width: 0; }
+.alert-bar.upd { background: #e9f7ef; border-color: #a7dcbc; }
+.adm-bars { padding: 0 16px; }
+.inst-steps { margin: 6px 0 10px; padding-left: 20px; line-height: 1.55; }
+.inst-steps li { margin: 4px 0; }
+@media (max-width: 700px) { .inst-btn span { display: none; } .inst-btn { width: 38px; padding: 0; justify-content: center; } .topbar-in { gap: 8px; } }
