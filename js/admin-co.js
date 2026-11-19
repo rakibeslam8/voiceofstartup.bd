@@ -157,7 +157,7 @@ window.VOSB_ADMIN_CO = function (X) {
     const lst = sec("listing"), prs = sec("pr"), paid = (n) => `${fmtN(n || 0)} paid`;
     return [
       tile("g", "Total users", fmtN(u.total), "#/users"),
-      tile("k", "Investors · Founders · Readers", `${fmtN(ro.investor || 0)} · ${fmtN(ro.founder || 0)} · ${fmtN(ro.reader || 0)}`, "#/users"),
+      tile("k", ro.other ? "Investors · Founders · Readers · Other" : "Investors · Founders · Readers", `${fmtN(ro.investor || 0)} · ${fmtN(ro.founder || 0)} · ${fmtN(ro.reader || 0)}${ro.other ? " · " + fmtN(ro.other) : ""}`, "#/users"),
       tile("g", "Total revenue · all sources", esc(bdt(r.total_verified != null ? r.total_verified : r.listing_verified)), "", "listing fees + PR &amp; ads"),
       tile("", "Revenue · last 30 days", esc(bdt(r.total_30d != null ? r.total_30d : r.listing_30d)), "", "all sources"),
       tile("", "Company listing fees", esc(bdt(lst.amount != null ? lst.amount : r.listing_verified)), "#/payments", paid(lst.n != null ? lst.n : r.listing_verified_n)),
