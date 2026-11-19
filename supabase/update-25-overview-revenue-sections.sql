@@ -1,0 +1,3 @@
+-- Overall dashboard / Ads & PR revenue: one entry per revenue source (listing fees, PR & ads) in admin_overview_totals().revenue.sections,
+-- totals = sum of the sections (a source added later counts everywhere), plus pr_net / pr_net_30d for the Ads & PR page.
+-- Applied to the live project as migration "overview_revenue_sections"; the function body lives in that migration (see Supabase → Database → Functions → admin_overview_totals).

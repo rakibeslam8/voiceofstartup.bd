@@ -522,21 +522,20 @@ window.VOSB_ADMIN_PR = function (X) {
     attention(); refreshBadges();
     const r = (T && T.revenue) || {}, st = { removed: false };
     const by = Array.isArray(r.by_service) ? r.by_service : [];
-    const net = Number(r.net_verified != null ? r.net_verified : r.total_verified || 0);
+    const prRev = Number(r.pr_verified || 0), pr30 = Number(r.pr_30d || 0), net = Number(r.pr_net != null ? r.pr_net : prRev - Number(r.charges_total || 0)), net30 = Number(r.pr_net_30d != null ? r.pr_net_30d : pr30 - Number(r.charges_30d || 0));
     view.innerHTML = head("Revenue & charges", `<button type="button" class="b b-orange" data-a="add">➕ Add ads / admin charge</button>`) + tabs("revenue") + `
       <div class="tiles">
-        <div class="tile g"><small>Total revenue (verified)</small><b>${esc(bdt(r.total_verified))}</b></div>
+        <div class="tile g"><small>PR &amp; ads revenue (verified)</small><b>${esc(bdt(prRev))}</b></div>
         <div class="tile r"><small>Ads &amp; admin charges</small><b>${esc(bdt(r.charges_total))}</b></div>
         <div class="tile ${net >= 0 ? "g" : "r"}"><small>Net after charges</small><b>${esc(bdt(net))}</b></div>
-        <div class="tile"><small>Last 30 days · revenue / net</small><b>${esc(bdt(r.total_30d))} <span class="muted" style="font-size:.7em">/ ${esc(bdt(r.net_30d))}</span></b></div>
+        <div class="tile"><small>Last 30 days · revenue / net</small><b>${esc(bdt(pr30))} <span class="muted" style="font-size:.7em">/ ${esc(bdt(net30))}</span></b></div>
       </div>
-      <div class="msg info">Revenue is counted automatically from every verified payment — company listing fees and <b>every PR service</b>, including services you add later. Free-campaign and fully-discounted orders add ৳0. Record what you pay for ads or admin work below and the <b>net</b> is worked out for you.</div>
-      <div class="card"><h2>Revenue by source</h2><div class="rv-tab">
-        <div class="rv-r"><span>🏢 Company listing fees</span><span class="muted">${fmtN(r.listing_verified_n || 0)} paid</span><b>${esc(bdt(r.listing_verified))}</b></div>
+      <div class="msg info">This page is about <b>PR &amp; ads only</b>: revenue is counted automatically from every verified PR payment, <b>including services you add later</b>. Free-campaign and fully-discounted orders add ৳0. Record what you pay for ads or admin work below and the <b>net</b> is worked out for you. Company listing fees are counted separately — see the Dashboard (Overall) and Companies → Payments.</div>
+      <div class="card"><h2>PR &amp; ads revenue by service</h2><div class="rv-tab">
         ${by.map((x) => `<div class="rv-r"><span>📣 ${esc(x.name)}</span><span class="muted">${fmtN(x.n)} order${x.n > 1 ? "s" : ""}</span><b>${esc(bdt(x.amount))}</b></div>`).join("")}
         ${by.length ? "" : `<div class="rv-r"><span class="muted">No paid PR orders yet</span><span></span><b>${esc(bdt(0))}</b></div>`}
-        <div class="rv-r rv-sum"><span>Total revenue</span><span></span><b>${esc(bdt(r.total_verified))}</b></div>
-        <div class="rv-r"><span class="muted">Waiting to be verified (not counted yet)</span><span></span><span class="muted">${esc(bdt(r.total_pending))}</span></div></div></div>
+        <div class="rv-r rv-sum"><span>PR &amp; ads revenue</span><span></span><b>${esc(bdt(prRev))}</b></div>
+        <div class="rv-r"><span class="muted">Waiting to be verified (not counted yet)</span><span></span><span class="muted">${esc(bdt(r.pr_pending))}</span></div></div></div>
       <div class="card" style="margin-top:16px"><div class="sc-gh"><h2>Ads &amp; admin charges</h2><label class="chk" style="margin:0"><input type="checkbox" id="rm"> Show removed</label></div>
         <p class="muted" style="margin:0 0 6px">Ads / boost spend: ${esc(bdt(r.charges_ads))} · Admin charges: ${esc(bdt(r.charges_admin))} · Last 30 days: ${esc(bdt(r.charges_30d))}</p><div class="rows" id="list"></div></div>`;
     const paint = () => {

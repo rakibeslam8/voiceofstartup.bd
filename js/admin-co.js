@@ -106,7 +106,7 @@ window.VOSB_ADMIN_CO = function (X) {
         ${t("r", "#/companies", "Applications waiting", fmtN(waiting(c)))}
         ${t("", "#/payments", "Payments waiting", fmtN(c.payments_pending))}
         ${t("g", "#/companies/all", "Published companies", fmtN(bs(c, "published")))}
-        ${t("k", "#/payments", "Verified revenue", esc(bdt(c.revenue_verified)))}
+        ${t("k", "#/payments", "Listing fees (verified)", esc(bdt(c.revenue_verified)))}
         ${t("", "#/users", "Registered users", fmtN(c.users))}
         ${t("", "#/interests", "New investor interests", fmtN(c.interests_new))}
       </div>`;
@@ -151,15 +151,18 @@ window.VOSB_ADMIN_CO = function (X) {
     let T; try { T = must(await sb.rpc("admin_overview_totals")); } catch (e) { return ""; }
     if (!T) return "";
     const u = T.users || {}, r = T.revenue || {}, c = T.companies || {}, k = T.content || {}, a = T.audience || {}, ro = u.roles || {};
-    const tile = (cls, label, val, href) => href ? `<a class="tile ${cls}" href="${href}" style="text-decoration:none;color:inherit"><small>${label}</small><b>${val}</b></a>` : `<div class="tile ${cls}"><small>${label}</small><b>${val}</b></div>`;
+    const tile = (cls, label, val, href, sub) => { const inner = `<small>${label}</small><b>${val}</b>${sub ? `<em class="t-sub">${sub}</em>` : ""}`; return href ? `<a class="tile ${cls}" href="${href}" style="text-decoration:none;color:inherit">${inner}</a>` : `<div class="tile ${cls}">${inner}</div>`; };
+    // revenue: the total counts every source; each source (company listing fees, PR & ads, …) has its own tile with its own count
+    const sec = (k) => (Array.isArray(r.sections) ? r.sections : []).find((x) => x.key === k) || {};
+    const lst = sec("listing"), prs = sec("pr"), paid = (n) => `${fmtN(n || 0)} paid`;
     return [
       tile("g", "Total users", fmtN(u.total), "#/users"),
       tile("k", "Investors · Founders · Readers", `${fmtN(ro.investor || 0)} · ${fmtN(ro.founder || 0)} · ${fmtN(ro.reader || 0)}`, "#/users"),
-      tile("g", "Total revenue · listing + PR", esc(bdt(r.total_verified != null ? r.total_verified : r.listing_verified)), "#/payments"),
-      tile("", "Revenue · 30 days", esc(bdt(r.total_30d != null ? r.total_30d : r.listing_30d)), "#/payments"),
-      tile("", "of which PR / ads", esc(bdt(r.pr_verified || 0)), "#/pr/revenue"),
-      tile("r", "Ads & admin charges", esc(bdt(r.charges_total || 0)), "#/pr/revenue"),
-      tile("g", "Net after charges", esc(bdt(r.net_verified != null ? r.net_verified : (r.total_verified || 0))), "#/pr/revenue"),
+      tile("g", "Total revenue · all sources", esc(bdt(r.total_verified != null ? r.total_verified : r.listing_verified)), "", "listing fees + PR &amp; ads"),
+      tile("", "Revenue · last 30 days", esc(bdt(r.total_30d != null ? r.total_30d : r.listing_30d)), "", "all sources"),
+      tile("", "Company listing fees", esc(bdt(lst.amount != null ? lst.amount : r.listing_verified)), "#/payments", paid(lst.n != null ? lst.n : r.listing_verified_n)),
+      tile("", "PR &amp; ads services", esc(bdt(prs.amount != null ? prs.amount : r.pr_verified)), "#/pr/revenue", paid(prs.n != null ? prs.n : r.pr_verified_n)),
+      tile("", "Waiting for verification", esc(bdt(r.total_pending || 0)), "#/payments", "not counted yet"),
       tile("g", "Listed companies", fmtN(c.published), "#/companies/all"),
     ].join("");
   }

@@ -775,3 +775,5 @@ html[data-theme="dark"] .pill.pr-cancelled, html[data-theme="dark"] .pill.pr-non
 @media (max-width: 700px) { .inst-btn span { display: none; } .inst-btn { width: 38px; padding: 0; justify-content: center; } .topbar-in { gap: 8px; } }
 
 .inst-warn { background: #fff3e6; border: 1px solid #ffc999; border-radius: 12px; padding: 10px 12px; font-size: .9rem; line-height: 1.45; margin: 8px 0 4px; }
+
+.tile .t-sub { display: block; font-style: normal; font-size: .8rem; font-weight: 600; color: var(--muted, #6b6b6b); margin-top: 4px; }
