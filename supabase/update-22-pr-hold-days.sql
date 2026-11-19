@@ -41,3 +41,19 @@ grant execute on function public.get_pr_slots() to authenticated;
 update public.pr_services set slot_group = 'article' where slot_group is null and key in ('founder_story','press_release','research','hiring','top_story','newsletter','banner','other');
 update public.pr_services set slot_group = 'post' where slot_group is null and key in ('event','giveaway','collab');
 update public.pr_services set slot_group = 'reel' where slot_group is null and key = 'combo';
+
+-- an order with an unpaid amount can be paid in any open status (not only new / confirmed)
+create or replace function public.pr_pay_order(p_id uuid, p_method text, p_sender text, p_trx text)
+returns jsonb language plpgsql security definer set search_path to 'public' as $function$
+declare uid uuid := auth.uid(); o public.pr_orders;
+begin
+  if uid is null then raise exception 'Please sign in' using errcode = '28000'; end if;
+  if not public.rl_user('prpay', 10, 3600) then raise exception 'Too many attempts, please try again later' using errcode = '54000'; end if;
+  select * into o from public.pr_orders where id = p_id and deleted_at is null;
+  if o.id is null or o.user_id <> uid then raise exception 'Not allowed' using errcode = '42501'; end if;
+  if o.status in ('cancelled','rejected') or coalesce(o.amount, 0) <= 0 or o.pay_status not in ('none','rejected') then raise exception 'Payment is not needed for this order'; end if;
+  perform public._pr_apply_payment(p_id, p_method, p_sender, p_trx);
+  return jsonb_build_object('id', p_id, 'pay_status', 'pending');
+end $function$;
+revoke all on function public.pr_pay_order(uuid, text, text, text) from public, anon;
+grant execute on function public.pr_pay_order(uuid, text, text, text) to authenticated;

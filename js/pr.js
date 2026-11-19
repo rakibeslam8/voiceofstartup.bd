@@ -477,7 +477,7 @@
     const sname = T(o.service_name_bn, o.service_name_en), br = o.brief || {};
     const amount = o.amount;
     const waitingQuote = o.kind === "quote" && amount == null && !["cancelled", "rejected"].includes(o.status);
-    const canPay = amount > 0 && ["new", "confirmed"].includes(o.status) && ["none", "rejected"].includes(o.pay_status);
+    const canPay = amount > 0 && !["cancelled", "rejected"].includes(o.status) && ["none", "rejected"].includes(o.pay_status);   // payable in any open state (admin may have started work after the quote)
     const canCancel = o.status === "new" && !(["pending", "verified"].includes(o.pay_status) && amount > 0);
     const pills = [pill(F.ORDER[o.status] || F.ORDER.new)];
     if (waitingQuote) pills.push(pill(["wait", "কোটেশন তৈরি হচ্ছে", "Quote being prepared"]));
