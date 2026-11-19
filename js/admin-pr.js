@@ -89,13 +89,14 @@ window.VOSB_ADMIN_PR = function (X) {
   const TABS = [["ads", "Ads", "#/ads"], ["orders", "PR orders", "#/pr"], ["revenue", "Revenue & charges", "#/pr/revenue"], ["schedule", "Schedule", "#/pr/schedule"], ["services", "Services", "#/pr/services"], ["coupons", "Coupons", "#/pr/coupons"], ["campaigns", "Free campaigns", "#/pr/campaigns"], ["settings", "Page & stats", "#/pr/settings"]];
   const tabs = (active) => `<div class="co-tabs" role="tablist" aria-label="Ads and PR">${TABS.map(([k, t, h]) => `<a href="${h}" role="tab" class="${k === active ? "on" : ""}" ${k === active ? 'aria-selected="true"' : ""}>${esc(t)}${k === "orders" && attn && attn.total ? `<i>${attn.total > 99 ? "99+" : attn.total}</i>` : ""}</a>`).join("")}</div>`;
 
-  const handles = (h) => h === "pr" || h.indexOf("pr/") === 0;
+  const handles = (h) => h === "pr" || h.indexOf("pr/") === 0 || h === "company-coupons";
   function render(h, view) {
     if (h === "pr") return viewOrders(view);
     if (h === "pr/revenue") return viewRevenue(view);
     if (h === "pr/schedule") return viewSchedule(view);
     if (h === "pr/services") return viewServices(view);
-    if (h === "pr/coupons") return viewCoupons(view);
+    if (h === "pr/coupons") return viewCoupons(view, "pr");
+    if (h === "company-coupons") return viewCoupons(view, "listing");
     if (h === "pr/campaigns") return viewCampaigns(view);
     if (h === "pr/settings") return viewSettings(view);
     location.hash = "#/pr";
@@ -246,7 +247,7 @@ window.VOSB_ADMIN_PR = function (X) {
     if (!view.isConnected) return;
     attention(); refreshBadges();
     const gname = {}; groups.forEach((g) => (gname[g.key] = g.name_en));
-    const st = { removed: false };
+    const st = { removed: false, all: false };
     view.innerHTML = head("Services & prices", `<button type="button" class="b b-orange" data-a="add">➕ New service</button>`) + tabs("services") + `
       <div class="msg info"><b>Change a price fast:</b> type the new amount in the box and press <b>Save price</b> (empty = “Get a quote”). Use <b>Edit</b> for everything else — description, notice for buyers, <b>extra questions</b> to collect, and the <b>booking calendar group</b>. Prices are in Bangladeshi Taka (৳). Services that are switched off are hidden from the page.</div>
       <label class="chk" style="margin:0 2px 12px"><input type="checkbox" id="rm"> Show removed services</label><div class="rows" id="list"></div>`;
@@ -340,48 +341,58 @@ window.VOSB_ADMIN_PR = function (X) {
        Everything → scope all, no keys · Company listing only → scope listing · All PR services → scope pr, no keys · Selected → scope all + the ticked keys (“listing” = company listing fee) */
   const appMode = (c) => c.scope === "listing" ? "listing" : !(c.service_keys && c.service_keys.length) ? (c.scope === "pr" ? "pr" : "all") : "sel";
   const appliesTo = (c, name) => { const m = appMode(c); return m === "all" ? "Everything (PR + company listing)" : m === "pr" ? "All PR services" : m === "listing" ? "Company listing only" : "Only: " + c.service_keys.map((k) => k === "listing" ? "Company listing" : name[k] || k).join(", "); };
-  async function viewCoupons(view) {
+  /* The same coupon manager is used in two places: Ads & PR → Coupons (ctx "pr") and Companies → Coupons (ctx "listing").
+     Both read and write the same central list; each one opens inside its own section (its own tab strip), lists the coupons that work
+     there, and starts a new coupon with that section pre-selected. “All coupons” in the filter shows every code from either place. */
+  const worksIn = (c, ctx) => { const m = appMode(c); return m === "all" || (ctx === "listing" ? m === "listing" || (m === "sel" && c.service_keys.includes("listing")) : m === "pr" || (m === "sel" && c.service_keys.some((k) => k !== "listing"))); };
+  async function viewCoupons(view, ctx) {
+    ctx = ctx === "listing" ? "listing" : "pr";
     bind(view);
-    view.innerHTML = head("Coupons") + tabs("coupons") + loadingCard();
+    const L = ctx === "listing", hd = (extra) => head(L ? "Company coupons" : "Coupons", extra);
+    const tb = async () => (L && X.coTabs ? await X.coTabs("cpn") : tabs("coupons"));
+    view.innerHTML = hd() + (await tb()) + loadingCard();
     let rows, used, lused, svcs;
     try {
       [rows, used, lused, svcs] = await Promise.all([sb.from("pr_coupons").select("*").order("created_at", { ascending: false }), fetchAll(() => sb.from("pr_orders").select("coupon_code,status,discount").not("coupon_code", "is", null).order("id")), fetchAll(() => sb.from("listing_payments").select("coupon_code,status,discount").not("coupon_code", "is", null).order("id")), sb.from("pr_services").select("key,name_en").is("deleted_at", null).order("sort")]);
       rows = must(rows) || []; used = must(used) || []; lused = must(lused) || []; svcs = must(svcs) || [];
-    } catch (e) { view.innerHTML = head("Coupons") + tabs("coupons") + errorCard(e); return; }
+    } catch (e) { view.innerHTML = hd() + (await tb()) + errorCard(e); return; }
     if (!view.isConnected) return;
     attention(); refreshBadges();
-    const uses = {}, given = {}; let totalUses = 0, totalDisc = 0;
-    used.forEach((o) => { if (!["cancelled", "rejected"].includes(o.status)) { uses[o.coupon_code] = (uses[o.coupon_code] || 0) + 1; given[o.coupon_code] = (given[o.coupon_code] || 0) + Number(o.discount || 0); totalUses++; totalDisc += Number(o.discount || 0); } });
-    lused.forEach((o) => { if (["pending", "verified"].includes(o.status)) { uses[o.coupon_code] = (uses[o.coupon_code] || 0) + 1; given[o.coupon_code] = (given[o.coupon_code] || 0) + Number(o.discount || 0); totalUses++; totalDisc += Number(o.discount || 0); } });
+    const uses = {}, given = {}, usesAll = {}; let totalUses = 0, totalDisc = 0;
+    const tally = (o, here) => { const k = o.coupon_code, d = Number(o.discount || 0); usesAll[k] = (usesAll[k] || 0) + 1; if (here) { uses[k] = (uses[k] || 0) + 1; given[k] = (given[k] || 0) + d; totalUses++; totalDisc += d; } };
+    used.forEach((o) => { if (!["cancelled", "rejected"].includes(o.status)) tally(o, !L); });
+    lused.forEach((o) => { if (["pending", "verified"].includes(o.status)) tally(o, L); });
     const name = {}; svcs.forEach((s) => (name[s.key] = s.name_en));
     const st = { removed: false };
     const now = Date.now();
     const state = (c) => c.deleted_at ? "removed" : !c.active ? "off" : c.expires_at && new Date(c.expires_at) < now ? "expired" : c.starts_at && new Date(c.starts_at) > now ? "scheduled" : c.max_uses && (uses[c.code] || 0) >= c.max_uses ? "used up" : "live";
-    const liveN = rows.filter((c) => state(c) === "live").length;
-    view.innerHTML = head("Coupons", `<button type="button" class="b b-orange" data-a="add">➕ New coupon</button>`) + tabs("coupons") + `
-      <div class="tiles"><div class="tile g"><small>Live coupons</small><b>${fmtN(liveN)}</b></div><div class="tile"><small>Times used</small><b>${fmtN(totalUses)}</b></div><div class="tile k"><small>Discount given</small><b>${esc(bdt(totalDisc))}</b></div></div>
-      <div class="msg info"><b>One place for every coupon.</b> For each code choose <b>where it works</b>: everything, only the company-listing fee, all PR services, or just the services you tick. Buyers type the code on the order screen (PR) or on the listing payment screen and see the discount at once. A code counts as used once an order or payment with it exists; cancelled / rejected ones give the use back. A 100% coupon on the listing fee skips the payment step.</div>
-      <label class="chk" style="margin:0 2px 12px"><input type="checkbox" id="rm"> Show removed coupons</label><div class="rows" id="list"></div>`;
+    const mine = (c) => st.all || worksIn(c, ctx);
+    const liveN = rows.filter((c) => state(c) === "live" && worksIn(c, ctx)).length;
+    view.innerHTML = hd(`<button type="button" class="b b-orange" data-a="add">➕ New coupon</button>`) + (await tb()) + `
+      <div class="tiles"><div class="tile g"><small>Live coupons</small><b>${fmtN(liveN)}</b></div><div class="tile"><small>Times used ${L ? "on listing fees" : "on PR orders"}</small><b>${fmtN(totalUses)}</b></div><div class="tile k"><small>Discount given</small><b>${esc(bdt(totalDisc))}</b></div></div>
+      <div class="msg info"><b>${L ? "Coupons for the company-listing fee." : "Coupons for PR services."}</b> The same coupon list is managed here and in ${L ? "Ads &amp; PR → Coupons" : "Companies → Coupons"} — a code you create in either place works wherever you let it. For each code choose <b>where it works</b>: everything, only the company-listing fee, all PR services, or just the services you tick. Buyers type the code on the order screen (PR) or on the listing payment screen and see the discount at once. A code counts as used once an order or payment with it exists; cancelled / rejected ones give the use back. A 100% coupon on the listing fee skips the payment step.</div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;margin:0 2px 12px"><label class="chk"><input type="checkbox" id="al"> Also show coupons that only work in ${L ? "Ads &amp; PR" : "Companies"}</label><label class="chk"><input type="checkbox" id="rm"> Show removed coupons</label></div><div class="rows" id="list"></div>`;
     const paint = () => {
-      const l = rows.filter((c) => (st.removed ? !!c.deleted_at : !c.deleted_at));
+      const l = rows.filter((c) => (st.removed ? !!c.deleted_at : !c.deleted_at) && mine(c));
       $("#list", view).innerHTML = l.length ? l.map((c) => { const s = state(c); return `<div class="row pr-row"><div class="th co-logo">🏷️</div><div class="ti"><h3><code class="co-trx">${esc(c.code)}</code> <small>· ${c.kind === "percent" ? esc(String(Number(c.value))) + "% off" + (c.max_discount ? " (max " + esc(bdt(c.max_discount)) + ")" : "") : esc(bdt(c.value)) + " off"}</small> ${pill(s === "live" ? "verified" : s === "scheduled" ? "pending" : "none", s)}</h3>
-        <div class="meta"><span class="pr-ap">🎯 ${esc(appliesTo(c, name))}</span><span>Used ${uses[c.code] || 0}${c.max_uses ? " / " + c.max_uses : ""}</span>${given[c.code] ? `<span>saved buyers ${esc(bdt(given[c.code]))}</span>` : ""}<span>${c.per_user}× per person</span>${c.min_amount > 0 ? `<span>min order ${esc(bdt(c.min_amount))}</span>` : ""}<span>${c.starts_at ? "from " + esc(fmtDT(c.starts_at)) : ""}${c.expires_at ? " until " + esc(fmtDT(c.expires_at)) : ""}</span>${c.note ? `<span>${esc(c.note)}</span>` : ""}</div></div>
+        <div class="meta"><span class="pr-ap">🎯 ${esc(appliesTo(c, name))}</span><span>Used ${uses[c.code] || 0} here${c.max_uses ? " · " + (usesAll[c.code] || 0) + " / " + c.max_uses + " in total" : ""}</span>${given[c.code] ? `<span>saved buyers ${esc(bdt(given[c.code]))}</span>` : ""}<span>${c.per_user}× per person</span>${c.min_amount > 0 ? `<span>min order ${esc(bdt(c.min_amount))}</span>` : ""}<span>${c.starts_at ? "from " + esc(fmtDT(c.starts_at)) : ""}${c.expires_at ? " until " + esc(fmtDT(c.expires_at)) : ""}</span>${c.note ? `<span>${esc(c.note)}</span>` : ""}</div></div>
         <div class="acts">${c.deleted_at ? `<button type="button" class="b b-green b-sm" data-a="restore" data-id="${esc(c.id)}">Restore</button>` : `<button type="button" class="b b-line b-sm" data-a="toggle" data-id="${esc(c.id)}">${c.active ? "Turn off" : "Turn on"}</button><button type="button" class="b b-line b-sm" data-a="edit" data-id="${esc(c.id)}">Edit</button><button type="button" class="b b-ghost b-sm" data-a="remove" data-id="${esc(c.id)}">Remove</button>`}</div></div>`; }).join("")
-        : `<div class="empty"><b>${st.removed ? "Nothing removed" : "No coupons yet"}</b>${st.removed ? "" : "Create one with “New coupon”."}</div>`;
+        : `<div class="empty"><b>${st.removed ? "Nothing removed" : "No coupons here yet"}</b>${st.removed ? "" : "Create one with “New coupon”."}</div>`;
     };
     paint();
     $("#rm", view).addEventListener("change", (e) => { st.removed = e.target.checked; paint(); });
-    const reload = async () => { const y = window.scrollY; await viewCoupons(view); window.scrollTo(0, y); };
+    $("#al", view).addEventListener("change", (e) => { st.all = e.target.checked; paint(); });
+    const reload = async () => { const y = window.scrollY; await viewCoupons(view, ctx); window.scrollTo(0, y); };
     const byId = (id) => rows.find((c) => c.id === id);
     const upd = async (id, patch) => must(await sb.from("pr_coupons").update(patch).eq("id", id));
     view._h.toggle = (b) => busy(b, async () => { const c = byId(b.dataset.id); await upd(c.id, { active: !c.active }); await reload(); });
     view._h.remove = (b) => busy(b, async () => { if (!(await modal({ title: "Remove this coupon?", body: "It stops working. Past orders keep their discount, and you can restore it any time.", ok: "Remove", danger: true }))) return; await upd(b.dataset.id, { deleted_at: new Date().toISOString(), active: false }); await reload(); });
     view._h.restore = (b) => busy(b, async () => { await upd(b.dataset.id, { deleted_at: null }); await reload(); });
-    view._h.add = () => cpnForm(null, svcs).then((ok) => ok && reload());
+    view._h.add = () => cpnForm(null, svcs, ctx).then((ok) => ok && reload());
     view._h.edit = (b) => cpnForm(byId(b.dataset.id), svcs).then((ok) => ok && reload());
   }
-  function cpnForm(c, svcs) {
-    const n = !c; c = c || { code: "", kind: "percent", value: "", min_amount: 0, max_discount: null, scope: "all", service_keys: [], starts_at: null, expires_at: null, max_uses: null, per_user: 1, active: true, note: "" };
+  function cpnForm(c, svcs, ctx) {
+    const n = !c; c = c || { code: "", kind: "percent", value: "", min_amount: 0, max_discount: null, scope: ctx === "listing" ? "listing" : "pr", service_keys: [], starts_at: null, expires_at: null, max_uses: null, per_user: 1, active: true, note: "" };
     const picked = new Set(c.service_keys || []), mode = appMode(c);
     const html = `<div class="pr-three">${fld("c-code", "Code *", inp("c-code", c.code, 'maxlength="24" autocapitalize="characters" placeholder="WELCOME10" style="text-transform:uppercase"' + (n ? "" : " disabled")), "A–Z, 0–9, - _ (3–24)")}${fld("c-kind", "Type", sel("c-kind", [["percent", "Percent (%)"], ["fixed", "Fixed amount (৳)"]], c.kind))}${fld("c-val", "Value *", inp("c-val", c.value, 'inputmode="decimal"'), "10 = 10% or ৳10")}</div>
       <div class="pr-three">${fld("c-min", "Minimum order (৳)", inp("c-min", c.min_amount || 0, 'inputmode="decimal"'))}${fld("c-max", "Max discount (৳)", inp("c-max", c.max_discount == null ? "" : c.max_discount, 'inputmode="decimal" placeholder="optional"'), "for % coupons")}${fld("c-pu", "Uses per person", inp("c-pu", c.per_user, 'inputmode="numeric"'))}</div>

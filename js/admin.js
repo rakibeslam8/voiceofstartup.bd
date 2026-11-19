@@ -255,7 +255,7 @@
   /* Company Directory control centre (js/admin-co.js): users, applications, payments, reviews, investor interest */
   const CO = typeof window.VOSB_ADMIN_CO === "function" ? window.VOSB_ADMIN_CO({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll }) : null;
   /* Paid promotion (PR) control centre (js/admin-pr.js): orders, services, coupons, free campaigns, page stats */
-  const PR = typeof window.VOSB_ADMIN_PR === "function" ? window.VOSB_ADMIN_PR({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll }) : null;
+  const PR = typeof window.VOSB_ADMIN_PR === "function" ? window.VOSB_ADMIN_PR({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll, coTabs: (a) => (CO ? CO.tabsHtml(a) : "") }) : null;
   /* Push notifications (js/admin-push.js): subscribed devices, automatic article alerts, announcements */
   const PU = typeof window.VOSB_ADMIN_PUSH === "function" ? window.VOSB_ADMIN_PUSH({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll }) : null;
   let shellOn = false;
@@ -295,7 +295,7 @@
 
   function markNav(r) {
     const base = r.startsWith("edit") ? "edit/new" : r.startsWith("ads") || r === "pr" || r.startsWith("pr/") ? "ads" : r.startsWith("newsletter") ? "subscribers"
-      : (r === "companies" || r.startsWith("companies/") || ["payments", "reviews", "interests", "company-settings", "valuations", "deals", "trash"].includes(r)) ? "companies"
+      : (r === "companies" || r.startsWith("companies/") || ["payments", "reviews", "interests", "company-settings", "company-coupons", "valuations", "deals", "trash"].includes(r)) ? "companies"
       : (r === "users" || r === "deletions" || r === "active") ? "users" : r === "push" ? "subscribers" : r;
     $$("[data-r]").forEach((a) => a.classList.toggle("on", a.dataset.r === base || (base === "edit/new" && a.dataset.r === "edit/new")));
   }

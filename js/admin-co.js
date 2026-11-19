@@ -113,7 +113,7 @@ window.VOSB_ADMIN_CO = function (X) {
   }
 
   /* ---------------- shared page furniture ---------------- */
-  const COTABS = [["apps", "Applications", "#/companies"], ["all", "All companies", "#/companies/all"], ["pay", "Payments", "#/payments"], ["rev", "Reviews & comments", "#/reviews"], ["val", "Valuations", "#/valuations"], ["deals", "Investments", "#/deals"], ["int", "Investor interest", "#/interests"], ["cpn", "Coupons", "#/pr/coupons"], ["set", "Listing settings", "#/company-settings"], ["trash", "Trash", "#/trash"]];
+  const COTABS = [["apps", "Applications", "#/companies"], ["all", "All companies", "#/companies/all"], ["pay", "Payments", "#/payments"], ["rev", "Reviews & comments", "#/reviews"], ["val", "Valuations", "#/valuations"], ["deals", "Investments", "#/deals"], ["int", "Investor interest", "#/interests"], ["cpn", "Coupons", "#/company-coupons"], ["set", "Listing settings", "#/company-settings"], ["trash", "Trash", "#/trash"]];
   function tabs(active, c) {
     const badge = { apps: waiting(c), pay: Number(c && c.payments_pending) || 0, int: Number(c && c.interests_new) || 0 };
     return `<div class="co-tabs" role="tablist" aria-label="Company Directory">${COTABS.map(([k, t, h]) => `<a href="${h}" role="tab" class="${k === active ? "on" : ""}" ${k === active ? 'aria-selected="true"' : ""}>${esc(t)}${badge[k] ? `<i>${badge[k] > 99 ? "99+" : badge[k]}</i>` : ""}</a>`).join("")}</div>`;
@@ -1037,5 +1037,6 @@ window.VOSB_ADMIN_CO = function (X) {
     const a = t.querySelector("a.on"); if (a) t.scrollLeft = Math.max(0, a.offsetLeft - (t.clientWidth - a.offsetWidth) / 2);
   });
   try { new MutationObserver(() => centerTabs()).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
-  return { handles, render, refreshBadges, counts, dashSection, overviewTiles };
+  const tabsHtml = async (active) => tabs(active, await counts());
+  return { handles, render, refreshBadges, counts, dashSection, overviewTiles, tabsHtml };
 };
