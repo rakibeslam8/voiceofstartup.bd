@@ -1,0 +1,4 @@
+-- Update 27 — the member bell shows pushed news (applied as migration "bell_shows_news_updates")
+-- notif_state(user_id, seen_at, read_ids): per-person read state for shared news items (RLS on, no policies, functions only).
+-- my_notifications(p_limit, p_news): with p_news=true also returns articles + announcements from push_outbox (last 7 days) as kind news/announce.
+-- mark_notifications_read(p_ids): null = everything read; ids may be personal notifications and/or news items.
