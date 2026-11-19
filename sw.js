@@ -3,7 +3,7 @@
  * so readers always get the latest news.
  * If a page cannot be loaded it first retries; only if that also fails does it show a short notice
  * (a real "offline" notice only when the device itself is offline, otherwise a "try again" notice). */
-const V = "vosb-sw-2";
+const V = "vosb-sw-3";
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
 
@@ -34,4 +34,40 @@ self.addEventListener("fetch", (e) => {
   const r = e.request;
   if (r.mode !== "navigate") return;
   e.respondWith(loadPage(r).catch(fallback));
+});
+
+/* ---------- Web Push: news and updates that arrive on the device even when the site is closed ---------- */
+self.addEventListener("push", (e) => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (x) { d = { body: e.data ? e.data.text() : "" }; }
+  const title = d.title || "Voice of Startup Bangladesh";
+  const opt = {
+    body: d.body || "",
+    icon: "/assets/icon-192.png",
+    badge: "/assets/favicon-96.png",
+    tag: d.tag || "vosb",
+    renotify: false,
+    lang: d.lang || "bn",
+    data: { url: d.url || "/" },
+  };
+  if (d.image && /^https:\/\//.test(d.image)) opt.image = d.image;
+  e.waitUntil(self.registration.showNotification(title, opt));
+});
+
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const raw = (e.notification.data && e.notification.data.url) || "/";
+  let target; try { target = new URL(raw, self.location.origin); if (target.origin !== self.location.origin) target = new URL("/", self.location.origin); } catch (x) { target = new URL("/", self.location.origin); }
+  e.waitUntil((async () => {
+    const all = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    for (const c of all) {
+      if (new URL(c.url).origin === self.location.origin && "focus" in c) { try { await c.focus(); if ("navigate" in c) await c.navigate(target.href); return; } catch (x) { /* fall through */ } }
+    }
+    if (self.clients.openWindow) await self.clients.openWindow(target.href);
+  })());
+});
+
+/* the push service renewed or dropped our subscription: ask an open page to register the new one (it does so on its next visit otherwise) */
+self.addEventListener("pushsubscriptionchange", (e) => {
+  e.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((all) => all.forEach((c) => c.postMessage({ type: "push-resync" }))));
 });

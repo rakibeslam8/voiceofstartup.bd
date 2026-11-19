@@ -70,6 +70,8 @@
     } else installHelp();
   });
   if ("serviceWorker" in navigator) window.addEventListener("load", () => { navigator.serviceWorker.register("/sw.js").catch(() => {}); });
+  /* Web Push (turn-on prompt, settings row, bell strip) — loaded after the page is ready so it never slows reading */
+  window.addEventListener("load", () => { setTimeout(() => { try { const sc = document.createElement("script"); sc.src = "/js/push.js?v=20261119a"; sc.async = true; document.head.appendChild(sc); } catch (e) {} }, 1200); });
 
   const NAV = [
     { href: "/", bn: "হোম", en: "Home" },
@@ -179,6 +181,7 @@
         <section class="st-card"><h2>${T("পছন্দ", "Preferences")}</h2>
           <button class="ab-row" type="button" data-act="theme"><svg class="ti-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg><svg class="ti-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg><span>${T("ডার্ক মোড", "Dark mode")}</span><i class="ab-sw" aria-hidden="true"></i></button>
           <button class="ab-row" type="button" data-act="lang"><b class="ab-lg">${lang === "bn" ? "EN" : "বা"}</b><span>${T("ভাষা", "Language")}</span><em>${lang === "bn" ? "English" : "বাংলা"}</em></button>
+          <button class="ab-row" type="button" data-act="push-toggle" data-push-row><span aria-hidden="true" class="ab-lg">🔔</span><span>${T("পুশ নোটিফিকেশন", "Push notifications")}</span><em class="push-st"></em></button>
           <button class="ab-row" type="button" data-act="refresh-app"><span class="ab-lg">↻</span><span>${T("অ্যাপ রিফ্রেশ (সমস্যা হলে)", "Refresh app (if something looks stale)")}</span></button>
           <div class="ab-row ab-size"><span>${T("লেখার আকার", "Article text size")}</span><div class="ab-step"><button type="button" data-act="fs-" aria-label="${T("ছোট করুন", "Smaller")}">A−</button><b id="ab-fs">${Math.round(readZoom() * 100)}%</b><button type="button" data-act="fs+" aria-label="${T("বড় করুন", "Larger")}">A+</button></div></div>
         </section>
@@ -1207,7 +1210,7 @@
   window.VOSB_UI = { get lang() { return lang; }, T, esc, pick, safeHref, bnDigits, formatDate, formatDateTime, money, $, $$, onRender(fn) { renderers.push(fn); }, refresh };
   (function loadAuth() {
     const s = document.createElement("script");
-    s.src = "/js/auth.js?v=20261118f";
+    s.src = "/js/auth.js?v=20261119b";
     s.onload = () => {
       try { window.VOSB_AUTH && window.VOSB_AUTH.paint(); } catch (e) {}
       if (document.getElementById("article") || /^\/(en\/)?read\//.test(location.pathname)) {   // article pages: likes + comments

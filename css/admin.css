@@ -741,3 +741,14 @@ html[data-theme="dark"] .pill.pr-cancelled, html[data-theme="dark"] .pill.pr-non
   .pr-mh { padding: 13px 14px; } .modal.pr-modal .pr-mbody { padding: 12px 14px; } .modal.pr-modal > .acts { padding-inline: 14px; }
   .modal.pr-modal > .msg.err { margin-inline: 14px; } .mo-kv { grid-template-columns: 1fr; gap: 2px; }
 }
+
+/* Push notifications page (js/admin-push.js) */
+.pn-prev { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+.pn-n small { display: block; color: var(--muted, #666); font-size: .78rem; font-weight: 700; margin-bottom: 4px; }
+.pn-card { display: flex; gap: 10px; align-items: flex-start; background: #f4f5f7; border: 1px solid #e3e5e9; border-radius: 14px; padding: 10px 12px; min-height: 64px; }
+.pn-card img { width: 40px; height: 40px; border-radius: 9px; flex: none; }
+.pn-card div { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.pn-card b { font-size: .92rem; line-height: 1.3; overflow-wrap: anywhere; }
+.pn-card span { font-size: .85rem; color: #444; line-height: 1.35; overflow-wrap: anywhere; }
+.pn-card em { font-style: normal; font-size: .74rem; color: #888; }
+@media (max-width: 700px) { .pn-prev, .pr-two { grid-template-columns: 1fr !important; } }

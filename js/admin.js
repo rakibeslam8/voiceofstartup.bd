@@ -256,6 +256,8 @@
   const CO = typeof window.VOSB_ADMIN_CO === "function" ? window.VOSB_ADMIN_CO({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll }) : null;
   /* Paid promotion (PR) control centre (js/admin-pr.js): orders, services, coupons, free campaigns, page stats */
   const PR = typeof window.VOSB_ADMIN_PR === "function" ? window.VOSB_ADMIN_PR({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll }) : null;
+  /* Push notifications (js/admin-push.js): subscribed devices, automatic article alerts, announcements */
+  const PU = typeof window.VOSB_ADMIN_PUSH === "function" ? window.VOSB_ADMIN_PUSH({ sb, esc, toast, modal, copyText, fmtDT, fmtD, fmtN, svg, $, $$, fetchAll }) : null;
   let shellOn = false;
   function shell() {
     const email = session.user.email || "";
@@ -294,7 +296,7 @@
   function markNav(r) {
     const base = r.startsWith("edit") ? "edit/new" : r.startsWith("ads") || r === "pr" || r.startsWith("pr/") ? "ads" : r.startsWith("newsletter") ? "subscribers"
       : (r === "companies" || r.startsWith("companies/") || ["payments", "reviews", "interests", "company-settings", "valuations", "deals", "trash"].includes(r)) ? "companies"
-      : (r === "users" || r === "deletions" || r === "active") ? "users" : r;
+      : (r === "users" || r === "deletions" || r === "active") ? "users" : r === "push" ? "subscribers" : r;
     $$("[data-r]").forEach((a) => a.classList.toggle("on", a.dataset.r === base || (base === "edit/new" && a.dataset.r === "edit/new")));
   }
 
@@ -319,6 +321,7 @@
       else if (h === "posts") await viewPosts(view);
       else if (h === "settings") viewSettings(view);
       else if (h.startsWith("edit/")) await viewEditor(view, h.slice(5));
+      else if (PU && PU.handles(h)) await PU.render(h, view);
       else if (PR && PR.handles(h)) await PR.render(h, view);
       else if (CO && CO.handles(h)) await CO.render(h, view);
       else { location.hash = "#/dashboard"; }
@@ -1785,7 +1788,7 @@
       const list = subsList.filter((x) => (st === "all" || x.status === st) && (!q || x.email.includes(q)));
       view.innerHTML = `
       <div class="page-h"><h1>Subscribers <span class="muted" style="font-size:1rem">(${fmtN(subsList.length)})</span></h1>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="b b-orange" href="#/newsletter">✉️ Send newsletter</a><button class="b b-line" id="imp-t">⬆ Import emails</button><button class="b b-line" id="copy">Copy active emails</button><button class="b b-line" id="csv">⬇ Export CSV</button></div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><a class="b b-orange" href="#/newsletter">✉️ Send newsletter</a><a class="b b-line" href="#/push">🔔 Push notifications</a><button class="b b-line" id="imp-t">⬆ Import emails</button><button class="b b-line" id="copy">Copy active emails</button><button class="b b-line" id="csv">⬇ Export CSV</button></div></div>
       ${flash ? `<div class="msg ok" style="margin-bottom:14px">${esc(flash)}</div>` : ""}
       ${impOpen ? `<div class="card imp-box" style="margin-bottom:16px"><h2>Import existing emails</h2>
         <p class="muted" style="font-size:.9rem;line-height:1.55;margin:4px 0 10px">Paste email addresses (separated by commas, spaces or new lines) or upload a <b>.csv</b> / <b>.txt</b> file — for example a contacts export from Gmail or Google Contacts. Other columns are ignored; duplicates and people already on the list are skipped.</p>
