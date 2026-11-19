@@ -1,6 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/3-300-uber-workers-to-lose-their-jobs-the-company-s-biggest-layoff-sin</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-19T10:21:00.000Z</news:publication_date>
+      <news:title>কাজ হারাচ্ছেন উবারের ৩,৩০০ কর্মী: প্রতিষ্ঠানটিতে করোনার পর সবচেয়ে বড় ছাঁটাই</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/3-300-uber-workers-to-lose-their-jobs-the-company-s-biggest-layoff-sin</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-19T10:21:00.000Z</news:publication_date>
+      <news:title>3,300 Uber workers to lose their jobs: The company&#39;s biggest layoff since the coronavirus</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/nvidia-won-t-bring-back-jensen-huang-doubles-revenue-in-third-quarter</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-19T10:16:00.000Z</news:publication_date>
+      <news:title>জেনসেন হুয়াংকে ফেরাবে না এনভিডিয়া, তৃতীয় প্রান্তিকে আয় দ্বিগুণ</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/nvidia-won-t-bring-back-jensen-huang-doubles-revenue-in-third-quarter</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-19T10:16:00.000Z</news:publication_date>
+      <news:title>Nvidia won&#39;t bring back Jensen Huang, doubles revenue in third quarter</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/in-epz-13-thousand-530-to-16-thousand-tk-605-are-offered-to-the-invest</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-19T10:02:00.000Z</news:publication_date>
+      <news:title>ইপিজেডে ১৩ হাজার ৫৩০ থেকে ১৬ হাজার ৬০৫ টাকা মজুরির প্রস্তাব বিনিয়োগকারীদের</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/in-epz-13-thousand-530-to-16-thousand-tk-605-are-offered-to-the-invest</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-19T10:02:00.000Z</news:publication_date>
+      <news:title>In EPZ, 13 thousand 530 to 16 thousand Tk 605 are offered to the investors</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/from-rickshaw-pullers-to-tea-sellers-students-and-masons-will-get-a-lo</loc>
     <news:news>
       <news:publication>
