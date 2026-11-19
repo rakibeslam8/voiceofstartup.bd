@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Thu, 19 Nov 2026 03:27:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 19 Nov 2026 04:50:00 GMT</lastBuildDate>
+    <item>
+      <title>রিকশাচালক থেকে চা–বিক্রেতা, শিক্ষার্থী ও রাজমিস্ত্রি পাবেন ১০ লাখ টাকার ঋণ, কীভাবে</title>
+      <link>https://www.voiceofstartup.bd/read/from-rickshaw-pullers-to-tea-sellers-students-and-masons-will-get-a-lo</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/from-rickshaw-pullers-to-tea-sellers-students-and-masons-will-get-a-lo</guid>
+      <pubDate>Thu, 19 Nov 2026 04:50:00 GMT</pubDate>
+      <category>ব্যবসা, বিনিয়োগ ও নীতিমালা</category>
+      <description>বাংলাদেশ ব্যাংকের উদ্যোগ</description>
+    </item>
     <item>
       <title>চট্টগ্রাম ইপিজেডে বন্ধ কারখানায় নতুন বিনিয়োগ, কর্মসংস্থান হবে ২ হাজার মানুষের</title>
       <link>https://www.voiceofstartup.bd/read/new-investment-in-closed-factory-in-chittagong-epz-employment-of-2-tho</link>
@@ -238,14 +246,6 @@
       <pubDate>Mon, 09 Nov 2026 06:57:00 GMT</pubDate>
       <category>ফাউন্ডার স্টোরি</category>
       <description>বিশ্বখ্যাত মার্কিন কোম্পানি এমজিএফ সোর্সিংয়ের কান্ট্রি ডিরেক্টর পদ ছেড়ে দিয়ে বায়িং হাউসের ব্যবসা শুরু করেন ক্য চিন ঠে (ডলি)। সময়টা ২০১৯ সালের নভেম্বর। কয়েকজন কর্মীও নিয়োগ দেন।</description>
-    </item>
-    <item>
-      <title>এআইয়ের বাংলা মডেল বানাতে চায় সরকার, আলোচনা চার প্রতিষ্ঠানের সঙ্গে</title>
-      <link>https://www.voiceofstartup.bd/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/the-government-wants-to-make-a-bengali-model-of-ai-talks-with-four-ins</guid>
-      <pubDate>Mon, 09 Nov 2026 03:01:00 GMT</pubDate>
-      <category>প্রযুক্তি ও এআই</category>
-      <description>বাংলা ভাষায় কৃত্রিম বুদ্ধিমত্তার (এআই) নিজস্ব মডেল তৈরির পরিকল্পনা করছে সরকার। এ জন্য দেশেই শক্তিশালী কম্পিউটার ও সার্ভারের অবকাঠামো গড়ে তুলতে চায়।</description>
     </item>
   </channel>
 </rss>
