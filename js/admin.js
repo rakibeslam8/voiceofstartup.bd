@@ -280,6 +280,7 @@
     bg.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="Install the admin app"><h2>Install the admin app</h2>
       <p>This installs the admin panel only — separate from the public website app.</p><ol class="inst-steps">${steps.map((x) => `<li>${x}</li>`).join("")}</ol>
       <p class="muted" style="font-size:.88rem">${ios ? "" : "If you do not see the option, open this page in Chrome or Edge (Firefox and some in-app browsers cannot install apps)."}</p>
+      ${android ? `<p class="inst-warn"><b>Chrome says “Open VOSB” instead of “Install”?</b> This phone already has the public <b>VOSB</b> app, and Chrome on Android treats every page of the site (including this admin) as part of that app, so it will not install a second one. To install the admin here: press and hold the VOSB icon → <b>Uninstall</b>, reload this page, then use <b>Install app</b> again.</p>` : ""}
       <div class="acts"><button class="b b-orange" data-x="1">Got it</button></div></div>`;
     const done = () => { bg.remove(); document.removeEventListener("keydown", key); };
     const key = (e) => { if (e.key === "Escape") done(); };
