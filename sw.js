@@ -3,7 +3,7 @@
  * so readers always get the latest news.
  * If a page cannot be loaded it first retries; only if that also fails does it show a short notice
  * (a real "offline" notice only when the device itself is offline, otherwise a "try again" notice). */
-const V = "vosb-sw-6";
+const V = "vosb-sw-7";
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
 
@@ -44,7 +44,7 @@ self.addEventListener("push", (e) => {
   const opt = {
     body: d.body || "",
     icon: "/assets/icon-192.png",
-    badge: "/assets/favicon-96.png",
+    badge: "/assets/badge-96.png",
     tag: d.tag || "vosb",
     renotify: false,
     lang: d.lang || "bn",
