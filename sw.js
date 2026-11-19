@@ -3,7 +3,7 @@
  * so readers always get the latest news.
  * If a page cannot be loaded it first retries; only if that also fails does it show a short notice
  * (a real "offline" notice only when the device itself is offline, otherwise a "try again" notice). */
-const V = "vosb-sw-5";
+const V = "vosb-sw-6";
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
 
@@ -53,11 +53,7 @@ self.addEventListener("push", (e) => {
   if (d.image && /^https:\/\//.test(d.image)) opt.image = d.image;
   opt.silent = false;            // always let the phone play its notification sound
   opt.vibrate = [140, 70, 140];  // Android: a short double buzz
-  e.waitUntil((async () => {
-    await self.registration.showNotification(title, opt);
-    // the app / site is open on screen: also play our own chime inside it (the page does the playing)
-    try { const all = await self.clients.matchAll({ type: "window", includeUncontrolled: true }); all.forEach((c) => { if (c.visibilityState === "visible") c.postMessage({ type: "push-sound" }); }); } catch (x) { /* ignore */ }
-  })());
+  e.waitUntil(self.registration.showNotification(title, opt));
 });
 
 self.addEventListener("notificationclick", (e) => {

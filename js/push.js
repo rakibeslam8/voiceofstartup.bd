@@ -68,7 +68,7 @@
       await subscribe(reg);
       ls.set(K.on, "1"); ls.del(K.dismissed);
       try { await reg.showNotification(T("নোটিফিকেশন চালু হয়েছে ✓", "Notifications are on ✓"), { body: T("নতুন খবর প্রকাশ হলেই এখানে জানতে পারবেন।", "You'll hear about new stories here as soon as they go live."), icon: "/assets/icon-192.png", badge: "/assets/favicon-96.png", tag: "vosb-welcome", data: { url: "/news" }, lang: lang() }); } catch (e) {}
-      paint(); hidePrompt(true); playChime();
+      paint(); hidePrompt(true);
       return { ok: true, reason: "ok" };
     } catch (e) { console.warn("push enable failed", e); return { ok: false, reason: "error" }; }
   }
@@ -151,17 +151,12 @@
     if (e.target.closest("[data-push-on]")) { e.preventDefault(); const s = state(); if (s === "ios" || s === "denied" || s === "unsupported") { explain({ reason: s === "ios" ? "ios-install" : s }); return; } const r = await enable(); if (!r.ok && r.reason !== "dismissed") explain(r); return; }
     if (e.target.closest('[data-act="push-toggle"]')) { e.preventDefault(); const s = state(); if (s === "ios" || s === "denied" || s === "unsupported") explain({ reason: s === "ios" ? "ios-install" : s }); else await toggle(); }
   });
-  /* our own chime, played inside the open app / site when a notification arrives (the phone plays its own sound for closed-app alerts) */
-  let chime = null;
-  const getChime = () => { if (!chime) { try { chime = new Audio("/assets/notify.mp3"); chime.preload = "auto"; } catch (e) {} } return chime; };
-  function playChime() { try { if (ls.get("vosb-sound") === "0") return; const a = getChime(); if (!a) return; a.currentTime = 0; const r = a.play(); if (r && r.catch) r.catch(() => {}); } catch (e) {} }
-  try { window.addEventListener("pointerdown", () => { const a = getChime(); if (a && a.load) a.load(); }, { once: true, passive: true }); } catch (e) {}
-  try { navigator.serviceWorker && navigator.serviceWorker.addEventListener("message", (e) => { if (e.data && e.data.type === "push-resync") sync(true); else if (e.data && e.data.type === "push-sound") playChime(); }); } catch (e) {}
+  try { navigator.serviceWorker && navigator.serviceWorker.addEventListener("message", (e) => { if (e.data && e.data.type === "push-resync") sync(true); }); } catch (e) {}
   try { document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") sync(); }); } catch (e) {}
   try { let pt; new MutationObserver(() => { clearTimeout(pt); pt = setTimeout(paint, 60); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
   try { window.addEventListener("appinstalled", () => setTimeout(() => { if (state() === "off") showPrompt(); }, 2500)); } catch (e) {}
   const boot = () => { paint(); sync(); maybePrompt(); try { const A = window.VOSB_AUTH; if (A && A.onChange) A.onChange(() => sync()); } catch (e) {} };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 
-  window.VOSB_PUSH = { support, state, enable, disable, sync, toggle, paint, setRpc(fn) { rpcOverride = fn; }, stateText, playChime };
+  window.VOSB_PUSH = { support, state, enable, disable, sync, toggle, paint, setRpc(fn) { rpcOverride = fn; }, stateText };
 })();
