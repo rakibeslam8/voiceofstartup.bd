@@ -132,26 +132,4 @@
       <news:title>Jensen Huang opened a wealth of two and a half million rupees in five days</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/the-biggest-fair-of-local-products-started-on-november-22-with-product</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-17T02:59:00.000Z</news:publication_date>
-      <news:title>দেশি পণ্যের সবচেয়ে বড় মেলা শুরু ২২ নভেম্বর, থাকছে ৪০০ উদ্যোক্তার পণ্য</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/the-biggest-fair-of-local-products-started-on-november-22-with-product</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-17T02:59:00.000Z</news:publication_date>
-      <news:title>The biggest fair of local products started on November 22, with products from 400 entrepreneurs</news:title>
-    </news:news>
-  </url>
 </urlset>
