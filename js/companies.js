@@ -55,7 +55,8 @@
   const teamSig = (t) => (Array.isArray(t) ? t : []).map((m) => ((m && m.name) || "") + "|" + ((m && m.role) || "")).join(";");
   function loc(c) {
     const bn = U().lang === "bn", pick = (k) => (bn ? c[k + "_bn"] : c[k + "_en"]) || c[k] || "";
-    const x = Object.assign({}, c, { name: pick("name"), tagline: pick("tagline"), description: pick("description"), business_model: pick("business_model"), highlights: pick("highlights"), use_of_funds: pick("use_of_funds") });
+    // a company NAME is a brand: it is always shown in English (Latin letters), whatever language the reader chose. Only if no English name exists does the typed name show.
+    const x = Object.assign({}, c, { name: c.name_en || c.name || c.name_bn || "", tagline: pick("tagline"), description: pick("description"), business_model: pick("business_model"), highlights: pick("highlights"), use_of_funds: pick("use_of_funds") });
     const ex = c.i18n_extra || {};
     if (Array.isArray(c.team) && Array.isArray(ex.team) && ex.sig === teamSig(c.team)) x.team = c.team.map((m, i) => Object.assign({}, m, { role: (ex.team[i] && (bn ? ex.team[i].bn : ex.team[i].en)) || m.role }));
     return x;
@@ -300,7 +301,7 @@
     if (/[?&]invest=1/.test(location.search) && $("#co-invest")) setTimeout(() => { try { history.replaceState(null, "", location.pathname + location.hash); } catch (e) {} invest(); }, 500);
     async function invest() {
       const u = await A().requireLogin("বিনিয়োগের আগ্রহ জানাতে লগইন করুন।", "Log in to show investor interest."); if (!u) return;
-      const m = modal(`<button type="button" class="co-x" data-x aria-label="${T("বন্ধ করুন", "Close")}">✕</button><h2>💼 ${T("বিনিয়োগে আগ্রহ জানান", "Show investor interest")}</h2><p class="muted">${esc(c.name)}</p>
+      const m = modal(`<button type="button" class="co-x" data-x aria-label="${T("বন্ধ করুন", "Close")}">✕</button><h2>💼 ${T("বিনিয়োগে আগ্রহ জানান", "Show investor interest")}</h2><p class="muted">${esc(loc(c).name)}</p>
         <form id="co-iform" novalidate><label>${T("আপনি কোন ধরনের বিনিয়োগকারী?", "What type of investor are you?")}<select name="type">${(CO.investorTypes || []).map((t) => `<option value="${esc(t.id)}">${esc(pickL(t))}</option>`).join("")}</select></label>
         <div class="co-two2"><label>${T("সর্বনিম্ন (৳)", "Minimum (৳)")}<input name="min" type="number" min="0" inputmode="numeric"></label><label>${T("সর্বোচ্চ (৳)", "Maximum (৳)")}<input name="max" type="number" min="0" inputmode="numeric"></label></div><p class="co-prev" id="co-prev"></p>
         <label>${T("আপনার বার্তা", "Your message")}<textarea name="msg" rows="4" maxlength="1000" placeholder="${T("আপনার আগ্রহ, প্রশ্ন বা প্রস্তাব লিখুন (কমপক্ষে ১০ অক্ষর)…", "Your interest, questions or proposal (at least 10 characters)…")}"></textarea></label>

@@ -60,7 +60,7 @@ async function fetchPosts() {
 }
 
 /* ---- fetch live (approved) companies: only rows the database already shows to the public ---- */
-const CO_COLS = "id,slug,name,tagline,description,category,stage,founded_year,website,social,logo_url,cover_url,division,district,team_size,business_model,highlights,vosb_valuation,seeking_amount,verified,featured,rating_avg,rating_count,published_at";
+const CO_COLS = "id,slug,name,name_en,tagline,description,category,stage,founded_year,website,social,logo_url,cover_url,division,district,team_size,business_model,highlights,vosb_valuation,seeking_amount,verified,featured,rating_avg,rating_count,published_at";
 async function fetchCompanies() {
   const all = [];
   for (let from = 0; from < 20000; from += 1000) {
@@ -226,6 +226,7 @@ function articlePage(r, lang, all) {
 /* ---- company profile page (static copy for search engines; js/companies.js then draws the live, interactive page) ---- */
 const coLabel = (list, id) => { const o = (list || []).find((x) => x.id === id); return o ? o.en : id || ""; };
 function companyPage(c, shell) {
+  c = { ...c, name: c.name_en || c.name };   // company names are always shown in English
   const url = `${ORIGIN}/company/${c.slug}`;
   const title = `${clip(c.name, 40)} — Company profile | VOSB`;
   const desc = clip([c.tagline, c.description].filter(Boolean).join(" — "), 158);
