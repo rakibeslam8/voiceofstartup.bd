@@ -42,13 +42,26 @@
     return out;
   }
 
+  /* ---- English house style (applied to every Bangla -> English result) ----
+     Bangladeshi newsroom conventions: Tk (not rupees / Rs / BDT), lakh & crore kept, official place spellings. */
+  const PLACES = [[/\bChittagong\b/g, "Chattogram"], [/\bBogra\b/g, "Bogura"], [/\bComilla\b/g, "Cumilla"], [/\bJessore\b/g, "Jashore"], [/\bBarisal\b/g, "Barishal"], [/\bDacca\b/g, "Dhaka"], [/\bNoakhali Sadar\b/g, "Noakhali Sadar"]];
+  function polishEn(t) {
+    let s = String(t || "");
+    const NUM = "(\\d[\\d,]*(?:\\.\\d+)?(?:\\s*(?:lakhs?|crores?|thousand|hundred))?)";
+    s = s.replace(new RegExp("(?:₹|৳|\\bRs\\.?|\\bINR|\\bBDT|\\bTaka|\\btaka|\\brupees?)\\s*" + NUM, "gi"), "Tk $1");            // Rs 50 lakh -> Tk 50 lakh
+    s = s.replace(new RegExp(NUM + "\\s*(?:rupees?|takas?|BDT|INR)\\b", "gi"), "Tk $1");                                        // 50 lakh rupees -> Tk 50 lakh
+    s = s.replace(/\bTk\s+Tk\b/g, "Tk").replace(/(\bTk\s[\d,.]+\s*)(lakh|crore)s\b/gi, "$1$2");
+    PLACES.forEach(([re, to]) => (s = s.replace(re, to)));
+    return s;
+  }
+
   async function plain(text, from, to, opts) {
     const f = (opts && opts.fetch) || (typeof fetch !== "undefined" ? fetch.bind(globalThis) : null);
     if (!f) throw new Error("no fetch");
     const engines = (opts && opts.engines) || [google, myMemory];
     let lastErr;
     for (const e of engines) {
-      try { const r = await e(text, from, to, f); if (r && r.trim()) return r; } catch (err) { lastErr = err; }
+      try { const r = await e(text, from, to, f); if (r && r.trim()) return to === "en" ? polishEn(r) : r; } catch (err) { lastErr = err; }
     }
     throw lastErr || new Error("translation failed");
   }
@@ -95,6 +108,17 @@
   async function title(t, from, to, opts) {
     const r = await plain(String(t || "").trim(), from, to, opts);
     return r.replace(/\s+/g, " ").trim().replace(/^["“]|["”]$/g, "");
+  }
+  /* a news HEADLINE: same as title(), then newsroom style —
+     no full stop at the end, straight quotes, "Tk" money, official place spellings. Use this for article titles, not for summaries. */
+  function headlineStyle(t) {
+    let s = polishEn(String(t || "")).replace(/\s+/g, " ").trim();
+    s = s.replace(/[“”]/g, '"').replace(/[‘’]/g, "'").replace(/^["']+(.+?)["']+$/, (m, x) => (/["']/.test(x) ? m : x)).replace(/\s*[.।]+$/, "").trim();
+    return s;
+  }
+  async function headline(t, from, to, opts) {
+    const r = await title(t, from, to, opts);
+    return to === "en" ? headlineStyle(r) : r.replace(/\s*[.]+$/, "");
   }
   /* a list of short texts in one request (falls back to one by one if the lines do not come back 1:1) */
   async function list(items, from, to, opts) {
@@ -165,5 +189,5 @@
     return { text, changed: n };
   }
 
-  return { plain, markdown, title, list, sync, altsOnly, protect, restore, chunks, engines: { google, myMemory } };
+  return { plain, markdown, title, headline, headlineStyle, polishEn, list, sync, altsOnly, protect, restore, chunks, engines: { google, myMemory } };
 });

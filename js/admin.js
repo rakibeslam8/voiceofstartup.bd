@@ -957,7 +957,7 @@
         let gen = false;
         const run = async (f, fn) => { try { await fn(); gen = true; } catch (e) { out.failed = true; out.failedFields.push(f + "_" + from); } };
         if (TR) {
-          if (need("title")) await run("title", async () => { ed["title_" + to] = await TR.title(ed["title_" + from], from, to); });
+          if (need("title")) await run("title", async () => { ed["title_" + to] = await TR.headline(ed["title_" + from], from, to); });
           if (need("body")) await run("body", async () => { ed["body_" + to] = await TR.sync(savedF["body_" + from], ed["body_" + from], ed["body_" + to], from, to); });
           if (need("image_alt")) await run("image_alt", async () => { ed["image_alt_" + to] = (await TR.title(ed["image_alt_" + from], from, to)).slice(0, 160); });
           const fromEx = ed["excerpt_" + from].trim();
@@ -976,7 +976,7 @@
       if ((ed["title_" + tab].trim() || ed["body_" + tab].trim()) && !(await modal({ title: `Replace the ${LN[tab]} text?`, body: `The ${LN[tab]} title, summary and content will be replaced by an automatic translation of the ${LN[from]} version.`, ok: "Translate & replace" }))) return;
       const btn = $f("retr"); btn.disabled = true; btn.textContent = "Translating…";
       try {
-        if (ed["title_" + from].trim()) ed["title_" + tab] = await TR.title(ed["title_" + from], from, tab);
+        if (ed["title_" + from].trim()) ed["title_" + tab] = await TR.headline(ed["title_" + from], from, tab);
         if (ed["body_" + from].trim()) ed["body_" + tab] = await TR.markdown(ed["body_" + from], from, tab);
         ed["excerpt_" + tab] = ed["excerpt_" + from].trim() ? (await TR.title(ed["excerpt_" + from], from, tab)).slice(0, 400) : MD.excerptFrom(ed["body_" + tab]);
         if (ed["image_alt_" + from].trim()) ed["image_alt_" + tab] = (await TR.title(ed["image_alt_" + from], from, tab)).slice(0, 160);
@@ -1027,7 +1027,7 @@
       btn.textContent = "Translating…";
       try {
         if (!TR) throw new Error("no translator");
-        ed["title_" + O] = await TR.title(ed["title_" + L], L, O);
+        ed["title_" + O] = await TR.headline(ed["title_" + L], L, O);
         ed["body_" + O] = await TR.markdown(ed["body_" + L], L, O);
         ed["excerpt_" + O] = ed["excerpt_" + L].trim() ? (await TR.title(ed["excerpt_" + L], L, O)).slice(0, 300) : MD.excerptFrom(ed["body_" + O]);
         if (ed["image_alt_" + L].trim()) ed["image_alt_" + O] = (await TR.title(ed["image_alt_" + L], L, O)).slice(0, 160);
