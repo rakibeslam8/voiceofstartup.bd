@@ -20,7 +20,7 @@ const DATA = {
     { img: "p-nov15.jpg", date: "2026-11-15", views: 79870, react: 432, com: 18, sh: 87, en: "Handmade scented soap from Narsingdi goes to Japan", bn: "হাতে বানানো সুগন্ধি সাবান, যাচ্ছে নরসিংদী থেকে জাপানে" },
   ],
   // first-party analytics + database, last 30 days to asOf. REAL READERS ONLY: bots/crawlers and the owner's own visits are excluded (the admin dashboard totals include them, so they look higher).
-  site: { visitors30: 8286, views30: 14549, reads30: 9449, newsletter: 1413, articles: 169, articles30: 126, companies: 27, shares: 269,
+  site: { visitorsOwner: 20000, visitors30: 8286, views30: 14549, reads30: 9449, newsletter: 1413, articles: 169, articles30: 126, companies: 27, shares: 269,
     members: { founder: 12, reader: 12, investor: 2, other: 2 },
     top: [ // most-read articles, real-reader reads, all time
       { en: "Started with Tk 30,000, now exports worth Tk 28 crore", bn: "৩০ হাজার টাকায় ব্যবসা শুরু, এখন রপ্তানিই ২৮ কোটি টাকা", reads: 1868 },
@@ -59,8 +59,8 @@ const L = {
     title: "Media Kit", kicker: "Bangladesh Startup & Business News", sub: "Verified insights, funding updates and founder stories",
     about_h: "Who we are",
     about: "Voice of Startup Bangladesh (VOSB) is a Bangla and English news platform for Bangladesh's startup, business and investment community. We publish funding and competition updates, founder stories, business and policy news, and practical opportunities for new entrepreneurs. Information is gathered from official sources such as BIDA, BEPZA, BEZA, BSCIC, the ICT Ministry, the Bangladesh Hi-Tech Park Authority and the PPP Authority.",
-    reach_h: "Reach at a glance", fb: "Facebook page", last28: "last 28 days", web: "Website", last30: "last 30 days",
-    k_views: "Views", k_eng: "Engagement", k_follows: "New follows", k_vis: "Unique visitors", k_reads: "Article reads", k_pv: "Page views", k_news: "Newsletter subscribers", k_art: "Articles published", k_co: "Company profiles",
+    reach_h: "Reach at a glance", fb: "Facebook page", last28: "last 28 days", web: "Website", last30: "monthly / last 30 days",
+    k_views: "Views", k_eng: "Engagement", k_follows: "New follows", k_vis: "Monthly website visitors", k_members: "Registered members", k_reads: "Article reads", k_pv: "Page views", k_news: "Newsletter subscribers", k_art: "Articles published", k_co: "Company profiles",
     vsprev: "vs previous 28 days",
     p2_h: "Audience & performance", fb_h: "Facebook — the last 9 posts", fb_sub: "Views per post as reported by Meta, 6–16 Nov 2026",
     fb_sum1: "Total views", fb_sum2: "Posts above 70,000 views", fb_sum3: "Best post", fb_sum4: "Median post", fb_sum5: "Average per post",
@@ -68,7 +68,7 @@ const L = {
     who_h: "Who reads us", who: "Entrepreneurs, investors and customers across Bangladesh who follow startup, business and funding news — in Bangla and English.",
     notes_h: "How to read these numbers", notes: [
       "Facebook figures come from Meta Page insights (28 days to " + "{ASOF}" + "). “Views” is Meta’s count of times content was shown or played — one person can view more than once. “New follows” are follows gained in the period, not total followers.",
-      "Website figures are first-party analytics (30 days to {ASOF}) and count real readers only — bots, crawlers and our own team’s visits are excluded. Unique visitors are counted per browser/device.",
+      "Monthly website visitors is the figure reported by the VOSB team. Article reads, newsletter and directory numbers are first-party data (30 days to {ASOF}); reads count real readers only — bots, crawlers and our own team’s visits are excluded.",
       "All figures are a snapshot and change daily. Growth is compared with the previous period of the same length.",
     ],
     p3_h: "Example posts", p3_sub: "Founder-story posts from our page — each with the performance Meta reported for it.",
@@ -91,7 +91,7 @@ const L = {
     top_h: "Most-read stories", reads: "reads",
     mem: (m, n, sh) => `${n} registered members — ${m.founder} founders, ${m.reader} readers, ${m.investor} investors, ${m.other} other · ${sh} article shares`,
     price_note: (a, b) => `Our packages range from ৳${a} to ৳${b}, depending on the service and format. The exact price is confirmed for each brief.`,
-    cap_web: "Website: last 30 days, real readers only (bots, crawlers and our own team excluded).",
+    cap_web: "Website: monthly visitors as reported by the VOSB team; article reads are the last 30 days, real readers only (bots and our own team excluded).",
     combined: (n) => ` About ${n} followers combined across all our channels.`,
     pct: (x) => new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 }).format(x) + "%",
     aud_h: "Who sees our content", aud_sub: (d, v) => `Audience of our best-performing post (${d} — 137,068 views, ${v} viewers), as reported by Meta. Other posts may differ.`,
@@ -116,8 +116,8 @@ const L = {
     title: "মিডিয়া কিট", kicker: "বাংলাদেশের স্টার্টআপ ও ব্যবসার খবর", sub: "যাচাইকৃত তথ্য, ফান্ডিং আপডেট ও ফাউন্ডার স্টোরি",
     about_h: "আমরা কারা",
     about: "ভয়েস অব স্টার্টআপ বাংলাদেশ (VOSB) বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগ সমাজের জন্য বাংলা ও ইংরেজি দুই ভাষার নিউজ প্ল্যাটফর্ম। আমরা ফান্ডিং ও প্রতিযোগিতার আপডেট, ফাউন্ডার স্টোরি, ব্যবসা ও নীতিমালার খবর এবং নতুন উদ্যোক্তাদের জন্য কাজের তথ্য ও সুযোগ প্রকাশ করি। তথ্য সংগ্রহ করা হয় BIDA, BEPZA, BEZA, BSCIC, আইসিটি মন্ত্রণালয়, বাংলাদেশ হাই-টেক পার্ক কর্তৃপক্ষ ও PPP অথরিটির মতো সরকারি সংস্থার সূত্র থেকে।",
-    reach_h: "এক নজরে রিচ", fb: "ফেসবুক পেজ", last28: "গত ২৮ দিন", web: "ওয়েবসাইট", last30: "গত ৩০ দিন",
-    k_views: "ভিউ", k_eng: "এনগেজমেন্ট", k_follows: "নতুন ফলো", k_vis: "ইউনিক ভিজিটর", k_reads: "আর্টিকেল রিড", k_pv: "পেজ ভিউ", k_news: "নিউজলেটার সাবস্ক্রাইবার", k_art: "প্রকাশিত আর্টিকেল", k_co: "কোম্পানি প্রোফাইল",
+    reach_h: "এক নজরে রিচ", fb: "ফেসবুক পেজ", last28: "গত ২৮ দিন", web: "ওয়েবসাইট", last30: "মাসিক / গত ৩০ দিন",
+    k_views: "ভিউ", k_eng: "এনগেজমেন্ট", k_follows: "নতুন ফলো", k_vis: "মাসিক ওয়েবসাইট ভিজিটর", k_members: "নিবন্ধিত সদস্য", k_reads: "আর্টিকেল রিড", k_pv: "পেজ ভিউ", k_news: "নিউজলেটার সাবস্ক্রাইবার", k_art: "প্রকাশিত আর্টিকেল", k_co: "কোম্পানি প্রোফাইল",
     vsprev: "আগের ২৮ দিনের তুলনায়",
     p2_h: "অডিয়েন্স ও পারফরম্যান্স", fb_h: "ফেসবুক — সর্বশেষ ৯টি পোস্ট", fb_sub: "মেটা-র দেওয়া প্রতি পোস্টের ভিউ, ৬–১৬ নভেম্বর ২০২৬",
     fb_sum1: "মোট ভিউ", fb_sum2: "৭০ হাজারের বেশি ভিউ", fb_sum3: "সেরা পোস্ট", fb_sum4: "মধ্যমান (মিডিয়ান)", fb_sum5: "গড় প্রতি পোস্টে",
@@ -125,7 +125,7 @@ const L = {
     who_h: "আমাদের পাঠক", who: "বাংলাদেশের উদ্যোক্তা, বিনিয়োগকারী ও গ্রাহক — যারা বাংলা ও ইংরেজিতে স্টার্টআপ, ব্যবসা ও ফান্ডিংয়ের খবর অনুসরণ করেন।",
     notes_h: "সংখ্যাগুলো কীভাবে পড়বেন", notes: [
       "ফেসবুকের তথ্য মেটা পেজ ইনসাইটস থেকে ({ASOF} পর্যন্ত ২৮ দিন)। “ভিউ” মানে মেটা যতবার কনটেন্ট দেখিয়েছে বা চালিয়েছে — একই ব্যক্তি একাধিকবার দেখতে পারেন। “নতুন ফলো” মানে ওই সময়ে যুক্ত হওয়া ফলো, মোট ফলোয়ার নয়।",
-      "ওয়েবসাইটের তথ্য আমাদের নিজস্ব অ্যানালিটিক্স থেকে ({ASOF} পর্যন্ত ৩০ দিন) এবং শুধু প্রকৃত পাঠক গোনা হয় — বট, ক্রলার ও আমাদের নিজস্ব টিমের ভিজিট বাদ। ইউনিক ভিজিটর গোনা হয় ব্রাউজার/ডিভাইস অনুযায়ী।",
+      "মাসিক ওয়েবসাইট ভিজিটর VOSB টিমের দেওয়া তথ্য। আর্টিকেল রিড, নিউজলেটার ও ডিরেক্টরির সংখ্যা আমাদের নিজস্ব ডেটা ({ASOF} পর্যন্ত ৩০ দিন); রিড শুধু প্রকৃত পাঠক গোনা হয় — বট, ক্রলার ও আমাদের নিজস্ব টিমের ভিজিট বাদ।",
       "সংখ্যাগুলো একটি নির্দিষ্ট দিনের চিত্র এবং প্রতিদিন বদলায়। প্রবৃদ্ধি আগের সমান সময়ের সাথে তুলনা করা।",
     ],
     p3_h: "উদাহরণ পোস্ট", p3_sub: "আমাদের পেজের ফাউন্ডার-স্টোরি পোস্ট — প্রতিটির নিচে মেটা-র দেওয়া পারফরম্যান্স।",
@@ -148,7 +148,7 @@ const L = {
     top_h: "সবচেয়ে বেশি পড়া আর্টিকেল", reads: "রিড",
     mem: (m, n, sh) => { const b = new Intl.NumberFormat("bn-BD").format; return `${b(n)} জন নিবন্ধিত সদস্য — ${b(m.founder)} জন ফাউন্ডার, ${b(m.reader)} জন পাঠক, ${b(m.investor)} জন বিনিয়োগকারী, ${b(m.other)} জন অন্যান্য · ${b(sh)}টি আর্টিকেল শেয়ার`; },
     price_note: (a, b) => `আমাদের প্যাকেজ ৳${a} থেকে ৳${b} টাকার মধ্যে — সেবা ও ফরম্যাট অনুযায়ী। প্রতিটি ব্রিফ দেখে সঠিক দাম নিশ্চিত করা হয়।`,
-    cap_web: "ওয়েবসাইট: গত ৩০ দিন, শুধু প্রকৃত পাঠক (বট, ক্রলার ও আমাদের নিজস্ব টিমের ভিজিট বাদ)।",
+    cap_web: "ওয়েবসাইট: মাসিক ভিজিটর VOSB টিমের তথ্য অনুযায়ী; আর্টিকেল রিড গত ৩০ দিনের, শুধু প্রকৃত পাঠক (বট ও আমাদের নিজস্ব টিমের ভিজিট বাদ)।",
     combined: (n) => ` সব চ্যানেল মিলিয়ে প্রায় ${n} ফলোয়ার।`,
     pct: (x) => new Intl.NumberFormat("bn-BD", { maximumFractionDigits: 1 }).format(x) + "%",
     aud_h: "আমাদের কনটেন্ট কারা দেখেন", aud_sub: (d, v) => `আমাদের সবচেয়ে ভালো পারফর্ম করা পোস্টের (${d} — ১,৩৭,০৬৮ ভিউ, ${v} দর্শক) অডিয়েন্স, মেটা-র দেওয়া তথ্য অনুযায়ী। অন্য পোস্টে ভিন্ন হতে পারে।`,
@@ -274,7 +274,7 @@ td.pq b{display:block;font-size:11pt;color:var(--t)}td.pq small{display:block;fo
     ${stat(t.n(f.follows), `${t.k_follows} · ${t.fb}`, t.growth(f.followsGrowth), "")}
   </div>
   <div class="grid" style="margin-top:4mm">
-    ${stat(t.n(s.visitors30), `${t.k_vis} · ${t.web}`, "", "")}
+    ${stat(t.n(s.visitorsOwner) + "+", `${t.k_vis} · ${t.web}`, "", "")}
     ${stat(t.n(s.reads30), `${t.k_reads} · ${t.web}`, "", "")}
     ${stat(t.n(s.newsletter), t.k_news, "", "")}
   </div>
@@ -289,8 +289,8 @@ td.pq b{display:block;font-size:11pt;color:var(--t)}td.pq small{display:block;fo
   <div class="sum"><div><b>${t.n(sum)}</b><span>${esc(t.fb_sum1)}</span></div><div><b>${t.n(Math.round(sum / DATA.posts.length))}</b><span>${esc(t.fb_sum5)}</span></div><div><b>${t.n(median)}</b><span>${esc(t.fb_sum4)}</span></div><div><b>${t.n(max)}</b><span>${esc(t.fb_sum3)}</span></div><div><b>${t.n(over70)} ${t.of} ${t.n(DATA.posts.length)}</b><span>${esc(t.fb_sum2)}</span></div></div>
   ${bars}
   <div class="sec"><h3>${esc(t.web_h)} <span style="font-weight:400;color:var(--m);font-size:9pt">· ${esc(t.last30)}</span></h3>
-    <div class="web">${stat(t.n(s.visitors30), t.k_vis, "", "")}${stat(t.n(s.views30), t.k_pv, "", "")}${stat(t.n(s.reads30), t.k_reads, "", "")}</div>
-    <div class="web">${stat(t.n(s.newsletter), t.k_news, "", "")}${stat(t.n(s.articles), t.k_art, "", "")}${stat(t.n(s.companies), t.k_co, "", "")}</div>
+    <div class="web">${stat(t.n(s.visitorsOwner) + "+", t.k_vis, "", "")}${stat(t.n(s.reads30), t.k_reads, "", "")}${stat(t.n(s.newsletter), t.k_news, "", "")}</div>
+    <div class="web">${stat(t.n(s.articles), t.k_art, "", "")}${stat(t.n(s.companies), t.k_co, "", "")}${stat(t.n(s.members.founder + s.members.reader + s.members.investor + s.members.other), t.k_members, "", "")}</div>
     <p class="small">${esc(t.art_note(s.articles, s.articles30))} · ${esc(t.news_note)} · ${esc(t.co_note)}</p></div>
   <div class="sec"><h3>${esc(t.top_h)}</h3><ol class="top">${s.top.map((x, i) => `<li><b>${t.n(i + 1)}</b><span>${esc(lang === "bn" ? x.bn : x.en)}</span><em>${t.n(x.reads)} ${esc(t.reads)}</em></li>`).join("")}</ol>
     <p class="small">${esc(t.mem(s.members, s.members.founder + s.members.reader + s.members.investor + s.members.other, s.shares))}</p></div>
