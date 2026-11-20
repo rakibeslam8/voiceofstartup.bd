@@ -52,7 +52,7 @@ const L = {
     k_views: "Views", k_eng: "Engagement", k_follows: "New follows", k_vis: "Unique visitors", k_reads: "Article reads", k_pv: "Page views", k_news: "Newsletter subscribers", k_art: "Articles published", k_co: "Company profiles",
     vsprev: "vs previous 28 days",
     p2_h: "Audience & performance", fb_h: "Facebook — the last 9 posts", fb_sub: "Views per post as reported by Meta, 6–16 Nov 2026",
-    fb_sum1: "Total views", fb_sum2: "Posts above 70,000 views", fb_sum3: "Best post", fb_sum4: "Median post",
+    fb_sum1: "Total views", fb_sum2: "Posts above 70,000 views", fb_sum3: "Best post", fb_sum4: "Median post", fb_sum5: "Average per post",
     of: "of", web_h: "Website & newsletter", art_note: (a, b) => `${a} articles published in total, ${b} in the last 30 days`, news_note: "active subscribers", co_note: "listed in the startup directory",
     who_h: "Who reads us", who: "Entrepreneurs, investors and customers across Bangladesh who follow startup, business and funding news — in Bangla and English.",
     notes_h: "How to read these numbers", notes: [
@@ -98,7 +98,7 @@ const L = {
     k_views: "ভিউ", k_eng: "এনগেজমেন্ট", k_follows: "নতুন ফলো", k_vis: "ইউনিক ভিজিটর", k_reads: "আর্টিকেল রিড", k_pv: "পেজ ভিউ", k_news: "নিউজলেটার সাবস্ক্রাইবার", k_art: "প্রকাশিত আর্টিকেল", k_co: "কোম্পানি প্রোফাইল",
     vsprev: "আগের ২৮ দিনের তুলনায়",
     p2_h: "অডিয়েন্স ও পারফরম্যান্স", fb_h: "ফেসবুক — সর্বশেষ ৯টি পোস্ট", fb_sub: "মেটা-র দেওয়া প্রতি পোস্টের ভিউ, ৬–১৬ নভেম্বর ২০২৬",
-    fb_sum1: "মোট ভিউ", fb_sum2: "৭০ হাজারের বেশি ভিউ", fb_sum3: "সেরা পোস্ট", fb_sum4: "মধ্যমান (মিডিয়ান)",
+    fb_sum1: "মোট ভিউ", fb_sum2: "৭০ হাজারের বেশি ভিউ", fb_sum3: "সেরা পোস্ট", fb_sum4: "মধ্যমান (মিডিয়ান)", fb_sum5: "গড় প্রতি পোস্টে",
     of: "/", web_h: "ওয়েবসাইট ও নিউজলেটার", art_note: (a, b) => `মোট ${new Intl.NumberFormat("bn-BD").format(a)}টি আর্টিকেল, গত ৩০ দিনে ${new Intl.NumberFormat("bn-BD").format(b)}টি`, news_note: "সক্রিয় সাবস্ক্রাইবার", co_note: "স্টার্টআপ ডিরেক্টরিতে তালিকাভুক্ত",
     who_h: "আমাদের পাঠক", who: "বাংলাদেশের উদ্যোক্তা, বিনিয়োগকারী ও গ্রাহক — যারা বাংলা ও ইংরেজিতে স্টার্টআপ, ব্যবসা ও ফান্ডিংয়ের খবর অনুসরণ করেন।",
     notes_h: "সংখ্যাগুলো কীভাবে পড়বেন", notes: [
@@ -182,8 +182,8 @@ h3{font-size:11.5pt;font-weight:700;margin:0 0 1.5mm}
 .also{margin-top:5mm;font-size:9.5pt;color:var(--m)}
 /* page 2 */
 .two{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
-.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin:3mm 0 4mm}
-.sum div{background:var(--os);border-radius:2.5mm;padding:2.5mm 3mm}.sum b{display:block;font-size:14pt;line-height:1.2}.sum span{font-size:8.5pt;color:var(--m)}
+.sum{display:grid;grid-template-columns:repeat(5,1fr);gap:2.5mm;margin:3mm 0 4mm}
+.sum div{background:var(--os);border-radius:2.5mm;padding:2.5mm 2.5mm}.sum b{display:block;font-size:13pt;line-height:1.2}.sum span{font-size:8.5pt;color:var(--m)}
 .bar{display:grid;grid-template-columns:20mm 1fr 20mm;align-items:center;gap:2mm;margin:.8mm 0;font-size:9pt}
 .bd{color:var(--m)}.bv{text-align:right;font-weight:600}
 .bt{height:4.2mm;background:#f1f1f1;border-radius:1mm;overflow:hidden}.bf{height:100%;background:#f5b48a}.bf.hi{background:var(--o)}
@@ -235,7 +235,7 @@ td:last-child{width:28mm}
 <section class="page"><div class="bar-top"></div>
   <h2>${esc(t.p2_h)}</h2><p class="sub">${esc(t.who)}</p>
   <h3>${esc(t.fb_h)}</h3><p class="small" style="margin:0 0 2mm">${esc(t.fb_sub)}</p>
-  <div class="sum"><div><b>${t.n(sum)}</b><span>${esc(t.fb_sum1)}</span></div><div><b>${t.n(over70)} ${t.of} ${t.n(DATA.posts.length)}</b><span>${esc(t.fb_sum2)}</span></div><div><b>${t.n(max)}</b><span>${esc(t.fb_sum3)}</span></div><div><b>${t.n(median)}</b><span>${esc(t.fb_sum4)}</span></div></div>
+  <div class="sum"><div><b>${t.n(sum)}</b><span>${esc(t.fb_sum1)}</span></div><div><b>${t.n(Math.round(sum / DATA.posts.length))}</b><span>${esc(t.fb_sum5)}</span></div><div><b>${t.n(median)}</b><span>${esc(t.fb_sum4)}</span></div><div><b>${t.n(max)}</b><span>${esc(t.fb_sum3)}</span></div><div><b>${t.n(over70)} ${t.of} ${t.n(DATA.posts.length)}</b><span>${esc(t.fb_sum2)}</span></div></div>
   ${bars}
   <div class="sec"><h3>${esc(t.web_h)} <span style="font-weight:400;color:var(--m);font-size:9pt">· ${esc(t.last30)}</span></h3>
     <div class="web">${stat(t.n(s.visitors30), t.k_vis, "", "")}${stat(t.n(s.views30), t.k_pv, "", "")}${stat(t.n(s.reads30), t.k_reads, "", "")}</div>

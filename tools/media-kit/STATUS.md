@@ -16,6 +16,8 @@
 - Founder story shows ৳0 only because of a free-campaign choice; it is NOT free normally. Kit does not show it as free.
 - Price range for all services: ৳2,000–৳7,000 (shown as a note above the service table; per-service prices still "Quoted per brief").
 
+**20K visitors — NOT used in the kit.** The PR page hero used to say "20K+ monthly website visitors" (and the owner called the new reach cards "actual data"). Real-reader analytics show 8,286 unique visitors / 14,549 page views in 30 days (dashboard all-time page views 20.7k include bots and the owner), so the kit shows the measured numbers. The PR page now shows 8.2K+ (Admin → Page & stats). Only add a 20K figure if there is a source (e.g. Google Analytics / Search Console screenshot) and label it with that source. The PR page's "30K+ average views per post" and "70K–1.3 lakh strong posts" ARE supported by Facebook data (average of last 9 posts 58,590; median 73,611; 5 of 9 above 70K; best 137,068) and the kit shows the measured values.
+
 **Open items**
 - Set per-service prices in Admin → Services if you want exact prices in the table; then rebuild.
 - Dashboard says 29 users, its breakdown (2·12·12·2) adds to 28 — one user has no profile row.
