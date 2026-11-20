@@ -19,7 +19,17 @@ const DATA = {
     { img: "p-nov14.jpg", date: "2026-11-14", views: 87268, react: 604, com: 16, sh: 132, en: "Pineapple, banana and jute-fibre products now sold in 39 countries", bn: "আনারস, কলা ও পাটের সুতায় তৈরি পণ্য যাচ্ছে ৩৯ দেশে" },
     { img: "p-nov15.jpg", date: "2026-11-15", views: 79870, react: 432, com: 18, sh: 87, en: "Handmade scented soap from Narsingdi goes to Japan", bn: "হাতে বানানো সুগন্ধি সাবান, যাচ্ছে নরসিংদী থেকে জাপানে" },
   ],
-  site: { visitors30: 9312, views30: 19890, newsletter: 1413, articles: 169, articles30: 126, companies: 27 }, // first-party analytics + database, last 30 days to asOf
+  // first-party analytics + database, last 30 days to asOf. REAL READERS ONLY: bots/crawlers and the owner's own visits are excluded (the admin dashboard totals include them, so they look higher).
+  site: { visitors30: 8286, views30: 14549, reads30: 9449, newsletter: 1413, articles: 169, articles30: 126, companies: 27, shares: 269,
+    members: { founder: 12, reader: 12, investor: 2, other: 2 },
+    top: [ // most-read articles, real-reader reads, all time
+      { en: "Started with Tk 30,000, now exports worth Tk 28 crore", bn: "৩০ হাজার টাকায় ব্যবসা শুরু, এখন রপ্তানিই ২৮ কোটি টাকা", reads: 1868 },
+      { en: "Started with Tk 30 lakh, profit of Tk 2.5 crore in three years", bn: "৩০ লাখে শুরু, তিন বছরে মুনাফা আড়াই কোটি টাকা", reads: 964 },
+      { en: "Abu Manzur Saif quits government job to become a successful entrepreneur", bn: "সরকারি চাকরি ছেড়ে সফল উদ্যোক্তা আবু মঞ্জুর সাঈফ", reads: 829 },
+      { en: "IDLC's SME Utsav loan: up to Tk 35 lakh without collateral", bn: "আইডিএলসির এসএমই উৎসব ঋণ: জামানত ছাড়া ৩৫ লাখ টাকা পাওয়া যাবে", reads: 778 },
+      { en: "Started with Tk 10,000, now earns Tk 20 lakh a month", bn: "১০ হাজার টাকায় শুরু, এখন মাসে আয় ২০ লাখ টাকা", reads: 746 },
+    ] },
+  priceMin: 2000, priceMax: 7000,
   email: "partnerships@voiceofstartup.bd",
 };
 /* ================================================================================= */
@@ -39,7 +49,7 @@ const L = {
     about_h: "Who we are",
     about: "Voice of Startup Bangladesh (VOSB) is a Bangla and English news platform for Bangladesh's startup, business and investment community. We publish funding and competition updates, founder stories, business and policy news, and practical opportunities for new entrepreneurs. Information is gathered from official sources such as BIDA, BEPZA, BEZA, BSCIC, the ICT Ministry, the Bangladesh Hi-Tech Park Authority and the PPP Authority.",
     reach_h: "Reach at a glance", fb: "Facebook page", last28: "last 28 days", web: "Website", last30: "last 30 days",
-    k_views: "Views", k_eng: "Engagement", k_follows: "New follows", k_vis: "Unique visitors", k_pv: "Page views", k_news: "Newsletter subscribers", k_art: "Articles published", k_co: "Company profiles",
+    k_views: "Views", k_eng: "Engagement", k_follows: "New follows", k_vis: "Unique visitors", k_reads: "Article reads", k_pv: "Page views", k_news: "Newsletter subscribers", k_art: "Articles published", k_co: "Company profiles",
     vsprev: "vs previous 28 days",
     p2_h: "Audience & performance", fb_h: "Facebook — the last 9 posts", fb_sub: "Views per post as reported by Meta, 6–16 Nov 2026",
     fb_sum1: "Total views", fb_sum2: "Posts above 70,000 views", fb_sum3: "Best post", fb_sum4: "Median post",
@@ -47,7 +57,7 @@ const L = {
     who_h: "Who reads us", who: "Entrepreneurs, investors and customers across Bangladesh who follow startup, business and funding news — in Bangla and English.",
     notes_h: "How to read these numbers", notes: [
       "Facebook figures come from Meta Page insights (28 days to " + "{ASOF}" + "). “Views” is Meta’s count of times content was shown or played — one person can view more than once. “New follows” are follows gained in the period, not total followers.",
-      "Website figures are first-party analytics (30 days to {ASOF}). Unique visitors are counted per browser/device.",
+      "Website figures are first-party analytics (30 days to {ASOF}) and count real readers only — bots, crawlers and our own team’s visits are excluded. Unique visitors are counted per browser/device.",
       "All figures are a snapshot and change daily. Growth is compared with the previous period of the same length.",
     ],
     p3_h: "Example posts", p3_sub: "Founder-story posts from our page — each with the performance Meta reported for it.",
@@ -67,6 +77,10 @@ const L = {
     c_h: "Get in touch", c_book: "Book online (sign-in required)", c_mail: "Partnerships",
     asof: "As of", page: "Page",
     also: "Also on Instagram, LinkedIn, YouTube and X.",
+    top_h: "Most-read stories", reads: "reads",
+    mem: (m, n, sh) => `${n} registered members — ${m.founder} founders, ${m.reader} readers, ${m.investor} investors, ${m.other} other · ${sh} article shares`,
+    price_note: (a, b) => `Our packages range from ৳${a} to ৳${b}, depending on the service and format. The exact price is confirmed for each brief.`,
+    cap_web: "Website: last 30 days, real readers only (bots, crawlers and our own team excluded).",
     cov_h: "What we cover", cov: ["Latest news", "Funding & competitions", "Founder stories", "Business & policy", "Opportunities for new entrepreneurs", "Startup & company directory"],
     why_h: "Why partner with us",
     why: (f) => [["Proven reach", `${f} Facebook views in 28 days, up 11x on the previous 28 days.`], ["Bilingual", "Sponsored articles are published in both Bangla and English."], ["Trusted sources", "Information is gathered from official government sources, and paid content is clearly labelled."]],
@@ -81,7 +95,7 @@ const L = {
     about_h: "আমরা কারা",
     about: "ভয়েস অব স্টার্টআপ বাংলাদেশ (VOSB) বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগ সমাজের জন্য বাংলা ও ইংরেজি দুই ভাষার নিউজ প্ল্যাটফর্ম। আমরা ফান্ডিং ও প্রতিযোগিতার আপডেট, ফাউন্ডার স্টোরি, ব্যবসা ও নীতিমালার খবর এবং নতুন উদ্যোক্তাদের জন্য কাজের তথ্য ও সুযোগ প্রকাশ করি। তথ্য সংগ্রহ করা হয় BIDA, BEPZA, BEZA, BSCIC, আইসিটি মন্ত্রণালয়, বাংলাদেশ হাই-টেক পার্ক কর্তৃপক্ষ ও PPP অথরিটির মতো সরকারি সংস্থার সূত্র থেকে।",
     reach_h: "এক নজরে রিচ", fb: "ফেসবুক পেজ", last28: "গত ২৮ দিন", web: "ওয়েবসাইট", last30: "গত ৩০ দিন",
-    k_views: "ভিউ", k_eng: "এনগেজমেন্ট", k_follows: "নতুন ফলো", k_vis: "ইউনিক ভিজিটর", k_pv: "পেজ ভিউ", k_news: "নিউজলেটার সাবস্ক্রাইবার", k_art: "প্রকাশিত আর্টিকেল", k_co: "কোম্পানি প্রোফাইল",
+    k_views: "ভিউ", k_eng: "এনগেজমেন্ট", k_follows: "নতুন ফলো", k_vis: "ইউনিক ভিজিটর", k_reads: "আর্টিকেল রিড", k_pv: "পেজ ভিউ", k_news: "নিউজলেটার সাবস্ক্রাইবার", k_art: "প্রকাশিত আর্টিকেল", k_co: "কোম্পানি প্রোফাইল",
     vsprev: "আগের ২৮ দিনের তুলনায়",
     p2_h: "অডিয়েন্স ও পারফরম্যান্স", fb_h: "ফেসবুক — সর্বশেষ ৯টি পোস্ট", fb_sub: "মেটা-র দেওয়া প্রতি পোস্টের ভিউ, ৬–১৬ নভেম্বর ২০২৬",
     fb_sum1: "মোট ভিউ", fb_sum2: "৭০ হাজারের বেশি ভিউ", fb_sum3: "সেরা পোস্ট", fb_sum4: "মধ্যমান (মিডিয়ান)",
@@ -89,7 +103,7 @@ const L = {
     who_h: "আমাদের পাঠক", who: "বাংলাদেশের উদ্যোক্তা, বিনিয়োগকারী ও গ্রাহক — যারা বাংলা ও ইংরেজিতে স্টার্টআপ, ব্যবসা ও ফান্ডিংয়ের খবর অনুসরণ করেন।",
     notes_h: "সংখ্যাগুলো কীভাবে পড়বেন", notes: [
       "ফেসবুকের তথ্য মেটা পেজ ইনসাইটস থেকে ({ASOF} পর্যন্ত ২৮ দিন)। “ভিউ” মানে মেটা যতবার কনটেন্ট দেখিয়েছে বা চালিয়েছে — একই ব্যক্তি একাধিকবার দেখতে পারেন। “নতুন ফলো” মানে ওই সময়ে যুক্ত হওয়া ফলো, মোট ফলোয়ার নয়।",
-      "ওয়েবসাইটের তথ্য আমাদের নিজস্ব অ্যানালিটিক্স থেকে ({ASOF} পর্যন্ত ৩০ দিন)। ইউনিক ভিজিটর গোনা হয় ব্রাউজার/ডিভাইস অনুযায়ী।",
+      "ওয়েবসাইটের তথ্য আমাদের নিজস্ব অ্যানালিটিক্স থেকে ({ASOF} পর্যন্ত ৩০ দিন) এবং শুধু প্রকৃত পাঠক গোনা হয় — বট, ক্রলার ও আমাদের নিজস্ব টিমের ভিজিট বাদ। ইউনিক ভিজিটর গোনা হয় ব্রাউজার/ডিভাইস অনুযায়ী।",
       "সংখ্যাগুলো একটি নির্দিষ্ট দিনের চিত্র এবং প্রতিদিন বদলায়। প্রবৃদ্ধি আগের সমান সময়ের সাথে তুলনা করা।",
     ],
     p3_h: "উদাহরণ পোস্ট", p3_sub: "আমাদের পেজের ফাউন্ডার-স্টোরি পোস্ট — প্রতিটির নিচে মেটা-র দেওয়া পারফরম্যান্স।",
@@ -109,6 +123,10 @@ const L = {
     c_h: "যোগাযোগ", c_book: "অনলাইনে বুকিং (সাইন-ইন প্রয়োজন)", c_mail: "পার্টনারশিপ",
     asof: "তথ্য হালনাগাদ", page: "পৃষ্ঠা",
     also: "ইনস্টাগ্রাম, লিংকডইন, ইউটিউব ও এক্স-এও আছি।",
+    top_h: "সবচেয়ে বেশি পড়া আর্টিকেল", reads: "রিড",
+    mem: (m, n, sh) => { const b = new Intl.NumberFormat("bn-BD").format; return `${b(n)} জন নিবন্ধিত সদস্য — ${b(m.founder)} জন ফাউন্ডার, ${b(m.reader)} জন পাঠক, ${b(m.investor)} জন বিনিয়োগকারী, ${b(m.other)} জন অন্যান্য · ${b(sh)}টি আর্টিকেল শেয়ার`; },
+    price_note: (a, b) => `আমাদের প্যাকেজ ৳${a} থেকে ৳${b} টাকার মধ্যে — সেবা ও ফরম্যাট অনুযায়ী। প্রতিটি ব্রিফ দেখে সঠিক দাম নিশ্চিত করা হয়।`,
+    cap_web: "ওয়েবসাইট: গত ৩০ দিন, শুধু প্রকৃত পাঠক (বট, ক্রলার ও আমাদের নিজস্ব টিমের ভিজিট বাদ)।",
     cov_h: "আমরা যা কভার করি", cov: ["সর্বশেষ সংবাদ", "ফান্ডিং ও প্রতিযোগিতা", "ফাউন্ডার স্টোরি", "ব্যবসা ও নীতিমালা", "নতুন উদ্যোক্তাদের জন্য সুযোগ", "স্টার্টআপ ও কোম্পানি ডিরেক্টরি"],
     why_h: "কেন আমাদের সাথে",
     why: (f) => [["প্রমাণিত রিচ", `গত ২৮ দিনে ফেসবুকে ${f} ভিউ — আগের ২৮ দিনের চেয়ে ১১ গুণ বেশি।`], ["দুই ভাষায়", "স্পনসর্ড আর্টিকেল বাংলা ও ইংরেজি দুই ভাষাতেই প্রকাশ হয়।"], ["নির্ভরযোগ্য সূত্র", "তথ্য সংগ্রহ করা হয় সরকারি সূত্র থেকে, আর পেইড কনটেন্টে স্পষ্ট লেবেল থাকে।"]],
@@ -166,13 +184,15 @@ h3{font-size:11.5pt;font-weight:700;margin:0 0 1.5mm}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
 .sum{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin:3mm 0 4mm}
 .sum div{background:var(--os);border-radius:2.5mm;padding:2.5mm 3mm}.sum b{display:block;font-size:14pt;line-height:1.2}.sum span{font-size:8.5pt;color:var(--m)}
-.bar{display:grid;grid-template-columns:20mm 1fr 20mm;align-items:center;gap:2mm;margin:1.2mm 0;font-size:9pt}
+.bar{display:grid;grid-template-columns:20mm 1fr 20mm;align-items:center;gap:2mm;margin:.8mm 0;font-size:9pt}
 .bd{color:var(--m)}.bv{text-align:right;font-weight:600}
 .bt{height:4.2mm;background:#f1f1f1;border-radius:1mm;overflow:hidden}.bf{height:100%;background:#f5b48a}.bf.hi{background:var(--o)}
-.sec{margin-top:6mm}
-.web{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:2mm}
+.sec{margin-top:5mm}
+.top{list-style:none;margin-top:1.5mm}.top li{display:grid;grid-template-columns:6mm 1fr auto;gap:2mm;align-items:baseline;padding:1.2mm 0;border-bottom:1px solid var(--l);font-size:9.5pt}.top b{color:var(--od)}.top em{font-style:normal;font-weight:600;color:var(--t)}
+.pnote{background:var(--os);border-left:3px solid var(--o);border-radius:0 2mm 2mm 0;padding:3mm 4mm;font-size:10.5pt;font-weight:600;margin-top:1mm}
+.web{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:2mm}.web .stat{padding:2.5mm 4mm 2.2mm}.web .stat b{font-size:17pt}
 .small{font-size:8.5pt;color:var(--m);margin-top:1mm}
-.notes{margin-top:6mm;border-top:1px solid var(--l);padding-top:3mm}.notes ul{padding-left:4.5mm;font-size:8.5pt;color:var(--m)}.notes li{margin:1mm 0}
+.notes{margin-top:4mm;border-top:1px solid var(--l);padding-top:3mm}.notes ul{padding-left:4.5mm;font-size:8.5pt;color:var(--m)}.notes li{margin:1mm 0}
 /* page 3 */
 .exg{display:grid;grid-template-columns:1fr 1fr;gap:5mm 5mm;margin-top:1mm}
 .ex{border:1px solid var(--l);border-radius:3mm;overflow:hidden;background:#fff}
@@ -181,16 +201,16 @@ h3{font-size:11.5pt;font-weight:700;margin:0 0 1.5mm}
 .et{font-weight:700;font-size:10pt;line-height:1.35}.ed{font-size:8.5pt;color:var(--m);margin-bottom:2mm}
 .em{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5mm}.em span{font-size:7.5pt;color:var(--m);line-height:1.25}.em b{display:block;font-size:11pt;color:var(--t)}
 /* page 4 */
-table{width:100%;border-collapse:collapse;font-size:10.5pt;margin-top:2mm}
+table{width:100%;border-collapse:collapse;font-size:10pt;margin-top:2mm}
 th{background:var(--k);color:#fff;text-align:left;font-weight:600;padding:2mm 2.5mm;font-size:9pt}
-td{border-bottom:1px solid var(--l);padding:3.2mm 2.5mm;vertical-align:top}
+td{border-bottom:1px solid var(--l);padding:2.2mm 2.5mm;vertical-align:top}
 td.sn{font-weight:700;width:34mm}td.pq{width:30mm;color:var(--od);font-weight:600}
 td:last-child{width:28mm}
 .how{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin-top:2mm}
 .how li{background:var(--os);border-radius:2.5mm;padding:3mm}.how b{display:inline-flex;width:6mm;height:6mm;border-radius:50%;background:var(--o);color:#fff;align-items:center;justify-content:center;font-size:9pt;margin-bottom:1.5mm}.how span{display:block;font-size:9pt;line-height:1.4}
 .cov{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm 6mm;margin-top:2mm;list-style:none}.cov li{font-size:10.5pt;padding-left:5mm;position:relative}.cov li:before{content:"";position:absolute;left:0;top:2.6mm;width:2.2mm;height:2.2mm;border-radius:50%;background:var(--o)}
 .why{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:2mm}.why div{border:1px solid var(--l);border-top:3px solid var(--o);border-radius:2.5mm;padding:3.5mm}.why b{display:block;font-size:11pt;margin-bottom:1mm}.why span{font-size:9.5pt;color:var(--m);line-height:1.45}
-.contact{margin-top:8mm;background:var(--k);color:#fff;border-radius:3mm;padding:5mm 6mm;display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.contact{margin-top:5mm;background:var(--k);color:#fff;border-radius:3mm;padding:5mm 6mm;display:grid;grid-template-columns:1fr 1fr;gap:4mm}
 .contact h3{color:#fff}.contact a{color:#ffb98c;text-decoration:none}.contact p{font-size:9.5pt;margin-top:1mm}
 </style></head><body>
 
@@ -202,7 +222,12 @@ td:last-child{width:28mm}
     ${stat(t.n(f.engagement), `${t.k_eng} · ${t.fb}`, t.growth(f.engagementGrowth), "")}
     ${stat(t.n(f.follows), `${t.k_follows} · ${t.fb}`, t.growth(f.followsGrowth), "")}
   </div>
-  <p class="cap">${esc(t.fb)}, ${esc(t.last28)} (${esc(t.vsprev)}).</p>
+  <div class="grid" style="margin-top:4mm">
+    ${stat(t.n(s.visitors30), `${t.k_vis} · ${t.web}`, "", "")}
+    ${stat(t.n(s.reads30), `${t.k_reads} · ${t.web}`, "", "")}
+    ${stat(t.n(s.newsletter), t.k_news, "", "")}
+  </div>
+  <p class="cap">${esc(t.fb)}, ${esc(t.last28)} (${esc(t.vsprev)}). ${esc(t.cap_web)}</p>
   <div class="about"><h3>${esc(t.about_h)}</h3><p>${esc(t.about)}</p><p class="also">${esc(t.also)}</p></div>
   <div class="about" style="margin-top:8mm"><h3>${esc(t.cov_h)}</h3><ul class="cov">${t.cov.map((c) => `<li>${esc(c)}</li>`).join("")}</ul></div>
   ${foot(1)}</section>
@@ -213,9 +238,11 @@ td:last-child{width:28mm}
   <div class="sum"><div><b>${t.n(sum)}</b><span>${esc(t.fb_sum1)}</span></div><div><b>${t.n(over70)} ${t.of} ${t.n(DATA.posts.length)}</b><span>${esc(t.fb_sum2)}</span></div><div><b>${t.n(max)}</b><span>${esc(t.fb_sum3)}</span></div><div><b>${t.n(median)}</b><span>${esc(t.fb_sum4)}</span></div></div>
   ${bars}
   <div class="sec"><h3>${esc(t.web_h)} <span style="font-weight:400;color:var(--m);font-size:9pt">· ${esc(t.last30)}</span></h3>
-    <div class="web">${stat(t.n(s.visitors30), t.k_vis, "", "")}${stat(t.n(s.views30), t.k_pv, "", "")}${stat(t.n(s.newsletter), t.k_news, "", "")}</div>
-    <div class="web">${stat(t.n(s.articles), t.k_art, "", "")}${stat(t.n(s.articles30), t.last30, "", "")}${stat(t.n(s.companies), t.k_co, "", "")}</div>
+    <div class="web">${stat(t.n(s.visitors30), t.k_vis, "", "")}${stat(t.n(s.views30), t.k_pv, "", "")}${stat(t.n(s.reads30), t.k_reads, "", "")}</div>
+    <div class="web">${stat(t.n(s.newsletter), t.k_news, "", "")}${stat(t.n(s.articles), t.k_art, "", "")}${stat(t.n(s.companies), t.k_co, "", "")}</div>
     <p class="small">${esc(t.art_note(s.articles, s.articles30))} · ${esc(t.news_note)} · ${esc(t.co_note)}</p></div>
+  <div class="sec"><h3>${esc(t.top_h)}</h3><ol class="top">${s.top.map((x, i) => `<li><b>${t.n(i + 1)}</b><span>${esc(lang === "bn" ? x.bn : x.en)}</span><em>${t.n(x.reads)} ${esc(t.reads)}</em></li>`).join("")}</ol>
+    <p class="small">${esc(t.mem(s.members, s.members.founder + s.members.reader + s.members.investor + s.members.other, s.shares))}</p></div>
   <div class="notes"><h3>${esc(t.notes_h)}</h3><ul>${notes}</ul></div>
   ${foot(2)}</section>
 
@@ -226,6 +253,7 @@ td:last-child{width:28mm}
 
 <section class="page"><div class="bar-top"></div>
   <h2>${esc(t.p4_h)}</h2><p class="sub">${esc(t.p4_sub)}</p>
+  <div class="pnote">${esc(t.price_note(t.n(DATA.priceMin), t.n(DATA.priceMax)))}</div>
   <table><thead><tr><th>${esc(t.th_s)}</th><th>${esc(t.th_d)}</th><th>${esc(t.th_p)}</th><th>${esc(t.th_b)}</th></tr></thead><tbody>${rows}</tbody></table>
   <div class="sec"><h3>${esc(t.how_h)}</h3><ol class="how">${how}</ol></div>
   <div class="sec"><h3>${esc(t.why_h)}</h3><div class="why">${t.why(t.compact(f.views)).map((w) => `<div><b>${esc(w[0])}</b><span>${esc(w[1])}</span></div>`).join("")}</div></div>

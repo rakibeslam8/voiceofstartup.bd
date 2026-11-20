@@ -6,13 +6,17 @@
 
 **Where the numbers come from (as of 20 Nov 2026):**
 - Facebook: Meta page insights screenshots from the owner (28 days: 1.2M views ↑11x, 47,134 engagement ↑631%, 3,666 new follows ↑180%; per-post views for 6–16 Nov; per-post reactions/comments/shares from the post screenshots).
-- Website: first-party database (9,312 unique visitors and 19,890 page views in the last 30 days; 1,413 active newsletter subscribers; 169 published articles, 126 in the last 30 days; 27 published company profiles).
+- Website: first-party database, **real readers only** (site_visits/post_views `kind='human'` — bots and the owner's own visits excluded): 8,286 unique visitors, 14,549 page views and 9,449 article reads in the last 30 days; 1,413 active newsletter subscribers; 169 published articles (126 in the last 30 days); 27 published companies; 269 article shares; 28 registered members (12 founders, 12 readers, 2 investors, 2 other); top-5 most-read articles by real-reader reads. NOTE: the admin dashboard tiles (9.8k visitors, 20.7k page views) include bots and the owner, so they look higher than the kit.
 - Services/booking facts: `pr_services`, `pr_slot_groups` (articles 10/day, posts 1/day, horizon 60 days).
 
 **Rebuild each month:** edit the DATA block at the top of `tools/media-kit/build.cjs`, then run `node tools/media-kit/build.cjs` (Playwright) — it rewrites both PDFs. Post images are cropped from screenshots into `tools/media-kit/img/`; fonts (Hind Siliguri, OFL) in `tools/media-kit/fonts/`. Never type a number that is not in a screenshot or a query.
 
-**Open items / owner decisions**
-- Set real prices in Admin → Services, then ask to regenerate (the table is built to show them; currently every service shows "Quoted per brief").
-- `founder_story` has price `0` in the database (the seed had none): the PR page may show it as free. Confirm that is intended; the kit does not show it as free.
-- The PR page says "20K+ visitors / month", but the database shows ~9.3K unique visitors (~19.9K page views) in 30 days — the 20K figure matches page views. Fix the wording/number in Admin → Page & stats before a client compares it with the kit.
-- Total Facebook follower count and a WhatsApp number are not in the kit (not provided; "New follows" is the period gain, not total followers).
+**Owner decisions (20 Nov, later)**
+- The old "20K visitors/month" on the PR page was only an idea: replaced by the real figure (`site_settings.pr_page.stats.monthly_visitors` = 8200 → shows "8.2K+").
+- Founder story shows ৳0 only because of a free-campaign choice; it is NOT free normally. Kit does not show it as free.
+- Price range for all services: ৳2,000–৳7,000 (shown as a note above the service table; per-service prices still "Quoted per brief").
+
+**Open items**
+- Set per-service prices in Admin → Services if you want exact prices in the table; then rebuild.
+- Dashboard says 29 users, its breakdown (2·12·12·2) adds to 28 — one user has no profile row.
+- Total Facebook follower count and a WhatsApp number are not in the kit; "New follows" is the 28-day gain, not total followers.
