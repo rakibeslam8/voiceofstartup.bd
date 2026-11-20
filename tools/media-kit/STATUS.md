@@ -1,6 +1,6 @@
 # Media kit (PDF) — status, 2026-11-20
 
-**Live files:** `/media-kit-en.pdf` and `/media-kit-bn.pdf` (site root, 4 A4 pages each, one language per file). robots.txt disallows both (they are not meant to rank). Linked from the PR page hero ("Media kit (PDF)" button, signed-in members only; follows the site language). The PDF URLs themselves are public, so anyone with the link can open them.
+**Live files:** `/media-kit-en.pdf` and `/media-kit-bn.pdf` (site root, 4 A4 pages each, one language per file). robots.txt disallows both (they are not meant to rank). Linked from the PR page hero ("Media kit (PDF)" button, shown to everyone since 20 Nov; follows the site language). The PDF URLs themselves are public, so anyone with the link can open them.
 
 **Contents:** cover (Facebook 28-day views / engagement / new follows with growth, who we are, what we cover) · audience & performance (last 9 posts bar chart, website 30-day numbers, newsletter, articles, company directory, "how to read these numbers") · 4 example posts with Meta views/reactions/comments/shares · service table (price column says "Quoted per brief" — no real prices are set yet) + how booking works + why partner + contact.
 
@@ -29,3 +29,5 @@
 - Set the same prices live in Admin → Services (and the WhatsApp number in Page & stats) if the owner wants the PR page to match the kit.
 - Dashboard says 29 users, its breakdown (2·12·12·2) adds to 28 — one user has no profile row.
 - Total Facebook follower count and a WhatsApp number are not in the kit; "New follows" is the 28-day gain, not total followers.
+
+**Update 20 Nov (later):** /pr is now public (no login to view). Kit contact box says "Book online (free account to order)" (c_book). PDFs rebuilt.

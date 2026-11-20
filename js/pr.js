@@ -1,5 +1,5 @@
 /* Voice of Startup Bangladesh — /pr : paid promotion, sponsored articles, posts, reels, collaborations.
-   Signed-in members only: signed-out visitors see a login wall and nothing else (no prices, no dates, no payment numbers). Reached ONLY from the Contact page and the footer (under the contacts) — no menu, no sitemap, noindex.
+   Open to everyone (20 Nov): anyone can VIEW services, prices and free dates without an account (payment account numbers are never sent to signed-out visitors). Placing an order, quotes, payments and "My orders" need a sign-in. Reached ONLY from the Contact page and the footer (under the contacts) — no menu, no sitemap, noindex.
    The screen collects and displays. Prices, coupons, free-campaign rules, TrxID checks and ownership are all enforced by the database functions
    (get_pr_public, get_pr_slots, pr_quote, pr_submit_order, pr_pay_order, pr_cancel_order). Publish dates are booked by the database:
    a service in a "slot group" (post / reel: 1 per day, article: 10 per day) can never be double-booked. */
@@ -94,13 +94,12 @@
     const n = (st.orders || []).length;
     el.innerHTML = `<a class="btn btn-orange" href="#services">${T("সেবা দেখুন", "Browse services")}</a>` +
       (A().isIn() ? `<a class="btn btn-outline" href="#orders">${T("আমার অর্ডার", "My orders")}${n ? ` <span class="ac-count">${nd(n)}</span>` : ""}</a>` : `<button type="button" class="btn btn-outline" data-act="login">${T("লগইন / সাইন আপ", "Log in / Sign up")}</button>`) +
-      (A().isIn() ? `<a class="btn btn-outline pr-kit" href="/media-kit-${U().lang === "bn" ? "bn" : "en"}.pdf" target="_blank" rel="noopener" download>📄 ${T("মিডিয়া কিট (PDF)", "Media kit (PDF)")}</a>` : "");
+      `<a class="btn btn-outline pr-kit" href="/media-kit-${U().lang === "bn" ? "bn" : "en"}.pdf" target="_blank" rel="noopener" download>📄 ${T("মিডিয়া কিট (PDF)", "Media kit (PDF)")}</a>`;
   }
 
   /* hero quick facts (shown above the buttons, so they are on the first phone screen): the lowest listed price and the earliest free date */
   function heroFacts() {
     const el = $("#pr-facts"); if (!el) return;
-    if (!A().isIn()) { el.innerHTML = ""; return; }
     const paid = svcs().filter((s) => s.price != null && Number(s.price) > 0).sort((x, y) => Number(x.price) - Number(y.price))[0];
     const g = st.slots && st.slots.groups; let first = "";
     if (g) Object.keys(g).forEach((k) => { const d = g[k].days.find((x) => x.left > 0); if (d && (!first || d.d < first)) first = d.d; });
@@ -115,7 +114,6 @@
   function heroCard() {
     const el = $("#pr-hero-r"); if (!el) return;
     heroFacts();
-    if (!A().isIn()) { el.innerHTML = ""; return; }
     const g = st.slots && st.slots.groups, sx = ((st.pub && st.pub.page) || {}).stats || {};
     let rows;
     if (!g) rows = `<div class="ac-skel" aria-hidden="true" style="height:140px;margin:0"></div>`;
@@ -530,17 +528,17 @@
 
   /* ---------- shell ---------- */
   function gateCard() {
-    root.innerHTML = `<div class="ac-card ac-center pr-gatecard"><div class="ac-big" aria-hidden="true">🔐</div><h1>${T("শুধু সদস্যদের জন্য", "Members only")}</h1>
-      <p class="muted">${T("এই পেজ দেখতে লগইন বা সাইন আপ করুন। অ্যাকাউন্ট বিনামূল্যে — এক মিনিটেই হয়ে যায়।", "Log in or sign up to open this page. An account is free and takes a minute.")}</p>
-      <p class="ac-acts" style="justify-content:center"><button type="button" class="btn btn-orange" data-act="login">${T("লগইন / সাইন আপ", "Log in / Sign up")}</button><a class="btn btn-outline" href="/">${T("হোমে ফিরুন", "Back to home")}</a></p></div>`;
+    root.innerHTML = `<div class="ac-card ac-center pr-gatecard"><div class="ac-big" aria-hidden="true">🔐</div><h1>${T("লগইন প্রয়োজন", "Sign in to continue")}</h1>
+      <p class="muted">${T("অর্ডার করতে বা আপনার অর্ডার দেখতে লগইন বা সাইন আপ করুন। অ্যাকাউন্ট বিনামূল্যে — এক মিনিটেই হয়ে যায়।", "Log in or sign up to place an order or see your orders. An account is free and takes a minute.")}</p>
+      <p class="ac-acts" style="justify-content:center"><button type="button" class="btn btn-orange" data-act="login">${T("লগইন / সাইন আপ", "Log in / Sign up")}</button><a class="btn btn-outline" href="#services" data-act="home">${T("সব সেবা দেখুন", "See all services")}</a></p></div>`;
     if (!st.gateShown) { st.gateShown = true; setTimeout(() => { if (!A().isIn()) A().open("login"); }, 350); }
   }
   function render(keepScroll) {
-    const inn = A().isIn();
-    document.body.classList.toggle("pr-gate", !inn);
-    if (!inn) { st.pub = null; st.slots = null; st.orders = null; st.o = null; return gateCard(); }
+    const inn = A().isIn(), r = route();
+    const needLogin = !inn && (r.v === "orders" || r.v === "order");   // only ordering and "My orders" need an account; viewing is open to everyone
+    document.body.classList.toggle("pr-gate", needLogin);
+    if (needLogin) { st.orders = null; st.o = null; cta(); return gateCard(); }
     cta(); heroCard();
-    const r = route();
     if (!st.pub) { root.innerHTML = st.err ? `<div class="ac-card ac-center"><div class="ac-big" aria-hidden="true">⚠️</div><p>${esc(st.err)}</p><p><button type="button" class="btn btn-orange" data-act="retry">${T("আবার চেষ্টা করুন", "Try again")}</button></p></div>` : `<div class="ac-skel" aria-hidden="true"></div><div class="ac-skel" aria-hidden="true"></div>`; return; }
     if ((st.pub.page || {}).enabled === false) { root.innerHTML = `<div class="ac-card ac-center"><div class="ac-big" aria-hidden="true">⏸️</div><h2>${T("পেইড প্রমোশন এখন বন্ধ আছে", "Paid promotion is paused right now")}</h2><p class="muted">${T("কিছুদিন পরে আবার দেখুন, অথবা ইমেইল করুন:", "Please check back soon, or email us:")} <a href="mailto:partnerships@voiceofstartup.bd">partnerships@voiceofstartup.bd</a></p></div>`; return; }
     const changed = st.lastView !== r.v + (r.key || "");
@@ -624,7 +622,6 @@
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && A().isIn() && route().v === "orders" && !st.payFor) loadOrders().then(() => render(true)); });
 
   async function boot() {
-    if (!A().isIn()) { st.pub = null; st.slots = null; return render(true); }
     await Promise.all([loadPub(), loadSlots()]);
     if (A().isIn()) await loadOrders();
     render(true);
