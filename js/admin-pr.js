@@ -201,24 +201,25 @@ window.VOSB_ADMIN_PR = function (X) {
     const verified = o.pay_status === "verified";
     const dates = (bookings || []).length ? `<section class="mo-card"><h3>📅 Publish dates</h3><p class="muted mo-sub">The buyer is notified when you change a date.</p><div class="pr-bks">${bookings.map((b) => `<span class="pr-bk" data-bk="${esc(b.id)}"><b>${esc(fmtDay(b.day))}</b> <button type="button" class="b b-line b-sm" data-mv="${esc(b.id)}">Change</button></span>`).join("")}</div></section>` : "";
     const quote = o.kind === "quote" && o.amount == null;
-    const html = `<div class="mo-head"><div class="mo-ic">${esc((o.service_icon) || "📣")}</div><div class="mo-ht"><b>${esc(o.service_name_en)}${o.qty > 1 ? " × " + o.qty : ""}</b><span class="muted">${esc(o.order_no)} · ${esc(fmtDT(o.created_at))}</span></div>
-        <div class="mo-pills">${pill(o.status, ORD_L[o.status] || o.status)}${pill(o.pay_status, PAY_L[o.pay_status] || o.pay_status)}</div></div>
-      <div class="mo-stats"><div><small>${quote ? "Price" : "Amount"}</small><b>${quote ? "Not set" : esc(bdt(o.amount))}</b></div>${o.coupon_code ? `<div><small>Coupon</small><b>${esc(o.coupon_code)} <span class="muted">−${esc(bdt(o.discount))}</span></b></div>` : ""}<div><small>Buyer</small><b class="mo-em">${esc(o.user_email || "—")}</b></div>${o.trx_id ? `<div><small>bKash TrxID</small><b><span class="co-trx">${esc(o.trx_id)}</span> <button type="button" class="b b-ghost b-sm" data-copyv="${esc(o.trx_id)}" aria-label="Copy TrxID">⧉</button><br><span class="muted mo-sm">from ${esc(o.sender_msisdn || "")}</span></b></div>` : ""}</div>
+    const fl = (id, label, inner, hint) => `<div class="mo-f"><label for="${id}">${esc(label)}</label>${inner}${hint ? `<small class="mo-hint">${hint}</small>` : ""}</div>`;
+    const stat = (k, v) => `<div class="mo-st"><small>${k}</small><b>${v}</b></div>`;
+    const html = `<header class="mo-head"><div class="mo-ic">${esc((o.service_icon) || "📣")}</div><div class="mo-ht"><b>${esc(o.service_name_en)}${o.qty > 1 ? " × " + o.qty : ""}</b><span>${esc(o.order_no)} · ${esc(fmtDT(o.created_at))}</span></div>
+        <div class="mo-pills">${pill(o.status, ORD_L[o.status] || o.status)}${pill(o.pay_status, PAY_L[o.pay_status] || o.pay_status)}</div></header>
+      <div class="mo-strip">${stat(quote ? "Price" : "Amount", quote ? "Not set" : esc(bdt(o.amount)))}${stat("Buyer", `<span class="mo-em">${esc(o.user_email || "—")}</span>`)}${o.coupon_code ? stat("Coupon", `${esc(o.coupon_code)} <span class="muted">−${esc(bdt(o.discount))}</span>`) : ""}${o.trx_id ? stat("bKash TrxID", `<span class="co-trx">${esc(o.trx_id)}</span> <button type="button" class="b b-ghost b-sm" data-copyv="${esc(o.trx_id)}" aria-label="Copy TrxID">⧉</button><span class="mo-sm">from ${esc(o.sender_msisdn || "")}</span>`) : ""}</div>
       <div class="mo-grid">
         <div class="mo-col">
-          <section class="mo-card"><h3>👤 Contact</h3>${contactKeys.map(kv).join("") || '<p class="muted">No details.</p>'}</section>
-          <section class="mo-card"><h3>📝 Brief</h3>${briefKeys.map(kv).join("") + extras || '<p class="muted">No details.</p>'}</section>
+          <section class="mo-card"><h3>Contact</h3>${contactKeys.map(kv).join("") || '<p class="muted">No details.</p>'}</section>
+          <section class="mo-card"><h3>Brief</h3>${briefKeys.map(kv).join("") + extras || '<p class="muted">No details.</p>'}</section>
           ${dates}
         </div>
-        <div class="mo-col">
-          <section class="mo-card mo-form"><h3>⚙️ Manage</h3>
-            <div class="pr-two">${fld("m-amt", quote ? "Price (৳) — set the quote" : "Amount (৳)", inp("m-amt", o.amount == null ? "" : o.amount, `inputmode="decimal" ${verified ? "disabled" : ""}`), verified ? "locked: payment verified" : "")}
-              ${fld("m-st", "Order status", sel("m-st", ORD_ST.map((s) => [s, ORD_L[s]]), o.status))}</div>
-            ${fld("m-pay", "Payment status", sel("m-pay", PAY_ST.map((s) => [s, PAY_L[s]]), o.pay_status), "changing it notifies the buyer")}
-            ${fld("m-note", "Message to the buyer", txt("m-note", o.admin_note || "", 3, 600), "shown on their “My orders” page")}
-            ${fld("m-url", "Published link", inp("m-url", o.delivered_url || "", 'placeholder="https://…" inputmode="url"'), "shown to the buyer when delivered")}
-            ${fld("m-int", "Internal note", txt("m-int", priv, 3, 1000), "only admins see this")}</section>
-        </div>
+        <aside class="mo-side"><section class="mo-card mo-form"><h3>Update this order</h3>
+            <div class="mo-row2">${fl("m-st", "Order status", sel("m-st", ORD_ST.map((s) => [s, ORD_L[s]]), o.status))}${fl("m-pay", "Payment status", sel("m-pay", PAY_ST.map((s) => [s, PAY_L[s]]), o.pay_status))}</div>
+            <p class="mo-hint mo-warn">Changing the payment status notifies the buyer.</p>
+            ${fl("m-amt", quote ? "Price (৳) — set the quote" : "Amount (৳)", inp("m-amt", o.amount == null ? "" : o.amount, `inputmode="decimal" ${verified ? "disabled" : ""}`), verified ? "🔒 Locked — payment is verified." : "")}
+            ${fl("m-note", "Message to the buyer", txt("m-note", o.admin_note || "", 3, 600), "Shown on their “My orders” page.")}
+            ${fl("m-url", "Published link", inp("m-url", o.delivered_url || "", 'placeholder="https://…" inputmode="url"'), "Shown to the buyer once delivered.")}
+            ${fl("m-int", "Internal note", txt("m-int", priv, 3, 1000), "Only admins can see this.")}</section>
+        </aside>
       </div>`;
     const res = await dialog({ title: "Manage order", html, wide: true, cls: "mo", ok: "Save changes",
       onOpen: (bg) => bg.addEventListener("click", async (e) => {
