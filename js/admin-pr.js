@@ -635,7 +635,7 @@ window.VOSB_ADMIN_PR = function (X) {
       <h2>Reach numbers shown on /pr</h2>
       <p class="muted" style="margin-top:-6px">Keep these honest — they are shown to advertisers. Update them whenever your page grows.</p>
       <div class="pr-three">${fld("p-av", "Average views per post", inp("p-av", s.avg_views == null ? "" : s.avg_views, 'inputmode="numeric"'))}${fld("p-mn", "Top posts: from (views)", inp("p-mn", s.peak_min == null ? "" : s.peak_min, 'inputmode="numeric"'))}${fld("p-mx", "Top posts: up to (views)", inp("p-mx", s.peak_max == null ? "" : s.peak_max, 'inputmode="numeric"'))}</div>
-      <div class="pr-three">${fld("p-vi", "Website visitors / month", inp("p-vi", s.monthly_visitors == null ? "" : s.monthly_visitors, 'inputmode="numeric"'))}${fld("p-em", "Contact e-mail", inp("p-em", cur.contact_email || "", 'type="email" placeholder="partnerships@voiceofstartup.bd"'))}${fld("p-wa", "WhatsApp number (optional)", inp("p-wa", cur.whatsapp || "", 'inputmode="tel" placeholder="8801XXXXXXXXX"'), "with country code; empty = hidden")}</div>
+      <div class="pr-three">${fld("p-fo", "Facebook page followers", inp("p-fo", s.followers == null ? "" : s.followers, 'inputmode="numeric"'))}${fld("p-vi", "Website visitors / month", inp("p-vi", s.monthly_visitors == null ? "" : s.monthly_visitors, 'inputmode="numeric"'))}${fld("p-em", "Contact e-mail", inp("p-em", cur.contact_email || "", 'type="email" placeholder="partnerships@voiceofstartup.bd"'))}${fld("p-wa", "WhatsApp number (optional)", inp("p-wa", cur.whatsapp || "", 'inputmode="tel" placeholder="8801XXXXXXXXX"'), "with country code; empty = hidden")}</div>
       <div class="pr-two">${fld("p-ib", "Intro line (Bangla, optional)", txt("p-ib", cur.intro_bn || "", 3, 400), "shown above the numbers")}${fld("p-ie", "Intro line (English, optional)", txt("p-ie", cur.intro_en || "", 3, 400))}</div>
       ${chk("p-on", "PR page is open for orders", cur.enabled !== false)}
       <div class="msg err" hidden id="pm"></div>
@@ -651,7 +651,7 @@ window.VOSB_ADMIN_PR = function (X) {
           const mn = n("p-mn"), mx = n("p-mx"); if (mn != null && mx != null && mx < mn) throw new Error("“Up to” views must not be less than “from”.");
           const em = g("p-em"); if (em && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) throw new Error("Enter a valid contact e-mail.");
           const wa = g("p-wa").replace(/[^\d]/g, "");
-          const value = { enabled: g("p-on"), stats: { avg_views: n("p-av"), peak_min: mn, peak_max: mx, monthly_visitors: n("p-vi") }, contact_email: em, whatsapp: wa, intro_bn: g("p-ib"), intro_en: g("p-ie") };
+          const value = { enabled: g("p-on"), stats: { avg_views: n("p-av"), peak_min: mn, peak_max: mx, monthly_visitors: n("p-vi"), followers: n("p-fo") }, contact_email: em, whatsapp: wa, intro_bn: g("p-ib"), intro_en: g("p-ie") };
           must(await sb.from("site_settings").upsert({ key: "pr_page", value, updated_at: new Date().toISOString() }, { onConflict: "key" }));
           toast("Saved — the /pr page is updated", "ok");
         } catch (er) { pm.hidden = false; pm.textContent = errMsg(er); }

@@ -346,3 +346,20 @@ html[data-theme="dark"] .pr-stat-ic { background: rgba(255,117,34,.16); }
 .pr-fact b { font: 800 1.02rem var(--font-body); color: var(--text, #1b1b1b); }
 .pr-fact:first-child b { color: var(--orange-dark); }
 @media (max-width: 760px) { .pr-facts { gap: 8px; margin-top: 12px; } .pr-fact { padding: 7px 11px; border-radius: 12px; } .pr-fact em { font-size: .76rem; } .pr-fact b { font-size: .92rem; } }
+
+/* proof of work */
+.pr-pfs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.pr-pf { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.pr-pf img { display: block; width: 100%; height: auto; aspect-ratio: 640 / 795; object-fit: cover; object-position: top; background: var(--bg-soft, #f4f4f4); }
+.pr-pf-b { padding: 12px 14px 14px; display: grid; gap: 4px; }
+.pr-pf-b h3 { font-size: .95rem; line-height: 1.35; margin: 0; }
+.pr-pf-d { color: var(--muted); font-size: .8rem; margin: 0; }
+.pr-pf-m { font-size: .84rem; margin: 2px 0 0; color: var(--text); line-height: 1.5; }
+.pr-pf-m b { color: var(--orange-dark); font-size: 1rem; }
+.pr-h3 { font-size: 1.15rem; margin: 0; }
+.pr-logos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.pr-logos li { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 8px 10px; display: grid; justify-items: center; gap: 6px; text-align: center; min-width: 0; }
+.pr-logos img { width: 64px; height: 64px; object-fit: contain; }
+.pr-logos span { font-size: .78rem; color: #333; line-height: 1.25; overflow-wrap: anywhere; }
+@media (max-width: 960px) { .pr-pfs { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pr-logos { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .pr-pfs { gap: 10px; } .pr-pf-b { padding: 10px; } .pr-pf-b h3 { font-size: .88rem; } .pr-logos { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .pr-logos img { width: 52px; height: 52px; } }

@@ -157,12 +157,30 @@
   function statsHtml() {
     const s = (st.pub.page || {}).stats || {};
     const tiles = [];
+    if (s.followers) tiles.push(["👥", compact(s.followers) + "+", T("ফেসবুক পেজ ফলোয়ার", "Facebook page followers")]);
     if (s.avg_views) tiles.push(["👁️", compact(s.avg_views) + "+", T("প্রতি পোস্টে গড় ভিউ", "Average views per post")]);
     if (s.peak_min && s.peak_max) tiles.push(["🔥", compact(s.peak_min) + " – " + compact(s.peak_max), T("ভালো পারফর্ম করা পোস্টে ভিউ", "Views on top-performing posts")]);
     if (s.monthly_visitors) tiles.push(["🌐", compact(s.monthly_visitors) + "+", T("মাসিক ওয়েবসাইট ভিজিটর", "Website visitors every month")]);
-    tiles.push(["🇧🇩", T("বাংলা + ইংরেজি", "Bangla + English"), T("প্রতিটি আর্টিকেল দুই ভাষায়", "Every article in both languages")]);
     return `<div class="pr-stats" role="list">${tiles.map((t) => `<div class="pr-stat" role="listitem"><span class="pr-stat-ic" aria-hidden="true">${t[0]}</span><b>${esc(t[1])}</b><small>${esc(t[2])}</small></div>`).join("")}</div>
       <p class="pr-fine">${T("ভিউ পেজের গড় ও সাম্প্রতিক পারফরম্যান্স — নির্দিষ্ট ভিউ বা ফলাফলের নিশ্চয়তা নয়।", "Figures are page averages and recent performance — views and results are not guaranteed.")}</p>`;
+  }
+  /* proof of work: real Meta post numbers (owner screenshots, 11–15 Nov 2026) + companies featured in our directory. Update when new numbers come. */
+  const PROOF = [
+    { img: "post-nov11.jpg", d: "2026-11-11", v: 137068, r: 537, c: 21, s: 127, bn: "৩০ হাজার টাকায় ব্যবসা শুরু, এখন রপ্তানিই ২৮ কোটি টাকা", en: "Started with ৳30,000 — now exporting ৳28 crore" },
+    { img: "post-nov14.jpg", d: "2026-11-14", v: 87268, r: 604, c: 16, s: 132, bn: "আনারস, কলা ও পাটের সুতায় তৈরি পণ্য যাচ্ছে ৩৯ দেশে", en: "Pineapple, banana and jute-fibre products now sold in 39 countries" },
+    { img: "post-nov12.jpg", d: "2026-11-12", v: 87771, r: 419, c: 12, s: 97, bn: "১০ হাজার টাকায় শুরু, এখন মাসে আয় ২০ লাখ টাকা", en: "Started with ৳10,000 — now earning ৳20 lakh a month" },
+    { img: "post-nov15.jpg", d: "2026-11-15", v: 79870, r: 432, c: 18, s: 87, bn: "হাতে বানানো সুগন্ধি সাবান, যাচ্ছে নরসিংদী থেকে জাপানে", en: "Handmade scented soap from Narsingdi goes to Japan" },
+  ];
+  const LOGOS = [["pathao", "Pathao"], ["grameenphone", "Grameenphone"], ["bkash", "bKash"], ["walton", "Walton Group"], ["shikho", "Shikho"], ["nagad", "Nagad"], ["pran-rfl", "PRAN-RFL Group"], ["akij", "Akij Group"], ["aci", "ACI Limited"], ["chaldal", "Chaldal"]];
+  function proofHtml() {
+    const posts = PROOF.map((x) => `<article class="pr-pf"><img src="/img/pr/${x.img}" alt="${esc(T(x.bn, x.en))}" loading="lazy" width="640" height="795">
+        <div class="pr-pf-b"><h3>${esc(T(x.bn, x.en))}</h3><p class="pr-pf-d">${esc(fmtD(x.d))}</p>
+        <p class="pr-pf-m"><b>${esc(compact(x.v))}</b> ${T("ভিউ", "views")} · ${nd(x.r)} ${T("রিঅ্যাকশন", "reactions")} · ${nd(x.c)} ${T("কমেন্ট", "comments")} · ${nd(x.s)} ${T("শেয়ার", "shares")}</p></div></article>`).join("");
+    const logos = LOGOS.map((l) => `<li><img src="/img/pr/logos/${l[0]}.png" alt="${esc(l[1])}" loading="lazy" width="90" height="90"><span>${esc(l[1])}</span></li>`).join("");
+    return `<section class="pr-sec" id="proof" aria-labelledby="pr-h-proof"><div class="pr-sec-h"><h2 id="pr-h-proof">${T("আমাদের কাজ ও পারফরম্যান্স", "Our work & how it performs")}</h2><p>${T("আমাদের ফেসবুক পেজের সাম্প্রতিক পোস্ট — ভিউ ও ইনগেজমেন্ট মেটা (ফেসবুক) ইনসাইটস থেকে।", "Recent posts from our Facebook page — views and engagement from Meta (Facebook) insights.")}</p></div>
+      <div class="pr-pfs">${posts}</div>
+      <div class="pr-sec-h" style="margin-top:28px"><h3 class="pr-h3">${T("যেসব কোম্পানি আমাদের ডিরেক্টরিতে আছে", "Companies featured in our directory")}</h3><p>${T("সম্পাদকীয় তালিকা — এরা আমাদের ক্লায়েন্ট বা পার্টনার নয়।", "Editorial listings — these are not our clients or partners.")}</p></div>
+      <ul class="pr-logos">${logos}</ul></section>`;
   }
   function campaignHtml() {
     const c = camp(); if (!c) return "";
@@ -212,6 +230,7 @@
     return `${intro ? `<p class="pr-intro">${esc(intro)}</p>` : ""}${statsHtml()}${campaignHtml()}
       <section class="pr-sec" id="services" aria-labelledby="pr-h-svc"><div class="pr-sec-h"><h2 id="pr-h-svc">${T("সেবা ও দাম", "Services & prices")}</h2><p>${T("যেভাবে আমাদের সাথে কাজ করতে পারেন", "Every way you can work with us")}</p></div>
         <div class="pr-bar"><div class="pr-chips" role="tablist" id="pr-chips">${chipsHtml()}</div><span id="pr-revall">${revAllBtn()}</span></div><div class="pr-grid" id="pr-grid">${gridHtml()}</div></section>
+      ${proofHtml()}
       <section class="pr-sec" aria-labelledby="pr-h-how"><div class="pr-sec-h"><h2 id="pr-h-how">${T("কীভাবে কাজ করে", "How it works")}</h2></div>
         <ol class="pr-steps">${STEPS.map((x) => `<li><span class="pr-sn" aria-hidden="true">${U().lang === "bn" ? x[0] : x[1]}</span><div><h3>${T(x[2], x[3])}</h3><p>${T(x[4], x[5])}</p></div></li>`).join("")}</ol></section>
       <section class="pr-sec" aria-labelledby="pr-h-faq"><div class="pr-sec-h"><h2 id="pr-h-faq">${T("সচরাচর জিজ্ঞাসা", "Questions people ask")}</h2></div>

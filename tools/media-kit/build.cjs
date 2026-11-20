@@ -31,7 +31,7 @@ const DATA = {
     ] },
   prices: [3000, 4000, 2000, 5000, null, null],   // per service, same order as the service rows (owner, 20 Nov 2026); null = custom
   founderFreeUntil: "2026-12-31",                // founder story is free until this date (introductory offer) — rebuild the kit after it passes
-  followersCombined: 20000,                      // approx., all social channels combined — figure given by the owner (not from a screenshot)
+  facebookFollowers: 15000, followersCombined: 20000,                      // approx., all social channels combined — figure given by the owner (not from a screenshot)
   whatsapp: { show: "+880 1404-792132", wa: "8801404792132" },
   // Audience of the best post (11 Nov, 137,068 views): Meta post-details screenshots. NOT page-wide.
   aud: { post: "2026-11-11", views: 137068, viewers: 82000, nonFollowers: 96, followers: 4,
@@ -87,7 +87,7 @@ const L = {
     how_h: "How booking works", how: ["Choose a service", "Pick a publish date from the booking calendar (up to 60 days ahead)", "Send your brief — we review it and confirm the price", "Pay, and we publish on your date"],
     c_h: "Get in touch", c_book: "Book online (free account to order)", c_mail: "Partnerships",
     asof: "As of", page: "Page",
-    also: "Also on Instagram, LinkedIn, YouTube and X.",
+    also: "Facebook page: 15,000+ followers. Also on Instagram, LinkedIn, YouTube and X.",
     top_h: "Most-read stories", reads: "reads",
     mem: (m, n, sh) => `${n} registered members — ${m.founder} founders, ${m.reader} readers, ${m.investor} investors, ${m.other} other · ${sh} article shares`,
     price_note: (a, b) => `Our packages range from ৳${a} to ৳${b}, depending on the service and format. The exact price is confirmed for each brief.`,
@@ -144,7 +144,7 @@ const L = {
     how_h: "বুকিং যেভাবে কাজ করে", how: ["একটি সেবা বেছে নিন", "বুকিং ক্যালেন্ডার থেকে প্রকাশের তারিখ নিন (৬০ দিন পর্যন্ত আগাম)", "আপনার ব্রিফ পাঠান — আমরা দেখে দাম নিশ্চিত করব", "পেমেন্ট করুন, আমরা আপনার তারিখে প্রকাশ করব"],
     c_h: "যোগাযোগ", c_book: "অনলাইনে বুকিং (অর্ডারে বিনামূল্যে অ্যাকাউন্ট লাগবে)", c_mail: "পার্টনারশিপ",
     asof: "তথ্য হালনাগাদ", page: "পৃষ্ঠা",
-    also: "ইনস্টাগ্রাম, লিংকডইন, ইউটিউব ও এক্স-এও আছি।",
+    also: "ফেসবুক পেজে ১৫,০০০+ ফলোয়ার। ইনস্টাগ্রাম, লিংকডইন, ইউটিউব ও এক্স-এও আছি।",
     top_h: "সবচেয়ে বেশি পড়া আর্টিকেল", reads: "রিড",
     mem: (m, n, sh) => { const b = new Intl.NumberFormat("bn-BD").format; return `${b(n)} জন নিবন্ধিত সদস্য — ${b(m.founder)} জন ফাউন্ডার, ${b(m.reader)} জন পাঠক, ${b(m.investor)} জন বিনিয়োগকারী, ${b(m.other)} জন অন্যান্য · ${b(sh)}টি আর্টিকেল শেয়ার`; },
     price_note: (a, b) => `আমাদের প্যাকেজ ৳${a} থেকে ৳${b} টাকার মধ্যে — সেবা ও ফরম্যাট অনুযায়ী। প্রতিটি ব্রিফ দেখে সঠিক দাম নিশ্চিত করা হয়।`,
