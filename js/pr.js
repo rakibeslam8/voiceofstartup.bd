@@ -253,7 +253,7 @@
     const lab = `<label for="${id}">${esc(T(bn, en))}${req ? ` <i class="req" aria-hidden="true">*</i>` : ""}</label>`;
     const ph = esc(T(d[3] || "", d[4] || ""));
     let ctl;
-    if (type === "textarea") ctl = `<textarea id="${id}" data-bf="${k}" rows="${k === "what" ? 4 : 3}" maxlength="${MAX[k] || 1200}" placeholder="${ph}">${esc(v)}</textarea>`;
+    if (type === "textarea") ctl = `<textarea id="${id}" data-bf="${k}" rows="${k === "what" ? 3 : 2}" maxlength="${MAX[k] || 1200}" placeholder="${ph}">${esc(v)}</textarea>`;
     else if (type === "select") ctl = `<select id="${id}" data-bf="${k}"><option value="">${T("— বেছে নিন —", "— Select —")}</option>${(d[5] || []).map((o) => `<option value="${esc(o[0])}"${v === o[0] ? " selected" : ""}>${esc(T(o[1], o[2]))}</option>`).join("")}</select>`;
     else if (type === "date") ctl = `<input id="${id}" data-bf="${k}" type="date" min="${todayIso()}" value="${esc(v)}">`;
     else ctl = `<input id="${id}" data-bf="${k}" type="${type === "tel" ? "tel" : type === "email" ? "email" : type === "url" ? "url" : "text"}"${type === "tel" ? ' inputmode="tel"' : ""}${type === "url" ? ' inputmode="url" autocapitalize="off"' : ""} maxlength="${MAX[k] || 200}" placeholder="${ph}" value="${esc(v)}" autocomplete="${k === "name" ? "name" : k === "phone" ? "tel" : k === "email" ? "email" : "off"}">`;
@@ -319,7 +319,7 @@
   function xfHtml(f) {
     const v = st.o.extra[f.id] || "", id = "xf-" + f.id, lab = `<label for="${id}">${esc(T(f.bn, f.en))}${f.required ? ` <i class="req" aria-hidden="true">*</i>` : ""}</label>`;
     let ctl;
-    if (f.type === "textarea") ctl = `<textarea id="${id}" data-xf="${esc(f.id)}" rows="3" maxlength="1200">${esc(v)}</textarea>`;
+    if (f.type === "textarea") ctl = `<textarea id="${id}" data-xf="${esc(f.id)}" rows="2" maxlength="1200">${esc(v)}</textarea>`;
     else if (f.type === "select") ctl = `<select id="${id}" data-xf="${esc(f.id)}"><option value="">${T("— বেছে নিন —", "— Select —")}</option>${(f.options || []).map((o) => `<option value="${esc(o.en)}"${v === o.en ? " selected" : ""}>${esc(T(o.bn, o.en))}</option>`).join("")}</select>`;
     else ctl = `<input id="${id}" data-xf="${esc(f.id)}" type="${f.type === "date" ? "date" : f.type === "number" ? "text" : f.type === "url" ? "url" : "text"}"${f.type === "number" ? ' inputmode="decimal"' : ""}${f.type === "url" ? ' inputmode="url" autocapitalize="off"' : ""} maxlength="300" value="${esc(v)}">`;
     return `<div class="ac-fld${f.type === "textarea" ? " ac-span" : ""}">${lab}${ctl}<span class="ac-err" data-err="xf-${esc(f.id)}" role="alert"></span></div>`;
@@ -552,6 +552,8 @@
       <p class="ac-acts" style="justify-content:center"><button type="button" class="btn btn-orange" data-act="login">${T("লগইন / সাইন আপ", "Log in / Sign up")}</button><a class="btn btn-outline" href="#services" data-act="home">${T("সব সেবা দেখুন", "See all services")}</a></p></div>`;
     if (!st.gateShown) { st.gateShown = true; setTimeout(() => { if (!A().isIn()) A().open("login"); }, 350); }
   }
+  /* text boxes start small and grow as the buyer types (a short pitch is enough — the team follows up on WhatsApp/email) */
+  function grow(t) { (t ? [t] : $$(".pr-form textarea")).forEach((x) => { x.style.height = "auto"; x.style.height = Math.min(x.scrollHeight + 2, 260) + "px"; }); }
   function render(keepScroll) {
     const inn = A().isIn(), r = route();
     const needLogin = !inn && (r.v === "orders" || r.v === "order");   // only ordering and "My orders" need an account; viewing is open to everyone
@@ -572,7 +574,7 @@
       if (st.done) root.innerHTML = doneHtml();
       else {
         if (!st.o || st.o.key !== s.key) st.o = newOrder(s);
-        root.innerHTML = orderHtml(s);
+        root.innerHTML = orderHtml(s); grow();
         if (changed && s.slot_group) loadSlots().then(() => { refreshCal(); heroCard(); });   // always show the freshest free dates
       }
     } else {
@@ -623,6 +625,7 @@
   });
   document.addEventListener("input", (e) => {
     const t = e.target; if (!root.contains(t) || !st.o && !t.id.startsWith("pay-")) return;
+    if (t.tagName === "TEXTAREA") grow(t);
     if (t.dataset.bf && st.o) { st.o.vals[t.dataset.bf] = t.value; const er = $(`[data-err="${t.dataset.bf}"]`); if (er) er.textContent = ""; }
     else if (t.dataset.xf && st.o) { st.o.extra[t.dataset.xf] = t.value; const er = $(`[data-err="xf-${t.dataset.xf}"]`); if (er) er.textContent = ""; }
     else if (t.id === "pr-qty") { const n = Number(en(t.value).replace(/\D/g, "")); if (n) { clearTimeout(qT); qT = setTimeout(() => setQty(n), 400); } }

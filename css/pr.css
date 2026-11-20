@@ -434,3 +434,7 @@ html[data-theme="dark"] .pr-stat-ic { background: rgba(255,117,34,.16); }
   .pr-form fieldset { margin-bottom: 12px; }
   .pr-back { margin-bottom: 6px; }
 }
+
+/* order form text boxes: small to start, they grow while typing */
+.pr-form textarea { min-height: 0; resize: none; overflow: hidden; line-height: 1.5; }
+.pr-form .ac-fld textarea { padding-block: 9px; }
