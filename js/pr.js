@@ -598,7 +598,7 @@
     if (d.dayadd) { st.o.dates[d.dayadd] = (st.o.dates[d.dayadd] || 0) + 1; refreshCal(); return; }
     if (d.calnav) { const a = (st.o.cal || "").split("-").map(Number); const dt = new Date(Date.UTC(a[0], a[1] - 1 + Number(d.calnav), 1)); st.o.cal = dt.getUTCFullYear() + "-" + pad2(dt.getUTCMonth() + 1); refreshCal(); return; }
     if (d.order) { const key = d.order; A().isIn() ? go("#order/" + encodeURIComponent(key)) : A().requireLogin("অর্ডার করতে লগইন করুন", "Log in to place an order").then(() => go("#order/" + encodeURIComponent(key))); return; }
-    if (d.cat) { st.cat = d.cat; const c = $("#pr-chips"), g = $("#pr-grid"), rb = $("#pr-revall"); if (c) c.innerHTML = chipsHtml(); if (g) g.innerHTML = gridHtml(); if (rb) rb.innerHTML = revAllBtn(); return; }
+    if (d.cat) { st.cat = d.cat; const c = $("#pr-chips"), g = $("#pr-grid"), rb = $("#pr-revall"); if (c) { c.innerHTML = chipsHtml(); const on = c.querySelector("[aria-selected=true]"); if (on && c.scrollWidth > c.clientWidth) c.scrollLeft = on.offsetLeft - (c.clientWidth - on.offsetWidth) / 2; } /* keep the tapped chip in view (re-drawing the row used to throw it back to the start) */ if (g) g.innerHTML = gridHtml(); if (rb) rb.innerHTML = revAllBtn(); return; }
     if (d.pm) { st.pay.method = d.pm; $$(".pr-pay").forEach((x) => (x.innerHTML = payHtml(Number(x.dataset.amt)))); return; }
     if (d.copy) { try { navigator.clipboard.writeText(d.copy).then(() => toast(T("কপি হয়েছে ✓", "Copied ✓"), "ok"), () => toast(d.copy, "")); } catch (x) { toast(d.copy, ""); } return; }
     if (d.qty) { setQty((st.o.qty || 1) + Number(d.qty)); return; }

@@ -438,3 +438,12 @@ html[data-theme="dark"] .pr-stat-ic { background: rgba(255,117,34,.16); }
 /* order form text boxes: roomy to start, they grow while typing */
 .pr-form textarea { min-height: 0; resize: none; overflow: hidden; line-height: 1.5; }
 .pr-form .ac-fld textarea { padding-block: 9px; }
+
+/* phone: the category chips must scroll sideways by themselves (the flex bar around them used to stretch instead) */
+@media (max-width: 700px) {
+  .pr-bar { display: block; margin-bottom: 14px; }
+  .pr-bar .pr-chips { min-width: 0; max-width: none; }
+  .pr-chips { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; touch-action: pan-x pan-y; }
+  .pr-chip { white-space: nowrap; }
+  #pr-revall:not(:empty) { display: block; margin-top: 8px; }
+}
