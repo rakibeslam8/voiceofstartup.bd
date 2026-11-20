@@ -131,7 +131,7 @@
       ${chips.length ? `<div class="pr-hr-chips">${chips.map((c) => `<span>${esc(c)}</span>`).join("")}</div>` : ""}</div>`;
   }
 
-  /* price reveal: the price stays hidden until the visitor asks — then it counts up from zero */
+  /* prices are always shown on the service cards (the old tap-to-reveal "See price" step was removed on request) */
   const reduced = () => { try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } };
   function revealHtml(s, anim) {
     const sp = anim ? Array.from({ length: 12 }, (_, i) => `<i class="pr-sp" style="--a:${i * 30}deg;--d:${34 + (i % 3) * 16}px;--t:${(i % 4) * 40}ms" aria-hidden="true"></i>`).join("") : "";
@@ -140,7 +140,7 @@
     return `<div class="pr-rv${anim ? " anim" : ""}">${sp}${pr}</div>
       <button type="button" class="btn ${s.price != null ? "btn-orange" : "btn-outline"} pr-order-b" data-order="${esc(s.key)}">${s.price != null ? T("অর্ডার করুন →", "Order now →") : T("কোটেশন চান →", "Get a quote →")}</button>`;
   }
-  const pboxHtml = (s) => st.rev[s.key] ? revealHtml(s, false) : `<button type="button" class="pr-see" data-see="${esc(s.key)}"><span class="pr-see-ic" aria-hidden="true">💰</span><span>${T("দাম দেখুন", "See price")}</span></button>`;
+  const pboxHtml = (s) => revealHtml(s, false);   // prices are always visible (no tap-to-reveal any more)
   function countUp(el, to, ms) {
     const t0 = performance.now(), ease = (x) => 1 - Math.pow(1 - x, 3);
     el.textContent = money(0);
@@ -179,9 +179,9 @@
     const free = campFor(s), note = T(s.notice_bn, s.notice_en);
     return `<article class="pr-card${s.popular ? " pop" : ""}"><div class="pr-card-top"><span class="pr-ic" aria-hidden="true">${esc(s.icon || "📣")}</span><span class="pr-badges">${s.popular ? `<span class="pr-badge">${T("জনপ্রিয়", "Popular")}</span>` : ""}${free ? `<span class="pr-badge free">${T("🎁 ফ্রি ক্যাম্পেইন", "🎁 Free campaign")}</span>` : ""}${s.slot_group ? `<span class="pr-badge cal">${T("📅 তারিখ বেছে নিন", "📅 Pick a date")}</span>` : ""}</span></div>
       <h3>${esc(T(s.name_bn, s.name_en))}</h3><p>${esc(T(s.desc_bn, s.desc_en))}</p>${note ? `<p class="pr-cnote">ℹ️ ${esc(note)}</p>` : ""}
-      <div class="pr-pbox${st.rev[s.key] ? " on" : ""}" data-pbox="${esc(s.key)}">${pboxHtml(s)}</div></article>`;
+      <div class="pr-pbox on" data-pbox="${esc(s.key)}">${pboxHtml(s)}</div></article>`;
   }
-  const revAllBtn = () => svcs().some((s) => !st.rev[s.key]) ? `<button type="button" class="pr-revall" data-act="rev-all">💰 ${T("সব দাম দেখুন", "Show all prices")}</button>` : "";
+  const revAllBtn = () => "";
   function gridHtml() {
     const list = svcs().filter((s) => st.cat === "all" || s.category === st.cat);
     return list.length ? list.map(cardHtml).join("") : `<p class="muted">${T("এই ক্যাটাগরিতে এখন কিছু নেই।", "Nothing in this category right now.")}</p>`;
@@ -191,7 +191,7 @@
     return F.CATS.filter((c) => c[0] === "all" || have.has(c[0])).map((c) => `<button type="button" class="pr-chip" role="tab" aria-selected="${st.cat === c[0]}" data-cat="${c[0]}">${esc(T(c[1], c[2]))}</button>`).join("");
   }
   const STEPS = [
-    ["১", "1", "সেবা বেছে নিন", "Pick a service", "আর্টিকেল, পোস্ট, রিলস বা প্যাকেজ — “দাম দেখুন” চাপলেই দাম, তারপর ক্যালেন্ডার থেকে প্রকাশের তারিখ।", "Article, post, reel or a package — tap “See price”, then pick your publish date on the calendar."],
+    ["১", "1", "সেবা বেছে নিন", "Pick a service", "আর্টিকেল, পোস্ট, রিলস বা প্যাকেজ — কার্ডেই দাম দেখুন, তারপর ক্যালেন্ডার থেকে প্রকাশের তারিখ।", "Article, post, reel or a package — see the price right on the card, then pick your publish date on the calendar."],
     ["২", "2", "ব্রিফ পাঠান", "Send your brief", "আপনার ব্র্যান্ড, লক্ষ্য ও প্রয়োজনীয় তথ্য ফর্মে লিখুন।", "Tell us about your brand, goal and what to include."],
     ["৩", "3", "বিকাশে পেমেন্ট", "Pay with bKash", "Send Money করে TrxID দিন। কাস্টম সেবায় আগে কোটেশন পাবেন।", "Send Money and enter the TrxID. Custom services get a quote first."],
     ["৪", "4", "আমরা প্রকাশ করি", "We publish", "কাজ শেষ হলে লিংক “আমার অর্ডার”-এ পাবেন। সব কনটেন্টে “Sponsored” লেবেল থাকে।", "Your link appears in “My orders”. Everything is labelled “Sponsored”."],
