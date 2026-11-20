@@ -93,7 +93,8 @@
     const el = $("#pr-cta"); if (!el) return;
     const n = (st.orders || []).length;
     el.innerHTML = `<a class="btn btn-orange" href="#services">${T("সেবা দেখুন", "Browse services")}</a>` +
-      (A().isIn() ? `<a class="btn btn-outline" href="#orders">${T("আমার অর্ডার", "My orders")}${n ? ` <span class="ac-count">${nd(n)}</span>` : ""}</a>` : `<button type="button" class="btn btn-outline" data-act="login">${T("লগইন / সাইন আপ", "Log in / Sign up")}</button>`);
+      (A().isIn() ? `<a class="btn btn-outline" href="#orders">${T("আমার অর্ডার", "My orders")}${n ? ` <span class="ac-count">${nd(n)}</span>` : ""}</a>` : `<button type="button" class="btn btn-outline" data-act="login">${T("লগইন / সাইন আপ", "Log in / Sign up")}</button>`) +
+      (A().isIn() ? `<a class="btn btn-outline pr-kit" href="/media-kit-${U().lang === "bn" ? "bn" : "en"}.pdf" target="_blank" rel="noopener" download>📄 ${T("মিডিয়া কিট (PDF)", "Media kit (PDF)")}</a>` : "");
   }
 
   /* hero quick facts (shown above the buttons, so they are on the first phone screen): the lowest listed price and the earliest free date */
