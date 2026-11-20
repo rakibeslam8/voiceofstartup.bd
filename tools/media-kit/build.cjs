@@ -29,7 +29,18 @@ const DATA = {
       { en: "IDLC's SME Utsav loan: up to Tk 35 lakh without collateral", bn: "আইডিএলসির এসএমই উৎসব ঋণ: জামানত ছাড়া ৩৫ লাখ টাকা পাওয়া যাবে", reads: 778 },
       { en: "Started with Tk 10,000, now earns Tk 20 lakh a month", bn: "১০ হাজার টাকায় শুরু, এখন মাসে আয় ২০ লাখ টাকা", reads: 746 },
     ] },
-  priceMin: 2000, priceMax: 7000,
+  prices: [3000, 4000, 2000, 5000, null, null],   // per service, same order as the service rows (owner, 20 Nov 2026); null = custom
+  founderFreeUntil: "2026-12-31",                // founder story is free until this date (introductory offer) — rebuild the kit after it passes
+  followersCombined: 20000,                      // approx., all social channels combined — figure given by the owner (not from a screenshot)
+  whatsapp: { show: "+880 1404-792132", wa: "8801404792132" },
+  // Audience of the best post (11 Nov, 137,068 views): Meta post-details screenshots. NOT page-wide.
+  aud: { post: "2026-11-11", views: 137068, viewers: 82000, nonFollowers: 96, followers: 4,
+    age: [["35–44", 43.8], ["25–34", 30.3], ["45–54", 13.6], ["other", 12.3]],
+    gender: { men: 76, women: 8, unknown: 16 },
+    country: [["bd", 92.9], ["in", 1.8], ["other", 4.2], ["unknown", 1.1]],
+    source: [["suggested", 92.5], ["followerfeed", 3.8], ["unavailable", 1.7], ["search", 0.1]] },
+  // companies profiled in the VOSB directory (curated listings — NOT clients). Logos cropped from the directory screenshots.
+  dir: [["pathao", "Pathao"], ["grameenphone", "Grameenphone"], ["bkash", "bKash"], ["walton", "Walton Group"], ["shikho", "Shikho"], ["nagad", "Nagad"], ["pran-rfl", "PRAN-RFL Group"], ["akij", "Akij Group"], ["aci", "ACI Limited"], ["chaldal", "Chaldal"]],
   email: "partnerships@voiceofstartup.bd",
 };
 /* ================================================================================= */
@@ -81,6 +92,17 @@ const L = {
     mem: (m, n, sh) => `${n} registered members — ${m.founder} founders, ${m.reader} readers, ${m.investor} investors, ${m.other} other · ${sh} article shares`,
     price_note: (a, b) => `Our packages range from ৳${a} to ৳${b}, depending on the service and format. The exact price is confirmed for each brief.`,
     cap_web: "Website: last 30 days, real readers only (bots, crawlers and our own team excluded).",
+    combined: (n) => ` About ${n} followers combined across all our channels.`,
+    pct: (x) => new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 }).format(x) + "%",
+    aud_h: "Who sees our content", aud_sub: (d, v) => `Audience of our best-performing post (${d} — 137,068 views, ${v} viewers), as reported by Meta. Other posts may differ.`,
+    age_h: "Age", gen_h: "Gender", cty_h: "Country", src_h: "Where the views came from",
+    men: "Men", women: "Women", unknown: "Unknown", other: "Other", bd: "Bangladesh", in: "India",
+    suggested: "Suggested", followerfeed: "Follower feed", unavailable: "Unavailable", search: "Search",
+    disc: (nf) => `${nf}% of this post’s viewers were not yet following the page — it reached new people.`,
+    dir_h: "Companies in our directory", dir_sub: "VOSB profiles Bangladesh’s leading and fast-growing companies. These are editorial listings in our company directory — not clients or partners, and inclusion is not an endorsement. Logos belong to their respective owners.",
+    free_until: "Free until 31 December 2026", custom_disc: "Depends on the discussion", custom_q: "Custom quote",
+    units: ["per article", "per post", "per feature", "per event"],
+    price_note2: "All prices are in Bangladeshi taka (৳), per item. The exact scope is confirmed from your brief.",
     cov_h: "What we cover", cov: ["Latest news", "Funding & competitions", "Founder stories", "Business & policy", "Opportunities for new entrepreneurs", "Startup & company directory"],
     why_h: "Why partner with us",
     why: (f) => [["Proven reach", `${f} Facebook views in 28 days, up 11x on the previous 28 days.`], ["Bilingual", "Sponsored articles are published in both Bangla and English."], ["Trusted sources", "Information is gathered from official government sources, and paid content is clearly labelled."]],
@@ -127,6 +149,17 @@ const L = {
     mem: (m, n, sh) => { const b = new Intl.NumberFormat("bn-BD").format; return `${b(n)} জন নিবন্ধিত সদস্য — ${b(m.founder)} জন ফাউন্ডার, ${b(m.reader)} জন পাঠক, ${b(m.investor)} জন বিনিয়োগকারী, ${b(m.other)} জন অন্যান্য · ${b(sh)}টি আর্টিকেল শেয়ার`; },
     price_note: (a, b) => `আমাদের প্যাকেজ ৳${a} থেকে ৳${b} টাকার মধ্যে — সেবা ও ফরম্যাট অনুযায়ী। প্রতিটি ব্রিফ দেখে সঠিক দাম নিশ্চিত করা হয়।`,
     cap_web: "ওয়েবসাইট: গত ৩০ দিন, শুধু প্রকৃত পাঠক (বট, ক্রলার ও আমাদের নিজস্ব টিমের ভিজিট বাদ)।",
+    combined: (n) => ` সব চ্যানেল মিলিয়ে প্রায় ${n} ফলোয়ার।`,
+    pct: (x) => new Intl.NumberFormat("bn-BD", { maximumFractionDigits: 1 }).format(x) + "%",
+    aud_h: "আমাদের কনটেন্ট কারা দেখেন", aud_sub: (d, v) => `আমাদের সবচেয়ে ভালো পারফর্ম করা পোস্টের (${d} — ১,৩৭,০৬৮ ভিউ, ${v} দর্শক) অডিয়েন্স, মেটা-র দেওয়া তথ্য অনুযায়ী। অন্য পোস্টে ভিন্ন হতে পারে।`,
+    age_h: "বয়স", gen_h: "লিঙ্গ", cty_h: "দেশ", src_h: "ভিউ কোথা থেকে এসেছে",
+    men: "পুরুষ", women: "নারী", unknown: "অজানা", other: "অন্যান্য", bd: "বাংলাদেশ", in: "ভারত",
+    suggested: "সাজেস্টেড", followerfeed: "ফলোয়ার ফিড", unavailable: "অজানা", search: "সার্চ",
+    disc: (nf) => `এই পোস্টের ${new Intl.NumberFormat("bn-BD").format(nf)}% দর্শক তখনো পেজ ফলো করতেন না — অর্থাৎ নতুন মানুষের কাছে পৌঁছেছে।`,
+    dir_h: "আমাদের ডিরেক্টরির কোম্পানি", dir_sub: "VOSB বাংলাদেশের শীর্ষস্থানীয় ও দ্রুত বর্ধনশীল কোম্পানির প্রোফাইল প্রকাশ করে। এগুলো আমাদের কোম্পানি ডিরেক্টরির সম্পাদকীয় তালিকা — ক্লায়েন্ট বা পার্টনার নয়, এবং তালিকাভুক্তি কোনো সমর্থন নয়। লোগো সংশ্লিষ্ট মালিকদের।",
+    free_until: "৩১ ডিসেম্বর ২০২৬ পর্যন্ত ফ্রি", custom_disc: "আলোচনা সাপেক্ষে", custom_q: "কাস্টম কোটেশন",
+    units: ["প্রতি আর্টিকেল", "প্রতি পোস্ট", "প্রতি ফিচার", "প্রতি ইভেন্ট"],
+    price_note2: "সব দাম বাংলাদেশি টাকায় (৳), প্রতিটির জন্য। আপনার ব্রিফ অনুযায়ী কাজের পরিধি নিশ্চিত করা হয়।",
     cov_h: "আমরা যা কভার করি", cov: ["সর্বশেষ সংবাদ", "ফান্ডিং ও প্রতিযোগিতা", "ফাউন্ডার স্টোরি", "ব্যবসা ও নীতিমালা", "নতুন উদ্যোক্তাদের জন্য সুযোগ", "স্টার্টআপ ও কোম্পানি ডিরেক্টরি"],
     why_h: "কেন আমাদের সাথে",
     why: (f) => [["প্রমাণিত রিচ", `গত ২৮ দিনে ফেসবুকে ${f} ভিউ — আগের ২৮ দিনের চেয়ে ১১ গুণ বেশি।`], ["দুই ভাষায়", "স্পনসর্ড আর্টিকেল বাংলা ও ইংরেজি দুই ভাষাতেই প্রকাশ হয়।"], ["নির্ভরযোগ্য সূত্র", "তথ্য সংগ্রহ করা হয় সরকারি সূত্র থেকে, আর পেইড কনটেন্টে স্পষ্ট লেবেল থাকে।"]],
@@ -137,13 +170,25 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 
 function html(lang) {
   const t = L[lang], asof = t.date(DATA.asOf, { day: "numeric", month: "long", year: "numeric" });
-  const foot = (n) => `<div class="foot"><span>Voice of Startup Bangladesh · ${esc(t.title)}</span><span>${t.asof}: ${asof}</span><span>${t.page} ${t.n(n)}/${t.n(4)}</span></div>`;
+  const foot = (n) => `<div class="foot"><span>Voice of Startup Bangladesh · ${esc(t.title)}</span><span>${t.asof}: ${asof}</span><span>${t.page} ${t.n(n)}/${t.n(5)}</span></div>`;
   const stat = (v, k, g, sub) => `<div class="stat"><b>${v}</b><span>${k}</span>${g ? `<i>${g}${sub ? " " + esc(sub) : ""}</i>` : ""}</div>`;
   const f = DATA.fb28, s = DATA.site;
   const bars = DATA.posts.map(([d, v]) => `<div class="bar"><span class="bd">${t.date(d)}</span><div class="bt"><div class="bf${v >= 70000 ? " hi" : ""}" style="width:${Math.max(1.5, (v / max) * 100)}%"></div></div><span class="bv">${t.n(v)}</span></div>`).join("");
   const ex = DATA.examples.map((e) => `<figure class="ex"><img src="img/${e.img}" alt=""><figcaption><div class="et">${esc(lang === "bn" ? e.bn : e.en)}</div><div class="ed">${t.date(e.date, { day: "numeric", month: "long", year: "numeric" })}</div>
     <div class="em"><span><b>${t.n(e.views)}</b>${t.pv}</span><span><b>${t.n(e.react)}</b>${t.pr}</span><span><b>${t.n(e.com)}</b>${t.pc}</span><span><b>${t.n(e.sh)}</b>${t.ps}</span></div></figcaption></figure>`).join("");
-  const rows = t.svc.map((r) => `<tr><td class="sn">${esc(r[0])}</td><td>${esc(r[1])}</td><td class="pq">${esc(t.quote)}</td><td>${esc(r[2])}</td></tr>`).join("");
+  const priceCell = (i) => { const a = DATA.prices[i]; if (a == null) return `<b>${esc(i === 4 ? t.custom_disc : t.custom_q)}</b>`; return `<b>৳${t.n(a)}</b><small>${esc(t.units[i])}</small>${i === 2 ? `<em>${esc(t.free_until)}</em>` : ""}`; };
+  const rows = t.svc.map((r, i) => `<tr><td class="sn">${esc(r[0])}</td><td>${esc(r[1])}</td><td class="pq">${priceCell(i)}</td><td>${esc(r[2])}</td></tr>`).join("");
+  const A = DATA.aud, hb = (label, v) => `<div class="hb"><span>${esc(label)}</span><div class="bt"><div class="bf hi" style="width:${v}%"></div></div><b>${t.pct(v)}</b></div>`;
+  const bnd = (x) => (lang === "bn" ? String(x).replace(/[0-9]/g, (d) => "০১২৩৪৫৬৭৮৯"[d]) : x);
+  const lab = (k) => bnd(L[lang][k] !== undefined ? L[lang][k] : k);
+  const audHtml = `<div class="cards2">
+    <div class="card"><h4>${esc(t.age_h)}</h4>${A.age.map(([k, v]) => hb(lab(k), v)).join("")}</div>
+    <div class="card"><h4>${esc(t.gen_h)}</h4><div class="stk"><i style="width:${A.gender.men}%;background:#0b2f66"></i><i style="width:${A.gender.women}%;background:#ff7522"></i><i style="width:${A.gender.unknown}%;background:#9ec9f2"></i></div>
+      <div class="leg"><span><u style="background:#0b2f66"></u>${esc(t.men)} <b>${t.pct(A.gender.men)}</b></span><span><u style="background:#ff7522"></u>${esc(t.women)} <b>${t.pct(A.gender.women)}</b></span><span><u style="background:#9ec9f2"></u>${esc(t.unknown)} <b>${t.pct(A.gender.unknown)}</b></span></div></div>
+    <div class="card"><h4>${esc(t.cty_h)}</h4>${A.country.map(([k, v]) => hb(lab(k), v)).join("")}</div>
+    <div class="card"><h4>${esc(t.src_h)}</h4>${A.source.map(([k, v]) => hb(lab(k), v)).join("")}</div></div>
+    <div class="ins">${esc(t.disc(A.nonFollowers))}</div>`;
+  const dirHtml = `<div class="logos">${DATA.dir.map(([k, n]) => `<div class="lg"><img src="logos/${k}.png" alt=""><span>${esc(n)}</span></div>`).join("")}</div>`;
   const how = t.how.map((h, i) => `<li><b>${t.n(i + 1)}</b><span>${esc(h)}</span></li>`).join("");
   const notes = t.notes.map((n) => `<li>${esc(n.replace(/\{ASOF\}/g, asof))}</li>`).join("");
   return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><title>Voice of Startup Bangladesh — ${esc(t.title)}</title><style>
@@ -203,14 +248,20 @@ h3{font-size:11.5pt;font-weight:700;margin:0 0 1.5mm}
 /* page 4 */
 table{width:100%;border-collapse:collapse;font-size:10pt;margin-top:2mm}
 th{background:var(--k);color:#fff;text-align:left;font-weight:600;padding:2mm 2.5mm;font-size:9pt}
-td{border-bottom:1px solid var(--l);padding:2.2mm 2.5mm;vertical-align:top}
-td.sn{font-weight:700;width:34mm}td.pq{width:30mm;color:var(--od);font-weight:600}
+td{border-bottom:1px solid var(--l);padding:1.7mm 2.5mm;vertical-align:top}
+td.sn{font-weight:700;width:34mm}td.pq{width:36mm;color:var(--od);font-weight:600}
 td:last-child{width:28mm}
 .how{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin-top:2mm}
 .how li{background:var(--os);border-radius:2.5mm;padding:3mm}.how b{display:inline-flex;width:6mm;height:6mm;border-radius:50%;background:var(--o);color:#fff;align-items:center;justify-content:center;font-size:9pt;margin-bottom:1.5mm}.how span{display:block;font-size:9pt;line-height:1.4}
 .cov{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm 6mm;margin-top:2mm;list-style:none}.cov li{font-size:10.5pt;padding-left:5mm;position:relative}.cov li:before{content:"";position:absolute;left:0;top:2.6mm;width:2.2mm;height:2.2mm;border-radius:50%;background:var(--o)}
-.why{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:2mm}.why div{border:1px solid var(--l);border-top:3px solid var(--o);border-radius:2.5mm;padding:3.5mm}.why b{display:block;font-size:11pt;margin-bottom:1mm}.why span{font-size:9.5pt;color:var(--m);line-height:1.45}
-.contact{margin-top:5mm;background:var(--k);color:#fff;border-radius:3mm;padding:5mm 6mm;display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:2mm}.why div{border:1px solid var(--l);border-top:3px solid var(--o);border-radius:2.5mm;padding:2.8mm 3.5mm}.why b{display:block;font-size:11pt;margin-bottom:1mm}.why span{font-size:9.5pt;color:var(--m);line-height:1.45}
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:1mm}.card{border:1px solid var(--l);border-radius:3mm;padding:4mm 4.5mm}.card h4{font-size:10.5pt;margin-bottom:2mm}
+.hb{display:grid;grid-template-columns:27mm 1fr 14mm;gap:2mm;align-items:center;font-size:9.5pt;margin:1.6mm 0}.hb b{text-align:right}.hb .bt{height:3.6mm}
+.stk{display:flex;height:5.5mm;border-radius:1.5mm;overflow:hidden;margin:1mm 0 2mm}.stk i{display:block;height:100%}.leg{font-size:8.5pt;color:var(--m);display:flex;gap:4mm;flex-wrap:wrap}.leg b{color:var(--t)}.leg u{display:inline-block;width:2.4mm;height:2.4mm;border-radius:50%;margin-right:1mm;text-decoration:none}
+.ins{margin-top:4mm;background:var(--os);border-left:3px solid var(--o);border-radius:0 2mm 2mm 0;padding:3mm 4mm;font-size:10pt;font-weight:600}
+.logos{display:grid;grid-template-columns:repeat(5,1fr);gap:4mm 3mm;margin-top:2.5mm}.lg{text-align:center;font-size:8.5pt;line-height:1.25}.lg img{width:21mm;height:21mm;border-radius:14%;border:1px solid var(--l);display:block;margin:0 auto 1.5mm;object-fit:cover}
+td.pq b{display:block;font-size:11pt;color:var(--t)}td.pq small{display:block;font-size:8.5pt;color:var(--m);font-weight:400}td.pq em{display:block;font-style:normal;font-size:8.5pt;color:var(--g);font-weight:700;margin-top:.5mm}
+.contact{margin-top:4mm;background:var(--k);color:#fff;border-radius:3mm;padding:4mm 6mm;display:grid;grid-template-columns:1fr 1fr;gap:4mm}
 .contact h3{color:#fff}.contact a{color:#ffb98c;text-decoration:none}.contact p{font-size:9.5pt;margin-top:1mm}
 </style></head><body>
 
@@ -228,7 +279,7 @@ td:last-child{width:28mm}
     ${stat(t.n(s.newsletter), t.k_news, "", "")}
   </div>
   <p class="cap">${esc(t.fb)}, ${esc(t.last28)} (${esc(t.vsprev)}). ${esc(t.cap_web)}</p>
-  <div class="about"><h3>${esc(t.about_h)}</h3><p>${esc(t.about)}</p><p class="also">${esc(t.also)}</p></div>
+  <div class="about"><h3>${esc(t.about_h)}</h3><p>${esc(t.about)}</p><p class="also">${esc(t.also)}${esc(t.combined(t.n(DATA.followersCombined)))}</p></div>
   <div class="about" style="margin-top:8mm"><h3>${esc(t.cov_h)}</h3><ul class="cov">${t.cov.map((c) => `<li>${esc(c)}</li>`).join("")}</ul></div>
   ${foot(1)}</section>
 
@@ -247,19 +298,25 @@ td:last-child{width:28mm}
   ${foot(2)}</section>
 
 <section class="page"><div class="bar-top"></div>
-  <h2>${esc(t.p3_h)}</h2><p class="sub">${esc(t.p3_sub)}</p>
-  <div class="exg">${ex}</div>
+  <h2>${esc(t.aud_h)}</h2><p class="sub">${esc(t.aud_sub(t.date(A.post, { day: "numeric", month: "long", year: "numeric" }), t.compact(A.viewers)))}</p>
+  ${audHtml}
+  <div class="sec" style="margin-top:7mm"><h3>${esc(t.dir_h)}</h3><p class="small" style="margin:0 0 1mm">${esc(t.dir_sub)}</p>${dirHtml}</div>
   ${foot(3)}</section>
 
 <section class="page"><div class="bar-top"></div>
+  <h2>${esc(t.p3_h)}</h2><p class="sub">${esc(t.p3_sub)}</p>
+  <div class="exg">${ex}</div>
+  ${foot(4)}</section>
+
+<section class="page"><div class="bar-top"></div>
   <h2>${esc(t.p4_h)}</h2><p class="sub">${esc(t.p4_sub)}</p>
-  <div class="pnote">${esc(t.price_note(t.n(DATA.priceMin), t.n(DATA.priceMax)))}</div>
+  <div class="pnote">${esc(t.price_note2)}</div>
   <table><thead><tr><th>${esc(t.th_s)}</th><th>${esc(t.th_d)}</th><th>${esc(t.th_p)}</th><th>${esc(t.th_b)}</th></tr></thead><tbody>${rows}</tbody></table>
   <div class="sec"><h3>${esc(t.how_h)}</h3><ol class="how">${how}</ol></div>
   <div class="sec"><h3>${esc(t.why_h)}</h3><div class="why">${t.why(t.compact(f.views)).map((w) => `<div><b>${esc(w[0])}</b><span>${esc(w[1])}</span></div>`).join("")}</div></div>
-  <div class="contact"><div><h3>${esc(t.c_h)}</h3><p>${esc(t.c_mail)}: <a href="mailto:${DATA.email}">${DATA.email}</a></p><p>www.voiceofstartup.bd</p></div>
+  <div class="contact"><div><h3>${esc(t.c_h)}</h3><p>${esc(t.c_mail)}: <a href="mailto:${DATA.email}">${DATA.email}</a></p><p>WhatsApp: <a href="https://wa.me/${DATA.whatsapp.wa}">${DATA.whatsapp.show}</a></p><p>www.voiceofstartup.bd</p></div>
     <div><h3>${esc(t.c_book)}</h3><p><a href="https://www.voiceofstartup.bd/pr">www.voiceofstartup.bd/pr</a></p><p>facebook.com/voiceofstartupbd</p></div></div>
-  ${foot(4)}</section>
+  ${foot(5)}</section>
 </body></html>`;
 }
 

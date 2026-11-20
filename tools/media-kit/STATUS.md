@@ -18,7 +18,14 @@
 
 **20K visitors — NOT used in the kit.** The PR page hero used to say "20K+ monthly website visitors" (and the owner called the new reach cards "actual data"). Real-reader analytics show 8,286 unique visitors / 14,549 page views in 30 days (dashboard all-time page views 20.7k include bots and the owner), so the kit shows the measured numbers. The PR page now shows 8.2K+ (Admin → Page & stats). Only add a 20K figure if there is a source (e.g. Google Analytics / Search Console screenshot) and label it with that source. The PR page's "30K+ average views per post" and "70K–1.3 lakh strong posts" ARE supported by Facebook data (average of last 9 posts 58,590; median 73,611; 5 of 9 above 70K; best 137,068) and the kit shows the measured values.
 
+**Update 20 Nov (9 AM): now 5 pages** — cover · reach/performance · NEW audience + directory page · example posts · services & prices.
+- Prices (owner): sponsored article ৳3,000, Facebook post ৳4,000, founder story ৳2,000 (FREE until 31 Dec 2026 — rebuild the kit after that date and drop the "free until" line), event/launch coverage ৳5,000, brand collaboration = depends on discussion, other = custom quote. These are in the PDF only — the live PR page/database still has no prices (article/post/event/collab null, founder_story 0). Not yet pushed live.
+- WhatsApp +880 1404-792132 (01404792132) is in the kit contact box only; `site_settings.pr_page.whatsapp` is still empty.
+- "About 20,000 followers combined across all channels" — figure from the owner, not from a screenshot; no per-platform counts. Replace with a measured number when a Facebook follower-count screenshot is available.
+- Audience page = Meta post-details screenshots for the 11 Nov post only (137,068 views, ~82K viewers): 96% non-followers, 76% men / 8% women / 16% unknown, 35–44 43.8%, 25–34 30.3%, 45–54 13.6%, other 12.3%, Bangladesh 92.9%, India 1.8%, other 4.2%, unknown 1.1%, views from Suggested 92.5%. Labelled as that post, not the whole page.
+- Directory logos (Pathao, Grameenphone, bKash, Walton, Shikho, Nagad, PRAN-RFL, Akij, ACI, Chaldal) are cropped from the owner's screenshots into `tools/media-kit/logos/` and labelled "companies in our directory — editorial listings, not clients or partners". They are `curated` directory entries; do NOT call them clients unless they are.
+
 **Open items**
-- Set per-service prices in Admin → Services if you want exact prices in the table; then rebuild.
+- Set the same prices live in Admin → Services (and the WhatsApp number in Page & stats) if the owner wants the PR page to match the kit.
 - Dashboard says 29 users, its breakdown (2·12·12·2) adds to 28 — one user has no profile row.
 - Total Facebook follower count and a WhatsApp number are not in the kit; "New follows" is the 28-day gain, not total followers.
