@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Fri, 20 Nov 2026 08:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 20 Nov 2026 15:30:00 GMT</lastBuildDate>
+    <item>
+      <title>মংলা ইপিজেডে ১০০ কোটি টাকার বেশি বিনিয়োগের নতুন কারখানায় ৪৫০ জনের কর্মসংস্থান হবে।</title>
+      <link>https://www.voiceofstartup.bd/read/new-factory-in-mongla-epz-with-an-investment-of-more-than-tk-100-crore</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/new-factory-in-mongla-epz-with-an-investment-of-more-than-tk-100-crore</guid>
+      <pubDate>Fri, 20 Nov 2026 15:30:00 GMT</pubDate>
+      <category>মার্কেট ইনসাইট</category>
+      <description>ব্লু ম্যানগ্রোভ প্যাকেজিং মংলা ইপিজেডে 8.7 মিলিয়ন ডলার বিনিয়োগে একটি পোশাক উত্পাদন কারখানা স্থাপন করবে। কর্মসংস্থান হবে 450 জনের।</description>
+    </item>
     <item>
       <title>সরকারের মোট ঋণ ২৩.৩৮ লাখ কোটি টাকা: অর্থমন্ত্রী</title>
       <link>https://www.voiceofstartup.bd/read/government-s-total-debt-is-tk-23-38-lakh-crore-finance-minister</link>
@@ -238,14 +246,6 @@
       <pubDate>Fri, 13 Nov 2026 03:41:00 GMT</pubDate>
       <category>ফাউন্ডার স্টোরি</category>
       <description>একসময় মোবাইল ফোনের ফ্ল্যাক্সিলোডের দোকান চালিয়েছেন; পাইকারি বাজার থেকে পোশাক ও বিছানা চাদর বা বেডশিট কিনে অনলাইনে বিক্রি করেছেন উদ্যোক্তা নিতাই সরকার। একপর্যায়ে নিজেই বেডশিটসহ হোমডেকরের পণ্য বানানো শুরু করেন।</description>
-    </item>
-    <item>
-      <title>ইলন মাস্কের সম্পদের পরিমাণ বাংলাদেশের বাজেটের কত গুণ জানেন</title>
-      <link>https://www.voiceofstartup.bd/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/do-you-know-how-many-times-the-wealth-of-elon-musk-is-the-budget-of-ba</guid>
-      <pubDate>Fri, 13 Nov 2026 03:39:00 GMT</pubDate>
-      <category>মার্কেট ইনসাইট</category>
-      <description>বাংলাদেশের ২০২৬-২৭ অর্থবছরের জন্য প্রস্তাবিত জাতীয় বাজেটের আকার ঘোষণা করা হয়েছে ৯ লাখ ৩৮ হাজার কোটি টাকা। আমাদের মতো একটি উন্নয়নশীল দেশের জন্য এই সংখ্যা বেশ বড়।</description>
     </item>
   </channel>
 </rss>

@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/new-factory-in-mongla-epz-with-an-investment-of-more-than-tk-100-crore</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-20T15:30:00.000Z</news:publication_date>
+      <news:title>মংলা ইপিজেডে ১০০ কোটি টাকার বেশি বিনিয়োগের নতুন কারখানায় ৪৫০ জনের কর্মসংস্থান হবে।</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/new-factory-in-mongla-epz-with-an-investment-of-more-than-tk-100-crore</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-20T15:30:00.000Z</news:publication_date>
+      <news:title>450 people will be employed in the new factory in Mongla EPZ with an investment of over Tk 100 crore</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/government-s-total-debt-is-tk-23-38-lakh-crore-finance-minister</loc>
     <news:news>
       <news:publication>
@@ -306,94 +328,6 @@
       </news:publication>
       <news:publication_date>2026-11-19T03:27:00.000Z</news:publication_date>
       <news:title>Closed factory in Chattogram EPZ gets fresh investment, 2,000 jobs expected</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/ghana-is-interested-in-buying-products-from-bangladesh-there-is-more-p</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-18T16:37:00.000Z</news:publication_date>
-      <news:title>বাংলাদেশ থেকে পণ্য নিতে আগ্রহী ঘানা, ওষুধ–পোশাকসহ ছয় পণ্যে সম্ভাবনা বেশি</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/ghana-is-interested-in-buying-products-from-bangladesh-there-is-more-p</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-18T16:37:00.000Z</news:publication_date>
-      <news:title>Ghana keen to import from Bangladesh, sees big potential in six products including medicine and garments</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/this-time-renata-medicine-of-bangladesh-in-the-netherlands-market</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-18T15:40:00.000Z</news:publication_date>
-      <news:title>এবার নেদারল্যান্ডসের বাজারে বাংলাদেশের রেনাটার ওষুধ</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/this-time-renata-medicine-of-bangladesh-in-the-netherlands-market</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-18T15:40:00.000Z</news:publication_date>
-      <news:title>Bangladesh&#39;s Renata medicines head to the Netherlands market</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/blessings-on-halal-earnings-5-prophetic-principles-for-businessmen</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-18T15:34:00.000Z</news:publication_date>
-      <news:title>হালাল উপার্জনে বরকত: ব্যবসায়ীদের জন্য নবীজির শেখানো ৫ নীতি</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/blessings-on-halal-earnings-5-prophetic-principles-for-businessmen</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-18T15:34:00.000Z</news:publication_date>
-      <news:title>Blessings in halal earnings: 5 principles the Prophet taught for businesspeople</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/struggle-to-fulfill-her-husband-s-dream-khadija-succeeds-in-cultivatin</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-18T15:29:00.000Z</news:publication_date>
-      <news:title>স্বামীর স্বপ্ন পূরণে লড়াই, বিদেশি ফল চাষে সফল খাদিজা</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/struggle-to-fulfill-her-husband-s-dream-khadija-succeeds-in-cultivatin</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-18T15:29:00.000Z</news:publication_date>
-      <news:title>Khadija fights to fulfil her husband&#39;s dream, finds success growing foreign fruits</news:title>
     </news:news>
   </url>
 </urlset>
