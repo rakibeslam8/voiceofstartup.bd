@@ -43,7 +43,7 @@
   const CTXK = "vosb-ctx";
   let ctx = (() => { try { const j = JSON.parse(localStorage.getItem(CTXK) || "null"); return j && user && j.id === user.id ? j : null; } catch (e) { return null; } })();
   function setCtx(d) {
-    ctx = d && user ? { id: user.id, type: d.user_type || "", co: +d.companies > 0, inv: +d.investing > 0 } : null;
+    ctx = d && user ? { id: user.id, type: d.user_type || "", co: +d.companies > 0, inv: +d.investing > 0, pr: +d.pr_orders > 0 } : null;
     try { if (ctx) localStorage.setItem(CTXK, JSON.stringify(ctx)); else localStorage.removeItem(CTXK); } catch (e) {}
     paint();
   }
@@ -53,6 +53,7 @@
     const founder = ctx.type === "founder" || ctx.co, investor = ctx.type === "investor" || ctx.inv;
     if (founder) L.push(["/account#companies", "🏢", "আমার কোম্পানি", "My companies"]);
     if (investor) L.push(["/account#invest", "💼", "আমার বিনিয়োগ", "My investments"]);
+    if (ctx.pr) L.push(["/pr#orders", "📣", "আমার PR অর্ডার", "My PR orders"]);
     if (founder) L.push(["/list-your-company", "➕", "কোম্পানি লিস্ট করুন", "List your company"]);
     if (!founder || investor) L.push(["/companies", "🔎", "কোম্পানি দেখুন", "Browse companies"]);
     return L;
