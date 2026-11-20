@@ -33,3 +33,5 @@
 **Update 20 Nov (later):** /pr is now public (no login to view). Kit contact box says "Book online (free account to order)" (c_book). PDFs rebuilt.
 
 **Update 20 Nov (9:20, owner correction):** the owner confirmed monthly website visitors = **20K**. Restored `site_settings.pr_page.stats.monthly_visitors` = 20000 (PR page shows 20K+) and the kit now shows "20,000+ monthly website visitors" (owner-reported; captions say so). The measured real-reader numbers remain in the DB for reference (8,286 unique / 14,549 page views, 30 days, human only); the kit no longer shows the page-views tile because it would be lower than the visitor figure. If a client asks for proof, attach a Google Analytics / Search Console screenshot.
+
+**Update 20 Nov (9:25):** owner set monthly page views = **35K** → kit shows "35,000+ monthly page views" (cover + performance page), owner-reported like the 20K visitors. Measured human-only numbers (8,286 visitors / 14,549 page views, 30 days) stay in the DB only.
