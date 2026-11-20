@@ -556,6 +556,7 @@
     const inn = A().isIn(), r = route();
     const needLogin = !inn && (r.v === "orders" || r.v === "order");   // only ordering and "My orders" need an account; viewing is open to everyone
     document.body.classList.toggle("pr-gate", needLogin);
+    document.body.classList.toggle("pr-sub", r.v !== "home");   // phone: no big hero above the order form / My orders
     if (needLogin) { st.orders = null; st.o = null; cta(); return gateCard(); }
     cta(); heroCard();
     if (!st.pub) { root.innerHTML = st.err ? `<div class="ac-card ac-center"><div class="ac-big" aria-hidden="true">⚠️</div><p>${esc(st.err)}</p><p><button type="button" class="btn btn-orange" data-act="retry">${T("আবার চেষ্টা করুন", "Try again")}</button></p></div>` : `<div class="ac-skel" aria-hidden="true"></div><div class="ac-skel" aria-hidden="true"></div>`; return; }

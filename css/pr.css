@@ -363,3 +363,74 @@ html[data-theme="dark"] .pr-stat-ic { background: rgba(255,117,34,.16); }
 .pr-logos span { font-size: .78rem; color: #333; line-height: 1.25; overflow-wrap: anywhere; }
 @media (max-width: 960px) { .pr-pfs { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pr-logos { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .pr-pfs { gap: 10px; } .pr-pf-b { padding: 10px; } .pr-pf-b h3 { font-size: .88rem; } .pr-logos { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .pr-logos img { width: 52px; height: 52px; } }
+
+/* ===== phone compact pass (20 Nov): shorter hero, 2×2 numbers, compact service cards, swipe rows for proof ===== */
+@media (max-width: 700px) {
+  .pr-hero { padding: 18px 0 16px; }
+  .pr-hero-grid { gap: 0; }
+  #pr-hero-r { display: none; }                                   /* next free date is already in the quick-fact chips */
+  .pr-facts { margin: 12px 0 0; gap: 8px; }
+  .pr-fact { padding: 7px 11px; border-radius: 12px; box-shadow: none; }
+  .pr-cta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .pr-cta .btn { flex: 1 1 calc(50% - 4px); justify-content: center; padding: 11px 10px; font-size: .92rem; }
+  .pr-cta .pr-kit { flex: 1 1 100%; border: 0; background: transparent; box-shadow: none; padding: 4px 0 0; min-height: 0; font-size: .86rem; text-decoration: underline; text-underline-offset: 3px; color: var(--muted); }
+
+  .pr-sec { margin-top: 26px; }
+  .pr-sec-h { margin-bottom: 12px; }
+  .pr-sec-h h2 { font-size: 1.25rem; }
+  .pr-intro { margin: 0 0 10px; }
+
+  /* numbers: 2 × 2 */
+  .pr-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 0; }
+  .pr-stat { grid-template-columns: 34px minmax(0, 1fr); column-gap: 9px; padding: 10px 10px; border-radius: 14px; }
+  .pr-stat-ic { width: 34px; height: 34px; border-radius: 10px; font-size: 1.05rem; }
+  .pr-stat b { font-size: 1.05rem; line-height: 1.15; }
+  .pr-stat small { font-size: .72rem; line-height: 1.25; }
+  .pr-fine { margin-top: 8px; font-size: .76rem; }
+
+  /* service cards: icon + name on one line, price and button on one line */
+  .pr-grid { gap: 10px; }
+  .pr-card { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; column-gap: 10px; row-gap: 6px; align-items: center; padding: 13px; }
+  .pr-card-top { display: contents; }
+  .pr-ic { grid-area: 1 / 1; width: 38px; height: 38px; border-radius: 11px; font-size: 1.2rem; }
+  .pr-card h3 { grid-area: 1 / 2; margin: 0; font-size: 1.02rem; line-height: 1.25; }
+  .pr-badges { grid-area: 1 / 3; }
+  .pr-badge.cal { display: none; }
+  .pr-card p { grid-column: 1 / -1; font-size: .86rem; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .pr-card .pr-cnote { grid-column: 1 / -1; padding: 5px 9px; font-size: .78rem !important; -webkit-line-clamp: 2; }
+  .pr-pbox { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 2px; min-height: 0; }
+  .pr-rv { text-align: left; padding: 0; background: none; flex: 1 1 auto; min-width: 0; }
+  .pr-rv .pr-price { align-items: flex-start; flex-direction: column; gap: 0; }
+  .pr-price b { font-size: 1.25rem; }
+  .pr-price.q b { font-size: 1rem; }
+  .pr-price span { font-size: .76rem; }
+  .pr-card .btn.pr-order-b { width: auto; flex: 0 0 auto; padding: 10px 16px; font-size: .9rem; }
+
+  /* proof: swipe row instead of a tall stack */
+  .pr-pfs { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; margin-inline: -16px; padding: 2px 16px 8px; scrollbar-width: none; }
+  .pr-pfs::-webkit-scrollbar { display: none; }
+  .pr-pf { flex: 0 0 58%; scroll-snap-align: start; }
+  .pr-pf-b h3 { font-size: .82rem; }
+  .pr-pf-m { font-size: .76rem; }
+  .pr-logos { display: flex; gap: 8px; overflow-x: auto; margin-inline: -16px; padding: 2px 16px 6px; scrollbar-width: none; }
+  .pr-logos::-webkit-scrollbar { display: none; }
+  .pr-logos { scroll-padding-inline: 16px; }
+  .pr-logos li { flex: 0 0 88px; padding: 8px 4px 7px; }
+  .pr-logos img { width: 44px; height: 44px; }
+  .pr-logos span { font-size: .64rem; overflow-wrap: normal; word-break: normal; }
+
+  .pr-steps li { padding: 11px 12px; }
+  .pr-end { padding: 16px; }
+}
+@media (max-width: 380px) { .pr-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+@media (max-width: 700px) {
+  body.pr-sub .pr-hero { display: none; }
+  body.pr-sub .ac-section { padding-top: 14px; }
+  .pr-form .ac-grid2 { gap: 11px 12px; margin-top: 8px; }
+  .pr-form .ac-fld { gap: 4px; }
+  .pr-form .ac-fld > label { font-size: .88rem; }
+  .pr-form .ac-fld :is(input:not([type=checkbox]):not([type=radio]), select, textarea) { padding: 9px 12px; }
+  .pr-form fieldset { margin-bottom: 12px; }
+  .pr-back { margin-bottom: 6px; }
+}
