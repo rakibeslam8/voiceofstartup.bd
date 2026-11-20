@@ -129,15 +129,16 @@
   function accountPage() {
     const root = $("#app");
     if (!root) return;
-    const st = { tab: "profile", prof: null, profErr: false, cos: null, cosErr: "", ints: {}, ov: {}, val: {}, inv: null, invErr: "", rendered: "" };
-    const TABS = [["profile", "👤", "প্রোফাইল", "Profile"], ["companies", "🏢", "আমার কোম্পানি", "My companies"], ["invest", "💼", "আমার বিনিয়োগ", "My investments"], ["security", "🔒", "নিরাপত্তা", "Security"]];
+    const st = { tab: "profile", prof: null, profErr: false, cos: null, cosErr: "", ints: {}, ov: {}, val: {}, inv: null, invErr: "", rendered: "", prs: null, prsErr: "" };
+    const TABS = [["profile", "👤", "প্রোফাইল", "Profile"], ["companies", "🏢", "আমার কোম্পানি", "My companies"], ["invest", "💼", "আমার বিনিয়োগ", "My investments"], ["prorders", "📣", "আমার PR অর্ডার", "My PR orders"], ["security", "🔒", "নিরাপত্তা", "Security"]];
     /* each person sees the tabs they need: founders → companies, investors → investments, readers → neither (unless they already have some) */
     const tabsFor = () => {
       const c = (A().ctx && A().ctx()) || null, type = (st.prof && st.prof.user_type) || (c && c.type) || "";
       const known = !!(c || st.prof);
       const founder = !known || type === "founder" || (c && c.co) || (st.cos && st.cos.length > 0);
       const investor = !known || type === "investor" || (c && c.inv) || !!(st.inv && ((st.inv.interests || []).length || (st.inv.investments || []).length));
-      return TABS.filter((t) => (t[0] === "companies" ? founder : t[0] === "invest" ? investor : true));
+      const hasPr = !!(c && c.pr) || !!(st.prs && st.prs.length);   // only people who already have a PR order see this tab
+      return TABS.filter((t) => (t[0] === "companies" ? founder : t[0] === "invest" ? investor : t[0] === "prorders" ? hasPr : true));
     };
     const tabsHtml = () => tabsFor().map((t) => `<button type="button" role="tab" data-tab="${t[0]}" aria-selected="${st.tab === t[0]}"><span aria-hidden="true">${t[1]}</span> ${T(t[2], t[3])}</button>`).join("");
     const refreshTabs = () => { const n = $(".ac-tabs", root); if (n) n.innerHTML = tabsHtml(); };
@@ -165,9 +166,11 @@
     function panel() {
       const el = $("#ac-panel"); if (!el) return;
       $$("[data-tab]", root).forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === st.tab)));
+      { const nav = $(".ac-tabs", root), on = nav && $("[aria-selected=true]", nav); if (nav && on && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = on.offsetLeft - (nav.clientWidth - on.offsetWidth) / 2; }   // phone: keep the open tab visible
       if (st.tab === "profile") profileView(el);
       else if (st.tab === "companies") companiesView(el);
       else if (st.tab === "invest") investView(el);
+      else if (st.tab === "prorders") prView(el);
       else securityView(el);
     }
 
@@ -254,6 +257,29 @@
     async function removeAvatar() {
       try { const old = st.prof && st.prof.avatar_url; st.prof = await rpc("update_my_profile", { p: { avatar_url: null } }); A().setAvatar(""); try { const m = old && String(old).split("/object/public/avatars/")[1]; if (m) (await sb()).storage.from("avatars").remove([m]); } catch (e) {} shell(); }
       catch (e) { toast(friendly(e), "err"); }
+    }
+
+    /* ---- my PR orders (short list; full details, payment and dates are on /pr#orders) ---- */
+    const PR_ST = { new: ["wait", "গৃহীত", "Received"], confirmed: ["ok", "নিশ্চিত", "Confirmed"], in_progress: ["wait", "কাজ চলছে", "In progress"], delivered: ["ok", "সম্পন্ন", "Delivered"], cancelled: ["draft", "বাতিল", "Cancelled"], rejected: ["bad", "গৃহীত হয়নি", "Not accepted"] };
+    const PR_PAY = { none: ["draft", "পেমেন্ট বাকি", "Payment due"], pending: ["wait", "পেমেন্ট যাচাই চলছে", "Checking payment"], verified: ["ok", "পেমেন্ট সম্পন্ন", "Paid"], rejected: ["bad", "পেমেন্ট গৃহীত হয়নি", "Payment not accepted"] };
+    async function loadPr() {
+      st.prsErr = "";
+      try {
+        const c = await sb(), uid = (A().user() || {}).id;
+        const { data, error } = await c.from("pr_orders").select("id,order_no,service_name_bn,service_name_en,qty,status,pay_status,kind,amount,created_at").eq("user_id", uid).is("deleted_at", null).order("created_at", { ascending: false });
+        if (error) throw error;
+        st.prs = data || [];
+      } catch (e) { st.prs = null; st.prsErr = friendly(e); }
+    }
+    function prView(el) {
+      if (st.prsErr) { el.innerHTML = `<div class="ac-card ac-center"><p>${esc(st.prsErr)}</p><button class="btn btn-outline ac-sm" data-act="retry-pr">${T("আবার চেষ্টা করুন", "Try again")}</button></div>`; return; }
+      if (!st.prs) { el.innerHTML = `<div class="ac-skel" aria-hidden="true"></div><div class="ac-skel" aria-hidden="true"></div>`; loadPr().then(() => { if (st.tab === "prorders") { panel(); refreshTabs(); } }); return; }
+      const pill = (a) => `<span class="ac-pill ${a[0]}">${esc(T(a[1], a[2]))}</span>`;
+      const money = (n) => "৳" + U().bnDigits(Number(n || 0).toLocaleString("en-IN"));
+      el.innerHTML = `<div class="ac-head"><h3>${T("আমার PR অর্ডার", "My PR orders")} <span class="ac-count">${U().bnDigits(st.prs.length)}</span></h3><a class="btn btn-orange ac-sm" href="/pr#orders">${T("অর্ডার ম্যানেজ করুন", "Open orders")}</a></div>
+        ${st.prs.length ? `<div class="ac-cos">${st.prs.map((o) => { const amt = o.kind === "quote" && o.amount == null ? T("কোটেশন অপেক্ষমাণ", "Quote pending") : o.kind === "free" || !(o.amount > 0) ? T("বিনামূল্যে", "Free") : money(o.amount);
+          return `<a class="ac-card ac-co" href="/pr#orders" style="display:block;text-decoration:none;color:inherit"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start"><div><b>${esc(o.order_no)}</b><h4 style="margin:2px 0">${esc(T(o.service_name_bn, o.service_name_en))}${o.qty > 1 ? " × " + U().bnDigits(o.qty) : ""}</h4><p class="muted" style="margin:0">${esc(U().formatDate(o.created_at))} · ${amt}</p></div><div class="ac-pills">${pill(PR_ST[o.status] || PR_ST.new)}${o.amount > 0 ? pill(PR_PAY[o.pay_status] || PR_PAY.none) : ""}</div></div></a>`; }).join("")}</div>`
+        : `<div class="ac-card ac-center"><div class="ac-big" aria-hidden="true">📣</div><h3>${T("এখনো কোনো অর্ডার নেই", "No orders yet")}</h3><p><a class="btn btn-orange" href="/pr">${T("সেবা দেখুন", "See services")}</a></p></div>`}`;
     }
 
     /* ---- my companies ---- */
@@ -511,6 +537,7 @@
       const act = t.dataset.act;
       if (act === "login") { A().requireLogin("প্রোফাইল ও কোম্পানি দেখতে লগইন করুন।", "Log in to see your profile and companies."); }
       else if (act === "retry-profile") { st.profErr = false; st.prof = null; panel(); await loadProfile(true); panel(); }
+      else if (act === "retry-pr") { st.prsErr = ""; st.prs = null; panel(); }
       else if (act === "retry-cos") { st.cosErr = ""; st.cos = null; panel(); await loadCompanies(); panel(); }
       else if (act === "ints") toggleInts(t.dataset.id);
       else if (act === "val") toggleVal(t.dataset.id);
@@ -546,7 +573,7 @@
     });
     window.addEventListener("hashchange", () => { if (A() && A().isIn()) { st.tab = hashTab(); panel(); if (st.tab === "companies" && st.cos === null && !st.cosErr) loadCompanies().then(panel); if (st.tab === "invest" && !st.inv && !st.invErr) loadInv().then(panel); } });
     U().onRender(() => { if (st.rendered !== U().lang) render(); });
-    A().onChange(() => { st.prof = null; st.cos = null; st.cosErr = ""; st.inv = null; st.ints = {}; st.val = {}; render(true); });
+    A().onChange(() => { st.prs = null; st.prsErr = ""; st.prof = null; st.cos = null; st.cosErr = ""; st.inv = null; st.ints = {}; st.val = {}; render(true); });
     render(true);
   }
 
