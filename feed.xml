@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Sat, 21 Nov 2026 03:50:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 21 Nov 2026 09:17:00 GMT</lastBuildDate>
+    <item>
+      <title>ছয় মাসের জন্য কার হাতে যাচ্ছে সিসিটি</title>
+      <link>https://www.voiceofstartup.bd/read/who-is-the-cct-going-to-for-six-months</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/who-is-the-cct-going-to-for-six-months</guid>
+      <pubDate>Sat, 21 Nov 2026 09:17:00 GMT</pubDate>
+      <category>মার্কেট ইনসাইট</category>
+      <description>চট্টগ্রাম বন্দর</description>
+    </item>
     <item>
       <title>নতুন সনদ পেল ১২ প্রতিষ্ঠান, বাংলাদেশে এখন পরিবেশবান্ধব কারখানা ৩০২টি</title>
       <link>https://www.voiceofstartup.bd/read/12-companies-got-new-certificate-now-there-are-302-eco-friendly-factor</link>
@@ -238,14 +246,6 @@
       <pubDate>Mon, 16 Nov 2026 07:49:00 GMT</pubDate>
       <category>ফাউন্ডার স্টোরি</category>
       <description>মেয়ে স্কুল থেকে আসার সময় বলল, রিকশায় ফিরবে। কিন্তু আমার কাছে ১০ টাকাও নেই। বাচ্চা ছেলে বলে, কলা খাবে। মেয়েকে বললাম, টাকা নেই। ছেলেকে সামনে থেকে কিনে দেব বলে বাসায় নিয়ে এলাম। মনটা খারাপ হয়ে গেল।</description>
-    </item>
-    <item>
-      <title>ব্যবসা না থাকলে বাণিজ্য সংগঠনের নেতা হতে পারবেন না ব্যবসায়ীরা</title>
-      <link>https://www.voiceofstartup.bd/read/businessmen-cannot-be-leaders-of-trade-organizations-if-there-is-no-bu</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/businessmen-cannot-be-leaders-of-trade-organizations-if-there-is-no-bu</guid>
-      <pubDate>Mon, 16 Nov 2026 07:23:00 GMT</pubDate>
-      <category>ব্যবসা, বিনিয়োগ ও নীতিমালা</category>
-      <description>কোনো ব্যবসা না থাকলে বাণিজ্য সংগঠনের সদস্যপদ থাকবে না। অর্থাৎ ব্যবসা করেন না, এমন কেউ বাণিজ্য সংগঠনের নেতা হতে পারবেন না।</description>
     </item>
   </channel>
 </rss>
