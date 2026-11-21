@@ -30,7 +30,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/founder-stories</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -126,6 +126,26 @@
     <loc>https://www.voiceofstartup.bd/editorial-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/import/2026/11/mwqlk66gq4rd.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/import/2026/11/mwqlk66gq4rd.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/who-is-the-cct-going-to-for-six-months</loc>

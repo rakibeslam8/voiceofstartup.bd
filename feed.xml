@@ -6,7 +6,15 @@
     <atom:link href="https://www.voiceofstartup.bd/feed.xml" rel="self" type="application/rss+xml"/>
     <description>বাংলাদেশের স্টার্টআপ, ব্যবসা ও বিনিয়োগের যাচাইকৃত খবর</description>
     <language>bn</language>
-    <lastBuildDate>Sat, 21 Nov 2026 09:17:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 21 Nov 2026 16:02:00 GMT</lastBuildDate>
+    <item>
+      <title>ফরিদপুরে পদ্মের ডালপালা থেকে তৈরি হচ্ছে বিশ্বমানের &#39;লোটাস সিল্ক&#39;, রপ্তানি সম্ভাবনা</title>
+      <link>https://www.voiceofstartup.bd/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp</link>
+      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp</guid>
+      <pubDate>Sat, 21 Nov 2026 16:02:00 GMT</pubDate>
+      <category>ফাউন্ডার স্টোরি</category>
+      <description>ফরিদপুর সদর উপজেলার কানাইপুর ইউনিয়নের রনকাইল গ্রামের ঐতিহ্যবাহী &#39;চাঁপাই বিল&#39; বা পদ্মা বিল শুধু প্রকৃতি প্রেমী ও পর্যটকদের জন্যই আকর্ষণ নয়, গ্রামীণ অর্থনীতির জন্য নতুন সম্ভাবনার দ্বার উন্মোচন করেছে। এই বিলে অত্যন্ত মূল্যবান ও পরিবেশবান্ধব সুতা রয়েছে</description>
+    </item>
     <item>
       <title>ছয় মাসের জন্য কার হাতে যাচ্ছে সিসিটি</title>
       <link>https://www.voiceofstartup.bd/read/who-is-the-cct-going-to-for-six-months</link>
@@ -238,14 +246,6 @@
       <pubDate>Mon, 16 Nov 2026 13:42:00 GMT</pubDate>
       <category>মার্কেট ইনসাইট</category>
       <description>দেশের ব্যাংকিং খাতে খেলাপি ঋণের পরিমাণ বেড়ে ৫ লাখ ৯৭ হাজার ১৫৪ কোটি টাকা ছাড়িয়েছে, যা ব্যাংকগুলোর বিতরণ করা মোট ঋণের ৩২ দশমিক ১৭ শতাংশ।</description>
-    </item>
-    <item>
-      <title>ফাহমিদার ডায়েরিতে এখন শুধুই সুখের গল্প</title>
-      <link>https://www.voiceofstartup.bd/read/fahmida-s-diary-now-contains-only-happy-stories</link>
-      <guid isPermaLink="true">https://www.voiceofstartup.bd/read/fahmida-s-diary-now-contains-only-happy-stories</guid>
-      <pubDate>Mon, 16 Nov 2026 07:49:00 GMT</pubDate>
-      <category>ফাউন্ডার স্টোরি</category>
-      <description>মেয়ে স্কুল থেকে আসার সময় বলল, রিকশায় ফিরবে। কিন্তু আমার কাছে ১০ টাকাও নেই। বাচ্চা ছেলে বলে, কলা খাবে। মেয়েকে বললাম, টাকা নেই। ছেলেকে সামনে থেকে কিনে দেব বলে বাসায় নিয়ে এলাম। মনটা খারাপ হয়ে গেল।</description>
     </item>
   </channel>
 </rss>

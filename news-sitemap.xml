@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-21T16:02:00.000Z</news:publication_date>
+      <news:title>ফরিদপুরে পদ্মের ডালপালা থেকে তৈরি হচ্ছে বিশ্বমানের &#39;লোটাস সিল্ক&#39;, রপ্তানি সম্ভাবনা</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-21T16:02:00.000Z</news:publication_date>
+      <news:title>World class &#39;Lotus Silk&#39; is being made from lotus stalks in Faridpur, export potential</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/who-is-the-cct-going-to-for-six-months</loc>
     <news:news>
       <news:publication>
@@ -284,50 +306,6 @@
       </news:publication>
       <news:publication_date>2026-11-20T06:41:00.000Z</news:publication_date>
       <news:title>The first international debt conference is starting in Cox&#39;s Bazar, the challenge of debt management will be important</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/rifa-tashnia-took-charge-of-walton-s-electric-car-project</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-19T14:43:00.000Z</news:publication_date>
-      <news:title>ওয়ালটনের বৈদ্যুতিক গাড়ি প্রকল্পের দায়িত্ব পেলেন রিফা তাছনিয়া</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/rifa-tashnia-took-charge-of-walton-s-electric-car-project</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-19T14:43:00.000Z</news:publication_date>
-      <news:title>Rifa Tashnia took charge of Walton&#39;s electric car project</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/recruitment-examination-for-37-positions-in-the-ministry-of-water-reso</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-19T14:35:00.000Z</news:publication_date>
-      <news:title>পানিসম্পদ মন্ত্রণালয়ের ৩৭ পদের নিয়োগ পরীক্ষা স্থগিত</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/recruitment-examination-for-37-positions-in-the-ministry-of-water-reso</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-19T14:35:00.000Z</news:publication_date>
-      <news:title>Recruitment examination for 37 positions in the Ministry of Water Resources has been suspended</news:title>
     </news:news>
   </url>
 </urlset>
