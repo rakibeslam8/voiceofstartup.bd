@@ -154,26 +154,4 @@
       <news:title>Anthropic is one of the most valuable companies in the world, the entrepreneurs are millionaires</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/new-factory-in-mongla-epz-with-an-investment-of-more-than-tk-100-crore</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-20T15:30:00.000Z</news:publication_date>
-      <news:title>মংলা ইপিজেডে ১০০ কোটি টাকার বেশি বিনিয়োগের নতুন কারখানায় ৪৫০ জনের কর্মসংস্থান হবে।</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/new-factory-in-mongla-epz-with-an-investment-of-more-than-tk-100-crore</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-20T15:30:00.000Z</news:publication_date>
-      <news:title>450 people will be employed in the new factory in Mongla EPZ with an investment of over Tk 100 crore</news:title>
-    </news:news>
-  </url>
 </urlset>
