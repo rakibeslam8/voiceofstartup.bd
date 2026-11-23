@@ -110,26 +110,4 @@
       <news:title>Ruhul, who left the engineering profession and became an agricultural entrepreneur, successfully built 550 bigha &#39;King Silage&#39;</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>bn</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-21T16:02:00.000Z</news:publication_date>
-      <news:title>ফরিদপুরে পদ্মের ডালপালা থেকে তৈরি হচ্ছে বিশ্বমানের &#39;লোটাস সিল্ক&#39;, রপ্তানি সম্ভাবনা</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://www.voiceofstartup.bd/en/read/world-class-lotus-silk-is-being-made-from-lotus-stalks-in-faridpur-exp</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Voice of Startup Bangladesh</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>2026-11-21T16:02:00.000Z</news:publication_date>
-      <news:title>World class &#39;Lotus Silk&#39; is being made from lotus stalks in Faridpur, export potential</news:title>
-    </news:news>
-  </url>
 </urlset>
