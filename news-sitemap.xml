@@ -1,6 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/the-story-of-building-a-multi-crore-venture-from-a-college-student-to</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-25T15:30:00.000Z</news:publication_date>
+      <news:title>কলেজ শিক্ষার্থী থেকে কোটি টাকার উদ্যোগ ২০০ কর্মীর শিল্পপ্রতিষ্ঠান গড়ার গল্প</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/the-story-of-building-a-multi-crore-venture-from-a-college-student-to</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-25T15:30:00.000Z</news:publication_date>
+      <news:title>The story of building a multi-crore venture from a college student to a 200-employee industrial enterprise</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/bangladesh-s-milestone-in-global-cyber-security-first-cna-night-squad</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-25T10:10:00.000Z</news:publication_date>
+      <news:title>বিশ্ব সাইবার নিরাপত্তায় বাংলাদেশের মাইলফলক: প্রথম CNA ‘নাইট স্কোয়াড’</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/bangladesh-s-milestone-in-global-cyber-security-first-cna-night-squad</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-25T10:10:00.000Z</news:publication_date>
+      <news:title>Bangladesh&#39;s Milestone in Global Cyber ​​Security: First CNA &#39;Night Squad&#39;</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/15-years-of-lotto-in-bangladesh-new-factory-in-kapasia</loc>
     <news:news>
       <news:publication>
