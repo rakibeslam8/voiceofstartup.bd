@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/cenbank-selects-640-young-entrepreneurs-for-collateral-free-loans-of-u</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-26T15:09:00.000Z</news:publication_date>
+      <news:title>Cenbank 20 লক্ষ টাকা পর্যন্ত জামানত-মুক্ত ঋণের জন্য 640 জন তরুণ উদ্যোক্তাকে বেছে নিয়েছে</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/cenbank-selects-640-young-entrepreneurs-for-collateral-free-loans-of-u</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-26T15:09:00.000Z</news:publication_date>
+      <news:title>Cenbank selects 640 young entrepreneurs for collateral-free loans of up to Tk20 lakh</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/everest-the-member-s-family-firm-was-given-the-responsibility-of-the-c</loc>
     <news:news>
       <news:publication>

@@ -36,7 +36,7 @@
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/business-policy</loc>
-    <lastmod>2026-11-24</lastmod>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -126,6 +126,26 @@
     <loc>https://www.voiceofstartup.bd/editorial-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/cenbank-selects-640-young-entrepreneurs-for-collateral-free-loans-of-u</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/cenbank-selects-640-young-entrepreneurs-for-collateral-free-loans-of-u"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/cenbank-selects-640-young-entrepreneurs-for-collateral-free-loans-of-u"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/cenbank-selects-640-young-entrepreneurs-for-collateral-free-loans-of-u"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/import/2026/11/mwxoubugi7f9.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/cenbank-selects-640-young-entrepreneurs-for-collateral-free-loans-of-u</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://www.voiceofstartup.bd/read/cenbank-selects-640-young-entrepreneurs-for-collateral-free-loans-of-u"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/cenbank-selects-640-young-entrepreneurs-for-collateral-free-loans-of-u"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/cenbank-selects-640-young-entrepreneurs-for-collateral-free-loans-of-u"/>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/import/2026/11/mwxoubugi7f9.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/read/everest-the-member-s-family-firm-was-given-the-responsibility-of-the-c</loc>
@@ -4146,6 +4166,13 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.voiceofstartup.bd/en/read/top-10-successful-bangladeshi-entrepreneurs"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.voiceofstartup.bd/read/top-10-successful-bangladeshi-entrepreneurs"/>
     <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/post-images/2026/10/mv7s804hahbo.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/company/pipquest</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+    <image:image><image:loc>https://hpanuojuazdqolgkafqg.supabase.co/storage/v1/object/public/company-logos/9cd554a9-e768-4e16-8fb7-23b8564e8b38/8041f21a-1861-4c48-b82d-aef8a51f07ff/logo-c9sxokrn.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.voiceofstartup.bd/company/jat-ai-lab</loc>
