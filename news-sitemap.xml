@@ -1,6 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://www.voiceofstartup.bd/read/which-country-owns-the-most-gold-in-the-world-how-many-tons-does-bangl</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-27T02:46:00.000Z</news:publication_date>
+      <news:title>বিশ্বে সবচেয়ে বেশি সোনার মালিক কোন দেশ, বাংলাদেশের মজুত কত টন</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/which-country-owns-the-most-gold-in-the-world-how-many-tons-does-bangl</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-27T02:46:00.000Z</news:publication_date>
+      <news:title>Which country owns the most gold in the world, how many tons does Bangladesh have?</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/read/japan-will-operate-the-third-terminal-of-the-airport-how-much-the-cost</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>bn</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-27T02:45:00.000Z</news:publication_date>
+      <news:title>বিমানবন্দরের তৃতীয় টার্মিনাল পরিচালনা করবে জাপান, যাত্রীদের খরচ কত বাড়বে</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://www.voiceofstartup.bd/en/read/japan-will-operate-the-third-terminal-of-the-airport-how-much-the-cost</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Voice of Startup Bangladesh</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-11-27T02:45:00.000Z</news:publication_date>
+      <news:title>Japan will operate the third terminal of the airport, how much the cost of passengers will increase</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://www.voiceofstartup.bd/read/cenbank-selects-640-young-entrepreneurs-for-collateral-free-loans-of-u</loc>
     <news:news>
       <news:publication>
